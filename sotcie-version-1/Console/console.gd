@@ -42,6 +42,9 @@ func readCommand(text: String) -> void:
 		"exsk":
 			argPrint(args, "64ffff", "ff6464", "64ff64", "ffaa64", "64ffaa")
 			errorCode = executeSkillsCommand(args)
+		"savedice":
+			argPrint(args, "64ffff", "aa64ff")
+			errorCode = displaySaveDiceCommand(args)
 		"dispskill":
 			argPrint(args, "64ffff", "ffff64")
 			errorCode = displaySkillCommand(args)
@@ -205,8 +208,15 @@ func weaknessPrint(val: int, isStagger := false) -> String:
 		c2 = "50"
 	return addStyle(text + str(val), c1 + (c1 if(isStagger) else c2) + c2)
 
-# func displaySaveDiceCommand(args: PackedStringArray) -> int:
-	
+func displaySaveDiceCommand(args: PackedStringArray) -> int:
+	if(args.size() < 2): return 1
+	if (!GameManager.unitList.has(args[1])): return 3
+	var unit := GameManager.unitList[args[1]]
+	for d in unit.savedDice:
+		var dieParse := d.split("/")
+		if(dieParse.size() != 2): return 4
+		displaySkillDice(dieParse[0], int(dieParse[1]))
+	return 0
 
 func displaySkillCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
@@ -216,24 +226,41 @@ func displaySkillCommand(args: PackedStringArray) -> int:
 		displaySkillTextField(data[0], "Name", "ffffff", true))
 	for l in DataTree.fetchSafely(data[0], "PreText")[0]:
 		if(l is String): addLog(addStyle(l, "aaaaaa"))
-		
-	for d in DataTree.fetchSafely(data[0], "Dice")[0]:
-		var dicePower := int(displaySkillTextField(d, "Dice"))
-		var diceBase := int(displaySkillTextField(d, "Base"))
-		var diceText = "" if (dicePower == 0) else ("1d" + str(abs(dicePower)))
-		if(dicePower < 0): diceText = ("" if (diceBase == 0) else str(diceBase)) + "-" + diceText
-		elif(dicePower > 0): diceText += "" if (diceBase == 0) else (("+" if (diceBase > 0) else "") + str(diceBase))
-		else: diceText = str(diceBase)
-		
-		var type := displaySkillTextField(d, "Type")
-		addLog(getTypeDisplay(type) + " " + addStyle(diceText, getTypeColor(type)))
-		
-		for l in DataTree.fetchSafely(d, "Text")[0]:
-			if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
-		
+	
+	displaySkillDice(data[0], -1)
+	
 	for l in DataTree.fetchSafely(data[0], "PostText")[0]:
 		if(l is String): addLog(addStyle(l, "aaaaaa"))
 	return 0
+
+func displaySkillDice(action, index: int):
+	var data: Array = [null, -2]
+	if(action is String): data = GameManager.fetchData("Actions/" + action)
+	if(action is Dictionary): data = [action, -1] 
+	if(data[1] == -2): return
+	
+	var diceList = DataTree.fetchSafely(data[0], "Dice")[0]
+	if(!(diceList is Array)): return
+	if(diceList.size() < index): return
+	
+	if(index < 0):
+		for i in diceList.size():
+			displaySkillDice(data[0], i)
+		return
+	
+	var d = diceList[index]
+	var dicePower := int(displaySkillTextField(d, "Dice"))
+	var diceBase := int(displaySkillTextField(d, "Base"))
+	var diceText = "" if (dicePower == 0) else ("1d" + str(abs(dicePower)))
+	if(dicePower < 0): diceText = ("" if (diceBase == 0) else str(diceBase)) + "-" + diceText
+	elif(dicePower > 0): diceText += "" if (diceBase == 0) else (("+" if (diceBase > 0) else "") + str(diceBase))
+	else: diceText = str(diceBase)
+	
+	var type := displaySkillTextField(d, "Type")
+	addLog(getTypeDisplay(type) + " " + addStyle(diceText, getTypeColor(type)))
+	
+	for l in DataTree.fetchSafely(d, "Text")[0]:
+		if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
 
 func displaySkillTextField(dict: Dictionary, field: String, color := "", bold := false) -> String:
 	var data := DataTree.fetchData(dict, field)

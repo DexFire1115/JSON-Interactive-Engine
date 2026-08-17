@@ -5,19 +5,23 @@
     "Conditions": {
         "EndScene": [
             {
-                "DealDamage": {
-                    "GetAttribute": "Stack"
-                }
+                "DealDamage": [
+                    {
+                        "GetAttribute": "Stack"
+                    }
+                ]
             },
             {
-                "SetStack": {
-                    "Divide": {
-                        "V1": {
-                            "GetAttribute": "Stack"
-                        },
-                        "V2": 2
+                "SetStack": [
+                    {
+                        "Divide": [
+                            {
+                              "GetAttribute": "Stack"
+                            },
+                            2
+                        ]
                     }
-                }
+                ]
             }
         ]
     },
