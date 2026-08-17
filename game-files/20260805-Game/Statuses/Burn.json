@@ -1,0 +1,27 @@
+{
+    "Name": "Burn",
+    "Color": "#cc6450",
+    "MinStack": 0,
+    "Conditions": {
+        "EndScene": [
+            {
+                "DealDamage": {
+                    "GetAttribute": "Stack"
+                }
+            },
+            {
+                "SetStack": {
+                    "Divide": {
+                        "V1": {
+                            "GetAttribute": "Stack"
+                        },
+                        "V2": 2
+                    }
+                }
+            }
+        ]
+    },
+    "Text": [
+        "At the end of the Scene, take damage = [b][color=cc6450]Burn[/color][/b] on self, then halve the Count."
+    ]
+}

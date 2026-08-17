@@ -1,0 +1,21 @@
+{
+    "Name": "Bash In",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 2,
+            "Hit": {
+                "DealStagger": 2
+            },
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Deal 2 [b][color=ffff64]Stagger[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

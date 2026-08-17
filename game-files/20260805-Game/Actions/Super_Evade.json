@@ -1,0 +1,26 @@
+{
+    "Name": "Super Evade!!!",
+    "Cost": 0,
+    "PreText": [
+        "Please Delete Me :("
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 10,
+            "Base": 10
+        },
+        {
+            "Type": "Evade",
+            "Dice": 10,
+            "Base": 10
+        },
+        {
+            "Type": "Evade",
+            "Dice": 10,
+            "Base": 10
+        }
+    ],
+    "PostText": [
+    ]
+}

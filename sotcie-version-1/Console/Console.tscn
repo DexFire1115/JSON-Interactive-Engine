@@ -1,0 +1,91 @@
+[gd_scene format=3 uid="uid://73fyrh80aeww"]
+
+[ext_resource type="Script" uid="uid://lnby68x2jqns" path="res://Console/console.gd" id="1_0a80t"]
+[ext_resource type="FontFile" uid="uid://cdy536m8wtr00" path="res://Fonts/CascadiaMono-Regular.ttf" id="1_eo7b8"]
+[ext_resource type="StyleBox" uid="uid://dq2fw5n4kcosu" path="res://Console/blackBackground.tres" id="1_fkl5r"]
+[ext_resource type="FontFile" uid="uid://ra06ncou4l55" path="res://Fonts/CascadiaMono-Bold.ttf" id="4_8c4vv"]
+[ext_resource type="FontFile" uid="uid://btlomhy1xpbhl" path="res://Fonts/CascadiaMono-Italic.ttf" id="5_syfx8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fkl5r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2w2c5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4qr6q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0a80t"]
+
+[node name="Console" type="Control" unique_id=927690875]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_0a80t")
+
+[node name="GUIArea" type="PanelContainer" parent="." unique_id=231115894]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -432.0
+offset_right = 768.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("1_fkl5r")
+
+[node name="VBox" type="VBoxContainer" parent="GUIArea" unique_id=1456783829]
+layout_mode = 2
+
+[node name="Logs" type="RichTextLabel" parent="GUIArea/VBox" unique_id=1731918215]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_fonts/normal_font = ExtResource("1_eo7b8")
+theme_override_fonts/bold_font = ExtResource("4_8c4vv")
+theme_override_fonts/bold_italics_font = ExtResource("5_syfx8")
+theme_override_fonts/italics_font = ExtResource("5_syfx8")
+theme_override_fonts/mono_font = ExtResource("1_eo7b8")
+theme_override_font_sizes/normal_font_size = 16
+theme_override_font_sizes/bold_font_size = 16
+theme_override_font_sizes/bold_italics_font_size = 16
+theme_override_font_sizes/italics_font_size = 16
+theme_override_font_sizes/mono_font_size = 16
+bbcode_enabled = true
+fit_content = true
+
+[node name="HBox" type="HBoxContainer" parent="GUIArea/VBox" unique_id=553685327]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 0
+
+[node name="InputHead" type="Label" parent="GUIArea/VBox/HBox" unique_id=1847751491]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_eo7b8")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_fkl5r")
+text = "/> "
+
+[node name="Input" type="LineEdit" parent="GUIArea/VBox/HBox" unique_id=1474212370]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_colors/font_placeholder_color = Color(0.39215687, 0.39215687, 0.39215687, 1)
+theme_override_colors/selection_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 1
+theme_override_fonts/font = ExtResource("1_eo7b8")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_2w2c5")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_4qr6q")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0a80t")
+placeholder_text = "command prompt"
+keep_editing_on_text_submit = true
+caret_blink = true
+caret_blink_interval = 0.5
+text_direction = 1
+
+[connection signal="text_submitted" from="GUIArea/VBox/HBox/Input" to="." method="_on_input_text_submitted"]

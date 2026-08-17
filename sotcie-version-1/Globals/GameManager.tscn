@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://do10cxiw6dru5"]
+
+[ext_resource type="Script" uid="uid://chpwsqwvr82hu" path="res://Globals/game_manager.gd" id="1_15n7v"]
+
+[node name="GlobalProcess" type="Node" unique_id=956793900]
+script = ExtResource("1_15n7v")
+
+[node name="LoadArchive" type="FileDialog" parent="." unique_id=1880945923]
+oversampling_override = 1.0
+title = "Open a File"
+initial_position = 2
+size = Vector2i(800, 450)
+visible = true
+ok_button_text = "Load"
+file_mode = 0
+display_mode = 1
+access = 2
+deleting_enabled = false
+
+[connection signal="file_selected" from="LoadArchive" to="." method="_on_load_archive_file_selected"]

@@ -1,0 +1,20 @@
+{
+    "Name": "Parry",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 1
+        },
+    ],
+    "PostText": [
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "Name": "Hooligan",
+    "Color": "#646480",
+    "Type": "Human",
+    "Class": "Canard",
+    "Attributes": {
+        "CurrentHealth": 35,
+        "MaxHealth": 35,
+        "CurrentStagger": 20,
+        "MaxStagger": 20,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 2,
+        "SlashStagger": 2,
+        "PierceStagger": 0,
+        "BluntStagger": -2,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Hooligan_Bash_1",
+        "Hooligan_Parry_1",
+        "Hooligan_Yikes_1",
+        "Hooligan_Knife_1"
+    ]
+}

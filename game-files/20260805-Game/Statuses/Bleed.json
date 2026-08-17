@@ -1,0 +1,56 @@
+{
+    "Name": "Bleed",
+    "Color": "#cc5064",
+    "MinStack": 0,
+    "MaxStack": {
+        "Add": {
+            "V1": 5,
+            "V2": {
+                "GetParent": {
+                    "GetStatus": [
+                        {
+                            "Status": "Fragile"
+                        },
+                        {
+                            "GetAttribute": "Stack"
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "Conditions": {
+        "UsedOffense": [
+            {
+                "DealDamage": {
+                    "GetAttribute": "Stack"
+                }
+            },
+            {
+                "ChangeStack": -1
+            }
+        ],
+        "EndScene": [
+            {
+                "DealDamage": {
+                    "GetAttribute": "Stack"
+                }
+            },
+            {
+                "SetStack": {
+                    "Divide": {
+                        "V1": {
+                            "GetAttribute": "Stack"
+                        },
+                        "V2": 2
+                    }
+                }
+            }
+        ]
+    },
+    "Text": [
+        "When using an Offensive die, take damage equal to the Count, then reduce by 1.",
+        "At the end of the scene, take damage = Count, then halve the Count.",
+        "Bleed cannot normally be stacked higher than 5, but each Fragile increases th cap by 1 for that creature."
+    ]
+}

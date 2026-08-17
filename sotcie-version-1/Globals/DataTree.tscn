@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ckp2jiiyabagf"]
+
+[ext_resource type="Script" uid="uid://dkjsccm3556ni" path="res://Globals/data_tree.gd" id="1_dt4dx"]
+
+[node name="DataTree" type="Node" unique_id=1441966727]
+script = ExtResource("1_dt4dx")

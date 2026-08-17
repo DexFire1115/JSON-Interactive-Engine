@@ -1,0 +1,14 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "Hooligan"
+        },
+        "E1": {
+            "Unit": "Hooligan"
+        }
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine Example Game File[/u][/b]"
+    ]
+}

@@ -1,0 +1,88 @@
+{
+    "Name": "Test Name",
+    "Cost": 5,
+    "Weight": 2,
+    "Uses": 0,
+    "Limit": 3,
+    "PreText": [
+        "Example Text. [color=ff6464]Please Remove[/color]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 2,
+            "Hit": {
+                "StatusInflict": {
+                    "Status": "Burn",
+                    "Count": 1
+                }
+            },
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]"
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": {
+                "StatusInflict": {
+                    "Status": "Burn",
+                    "Count": 1
+                }
+            },
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]"
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": -2,
+            "Hit": {
+                "StatusInflict": {
+                    "Status": "Burn",
+                    "Count": 1
+                }
+            },
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]"
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 0,
+            "Base": 2
+        },
+        {
+            "Type": "Evade",
+            "Dice": 0,
+            "Base": 0
+        },
+        {
+            "Type": "SlashCounter",
+            "Dice": 0,
+            "Base": -2
+        },
+        {
+            "Type": "PierceCounter",
+            "Dice": -6,
+            "Base": 2
+        },
+        {
+            "Type": "BlockCounter",
+            "Dice": -6,
+            "Base": 0
+        },
+        {
+            "Type": "EvadeCounter",
+            "Dice": -6,
+            "Base": -2
+        }
+    ],
+    "PostText": [
+        "Example Text. Please Remove.",
+        "Example second line. Also remove."
+    ]
+}
