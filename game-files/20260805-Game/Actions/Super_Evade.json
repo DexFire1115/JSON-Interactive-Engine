@@ -8,7 +8,7 @@
         {
             "Type": "Evade",
             "Dice": 10,
-            "Base": 10
+            "Base": 11
         },
         {
             "Type": "Evade",
@@ -18,7 +18,7 @@
         {
             "Type": "Evade",
             "Dice": 10,
-            "Base": 10
+            "Base": 9
         }
     ],
     "PostText": [

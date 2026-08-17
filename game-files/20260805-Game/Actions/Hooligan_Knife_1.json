@@ -8,12 +8,14 @@
             "Type": "SlashOffense",
             "Dice": 6,
             "Base": 0,
-            "Hit": {
-                "StatusInflict": {
-                    "Status": "Burn",
-                    "Count": 1
+            "Hit": [
+                {
+                    "StatusInflict": [
+                        "Burn",
+                        1
+                    ]
                 }
-            },
+            ],
             "Text": [
                 "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]"
             ]
@@ -22,12 +24,14 @@
             "Type": "PierceOffense",
             "Dice": 4,
             "Base": 0,
-            "Hit": {
-                "StatusInflict": {
-                    "Status": "Burn",
-                    "Count": 1
+            "Hit": [
+                {
+                    "StatusInflict": [
+                        "Burn",
+                        1
+                    ]
                 }
-            },
+            ],
             "Text": [
                 "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]"
             ]
@@ -36,12 +40,14 @@
             "Type": "SlashOffense",
             "Dice": 6,
             "Base": 0,
-            "Hit": {
-                "StatusInflict": {
-                    "Status": "Burn",
-                    "Count": 1
+            "Hit": [
+                {
+                    "StatusInflict": [
+                        "Burn",
+                        1
+                    ]
                 }
-            },
+            ],
             "Text": [
                 "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]"
             ]

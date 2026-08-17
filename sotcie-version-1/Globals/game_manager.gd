@@ -34,6 +34,16 @@ func _on_load_archive_file_selected(path: String) -> void:
 			fileBranch(filePath)
 		loadfile.close()
 		Functions.runGameStat()
+#		for i in range(10):
+#			print(Functions.callj("propCall", ["tempArr", "duplicate"]))
+#			Functions.callj("propCall", ["tempArr", "set", 
+#				{"roll": [
+#					{"propCall": ["tempArr", "size"]}, 
+#					-1
+#				]} , 
+#				{"roll": [10, 10]}
+#			])
+#		print(Functions.callj("propCall", ["tempArr", "duplicate"]))
 
 func search(s: String) -> void:
 	addPushConsole(JSON.stringify(fetchData(s)[0], "    ",false))

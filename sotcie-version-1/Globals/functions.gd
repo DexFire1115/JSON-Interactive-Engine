@@ -2,7 +2,41 @@ extends Node
 
 enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 
-func roll(power: int, base: int) -> int:
+var references: Dictionary[String, Variant] = {}
+
+# @export var tempArr := [0, 1, 2]
+
+
+func callj(method: String, args: Array) -> Variant:
+	for i in args.size():
+		args[i] = isNestedArg(args[i])
+	if(has_method(method)):
+		return callv(method, args)
+	else: return null
+
+func isNestedArg(arg) -> Variant:
+	if(arg is Dictionary && Dictionary(arg).size() == 1):
+		var key = Dictionary(arg).keys()[0]
+		return isNestedArg(callj(key, arg[key]))
+	return arg
+
+func propCall(property: String, method: String, ...args: Array) -> Variant:
+	if(get(property) == null): return null
+	return Callable.create(get(property), method).callv(args)
+
+func sequence(args: Array):
+	for method in args:
+		isNestedArg(method)
+
+func setVar(varName: String, value) -> Variant:
+	var oldVal = getVar(varName)
+	references[varName] = value
+	return oldVal
+
+func getVar(varName: String) -> Variant:
+	return references.get(varName)
+
+func roll(power: int, base := 0) -> int:
 	if(power < 0): return base - randi_range(1, -power)
 	if(power > 0): return randi_range(1, power) + base
 	return base

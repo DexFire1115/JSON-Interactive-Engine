@@ -3,48 +3,45 @@
     "Color": "#cc5064",
     "MinStack": 0,
     "MaxStack": {
-        "Add": {
-            "V1": 5,
-            "V2": {
-                "GetParent": {
-                    "GetStatus": [
-                        {
-                            "Status": "Fragile"
-                        },
-                        {
-                            "GetAttribute": "Stack"
-                        }
-                    ]
-                }
-            }
-        }
+        "Add": [
+            5,
+            0
+        ]
     },
     "Conditions": {
         "UsedOffense": [
             {
-                "DealDamage": {
-                    "GetAttribute": "Stack"
-                }
+                "DealDamage": [
+                    {
+                        "GetAttribute": "Stack"
+                    }
+                ]
             },
             {
-                "ChangeStack": -1
+                "ChangeStack": [
+                    -1
+                ]
             }
         ],
         "EndScene": [
             {
-                "DealDamage": {
-                    "GetAttribute": "Stack"
-                }
+                "DealDamage": [
+                    {
+                        "GetAttribute": "Stack"
+                    }
+                ]
             },
             {
-                "SetStack": {
-                    "Divide": {
-                        "V1": {
-                            "GetAttribute": "Stack"
-                        },
-                        "V2": 2
+                "SetStack": [
+                    {
+                        "Divide": [
+                            {
+                                "GetAttribute": "Stack"
+                            },
+                            2
+                        ]
                     }
-                }
+                ]
             }
         ]
     },
