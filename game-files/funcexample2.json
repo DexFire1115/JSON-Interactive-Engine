@@ -1,0 +1,82 @@
+{
+    "loop": [
+        {
+            "rangeTo": [
+                2
+            ]
+        },
+        [
+            {
+                "sceneStart": []
+            },
+            {
+                "setVar": [
+                    "u1",
+                    {
+                        "getUnitFromDice": [
+                            {
+                                "getNextSpeedDie": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "removeSpeedDice": []
+            },
+            {
+                "setVar": [
+                    "u2",
+                    {
+                        "getUnitFromDice": [
+                            {
+                                "getNextSpeedDie": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "removeSpeedDice": []
+            },
+            {
+                "executeSkills": [
+                    {
+                        "getVar": [
+                            "u1"
+                        ]
+                    },
+                    {
+                        "getVar": [
+                            "u2"
+                        ]
+                    },
+                    "Hooligan_Parry_1",
+                    "Super_Evade"
+                ] 
+            },
+            {
+                "objCall": [
+                    {
+                        "propCall": [
+                            "unitList",
+                            "get",
+                            {
+                                "getVar": [
+                                    "u2"
+                                ]
+                            },
+                        ]
+                    },
+                    "get",
+                    "savedDice"
+                ]
+            },
+            {
+                "addLog": [
+                    "hi"
+                ]
+            }
+        ]
+    ]
+}

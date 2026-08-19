@@ -10,7 +10,7 @@
             "Base": 0,
             "Hit": [
                 {
-                    "StatusInflict": [
+                    "statusInflict": [
                         "Burn",
                         1
                     ]
@@ -26,7 +26,7 @@
             "Base": 0,
             "Hit": [
                 {
-                    "StatusInflict": [
+                    "statusInflict": [
                         "Burn",
                         1
                     ]
@@ -42,7 +42,7 @@
             "Base": 0,
             "Hit": [
                 {
-                    "StatusInflict": [
+                    "statusInflict": [
                         "Burn",
                         1
                     ]
