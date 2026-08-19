@@ -1,0 +1,135 @@
+{
+    "sequence": [
+        {
+            "setVar": [
+                "X",
+                0
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "rangeTo": [
+                        10
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "X",
+                            {
+                                "add": [
+                                    {
+                                        "getVar": [
+                                            "X"
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "addLog": [
+                            {
+                                "getVar": [
+                                    "X"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "ifelse": [
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "X"
+                                        ]
+                                    },
+                                    5
+                                ]
+                            },
+                            [
+                                {
+                                    "sceneStart": []
+                                }
+                            ],
+                            [
+                                {
+                                    "addLog": [
+                                        "nope"
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}
+
+{"sequence": [
+    {"setVar": [
+        "X",
+        0
+    ]},
+    {"loop": [
+        {"rangeTo": [
+            10
+        ]},
+        [
+            {"setVar": [
+                "X",
+                {"add": [
+                    {"getVar": [
+                        "X"
+                    ]},
+                    1
+                ]}
+            ]},
+            {"addLog": [
+                {"getVar": [
+                    "X"
+                ]}
+            ]},
+            {"ifelse": [
+                {"equals": [
+                    {"getVar": [
+                        "X"
+                    ]},
+                    5
+                ]},
+                [
+                    {"sceneStart": []}
+                ],
+                [
+                    {"addLog": [
+                        "nope"
+                    ]}
+                ]
+            ]}
+        ]
+    ]}
+]}
+
+{"sequence": [
+    {"setVar": [ "X", 0 ]},
+    {"loop": [
+        {"rangeTo": [10]},
+        [
+            {"setVar": [ "X", {"add": [ {"getVar": ["X"]}, 1 ]} ]},
+            {"addLog": [ {"getVar": ["X"]} ]},
+            {"ifelse": [
+                {"equals": [ {"getVar": ["X"]}, 5 ]},
+                [
+                    {"sceneStart": []}
+                ],
+                [
+                    {"addLog": [ "nope" ]}
+                ]
+            ]}
+        ]
+    ]}
+]}

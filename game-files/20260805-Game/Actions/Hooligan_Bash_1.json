@@ -10,8 +10,23 @@
             "Base": 2,
             "Hit": [
                 {
-                    "DealStagger": 2
-                }
+                    "dealStagger": [
+                        2
+                    ]
+                },
+                {
+                    "setVar": [
+                        "X",
+                        10
+                    ]
+                },
+                {
+                    "dealDamage": {
+                        "getVar": [
+                            "X"
+                        ]
+                    }
+                },
             ],
             "Text": [
                 "[b][color=64ff64][lb]Hit][/color][/b] Deal 2 [b][color=ffff64]Stagger[/color][/b]."
