@@ -30,6 +30,9 @@ func readCommand(text: String) -> void:
 		"scene":
 			argPrint(args, "64ffff")
 			errorCode = startSceneCommand(args)
+		"exfn":
+			argPrint(args, "64ffff")
+			errorCode = executeFunctionCommand(args)
 		"roll", "r":
 			argPrint(args, "64ffff", "aa64ff", "ff64ff")
 			errorCode = rollCommand(args)
@@ -79,7 +82,7 @@ func searchUnitCommand(args: PackedStringArray) -> int:
 
 func editUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 4): return 1
-	var unit: Unit = GameManager.unitList[args[1]]
+	var unit: Unit = Functions.unitList[args[1]]
 	var val = args[3]
 	if(args[3].ends_with("f") && args[3].trim_suffix("f").is_valid_float()):
 		val = args[3].trim_suffix("f").to_float()
@@ -98,7 +101,7 @@ func saveDiceCommand(args: PackedStringArray) -> int:
 	var dice := ""
 	if(args.size() >= 2):
 		dice = args[1]
-		if(!GameManager.diceList.has(dice)): return 4
+		if(!Functions.diceList.has(dice)): return 4
 	Functions.saveSpeedDice(dice)
 	return 0
 
@@ -106,8 +109,14 @@ func removeSpeedDiceCommand(args: PackedStringArray) -> int:
 	var dice := ""
 	if(args.size() >= 2):
 		dice = args[1]
-		if(!(GameManager.diceList.has(dice) || GameManager.saveList.has(dice))): return 4
+		if(!(Functions.diceList.has(dice) || Functions.saveList.has(dice))): return 4
 	Functions.removeSpeedDice(dice)
+	return 0
+
+func executeFunctionCommand(args: PackedStringArray) -> int:
+	if(args.size() < 2): return 1
+	var result = Functions.isNestedArg( JSON.parse_string( " ".join( args.slice(1) ).replace("[lb]","[") ) )
+	addLog(addStyle("Result : ", "ffffff", true) + str(result))
 	return 0
 
 func rollCommand(args: PackedStringArray) -> int:
@@ -122,7 +131,7 @@ func rollCommand(args: PackedStringArray) -> int:
 
 func displayUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var data = GameManager.unitList[args[1]].dataSet
+	var data = Functions.unitList[args[1]].dataSet
 	if(data == null): return 3
 	var text := "[u]"
 	text += addStyle("Name: ", "ffffff", true)
@@ -210,8 +219,8 @@ func weaknessPrint(val: int, isStagger := false) -> String:
 
 func displaySaveDiceCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	if (!GameManager.unitList.has(args[1])): return 3
-	var unit := GameManager.unitList[args[1]]
+	if (!Functions.unitList.has(args[1])): return 3
+	var unit := Functions.unitList[args[1]]
 	for d in unit.savedDice:
 		var dieParse := d.split("/")
 		if(dieParse.size() != 2): return 4
@@ -298,29 +307,29 @@ func getTypeColor(type: String) -> String:
 
 func displaySpeedDiceCommand(_args: PackedStringArray) -> int:
 	addLog(underlineStr(boldStr("Speed Dice Turn Order")))
-	for d in Functions.sortSpeedDice(GameManager.diceList):
+	for d in Functions.sortSpeedDice(Functions.diceList):
 		printSpeedDice(d, 0)
-	for d in Functions.sortSpeedDice(GameManager.saveList):
+	for d in Functions.sortSpeedDice(Functions.saveList):
 		printSpeedDice(d, 1)
-	for d in Functions.sortSpeedDice(GameManager.usedList):
+	for d in Functions.sortSpeedDice(Functions.usedList):
 		printSpeedDice(d, 2)
 	return 0
 
 func printSpeedDice(dice: String, listID := 0) -> void:
 	var unit := Functions.getUnitFromDice(dice)
-	if(!GameManager.unitList.has(unit)): return
-	var unitData := GameManager.unitList[unit].dataSet
+	if(!Functions.unitList.has(unit)): return
+	var unitData := Functions.unitList[unit].dataSet
 	var dict: Dictionary[String, int]
 	var color: String
 	match listID:
 		1: 
-			dict = GameManager.saveList
+			dict = Functions.saveList
 			color = "64aaff"
 		2: 
-			dict = GameManager.usedList
+			dict = Functions.usedList
 			color = "ff64aa"
 		_: 
-			dict = GameManager.diceList
+			dict = Functions.diceList
 			color = "ffaa64"
 	var speed := dict[dice]
 	if(speed == null): return
@@ -347,8 +356,8 @@ func executeSkillsCommand(args: PackedStringArray) -> int:
 
 func changeLightCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3): return 1
-	if(!GameManager.unitList.has(args[1])): return 3
-	var unitdata := GameManager.unitList[args[1]].dataSet
+	if(!Functions.unitList.has(args[1])): return 3
+	var unitdata := Functions.unitList[args[1]].dataSet
 	if(!args[2].is_valid_int()): return 5
 	var diff := int(args[2])
 	var oldLight = DataTree.fetchData(unitdata, "Attributes/CurrentLight")[0]
@@ -372,8 +381,8 @@ func changeLightCommand(args: PackedStringArray) -> int:
 
 func damageCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3): return 1
-	if(!GameManager.unitList.has(args[1])): return 3
-	var unitdata := GameManager.unitList[args[1]].dataSet
+	if(!Functions.unitList.has(args[1])): return 3
+	var unitdata := Functions.unitList[args[1]].dataSet
 	if(!args[2].is_valid_int()): return 5
 	var hdmg := int(args[2])
 	var sdmg: int
@@ -477,8 +486,8 @@ func castNumDataToString(arr: Array) -> String:
 	return str(int(arr[0]))
 
 func getNameTag(unit: String) -> String:
-	if(!GameManager.unitList.has(unit)): return ""
-	var unitData := GameManager.unitList[unit].dataSet
+	if(!Functions.unitList.has(unit)): return ""
+	var unitData := Functions.unitList[unit].dataSet
 	var unitName = DataTree.fetchData(unitData,"Name")[0]
 	var unitColor = DataTree.fetchData(unitData,"Color")[0]
 	if(!(unitColor is String)): unitColor = "aaaaaa"

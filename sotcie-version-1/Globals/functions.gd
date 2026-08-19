@@ -2,10 +2,15 @@ extends Node
 
 enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 
-var references: Dictionary[String, Variant] = {}
+# Handling Game Processes
+@export var unitList: Dictionary[String, Unit]
+@export var scene: int = 0
+@export var diceList: Dictionary[String, int]
+@export var saveList: Dictionary[String, int]
+@export var usedList: Dictionary[String, int]
 
-# @export var tempArr := [0, 1, 2]
-
+# Temporary Function Vars
+@export var references: Dictionary[String, Variant] = {}
 
 func callj(method: String, args: Array) -> Variant:
 	for i in args.size():
@@ -24,9 +29,49 @@ func propCall(property: String, method: String, ...args: Array) -> Variant:
 	if(get(property) == null): return null
 	return Callable.create(get(property), method).callv(args)
 
-func sequence(args: Array):
+func propCallFrom(object: Object, property: String, method: String, ...args: Array) -> Variant:
+	if(object.get(property) == null): return null
+	return Callable.create(object.get(property), method).callv(args)
+
+func objCall(object: Object, method: String, ...args: Array) -> Variant:
+	if(!object.has_method(method)): return null
+	return object.callv(method, args)
+
+func sequence(...args: Array):
+	var val
 	for method in args:
-		isNestedArg(method)
+		val = isNestedArg(method)
+	return val
+
+func ifelse(query: bool, trueCase: Array, falseCase: Array):
+	var val
+	if(query):
+		for c in trueCase.duplicate_deep():
+			val = isNestedArg(c)
+	else:
+		for c in falseCase.duplicate_deep():
+			val = isNestedArg(c)
+	return val
+
+func loop(arr: Array, commands: Array):
+	var val
+	for a in arr:
+		for c in commands.duplicate_deep():
+			val = isNestedArg(c)
+	return val
+
+func whileLoop(query: bool, commands: Array):
+	var val
+	while(query):
+		for c in commands.duplicate_deep():
+			val = isNestedArg(c)
+	return val
+
+func rangeTo(val: int):
+	return range(val)
+
+func addLog(text):
+	GameManager.addPushConsole(str(text))
 
 func setVar(varName: String, value) -> Variant:
 	var oldVal = getVar(varName)
@@ -36,56 +81,110 @@ func setVar(varName: String, value) -> Variant:
 func getVar(varName: String) -> Variant:
 	return references.get(varName)
 
+func add(v1: int, v2: int) -> int:
+	return v1 + v2
+
+func addf(v1: float, v2: float) -> float:
+	return v1 + v2
+
+func sub(v1: int, v2: int) -> int:
+	return v1 - v2
+
+func subf(v1: float, v2: float) -> float:
+	return v1 - v2
+
+func mult(v1: int, v2: int) -> int:
+	return v1 * v2
+
+func multf(v1: float, v2: float) -> float:
+	return v1 * v2
+
+func div(v1: int, v2: int) -> int:
+	return v1 - v2
+
+func divf(v1: float, v2: float) -> float:
+	return v1 - v2
+
+func mod(v1: int, v2: int) -> int:
+	return v1 % v2
+
+func pi() -> float:
+	return PI
+
+func equals(v1, v2) -> bool:
+	return(v1 == v2)
+
+func getUnitData(unit: String) -> Dictionary:
+	var unitVar: Unit = unitList.get(unit)
+	if(unitVar == null): return {}
+	return unitVar.dataSet
+
+func dealDamage(amt: int, target := ""):
+	if(target.is_empty()): target = references.get("target")
+	if(target == null): return
+	EventBus.emit_signal("dmgConsole", ["", target, amt, 0])
+
+func dealStagger(amt: int, target := ""):
+	if(target.is_empty()): target = references.get("target")
+	if(target == null): return
+	EventBus.emit_signal("dmgConsole", ["", target, 0, amt])
+
 func roll(power: int, base := 0) -> int:
 	if(power < 0): return base - randi_range(1, -power)
 	if(power > 0): return randi_range(1, power) + base
 	return base
 
 func addUnit(code: String, data: Dictionary) -> Dictionary:
-	var oldData = GameManager.unitList.get(code, {})
-	GameManager.unitList.set(code, Unit.new(data, GameManager.unitList))
+	var oldData = unitList.get(code, {})
+	unitList.set(code, Unit.new(data, unitList))
 	return oldData
 
 func sceneStart():
-	GameManager.scene += 1
+	scene += 1
 	GameManager.addPushConsole("[u][b][lb]Scene " + 
-	str(GameManager.scene) + "][/b][/u]")
+	str(scene) + "][/b][/u]")
 	rollSpeed()
 	regenLight()
+	clearSaveDice()
+
+func clearSaveDice():
+	for u in unitList:
+		var unit = unitList[u]
+		unit.savedDice.clear()
 
 func regenLight():
-	for u in GameManager.unitList:
-		var unit = GameManager.unitList[u]
+	for u in unitList:
+		var unit = unitList[u]
 		var newLight = min(DataTree.fetchData(unit.dataSet,"Attributes/CurrentLight")[0] + 
 		DataTree.fetchData(unit.dataSet,"Attributes/LightRegen")[0], 
 		DataTree.fetchData(unit.dataSet,"Attributes/MaxLight")[0])
 		DataTree.editData(unit.dataSet,"Attributes/CurrentLight", newLight)
 
 func rollSpeed():
-	GameManager.diceList.clear()
-	GameManager.saveList.clear()
-	GameManager.usedList.clear()
-	for u in GameManager.unitList:
-		var unit = GameManager.unitList[u]
+	diceList.clear()
+	saveList.clear()
+	usedList.clear()
+	for u in unitList:
+		var unit = unitList[u]
 		for i in int(DataTree.fetchData(unit.dataSet,"Attributes/SpeedDiceAmt")[0]):
 			var val = max(1, roll(
 				DataTree.fetchData(unit.dataSet,"Attributes/SpeedDiceSize")[0],
 				DataTree.fetchData(unit.dataSet,"Attributes/SpeedDiceBase")[0]
 			))
-			GameManager.diceList.set(u + "D" + str(i), val)
+			diceList.set(u + "D" + str(i), val)
 
 func nextTurn():
-	var isSavedDice := GameManager.diceList.is_empty()
-	if(GameManager.saveList.is_empty()): return
+	var isSavedDice := diceList.is_empty()
+	if(saveList.is_empty()): return
 	var dice := getNextSpeedDie(isSavedDice)
 	var unitName := getUnitFromDice(dice)
-	var unitData := GameManager.unitList[unitName].dataSet
+	var unitData := unitList[unitName].dataSet
 	var actionList := DataTree.fetchData(unitData, "Actions")
 	actionList.push_front("Void Dice" if(isSavedDice) else "Save Dice")
 	
 
 func getNextSpeedDie(searchSaved := true) -> String:
-	var dict = GameManager.diceList if(searchSaved) else GameManager.saveList
+	var dict = diceList if(searchSaved) else saveList
 	var val = highestInDict(dict)
 	return(val if(val != null) else "")
 
@@ -101,26 +200,26 @@ func highestInDict(dict: Dictionary) -> Variant:
 
 # Removes next die if unspecified
 func removeSpeedDice(die := "") -> int:
-	if(die.is_empty()): die = getNextSpeedDie(!GameManager.diceList.is_empty())
+	if(die.is_empty()): die = getNextSpeedDie(!diceList.is_empty())
 	if(die.is_empty()): return -1 # No Dice to Remove
-	if(GameManager.diceList.has(die)): # Removed from DiceList
-		GameManager.usedList.set(die, GameManager.diceList[die])
-		GameManager.diceList.erase(die)
+	if(diceList.has(die)): # Removed from DiceList
+		usedList.set(die, diceList[die])
+		diceList.erase(die)
 		return 1
-	if(GameManager.saveList.has(die)): # Removed from SaveList
-		GameManager.usedList.set(die, GameManager.saveList[die])
-		GameManager.saveList.erase(die)
+	if(saveList.has(die)): # Removed from SaveList
+		usedList.set(die, saveList[die])
+		saveList.erase(die)
 		return 2 
 	return 0 # Die not Found
 
 # Saves next die if unspecified
 func saveSpeedDice(die := "") -> int:
-	if(die.is_empty()): die = getNextSpeedDie(!GameManager.diceList.is_empty())
+	if(die.is_empty()): die = getNextSpeedDie(!diceList.is_empty())
 	if(die.is_empty()): return -1 # No Dice to Save
-	if(GameManager.saveList.has(die)): return 1 # Die already saved
-	if(!GameManager.diceList.has(die)): return 0 # Die not Found
-	GameManager.saveList.set(die, GameManager.diceList[die])
-	GameManager.diceList.erase(die)
+	if(saveList.has(die)): return 1 # Die already saved
+	if(!diceList.has(die)): return 0 # Die not Found
+	saveList.set(die, diceList[die])
+	diceList.erase(die)
 	return 2 # Saved
 
 func sortSpeedDice(dice: Dictionary) -> Array:
@@ -136,8 +235,8 @@ func getUnitFromDice(dice: String) -> String:
 	return dice.rsplit("D", true, 1)[0]
 
 func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
-	if(!GameManager.unitList.has(u1)): return
-	if(!GameManager.unitList.has(u2)): return
+	if(!unitList.has(u1)): return
+	if(!unitList.has(u2)): return
 	var u1dice := createDiceArr(u1, a1)
 	var u2dice := createDiceArr(u2, a2)
 	while(!(u1dice.is_empty() && u2dice.is_empty())):
@@ -148,22 +247,22 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 			"" if(u2dice.is_empty()) else u2dice.front())
 		if(result == -1):
 			if(u2dice.is_empty()):
-				GameManager.unitList[u1].savedDice.push_back(u1dice.pop_front())
+				unitList[u1].savedDice.push_back(u1dice.pop_front())
 			else:
-				GameManager.unitList[u2].savedDice.push_back(u2dice.pop_front())
+				unitList[u2].savedDice.push_back(u2dice.pop_front())
 			continue
 		@warning_ignore("integer_division")
 		if((result / 2) % 2 == 0): u1dice.pop_front()
 		if(result % 2 == 0): u2dice.pop_front()
 
 func createDiceArr(unit: String, action: String) -> Array[String]:
-	if(!GameManager.unitList.has(unit)): return []
+	if(!unitList.has(unit)): return []
 	if(action.is_empty()): return []
 	var arr: Array[String]
 	var saveCheck = action.replace("[lb]","[").split("SaveDice")
 	var saveIndexes = null if(saveCheck.size() != 2) else JSON.parse_string(saveCheck[1])
 	if(saveIndexes is Array):
-		var unitSavedArr = GameManager.unitList[unit].savedDice
+		var unitSavedArr = unitList[unit].savedDice
 		for i in saveIndexes:
 			if(!(i is float)): continue
 			var index = int(i)
@@ -228,9 +327,9 @@ func recycleDie(die: Dictionary, result: int) -> int:
 	return 1
 
 func cleanSaveDice(unit: String) -> bool:
-	if(!GameManager.unitList.has(unit)): return false
+	if(!unitList.has(unit)): return false
 	var wasChanged := false
-	var unitDice = GameManager.unitList[unit].savedDice
+	var unitDice = unitList[unit].savedDice
 	while(unitDice.has("")):
 		wasChanged = true
 		unitDice.erase("")
@@ -257,8 +356,8 @@ func getDieType(die: Dictionary) -> String:
 	return type
 
 func getResistance(unit: String, type: String) -> Array[int]:
-	if(!GameManager.unitList.has(unit)): return [0, 0]
-	var unitData := GameManager.unitList[unit].dataSet
+	if(!unitList.has(unit)): return [0, 0]
+	var unitData := unitList[unit].dataSet
 	var dmgPath = "Attributes/" + type + "Damage"
 	var stgPath = "Attributes/" + type + "Stagger"
 	var dmgRes = simpleCollapse(DataTree.fetchData(unitData, dmgPath))
@@ -276,9 +375,9 @@ func simpleCollapse(fetchData) -> int:
 	return sum
 
 func runGameStat() -> void:
-	GameManager.unitList.clear()
+	unitList.clear()
 	var gameStat = GameManager.fetchData("gamestat")[0]
-	GameManager.scene = DataTree.fetchData(gameStat, "Scene")[0]
+	scene = DataTree.fetchData(gameStat, "Scene")[0]
 	GameManager.consoleLog = DataTree.fetchData(gameStat, "Console")[0]
 	var unitKeys = Dictionary(DataTree.fetchData(gameStat, "Units")[0]).keys()
 	for k in unitKeys:

@@ -2,9 +2,9 @@ class_name Unit
 extends Resource
 
 @export var dataSet: Dictionary
-var gmUnitList: Dictionary
-var savedDice: PackedStringArray = []
-var target: String
+@export var gmUnitList: Dictionary
+@export var savedDice: PackedStringArray = []
+@export var target: String
 
 func _init(data: Dictionary = {}, units: Dictionary = {}) -> void:
 	dataSet = data.duplicate_deep()

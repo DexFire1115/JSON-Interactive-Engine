@@ -7,17 +7,10 @@ var fileinfo: Dictionary
 var homeDir: String = "/home/dexfire1115/Documents/SotCIE/"
 
 # Handling ConsoleLogging
-var consoleLog: PackedStringArray = []
+@export var consoleLog: PackedStringArray = []
 
 # Handling Data Management
-var filetree: Dictionary
-
-# Handling Game Processes
-var unitList: Dictionary[String, Unit]
-var scene: int = 0
-var diceList: Dictionary[String, int]
-var saveList: Dictionary[String, int]
-var usedList: Dictionary[String, int]
+@export var filetree: Dictionary
 
 func _ready() -> void:
 	$LoadArchive.current_dir = homeDir
@@ -34,16 +27,6 @@ func _on_load_archive_file_selected(path: String) -> void:
 			fileBranch(filePath)
 		loadfile.close()
 		Functions.runGameStat()
-#		for i in range(10):
-#			print(Functions.callj("propCall", ["tempArr", "duplicate"]))
-#			Functions.callj("propCall", ["tempArr", "set", 
-#				{"roll": [
-#					{"propCall": ["tempArr", "size"]}, 
-#					-1
-#				]} , 
-#				{"roll": [10, 10]}
-#			])
-#		print(Functions.callj("propCall", ["tempArr", "duplicate"]))
 
 func search(s: String) -> void:
 	addPushConsole(JSON.stringify(fetchData(s)[0], "    ",false))
@@ -80,7 +63,7 @@ func fetchData(path: String) -> Array:
 func fetchUnit(path: String) -> Array:
 	var split := path.split("/", true, 1)
 	if(split.size() < 1): return [{},-2]
-	var unit: Unit = unitList.get(split[0])
+	var unit: Unit = Functions.unitList.get(split[0])
 	var subpath: String
 	if(split.size() < 2): subpath = ""
 	else: subpath = split[1]
