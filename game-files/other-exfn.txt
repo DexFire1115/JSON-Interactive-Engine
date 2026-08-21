@@ -1,0 +1,17 @@
+exfn {"sequence": [{"setVar": ["Y", 0]}, {"getVar": ["Y"]}]}
+
+exfn {"loop": [{"range": [10]}, {"sceneStart": []}]}
+
+exfn {"loop": [[10, 20, 30], {"sceneStart": []}]}
+
+exfn {"print": [{"range": [10]}]}
+
+exfn {"loop": [{"rangeTo": [10]}, {"sceneStart": []}]}
+
+exfn {"loop": [[0, 1, 2 ... , 10], <null>]}
+
+exfn {"loop": [{"rangeTo": [10]}, [{"sceneStart": []}]]}
+
+{"sequence": [{"setVar": ["X",0]},{"loop": [{"rangeTo": [10]},[{"setVar": ["X",{"add": [{"getVar": ["X"]},1]}]},{"addLog": [{"getVar": ["X"]}]},{"ifelse": [{"equals": [{"getVar": ["X"]},5]},[{"sceneStart": []}],[{"addLog": ["nope"]}]]}]]}]}
+
+{"sequence": [{"setVar": ["X",0]},{"loop": [{"rangeTo": [1000]},[{"setVar": ["X",{"add": [{"getVar": ["X"]},1]}]},{"addLog": [{"getVar": ["X"]}]}]]}]}

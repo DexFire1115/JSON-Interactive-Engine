@@ -1,0 +1,12 @@
+{
+    "Args": [ "Power", "Base" ],
+    "Sequence": [
+        {"setVar": [ "r1", {"roll": [ {"getVar": [ "Power", 0 ]}, {"getVar": [ "Base", 0 ]} ]} ]},
+        {"setVar": [ "r2", {"roll": [ {"getVar": [ "Power", 0 ]}, {"getVar": [ "Base", 0 ]} ]} ]},
+        {"ifelse": [ {"greaterThan": [ {"getVar": [ "r1" ]}, {"getVar": [ "r2" ]} ]},
+            [ {"getVar": [ "r1" ]} ],
+            [ {"getVar": ["r2"]} ] ]
+        },
+        "return"
+    ]
+}

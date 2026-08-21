@@ -42,7 +42,7 @@
             "Base": 0,
             "Hit": [
                 {
-                    "statusInflict": [
+                    "StatusInflict": [
                         "Burn",
                         1
                     ]

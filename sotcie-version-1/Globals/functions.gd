@@ -11,19 +11,35 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 
 # Temporary Function Vars
 @export var references: Dictionary[String, Variant] = {}
+@export var stack: Array[String] = []
 
 func callj(method: String, args: Array) -> Variant:
 	for i in args.size():
 		args[i] = isNestedArg(args[i])
-	if(has_method(method)):
+	if(GameManager.fetchData("Functions")[0].keys().has(method + ".json")):
+		return jFunc(method, args)
+	elif(has_method(method)):
 		return callv(method, args)
 	else: return null
 
 func isNestedArg(arg) -> Variant:
 	if(arg is Dictionary && Dictionary(arg).size() == 1):
-		var key = Dictionary(arg).keys()[0]
-		return isNestedArg(callj(key, arg[key]))
+		var key = arg.keys()[0]
+		var val = arg[key]
+		if((key is String && val is Array)):
+			return isNestedArg(callj(key, val))
 	return arg
+
+func jFunc(method: String, args: Array) -> Variant:
+	var funcData := Dictionary(GameManager.fetchData("Functions/" + method)[0]).duplicate_deep()
+	var argPairs = {}
+	var argNames = funcData["Args"]
+	if(!argNames is Array): return null
+	if(args.size() < argNames.size()): return null
+	for i in args.size():
+		argPairs[argNames[i]] = args[i]
+	if(argPairs.size() == 1): argPairs["_"] = "_"
+	return sequence(method, funcData["Sequence"], argPairs)
 
 func propCall(property: String, method: String, ...args: Array) -> Variant:
 	if(get(property) == null): return null
@@ -37,13 +53,37 @@ func objCall(object: Object, method: String, ...args: Array) -> Variant:
 	if(!object.has_method(method)): return null
 	return object.callv(method, args)
 
-func sequence(...args: Array):
+func refCall(ref: String, method: String, ...args: Array) -> Variant:
+	ref = parseRef(ref)
+	if(!references.has(ref)): return null
+	return Callable.create(references[ref], method).callv(args)
+
+func parseRef(varName: String) -> String:
+	if(references.has(varName)): return varName
+	var stackName = "/".join(stack.slice(0, max(0, stack.size() - varName.count("."))))
+	varName = varName.replace(".", "")
+	if(stackName.is_empty()): return varName
+	return stackName + "/" + varName
+
+func clearScope(stackName := ""):
+	if(stackName.is_empty()): stackName = "/".join(stack)
+	for k in references.keys():
+		if(k.contains(stackName)):
+			references.erase(k)
+
+func sequence(stackName: String, calls := [], args := {}):
+	stack.push_back(stackName)
+	for arg in args:
+		setVar(arg, args[arg])
 	var val
-	for method in args:
+	for method in calls:
+		if(method is String && method == "return"): break
 		val = isNestedArg(method)
+	clearScope()
+	stack.pop_back()
 	return val
 
-func ifelse(query: bool, trueCase: Array, falseCase: Array):
+func ifelse(query: bool, trueCase: Array, falseCase := []):
 	var val
 	if(query):
 		for c in trueCase.duplicate_deep():
@@ -74,12 +114,20 @@ func addLog(text):
 	GameManager.addPushConsole(str(text))
 
 func setVar(varName: String, value) -> Variant:
-	var oldVal = getVar(varName)
+	var realName = parseRef(varName)
+	return rawSetVar(realName, value)
+
+func getVar(varName: String, default = null) -> Variant:
+	var realName = parseRef(varName)
+	return rawGetVar(realName, default)
+
+func rawSetVar(varName: String, value) -> Variant:
+	var oldVal = rawGetVar(varName)
 	references[varName] = value
 	return oldVal
 
-func getVar(varName: String) -> Variant:
-	return references.get(varName)
+func rawGetVar(varName: String, default = null) -> Variant:
+	return references.get(varName, default)
 
 func add(v1: int, v2: int) -> int:
 	return v1 + v2
@@ -111,8 +159,29 @@ func mod(v1: int, v2: int) -> int:
 func pi() -> float:
 	return PI
 
+func randiXY(x: int, y: int) -> int:
+	return randi_range(x, y)
+
+func concat(...args: Array) -> String:
+	return "".join(args)
+
 func equals(v1, v2) -> bool:
 	return(v1 == v2)
+
+func greaterThan(v1, v2) -> bool:
+	return(v1 > v2)
+	
+func lessThan(v1, v2) -> bool:
+	return(v1 < v2)
+
+func gte(v1, v2) -> bool:
+	return(v1 >= v2)
+	
+func lte(v1, v2) -> bool:
+	return(v1 <= v2)
+
+func notBool(b: bool) -> bool:
+	return !b
 
 func getUnitData(unit: String) -> Dictionary:
 	var unitVar: Unit = unitList.get(unit)
@@ -120,14 +189,18 @@ func getUnitData(unit: String) -> Dictionary:
 	return unitVar.dataSet
 
 func dealDamage(amt: int, target := ""):
-	if(target.is_empty()): target = references.get("target")
+	if(target.is_empty()): target = getVar("target")
 	if(target == null): return
 	EventBus.emit_signal("dmgConsole", ["", target, amt, 0])
 
 func dealStagger(amt: int, target := ""):
-	if(target.is_empty()): target = references.get("target")
+	if(target.is_empty()): target = getVar("target")
 	if(target == null): return
 	EventBus.emit_signal("dmgConsole", ["", target, 0, amt])
+
+func inflictStatus(_status: String, _amt: int, target := ""):
+	if(target.is_empty()): target = getVar("target")
+	pass
 
 func roll(power: int, base := 0) -> int:
 	if(power < 0): return base - randi_range(1, -power)
@@ -141,8 +214,7 @@ func addUnit(code: String, data: Dictionary) -> Dictionary:
 
 func sceneStart():
 	scene += 1
-	GameManager.addPushConsole("[u][b][lb]Scene " + 
-	str(scene) + "][/b][/u]")
+	GameManager.addPushConsole("[u][b][lb]Scene " + str(scene) + "][/b][/u]")
 	rollSpeed()
 	regenLight()
 	clearSaveDice()

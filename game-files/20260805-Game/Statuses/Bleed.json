@@ -1,7 +1,6 @@
 {
     "Name": "Bleed",
     "Color": "#cc5064",
-    "MinStack": 0,
     "MaxStack": {
         "Add": [
             5,
