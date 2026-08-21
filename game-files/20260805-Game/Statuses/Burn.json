@@ -1,11 +1,10 @@
 {
     "Name": "Burn",
     "Color": "#cc6450",
-    "MinStack": 0,
     "Conditions": {
         "EndScene": [
             {
-                "DealDamage": [
+                "dealDamage": [
                     {
                         "GetAttribute": "Stack"
                     }

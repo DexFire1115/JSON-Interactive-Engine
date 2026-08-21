@@ -1,0 +1,64 @@
+exfn {"sequence": [
+    "Main",
+    [
+        {"addLog": [ {"get": [ "stack" ]} ]},
+        {"addLog": [ {"get": [ "references" ]} ]},
+        {"setVar": [ "X", 10 ]},
+        {"setVar": [ "Y", 20 ]},
+        {"addLog": [ {"get": [ "references" ]} ]},
+        {"setVar": [ "X", {"getVar": [ "Main/Y" ]} ]},
+        {"addLog": [ {"get": [ "references" ]} ]},
+        {"sequence": [ 
+            "NotMain", 
+            [
+                {"addLog": [ {"get": [ "stack" ]} ]},
+                {"addLog": [ {"get": [ "references" ]} ]},
+                {"setVar": [ "X", 50 ]},
+                {"setVar": [ "Y", 100 ]},
+                { "addLog": [ {"get": [ "references" ]} ]},
+                {"setVar": [ "Main/Y", {"getVar": [ "Y" ]} ]},
+                {"addLog": [{ "get": [ "references" ]} ]},
+                {"setVar": [ "X", { "getVar": [ ".X" ]} ]},
+                {"addLog": [ {"get": [ "references" ]} ]},
+                {"setVar": [ ".Z", { "getVar": [ "X" ]} ]},
+                {"addLog": [ {"get": [ "references" ]} ]}
+            ]
+        ]},
+        {"addLog": [ {"get": [ "stack" ]} ]},
+        {"addLog": [ { "get": [ "references" ]} ]}
+    ]
+]}
+
+
+exfn {"objCall": [ 
+    {"propCall": [ "unitList", "get", "A1" ]},
+    "get", 
+    "dataSet"
+]}
+
+exfn {"objCall": [ 
+    {"objCall": [ 
+        {"propCall": [ "unitList", "get", "A1" ]},
+        "get", 
+        "dataSet"
+    ]},
+    "get", 
+    "Name"
+]}
+
+exfn {"sequence": [
+    "Main",
+    [
+        {"addLog": [ {"get": [ "stack" ]} ]},
+        {"setVar": [ "X", 10 ]},
+        {"setVar": [ "data", 
+            {"objCall": [ 
+                {"propCall": [ "unitList", "get", "A1" ]},
+                "get", 
+                "dataSet"
+            ]},
+        ]},
+        {"addLog": [ { "get": [ "references" ]} ]},
+        {"refCall": [ "data", "set", "Name", "Something Else" ]}
+    ]
+]}

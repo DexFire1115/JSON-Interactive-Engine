@@ -123,10 +123,12 @@ func rollCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
 	if(args.size() < 3):
 		addLog(addStyle("Result : ", "ffcc64", true) + 
-			addStyle(str(Functions.roll(args[1].to_int(), 0)), "ffffff"))
+			# addStyle(str(Functions.roll(args[1].to_int(), 0)), "ffffff"))
+			addStyle(str(Functions.callj("roll", [args[1].to_int(), 0])), "ffffff"))
 		return 0
 	addLog(addStyle("Result : ", "ffcc64", true) + 
-		addStyle(str(Functions.roll(args[1].to_int(), args[2].to_int())),"ffffff"))
+		# addStyle(str(Functions.roll(args[1].to_int(), args[2].to_int())),"ffffff"))
+		addStyle(str(Functions.callj("roll", [args[1].to_int(), args[2].to_int()])), "ffffff"))
 	return 0
 
 func displayUnitCommand(args: PackedStringArray) -> int:
