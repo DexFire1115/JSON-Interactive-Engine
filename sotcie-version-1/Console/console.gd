@@ -75,14 +75,14 @@ func searchCommand(args: PackedStringArray) -> int:
 func searchUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
 	if(args.size() < 3):
-		addPushConsole(JSON.stringify(GameManager.fetchUnit(args[1])[0], "    ",false))
+		addPushConsole(JSON.stringify(GameManager.fetchUnit(args[1]), "    ",false))
 		return 0
-	addPushConsole(JSON.stringify(GameManager.fetchUnit(args[1] + "/" + args[2])[0], "    ",false))
+	addPushConsole(JSON.stringify(GameManager.fetchUnit(args[1] + "/" + args[2]), "    ",false))
 	return 0
 
 func editUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 4): return 1
-	var unit: Unit = Functions.unitList[args[1]]
+	var unitData := Functions.unitList[args[1]].dataSet
 	var val = args[3]
 	if(args[3].ends_with("f") && args[3].trim_suffix("f").is_valid_float()):
 		val = args[3].trim_suffix("f").to_float()
@@ -90,7 +90,7 @@ func editUnitCommand(args: PackedStringArray) -> int:
 		val = args[3].trim_suffix("i").to_int()
 	if(args[3] == "[]arr*" || args[3] == "[lb]]arr*"): val = []
 	if(args[3] == "{}obj*"): val = {}
-	addPushConsole(JSON.stringify(DataTree.editData(unit.dataSet,args[2],val), "    ",false))
+	addPushConsole(JSON.stringify(unitData.dset(args[2],val), "    ",false))
 	return 0
 
 func startSceneCommand(_args: PackedStringArray) -> int:
@@ -133,70 +133,70 @@ func rollCommand(args: PackedStringArray) -> int:
 
 func displayUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var data = Functions.unitList[args[1]].dataSet
-	if(data == null): return 3
+	var unitData = Functions.unitList[args[1]].dataSet
+	if(unitData == null): return 3
 	var text := "[u]"
 	text += addStyle("Name: ", "ffffff", true)
 	text += getNameTag(args[1])
 	text += " [lb]"
-	text += addStyle(DataTree.fetchData(data, "Type")[0], "ffffff")
+	text += addStyle(unitData.dget("Type", ""), "ffffff")
 	text += " , "
-	text += addStyle(DataTree.fetchData(data, "Class")[0], "ffffff")
+	text += addStyle(unitData.dget("Class", ""), "ffffff")
 	text += "][/u]\n"
 	
 	text += addStyle(" Health", "ff6464", true)
 	text += ": "
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/CurrentHealth")), "ff6464")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/CurrentHealth", 0)), "ff6464")
 	text += "/"
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/MaxHealth")), "ff6464")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/MaxHealth", 0)), "ff6464")
 	text += " | "
 	text += addStyle("Stagger", "ffff64", true)
 	text += ": "
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/CurrentStagger")), "ffff64")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/CurrentStagger", 0)), "ffff64")
 	text += "/"
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/MaxStagger")), "ffff64")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/MaxStagger", 0)), "ffff64")
 	text += "\n"
 	
 	text += addStyle(" Light", "ffffcc", true)
 	text += ": "
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/CurrentLight")), "ffffcc")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/CurrentLight", 0)), "ffffcc")
 	text += "/"
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/MaxLight")), "ffffcc")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/MaxLight", 0)), "ffffcc")
 	text += " ("
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/LightRegen")), "ccffff")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/LightRegen", 0)), "ccffff")
 	text += ") | "
 	text += addStyle(" Emotion", "aa64ff", true)
 	text += ": "
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/EmotionPoints")), "aa64ff")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/EmotionPoints", 0)), "aa64ff")
 	text += "\n"
 	
 	text += addStyle(" Speed", "ffaa64", true)
 	text += ": "
 	text += addStyle("1d", "ffaa64", true)
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/SpeedDiceSize")), "ffaa64")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/SpeedDiceSize", 0)), "ffaa64")
 	text += "+"
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/SpeedDiceBase")), "ffaa64")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/SpeedDiceBase", 0)), "ffaa64")
 	text += " ("
-	text += addStyle(castNumDataToString(DataTree.fetchData(data, "Attributes/SpeedDiceAmt")), "ff64aa")
+	text += addStyle(castNumDataToString(unitData.dget("Attributes/SpeedDiceAmt", 0)), "ff64aa")
 	text += ")\n"
 	
 	text += addStyle(" Slash ", "ffcccc", true)
 	text += ": "
-	text += weaknessPrint(castNumDataToInt(DataTree.fetchData(data, "Attributes/SlashDamage")))
+	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/SlashDamage", 0)))
 	text += " , "
-	text += weaknessPrint(castNumDataToInt(DataTree.fetchData(data, "Attributes/SlashStagger")), true)
+	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/SlashStagger", 0)), true)
 	text += "\n"
 	text += addStyle(" Pierce", "ccffcc", true)
 	text += ": "
-	text += weaknessPrint(castNumDataToInt(DataTree.fetchData(data, "Attributes/PierceDamage")))
+	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/PierceDamage", 0)))
 	text += " , "
-	text += weaknessPrint(castNumDataToInt(DataTree.fetchData(data, "Attributes/PierceStagger")), true)
+	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/PierceStagger", 0)), true)
 	text += "\n"
 	text += addStyle(" Blunt ", "ccccff", true)
 	text += ": "
-	text += weaknessPrint(castNumDataToInt(DataTree.fetchData(data, "Attributes/BluntDamage")))
+	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/BluntDamage", 0)))
 	text += " , "
-	text += weaknessPrint(castNumDataToInt(DataTree.fetchData(data, "Attributes/BluntStagger")), true)
+	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/BluntStagger", 0)), true)
 	text += "\n"
 	
 	
@@ -231,35 +231,34 @@ func displaySaveDiceCommand(args: PackedStringArray) -> int:
 
 func displaySkillCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var data := GameManager.fetchData("Actions/" + args[1])
-	if(data[1] == -2): return 2
-	addLog(addStyle("[" + displaySkillTextField(data[0], "Cost") + "] ", "ffaa64", true) +
-		displaySkillTextField(data[0], "Name", "ffffff", true))
-	for l in DataTree.fetchSafely(data[0], "PreText")[0]:
+	var data = DataTree.new(GameManager.filetree.dget("Actions/" + args[1], {}))
+	if(data.isEmpty()): return 2
+	addLog(addStyle("[" + displaySkillTextField(data, "Cost") + "] ", "ffaa64", true) +
+		displaySkillTextField(data, "Name", "ffffff", true))
+	for l in data.safeGet("PreText", TYPE_ARRAY):
 		if(l is String): addLog(addStyle(l, "aaaaaa"))
 	
-	displaySkillDice(data[0], -1)
+	displaySkillDice(data, -1)
 	
-	for l in DataTree.fetchSafely(data[0], "PostText")[0]:
+	for l in data.safeGet("PostText", TYPE_ARRAY):
 		if(l is String): addLog(addStyle(l, "aaaaaa"))
 	return 0
 
 func displaySkillDice(action, index: int):
-	var data: Array = [null, -2]
-	if(action is String): data = GameManager.fetchData("Actions/" + action)
-	if(action is Dictionary): data = [action, -1] 
-	if(data[1] == -2): return
+	var data: DataTree
+	if(action is String): data = Functions.fileTree.dget("Actions/" + action)
+	if(action is DataTree): data = action
+	if(!(data is DataTree)): return
 	
-	var diceList = DataTree.fetchSafely(data[0], "Dice")[0]
-	if(!(diceList is Array)): return
+	var diceList = data.safeGet("Dice", TYPE_ARRAY)
 	if(diceList.size() < index): return
 	
 	if(index < 0):
 		for i in diceList.size():
-			displaySkillDice(data[0], i)
+			displaySkillDice(data, i)
 		return
 	
-	var d = diceList[index]
+	var d = DataTree.new(diceList[index])
 	var dicePower := int(displaySkillTextField(d, "Dice"))
 	var diceBase := int(displaySkillTextField(d, "Base"))
 	var diceText = "" if (dicePower == 0) else ("1d" + str(abs(dicePower)))
@@ -270,17 +269,17 @@ func displaySkillDice(action, index: int):
 	var type := displaySkillTextField(d, "Type")
 	addLog(getTypeDisplay(type) + " " + addStyle(diceText, getTypeColor(type)))
 	
-	for l in DataTree.fetchSafely(d, "Text")[0]:
+	for l in d.safeGet("Text", TYPE_ARRAY):
 		if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
 
-func displaySkillTextField(dict: Dictionary, field: String, color := "", bold := false) -> String:
-	var data := DataTree.fetchData(dict, field)
+func displaySkillTextField(dict: DataTree, field: String, color := "", bold := false) -> String:
+	var data = dict.dget(field, 0)
 	var text: String
-	if(data[1] != 0):
+	if(dict.isComplex(data)):
 		text = "N/A"
 		color = "646464"
 		bold = true
-	else: text = str(int(data[0]) if (data[0] is float) else data[0])
+	else: text = str(int(data) if (data is float) else data)
 	if(color.is_empty()): return text
 	return addStyle(text, color, bold)
 
@@ -340,8 +339,8 @@ func printSpeedDice(dice: String, listID := 0) -> void:
 	text += " | "
 	text += getNameTag(unit)
 	text += " "
-	var curLight = DataTree.fetchData(unitData, "Attributes/CurrentLight")[0]
-	var maxLight = DataTree.fetchData(unitData, "Attributes/MaxLight")[0]
+	var curLight = unitData.dget("Attributes/CurrentLight", "")
+	var maxLight = unitData.dget("Attributes/MaxLight", "")
 	text += addStyle("⬢".repeat(curLight),"ffffcc")
 	text += addStyle("⬢".repeat(maxLight - curLight),"646464")
 	text += " ("
@@ -359,17 +358,13 @@ func executeSkillsCommand(args: PackedStringArray) -> int:
 func changeLightCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3): return 1
 	if(!Functions.unitList.has(args[1])): return 3
-	var unitdata := Functions.unitList[args[1]].dataSet
+	var unitData := Functions.unitList[args[1]].dataSet
 	if(!args[2].is_valid_int()): return 5
 	var diff := int(args[2])
-	var oldLight = DataTree.fetchData(unitdata, "Attributes/CurrentLight")[0]
-	var maxLight = DataTree.fetchData(unitdata, "Attributes/MaxLight")[0]
-	DataTree.editData(unitdata, "Attributes/CurrentLight", 
-		min(max(0, 
-			oldLight + diff),
-			maxLight
-		))
-	var newLight = DataTree.fetchData(unitdata, "Attributes/CurrentLight")[0]
+	var oldLight = unitData.dget("Attributes/CurrentLight", "")
+	var maxLight = unitData.dget("Attributes/MaxLight", "")
+	unitData.dset("Attributes/CurrentLight", min(max(0, oldLight + diff), maxLight))
+	var newLight = unitData.dget("Attributes/CurrentLight", "")
 	var text := ""
 	text += getNameTag(args[1])
 	text += ": "
@@ -391,20 +386,14 @@ func damageCommand(args: PackedStringArray) -> int:
 	if(args.size() < 4): sdmg = hdmg
 	elif(!args[3].is_valid_int()): return 5
 	else: sdmg = int(args[3])
-	var oldHealth = DataTree.fetchData(unitdata, "Attributes/CurrentHealth")[0]
-	var oldStagger = DataTree.fetchData(unitdata, "Attributes/CurrentStagger")[0]
-	DataTree.editData(unitdata, "Attributes/CurrentHealth", 
-		min(max(0, 
-			DataTree.fetchData(unitdata, "Attributes/CurrentHealth")[0] - hdmg),
-			DataTree.fetchData(unitdata, "Attributes/MaxHealth")[0]
-		))
-	DataTree.editData(unitdata, "Attributes/CurrentStagger", 
-		min(max(0, 
-			DataTree.fetchData(unitdata, "Attributes/CurrentStagger")[0] - sdmg),
-			DataTree.fetchData(unitdata, "Attributes/MaxStagger")[0]
-		))
-	var newHealth = DataTree.fetchData(unitdata, "Attributes/CurrentHealth")[0]
-	var newStagger = DataTree.fetchData(unitdata, "Attributes/CurrentStagger")[0]
+	var oldHealth = unitdata.safeGet("Attributes/CurrentHealth", -1)
+	var oldStagger = unitdata.safeGet("Attributes/CurrentStagger", -1)
+	unitdata.dset("Attributes/CurrentHealth", 
+		min(max(0, oldHealth - hdmg), unitdata.safeGet("Attributes/MaxHealth", -1)))
+	unitdata.dset("Attributes/CurrentStagger", 
+		min(max(0, oldStagger - sdmg), unitdata.safeGet("Attributes/MaxStagger", -1)))
+	var newHealth = unitdata.safeGet("Attributes/CurrentHealth", -1)
+	var newStagger = unitdata.safeGet("Attributes/CurrentStagger", -1)
 		
 	var text := ""
 	text += underlineStr(boldStr("Damaged : " + getNameTag(args[1])))
@@ -469,29 +458,25 @@ func argPrint(args: PackedStringArray, ...colors: Array) -> void:
 		if(i + 1 < args.size()): text += " "
 	addLog(text)
 
-func castNumDataToInt(arr: Array) -> int:
-	if(arr[1] != 0): 
-		return 0
-	if(arr[0] is String && !(str(arr[0]).is_valid_float() || str(arr[0]).is_valid_int())):
-		return 0
-	if(!(arr[0] is float || arr[0] is int)):
-		return 0
-	return int(arr[0])
+func castNumDataToInt(val) -> int:
+	if(val is String && (str(val).is_valid_float() || str(val).is_valid_int())):
+		return int(val)
+	if(val is float || val is int):
+		return int(val)
+	return 0
 	
-func castNumDataToString(arr: Array) -> String:
-	if(arr[1] != 0): 
-		return "N/A"
-	if(arr[0] is String && !(str(arr[0]).is_valid_float() || str(arr[0]).is_valid_int())):
-		return "N/A"
-	if(!(arr[0] is float || arr[0] is int)):
-		return "N/A"
-	return str(int(arr[0]))
+func castNumDataToString(val) -> String:
+	if(val is String && (str(val).is_valid_float() || str(val).is_valid_int())):
+		return str(int(val))
+	if(val is float || val is int):
+		return str(int(val))
+	return "N/A"
 
 func getNameTag(unit: String) -> String:
 	if(!Functions.unitList.has(unit)): return ""
 	var unitData := Functions.unitList[unit].dataSet
-	var unitName = DataTree.fetchData(unitData,"Name")[0]
-	var unitColor = DataTree.fetchData(unitData,"Color")[0]
+	var unitName = unitData.dget("Name","")
+	var unitColor = unitData.dget("Color","")
 	if(!(unitColor is String)): unitColor = "aaaaaa"
 	if(unitName is String):
 		return addStyle("[lb]" + unit + "] " + unitName, unitColor, true)

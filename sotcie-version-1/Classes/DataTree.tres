@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="DataTreee" format=3 uid="uid://dmp8huye3egoo"]
+
+[ext_resource type="Script" uid="uid://d3jrtp6ejni1i" path="res://Classes/data_tree.gd" id="1_vo2w1"]
+
+[resource]
+script = ExtResource("1_vo2w1")
