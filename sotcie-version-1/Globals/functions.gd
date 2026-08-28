@@ -8,6 +8,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 @export var diceList: Dictionary[String, int]
 @export var saveList: Dictionary[String, int]
 @export var usedList: Dictionary[String, int]
+@export var fileTree := DataTree.new()
 
 # Temporary Function Vars
 @export var references: Dictionary[String, Variant] = {}
@@ -16,7 +17,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 func callj(method: String, args: Array) -> Variant:
 	for i in args.size():
 		args[i] = isNestedArg(args[i])
-	if(GameManager.fetchData("Functions")[0].keys().has(method + ".json")):
+	if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
 		return jFunc(method, args)
 	elif(has_method(method)):
 		return callv(method, args)
@@ -31,7 +32,7 @@ func isNestedArg(arg) -> Variant:
 	return arg
 
 func jFunc(method: String, args: Array) -> Variant:
-	var funcData := Dictionary(GameManager.fetchData("Functions/" + method)[0]).duplicate_deep()
+	var funcData := Dictionary(fileTree.dget("Functions/" + method, {})).duplicate_deep()
 	var argPairs = {}
 	var argNames = funcData["Args"]
 	if(!argNames is Array): return null
@@ -183,10 +184,15 @@ func lte(v1, v2) -> bool:
 func notBool(b: bool) -> bool:
 	return !b
 
+func joinArr(arr1: Array, arr2: Array) -> Array:
+	var arrSum := arr1.duplicate()
+	arrSum.append_array(arr2)
+	return arrSum
+
 func getUnitData(unit: String) -> Dictionary:
 	var unitVar: Unit = unitList.get(unit)
 	if(unitVar == null): return {}
-	return unitVar.dataSet
+	return unitVar.dataSet.dataset
 
 func dealDamage(amt: int, target := ""):
 	if(target.is_empty()): target = getVar("target")
@@ -226,22 +232,22 @@ func clearSaveDice():
 
 func regenLight():
 	for u in unitList:
-		var unit = unitList[u]
-		var newLight = min(DataTree.fetchData(unit.dataSet,"Attributes/CurrentLight")[0] + 
-		DataTree.fetchData(unit.dataSet,"Attributes/LightRegen")[0], 
-		DataTree.fetchData(unit.dataSet,"Attributes/MaxLight")[0])
-		DataTree.editData(unit.dataSet,"Attributes/CurrentLight", newLight)
+		var unitData := unitList[u].dataSet
+		var newLight = min(unitData.dget("Attributes/CurrentLight", 0) + 
+		unitData.dget("Attributes/LightRegen", 0), 
+		unitData.dget("Attributes/MaxLight", 0))
+		unitData.dset("Attributes/CurrentLight", newLight)
 
 func rollSpeed():
 	diceList.clear()
 	saveList.clear()
 	usedList.clear()
 	for u in unitList:
-		var unit = unitList[u]
-		for i in int(DataTree.fetchData(unit.dataSet,"Attributes/SpeedDiceAmt")[0]):
+		var unitData = unitList[u].dataSet
+		for i in int(unitData.dget("Attributes/SpeedDiceAmt", 0)):
 			var val = max(1, roll(
-				DataTree.fetchData(unit.dataSet,"Attributes/SpeedDiceSize")[0],
-				DataTree.fetchData(unit.dataSet,"Attributes/SpeedDiceBase")[0]
+				unitData.dget("Attributes/SpeedDiceSize", 0),
+				unitData.dget("Attributes/SpeedDiceBase", 0),
 			))
 			diceList.set(u + "D" + str(i), val)
 
@@ -251,7 +257,7 @@ func nextTurn():
 	var dice := getNextSpeedDie(isSavedDice)
 	var unitName := getUnitFromDice(dice)
 	var unitData := unitList[unitName].dataSet
-	var actionList := DataTree.fetchData(unitData, "Actions")
+	var actionList := fileTree.fetchData(unitData, "Actions")
 	actionList.push_front("Void Dice" if(isSavedDice) else "Save Dice")
 	
 
@@ -343,10 +349,9 @@ func createDiceArr(unit: String, action: String) -> Array[String]:
 			unitSavedArr[index] = ""
 		cleanSaveDice(unit)
 	else:
-		var actionData := GameManager.fetchData("Actions/" + action + "/Dice")
-		if(actionData[0] is Array):
-			for i in Array(actionData[0]).size():
-				arr.append(action + "/" + str(i))
+		var actionData = fileTree.safeGet("Actions/" + action + "/Dice", TYPE_ARRAY)
+		for i in Array(actionData).size():
+			arr.append(action + "/" + str(i))
 	return arr
 
 func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
@@ -382,18 +387,15 @@ func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
 	return recycleDie(d1Data, d1Result) * 2 + recycleDie(d2Data, d2Result)
 
 func rollDie(_unit: String, die: Dictionary) -> int:
-	return max(1, roll(DataTree.fetchData(die, "Dice")[0], DataTree.fetchData(die, "Base")[0]))
+	return max(1, roll(fileTree.fetchData(die, "Dice")[0], fileTree.fetchData(die, "Base")[0]))
 
 func getDiceData(die: String) -> Dictionary:
 	var dieParse := die.split("/")
 	if(dieParse.size() != 2): return {}
-	var dieData = GameManager.fetchData("Actions/" + dieParse[0] + "/Dice/" + dieParse[1])
-	if(DataTree.fetchFail(dieData)): return {}
-	return dieData[0] if(dieData[0] is Dictionary) else {}
+	return fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], TYPE_DICTIONARY)
 
 func recycleDie(die: Dictionary, result: int) -> int:
-	var type = DataTree.fetchData(die, "Type")[0]
-	if(!(type is String)): return 0
+	var type = getDieType(die)
 	if(!(type.contains("Evade") || type.contains("Counter"))): return 0
 	if(result > 1): return 0
 	return 1
@@ -423,21 +425,18 @@ func dmgType(die: Dictionary) -> String:
 	return (type.split("Offense")[0]).split("Counter")[0]
 
 func getDieType(die: Dictionary) -> String:
-	var type = DataTree.fetchData(die, "Type")[0]
-	if(!(type is String)): return ""
-	return type
+	return DataTree.new(die).safeGet("Type", TYPE_STRING)
 
 func getResistance(unit: String, type: String) -> Array[int]:
 	if(!unitList.has(unit)): return [0, 0]
 	var unitData := unitList[unit].dataSet
 	var dmgPath = "Attributes/" + type + "Damage"
 	var stgPath = "Attributes/" + type + "Stagger"
-	var dmgRes = simpleCollapse(DataTree.fetchData(unitData, dmgPath))
-	var stgRes = simpleCollapse(DataTree.fetchData(unitData, stgPath))
+	var dmgRes = simpleCollapse(unitData.dget(dmgPath))
+	var stgRes = simpleCollapse(unitData.dget(stgPath))
 	return [dmgRes, stgRes]
 
-func simpleCollapse(fetchData) -> int:
-	var data = fetchData[0]
+func simpleCollapse(data) -> int:
 	if(data is int || data is float): return data
 	if(data is String): return 0
 	var sum := 0
@@ -447,12 +446,13 @@ func simpleCollapse(fetchData) -> int:
 	return sum
 
 func runGameStat() -> void:
+	fileTree = GameManager.filetree
 	unitList.clear()
-	var gameStat = GameManager.fetchData("gamestat")[0]
-	scene = DataTree.fetchData(gameStat, "Scene")[0]
-	GameManager.consoleLog = DataTree.fetchData(gameStat, "Console")[0]
-	var unitKeys = Dictionary(DataTree.fetchData(gameStat, "Units")[0]).keys()
+	var gameStat = fileTree.dget("gamestat", {})
+	scene = fileTree.fetchData(gameStat, "Scene")[0]
+	GameManager.consoleLog = fileTree.fetchData(gameStat, "Console")[0]
+	var unitKeys = Dictionary(fileTree.fetchData(gameStat, "Units")[0]).keys()
 	for k in unitKeys:
-		var unitName = DataTree.fetchData(gameStat, "Units/" + k + "/Unit")[0]
-		addUnit(k, GameManager.fetchData("Units/" + unitName)[0])
+		var unitName = fileTree.fetchData(gameStat, "Units/" + k + "/Unit")[0]
+		addUnit(k, fileTree.dget("Units/" + unitName, {}))
 	GameManager.pushConsole()
