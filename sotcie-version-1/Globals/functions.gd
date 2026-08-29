@@ -149,10 +149,11 @@ func multf(v1: float, v2: float) -> float:
 	return v1 * v2
 
 func div(v1: int, v2: int) -> int:
-	return v1 - v2
+	@warning_ignore("integer_division")
+	return v1 / v2
 
 func divf(v1: float, v2: float) -> float:
-	return v1 - v2
+	return v1 / v2
 
 func mod(v1: int, v2: int) -> int:
 	return v1 % v2
@@ -184,29 +185,71 @@ func lte(v1, v2) -> bool:
 func notBool(b: bool) -> bool:
 	return !b
 
+func min(v1: int, v2: int) -> int:
+	return min(v1, v2)
+	
+func max(v1: int, v2: int) -> int:
+	return max(v1, v2)
+
 func joinArr(arr1: Array, arr2: Array) -> Array:
 	var arrSum := arr1.duplicate()
 	arrSum.append_array(arr2)
 	return arrSum
 
-func getUnitData(unit: String) -> Dictionary:
+func getUnitData(unit: String) -> DataTree:
 	var unitVar: Unit = unitList.get(unit)
-	if(unitVar == null): return {}
-	return unitVar.dataSet.dataset
+	if(unitVar == null): return null
+	return unitVar.dataSet
 
 func dealDamage(amt: int, target := ""):
-	if(target.is_empty()): target = getVar("target")
+	if(target.is_empty()): target = getVar("Target")
 	if(target == null): return
 	EventBus.emit_signal("dmgConsole", ["", target, amt, 0])
 
 func dealStagger(amt: int, target := ""):
-	if(target.is_empty()): target = getVar("target")
+	if(target.is_empty()): target = getVar("Target")
 	if(target == null): return
 	EventBus.emit_signal("dmgConsole", ["", target, 0, amt])
 
-func inflictStatus(_status: String, _amt: int, target := ""):
-	if(target.is_empty()): target = getVar("target")
-	pass
+func statusInflict(status: String, amt := 1, target := "", nextScene := false):
+	if(target.is_empty()): target = getVar("Target")
+	var targetData := getUnitData(target)
+	if(targetData == null): return
+	var statusPath := "Statuses/" + status
+	var statConditionPath := statusPath + "/Conditions"
+	if(fileTree.dget(statusPath) == null): return
+	targetData.instantiate(statusPath, {})
+	var statusData = DataTree.new(targetData.dget(statusPath, {}))
+	statusData.dset("File", statusPath)
+	var stackName := "Stack" if(!nextScene) else "NextStack"
+	statusData.dset(stackName, statusData.dget(stackName, 0) + amt)
+	statusData.instantiate("Conditions", [])
+	var statusDataConditions := Array(statusData.safeGet(statConditionPath, TYPE_ARRAY))
+	for k in fileTree.safeGet(statConditionPath, TYPE_DICTIONARY).keys():
+		if(!statusDataConditions.has(k)):
+			statusDataConditions.append(k)
+	
+	#TODO Remove after adding cache updates / generalized tag conditionals
+	var tagSequence = fileTree.safeGet(statConditionPath + "/Applied", TYPE_ARRAY)
+	sequence("Applied", tagSequence, {"Target": target})
+	if(getStatus(status) <= 0): removeStatus(status)
+
+func removeStatus(status: String, target := ""):
+	if(target.is_empty()): target = getVar("Target")
+	var targetData := getUnitData(target)
+	if(targetData == null): return
+	Dictionary(targetData.safeGet("Statuses", TYPE_DICTIONARY)).erase(status)
+
+func getStatus(status: String, default := 0, target := "") -> int:
+	if(target.is_empty()): target = getVar("Target")
+	var targetData := getUnitData(target)
+	if(targetData == null): return default
+	return targetData.dget("Statuses/" + status + "/Stack", default)
+
+func changePower(amt: int, die := {}):
+	if(die.is_empty()): die = getVar("DieData")
+	var dieData = DataTree.new(die)
+	dieData.dset("Base", add(dieData.dget("Base", 0), amt))
 
 func roll(power: int, base := 0) -> int:
 	if(power < 0): return base - randi_range(1, -power)
@@ -355,8 +398,10 @@ func createDiceArr(unit: String, action: String) -> Array[String]:
 	return arr
 
 func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
-	var d1Data := getDiceData(d1)
-	var d2Data := getDiceData(d2)
+	var d1Data := getDiceData(d1).duplicate_deep()
+	var d2Data := getDiceData(d2).duplicate_deep()
+	readDieTag("Check", d1Data, u1, u2)
+	readDieTag("Check", d2Data, u2, u1)
 	var d1Roll := rollDie(u1, d1Data) if(!d1Data.is_empty()) else 0
 	var d2Roll := rollDie(u2, d2Data) if(!d2Data.is_empty()) else 0
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll, getDieType(d2Data), d2Roll)
@@ -372,6 +417,10 @@ func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
 	var atkDice := d1Data if(prioritySwitch) else d2Data
 	var defDice := d2Data if(prioritySwitch) else d1Data
 	
+	if((d1Result if(prioritySwitch) else d2Result) == CLASH_WIN):
+		readDieTag("ClashWin", atkDice, atkUnit, defUnit)
+		readDieTag("ClashLose", defDice, defUnit, atkUnit)
+	
 	if(canStore(atkDice) && defRoll == 0): return -1 # Defense/Counter Recycle
 	if(isOffense(atkDice)): # Offense win
 		var res = getResistance(defUnit, dmgType(atkDice))
@@ -379,12 +428,23 @@ func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
 		if(dmgType(defDice) == "Block"): # Offense beats Block
 			dmg -= defRoll
 		EventBus.emit_signal("dmgConsole", ["", defUnit, str(max(0, dmg + res[0])), str(max(0, dmg + res[1]))])
+		readDieTag("Hit", atkDice, atkUnit, defUnit)
+		var atkDieDT := DataTree.new(atkDice)
+		if(atkRoll - atkDieDT.dget("Base", 0) == atkDieDT.dget("Power", 0)):
+			readDieTag("Crit", atkDice, atkUnit, defUnit)
 	elif(dmgType(atkDice) == "Block"): # Block win
 		EventBus.emit_signal("dmgConsole", ["", defUnit, "0", str(max(0, atkRoll - defRoll))])
 	elif(!isOffense(defDice)): # Evade beats Evade/Block
 		EventBus.emit_signal("dmgConsole", ["", atkUnit, "0", str(min(0, -atkRoll))])
 	if(!(isOffense(atkDice) || isOffense(defDice))): return 0
 	return recycleDie(d1Data, d1Result) * 2 + recycleDie(d2Data, d2Result)
+
+func readDieTag(tag: String, die: Dictionary, atkUnit: String, defUnit: String):
+	var tagSequence = DataTree.new(die).safeGet(tag, TYPE_ARRAY)
+	sequence(tag, tagSequence, {"DieData": die, "Caster": atkUnit, "Target": defUnit})
+
+func executeCondition(tag: String, source: String, metadata := {}):
+	pass
 
 func rollDie(_unit: String, die: Dictionary) -> int:
 	return max(1, roll(fileTree.fetchData(die, "Dice")[0], fileTree.fetchData(die, "Base")[0]))

@@ -75,6 +75,14 @@ func fetchData(data, path: String) -> Array:
 func dset(path: String, value) -> Variant:
 	return editData(dataset, path, value)
 
+func instantiate(path: String, value, typeSafe := true) -> Variant:
+	var oldData = dget(path)
+	if(typeSafe && typeof(oldData) != typeof(value)):
+		dset(path, value)
+	elif(oldData == null):
+		dset(path, value)
+	return oldData
+
 func editData(data, path: String, value) -> Variant:
 	var pathStack := path.split("/")
 	var element = data
