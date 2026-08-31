@@ -190,3 +190,6 @@ func getComplexType(path: String) -> int:
 			if(oldType == TYPE_NIL): oldType = currentType
 			else: return TYPE_NIL
 	return currentType
+
+func _to_string() -> String:
+	return toJSONStr()

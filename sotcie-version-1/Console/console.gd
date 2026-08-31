@@ -57,7 +57,7 @@ func readCommand(text: String) -> void:
 		"dispspeed":
 			argPrint(args, "64ffff")
 			errorCode = displaySpeedDiceCommand(args)
-		"savedice":
+		"holddice":
 			argPrint(args, "64ffff", "ffcc64")
 			errorCode = saveDiceCommand(args)
 		"remdice":
@@ -246,7 +246,7 @@ func displaySkillCommand(args: PackedStringArray) -> int:
 
 func displaySkillDice(action, index: int):
 	var data: DataTree
-	if(action is String): data = Functions.fileTree.dget("Actions/" + action)
+	if(action is String): data = DataTree.new(Functions.fileTree.safeGet("Actions/" + action, TYPE_DICTIONARY))
 	if(action is DataTree): data = action
 	if(!(data is DataTree)): return
 	
