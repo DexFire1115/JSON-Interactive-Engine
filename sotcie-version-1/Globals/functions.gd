@@ -9,6 +9,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 @export var saveList: Dictionary[String, int]
 @export var usedList: Dictionary[String, int]
 @export var fileTree := DataTree.new()
+@export var actionID: int = 0
 
 # Temporary Function Vars
 @export var references: Dictionary[String, Variant] = {}
@@ -61,6 +62,7 @@ func refCall(ref: String, method: String, ...args: Array) -> Variant:
 
 func parseRef(varName: String) -> String:
 	if(references.has(varName)): return varName
+	if(varName.begins_with("*")): return varName.substr(1)
 	var stackName = "/".join(stack.slice(0, max(0, stack.size() - varName.count("."))))
 	varName = varName.replace(".", "")
 	if(stackName.is_empty()): return varName
@@ -114,13 +116,22 @@ func rangeTo(val: int):
 func addLog(text):
 	GameManager.addPushConsole(str(text))
 
-func setVar(varName: String, value) -> Variant:
+func setVar(varName: String, value, ref := "") -> Variant:
+	varName = appendRef(varName, ref)
 	var realName = parseRef(varName)
 	return rawSetVar(realName, value)
 
-func getVar(varName: String, default = null) -> Variant:
+func getVar(varName: String, default = null, ref := "") -> Variant:
+	varName = appendRef(varName, ref)
 	var realName = parseRef(varName)
 	return rawGetVar(realName, default)
+
+func appendRef(varName: String, ref := "") -> String:
+	if(!ref.is_empty()):
+		var prefix = getVar(ref, null)
+		if(!prefix is String): return ""
+		varName = prefix + "/" + varName
+	return varName
 
 func rawSetVar(varName: String, value) -> Variant:
 	var oldVal = rawGetVar(varName)
@@ -246,10 +257,9 @@ func getStatus(status: String, default := 0, target := "") -> int:
 	if(targetData == null): return default
 	return targetData.dget("Statuses/" + status + "/Stack", default)
 
-func changePower(amt: int, die := {}):
-	if(die.is_empty()): die = getVar("DieData")
-	var dieData = DataTree.new(die)
-	dieData.dset("Base", add(dieData.dget("Base", 0), amt))
+func changePower(amt: int, die := DataTree.new()):
+	if(die.dataset.is_empty()): die = getVar("DieData")
+	die.dset("Base", add(die.dget("Base", 0), amt))
 
 func roll(power: int, base := 0) -> int:
 	if(power < 0): return base - randi_range(1, -power)
@@ -358,12 +368,13 @@ func getUnitFromDice(dice: String) -> String:
 func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	if(!unitList.has(u1)): return
 	if(!unitList.has(u2)): return
-	var u1dice := createDiceArr(u1, a1)
-	var u2dice := createDiceArr(u2, a2)
+	var u1id := createAction(u1, a1)
+	var u2id := createAction(u2, a2)
+	var u1dice := Array(getAction(u1id, "diceArr", []))
+	var u2dice := Array(getAction(u2id, "diceArr", []))
 	while(!(u1dice.is_empty() && u2dice.is_empty())):
 		var result := executeClash(
-			u1, 
-			u2, 
+			u1, u2, u1id, u2id,
 			"" if(u1dice.is_empty()) else u1dice.front(),
 			"" if(u2dice.is_empty()) else u2dice.front())
 		if(result == -1):
@@ -375,6 +386,24 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 		@warning_ignore("integer_division")
 		if((result / 2) % 2 == 0): u1dice.pop_front()
 		if(result % 2 == 0): u2dice.pop_front()
+
+func createAction(unit: String, action: String) -> int:
+	var diceArr = createDiceArr(unit, action)
+	if(diceArr.is_empty()): return -1
+	actionID += 1
+	var actionTree = DataTree.new()
+	setVar("Action" + str(actionID), actionTree)
+	actionTree.dset("path", "*" + "/".join(stack) + "Action" + str(actionID))
+	actionTree.dset("unit", unit)
+	actionTree.dset("diceArr", diceArr)
+	actionTree.dset("data", Dictionary(fileTree.safeGet("Actions/" + action, TYPE_DICTIONARY)).duplicate_deep())
+	return actionID
+
+func getAction(id: int, path := "", default = null) -> Variant:
+	var data = getVar("Action" + str(id))
+	if(!(data is DataTree)): return default
+	if(path.is_empty()): return data
+	return data.dget(path, default)
 
 func createDiceArr(unit: String, action: String) -> Array[String]:
 	if(!unitList.has(unit)): return []
@@ -397,13 +426,13 @@ func createDiceArr(unit: String, action: String) -> Array[String]:
 			arr.append(action + "/" + str(i))
 	return arr
 
-func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
-	var d1Data := getDiceData(d1).duplicate_deep()
-	var d2Data := getDiceData(d2).duplicate_deep()
-	readDieTag("Check", d1Data, u1, u2)
-	readDieTag("Check", d2Data, u2, u1)
-	var d1Roll := rollDie(u1, d1Data) if(!d1Data.is_empty()) else 0
-	var d2Roll := rollDie(u2, d2Data) if(!d2Data.is_empty()) else 0
+func executeClash(u1: String, u2: String, a1id: int, a2id: int, d1: String, d2: String) -> int:
+	var d1Data := DataTree.new(getDiceData(d1, a1id))
+	var d2Data := DataTree.new(getDiceData(d2, a2id))
+	readDieTag("Check", a1id, d1Data, u1, u2)
+	readDieTag("Check", a2id, d2Data, u2, u1)
+	var d1Roll := rollDie(u1, d1Data) if(!d1Data.dataset.is_empty()) else 0
+	var d2Roll := rollDie(u2, d2Data) if(!d2Data.dataset.is_empty()) else 0
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll, getDieType(d2Data), d2Roll)
 	if(d1Roll - d2Roll == 0): return 0 # Tie or double unopposed
 	var d1Result: int = 0 if(d1Roll * d2Roll == 0) else (sign(d2Roll - d1Roll) + 2)
@@ -412,14 +441,16 @@ func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
 	var prioritySwitch := (d1Result <= d2Result) && d1Roll != 0
 	var atkUnit := u1 if(prioritySwitch) else u2
 	var defUnit := u2 if(prioritySwitch) else u1
+	var atkID := a1id if(prioritySwitch) else a2id
+	var defID := a2id if(prioritySwitch) else a1id
 	var atkRoll := d1Roll if(prioritySwitch) else d2Roll
 	var defRoll := d2Roll if(prioritySwitch) else d1Roll
 	var atkDice := d1Data if(prioritySwitch) else d2Data
 	var defDice := d2Data if(prioritySwitch) else d1Data
 	
 	if((d1Result if(prioritySwitch) else d2Result) == CLASH_WIN):
-		readDieTag("ClashWin", atkDice, atkUnit, defUnit)
-		readDieTag("ClashLose", defDice, defUnit, atkUnit)
+		readDieTag("ClashWin", atkID, atkDice, atkUnit, defUnit)
+		readDieTag("ClashLose", defID, defDice, defUnit, atkUnit)
 	
 	if(canStore(atkDice) && defRoll == 0): return -1 # Defense/Counter Recycle
 	if(isOffense(atkDice)): # Offense win
@@ -428,10 +459,9 @@ func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
 		if(dmgType(defDice) == "Block"): # Offense beats Block
 			dmg -= defRoll
 		EventBus.emit_signal("dmgConsole", ["", defUnit, str(max(0, dmg + res[0])), str(max(0, dmg + res[1]))])
-		readDieTag("Hit", atkDice, atkUnit, defUnit)
-		var atkDieDT := DataTree.new(atkDice)
-		if(atkRoll - atkDieDT.dget("Base", 0) == atkDieDT.dget("Power", 0)):
-			readDieTag("Crit", atkDice, atkUnit, defUnit)
+		readDieTag("Hit", atkID, atkDice, atkUnit, defUnit)
+		if(atkRoll - atkDice.dget("Base", 0) == atkDice.dget("Power", 0)):
+			readDieTag("Crit", atkID, atkDice, atkUnit, defUnit)
 	elif(dmgType(atkDice) == "Block"): # Block win
 		EventBus.emit_signal("dmgConsole", ["", defUnit, "0", str(max(0, atkRoll - defRoll))])
 	elif(!isOffense(defDice)): # Evade beats Evade/Block
@@ -439,22 +469,44 @@ func executeClash(u1: String, u2: String, d1: String, d2: String) -> int:
 	if(!(isOffense(atkDice) || isOffense(defDice))): return 0
 	return recycleDie(d1Data, d1Result) * 2 + recycleDie(d2Data, d2Result)
 
-func readDieTag(tag: String, die: Dictionary, atkUnit: String, defUnit: String):
-	var tagSequence = DataTree.new(die).safeGet(tag, TYPE_ARRAY)
-	sequence(tag, tagSequence, {"DieData": die, "Caster": atkUnit, "Target": defUnit})
+func readActionTag(tag: String, aid: int, caster: String, target: String):
+	executeCondition(tag, getAction(aid, "data"), {
+		"Self": caster,
+		"Target": target,
+		"Action": aid,
+		"/Action": getAction(aid, "path")
+	})
+	executeCondition(tag, getAction(aid, "unit"), {
+		"Self": caster,
+		"Target": target,
+		"Action": aid,
+		"/Action": getAction(aid, "path")
+	})
 
-func executeCondition(tag: String, source: String, metadata := {}):
-	pass
+func readDieTag(tag: String, aid: int, die: DataTree, caster: String, target: String):
+	executeCondition(tag, die, {
+		"Self": caster,
+		"Target": target,
+		"Action": aid,
+		"/Action": getAction(aid, "path"),
+		"DieData": die
+	})
 
-func rollDie(_unit: String, die: Dictionary) -> int:
-	return max(1, roll(fileTree.fetchData(die, "Dice")[0], fileTree.fetchData(die, "Base")[0]))
+func executeCondition(tag: String, source: DataTree, metadata := {}):
+	var tagSequence = source.safeGet(tag, TYPE_ARRAY)
+	sequence(tag, tagSequence, metadata)
 
-func getDiceData(die: String) -> Dictionary:
+func rollDie(_unit: String, die: DataTree) -> int:
+	var dieTree = die
+	return max(1, roll(dieTree.dget("Dice", 0), dieTree.dget("Base", 0)))
+
+func getDiceData(die: String, id := -1) -> Dictionary:
 	var dieParse := die.split("/")
 	if(dieParse.size() != 2): return {}
+	if(id > 0): return getAction(id, "data/Dice/" + dieParse[1], {})
 	return fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], TYPE_DICTIONARY)
 
-func recycleDie(die: Dictionary, result: int) -> int:
+func recycleDie(die: DataTree, result: int) -> int:
 	var type = getDieType(die)
 	if(!(type.contains("Evade") || type.contains("Counter"))): return 0
 	if(result > 1): return 0
@@ -469,23 +521,23 @@ func cleanSaveDice(unit: String) -> bool:
 		unitDice.erase("")
 	return wasChanged
 
-func isOffense(die: Dictionary) -> bool:
+func isOffense(die: DataTree) -> bool:
 	var type = getDieType(die)
 	if(type.is_empty()): return false
 	return !(type.contains("Block") || type.contains("Evade"))
 
-func canStore(die: Dictionary) -> bool:
+func canStore(die: DataTree) -> bool:
 	var type = getDieType(die)
 	if(type.is_empty()): return false
 	return !isOffense(die) || type.contains("Counter")
 
-func dmgType(die: Dictionary) -> String:
+func dmgType(die: DataTree) -> String:
 	var type = getDieType(die)
 	if(type.is_empty()): return ""
 	return (type.split("Offense")[0]).split("Counter")[0]
 
-func getDieType(die: Dictionary) -> String:
-	return DataTree.new(die).safeGet("Type", TYPE_STRING)
+func getDieType(die: DataTree) -> String:
+	return die.safeGet("Type", TYPE_STRING)
 
 func getResistance(unit: String, type: String) -> Array[int]:
 	if(!unitList.has(unit)): return [0, 0]
