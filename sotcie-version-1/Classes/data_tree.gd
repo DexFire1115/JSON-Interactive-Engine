@@ -6,6 +6,9 @@ extends Resource
 func _init(data := {}) -> void:
 	dataset = data
 
+func copy() -> DataTree:
+	return DataTree.new(dataset.duplicate_deep())
+
 func toJSONStr() -> String:
 	return JSON.stringify(dataset, "    ", false)
 
@@ -190,6 +193,25 @@ func getComplexType(path: String) -> int:
 			if(oldType == TYPE_NIL): oldType = currentType
 			else: return TYPE_NIL
 	return currentType
+
+func erase(path: String):
+	if(path.is_empty()): 
+		dataset.clear()
+		return
+	if(!path.contains("/")):
+		eraseFrom(dataset, path)
+		return
+	var pathAndKey = path.rsplit("/", true, 1)
+	var obj = dget(pathAndKey[0])
+	if(obj == null): return
+	eraseFrom(obj, pathAndKey[1])
+
+func eraseFrom(object, key):
+	if(!isValidScope(object, key)): return
+	if(object is Dictionary):
+		object.erase(key)
+	if(object is Array):
+		object.remove_at(key)
 
 func _to_string() -> String:
 	return toJSONStr()
