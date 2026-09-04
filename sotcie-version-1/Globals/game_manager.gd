@@ -4,7 +4,8 @@ extends Node
 var loadfile: ZIPReader = ZIPReader.new()
 var loadroot: String
 var fileinfo: Dictionary
-var homeDir: String = "/home/dexfire1115/Documents/SotCIE/"
+var homeDir: String = OS.get_system_dir(OS.SYSTEM_DIR_DOWNLOADS)
+#var homeDir: String = "/home/dexfire1115/Documents/SotCIE/"
 
 # Handling ConsoleLogging
 @export var consoleLog: PackedStringArray = []
