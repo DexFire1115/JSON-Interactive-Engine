@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="Action" format=3 uid="uid://dgp7qcop1ovg"]
-
-[ext_resource type="Script" uid="uid://bsbpr0wuq780h" path="res://Classes/action.gd" id="1_n7rvs"]
-
-[resource]
-script = ExtResource("1_n7rvs")
-metadata/_custom_type_script = "uid://bsbpr0wuq780h"
