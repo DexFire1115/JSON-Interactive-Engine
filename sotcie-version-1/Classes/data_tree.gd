@@ -131,8 +131,11 @@ func isValidScope(data, level) -> bool:
 func isValidArrayIndex(data, level) -> bool:
 	return (data is Array && level.is_valid_int())
 
+func isNum(data) -> bool:
+	return data is int || data is float
+
 func isPrimitive(data) -> bool:
-	return data is int || data is float || data is bool || data is String
+	return isNum(data) || data is bool || data is String
 
 func isComplex(data) -> bool:
 	return data is Dictionary || data is Array
@@ -140,7 +143,7 @@ func isComplex(data) -> bool:
 func fetchFail(input: Array) -> bool:
 	return input[1] == -2 || input[1] > 1
 
-func callArgSet(method: String, prefix := [], main := [], suffix := []) -> Array:
+func callArgSet(method: String, prefix := [], main := [], suffix := []) -> Variant:
 	return Functions.callj(method, Functions.joinArr(Functions.joinArr(prefix, main), suffix))
 
 func getComplexArgs(path: String, method: String, prefixDefaults := []) -> Variant:
@@ -166,12 +169,14 @@ func getComplexSet(path: String, method: String, prefixDefaults := [], suffixDef
 		return evalArr
 	return null
 
-func getComplexSeqn(path: String, method: String, prefixDefaults := [], suffixDefaults := []) -> Variant:
+func getComplexSeqn(path: String, method: String, typeDefault = null, prefixDefaults := [], suffixDefaults := []) -> Variant:
 	var data = dget(path)
+	var tally = typeDefault
 	if(data == null): return null
-	var tallyType = getComplexType(path)
-	if(tallyType == TYPE_NIL): return null
-	var tally = type_convert(null, tallyType)
+	if(typeDefault == null):
+		var tallyType = getComplexType(path)
+		if(tallyType == TYPE_NIL): return null
+		tally = type_convert(null, tallyType)
 	if(!isComplex(data)): tally = callArgSet(method, prefixDefaults, [tally, data], suffixDefaults)
 	if(data is Dictionary):
 		for key in data:
@@ -193,6 +198,45 @@ func getComplexType(path: String) -> int:
 			if(oldType == TYPE_NIL): oldType = currentType
 			else: return TYPE_NIL
 	return currentType
+
+func complexInstantiate(path: String, isDict := true):
+	var baseVal = null
+	if(dget(path) is Dictionary): baseVal = dget(path + "/Base")
+	if(dget(path) is Array): baseVal = dget(path + "/0")
+	if(isDict):
+		var oldVal = instantiate(path, {})
+		if(baseVal == null): baseVal = oldVal
+		dset(path + "/Base", baseVal)
+	else:
+		var oldVal = instantiate(path, [])
+		if(baseVal == null): baseVal = oldVal
+		dset(path + "/0", baseVal)
+
+func complexErase(path: String):
+	erase(path)
+	var parentPath = path.rsplit("/", true, 1)[0]
+	var container = dget(parentPath)
+	if(!isComplex(container)): return
+	if(container.size() != 1): return
+	if(container is Dictionary && container.has("Base")):
+		dset(parentPath, dget(parentPath + "/Base"))
+	else:
+		dset(parentPath, dget(parentPath + "/0"))
+
+func getPrimitve(path: String, default = null) -> Variant:
+	var val = dget(path, default)
+	if(val == default): return val
+	while(isComplex(val)):
+		if(val is Array):
+			if(val.is_empty()): return default
+			val = val[0]
+			continue
+		if(val is Dictionary):
+			if(!val.has("Base")): return default
+			val = val["Base"]
+			continue
+	if(!isPrimitive(val)): return default
+	return val
 
 func erase(path: String):
 	if(path.is_empty()): 

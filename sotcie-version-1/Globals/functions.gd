@@ -18,6 +18,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 func callj(method: String, args: Array) -> Variant:
 	for i in args.size():
 		args[i] = isNestedArg(args[i])
+	#print(method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
 		return jFunc(method, args)
 	elif(has_method(method)):
@@ -199,21 +200,41 @@ func notBool(b: bool) -> bool:
 
 func min(v1: int, v2: int) -> int:
 	return min(v1, v2)
+
+func minSet(...args: Array) -> Variant:
+	if(args.is_empty()): return null
+	var minV = args[0]
+	var index = 1
+	while(index < args.size()):
+		minV = min(args[index - 1], args[index])
+		index += 1
+	return minV
 	
 func max(v1: int, v2: int) -> int:
 	return max(v1, v2)
+
+func maxSet(...args: Array) -> Variant:
+	if(args.is_empty()): return null
+	var maxV = args[0]
+	var index = 1
+	while(index < args.size()):
+		maxV = max(args[index - 1], args[index])
+		index += 1
+	return maxV
 
 func joinArr(arr1: Array, arr2: Array) -> Array:
 	var arrSum := arr1.duplicate()
 	arrSum.append_array(arr2)
 	return arrSum
 
-func getUnitData(unit: String) -> DataTree:
+func getUnitData(unit := "") -> DataTree:
+	unit = getSingleTarget(unit)
 	var unitVar: Unit = unitList.get(unit)
 	if(unitVar == null): return null
 	return unitVar.dataSet
 
-func getUnitProp(unit: String, prop: String) -> Variant:
+func getUnitProp(unit := "", prop := "") -> Variant:
+	unit = getSingleTarget(unit)
 	var unitVar: Unit = unitList.get(unit)
 	if(unitVar == null): return null
 	return unitVar.get(prop)
@@ -225,6 +246,7 @@ func setUnitProp(unit: String, prop: String, val: Variant):
 
 func getSingleTarget(target := "") -> String:
 	if(target.is_empty()): target = getVar("Target", "")
+	if(target == "@Target"): target = getVar("Target", "")
 	if(target == "@Self"): target = getVar("Self", "")
 	return target
 
@@ -273,6 +295,7 @@ func removeStatus(status: String, target := ""):
 	if(target.is_empty()): return
 	var targetData := getUnitData(target)
 	if(targetData == null): return
+	readUnitTag("Removed", target)
 	var statusConditions: Array = targetData.safeGet("Statuses/" + status + "/Conditions", TYPE_ARRAY)
 	var unitConditions := DataTree.new(targetData.safeGet("Conditions", TYPE_DICTIONARY))
 	for c in statusConditions:
@@ -335,10 +358,10 @@ func rollSpeed():
 	usedList.clear()
 	for u in unitList:
 		var unitData = unitList[u].dataSet
-		for i in int(unitData.dget("Attributes/SpeedDiceAmt", 0)):
+		for i in int(getSumAttribute(unitData, "SpeedDiceAmt")):
 			var val = max(1, roll(
-				unitData.dget("Attributes/SpeedDiceSize", 0),
-				unitData.dget("Attributes/SpeedDiceBase", 0),
+				getSumAttribute(unitData, "SpeedDiceSize"),
+				getSumAttribute(unitData, "SpeedDiceBase"),
 			))
 			diceList.set(u + "D" + str(i), val)
 
@@ -424,6 +447,8 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	setUnitProp(u2, "action", u2id)
 	readActionTag("OnUse", u1)
 	readActionTag("OnUse", u2)
+	moveCounterDice(u1id)
+	moveCounterDice(u2id)
 	while(!(u1dice.is_empty() && u2dice.is_empty())):
 		if(u1dice.is_empty()): afterSkill(u1, u2, clashData, true)
 		if(u2dice.is_empty()): afterSkill(u1, u2, clashData, false)
@@ -440,6 +465,7 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 		@warning_ignore("integer_division")
 		if((result / 2) % 2 == 0): u1dice.pop_front()
 		if(result % 2 == 0): u2dice.pop_front()
+
 	afterSkill(u1, u2, clashData, true)
 	afterSkill(u1, u2, clashData, false)
 	setUnitProp(u1, "target", "")
@@ -457,6 +483,8 @@ func afterSkill(u1: String, u2: String, data: Dictionary, isU1: bool):
 		var u2Stagger = getUnitData(u2).safeGet("Attributes/CurrentStagger", -1)
 		if(u2Stagger == 0 && data["u2oldStagger"] > 0): readActionTag("OnStagger", u1)
 		readActionTag("AfterUse", u1)
+		for d in getAction(getUnitProp(u1, "action"), "data/Autosave", []):
+			unitList[u1].savedDice.push_back(d)
 		data["a1Finished?"] = true
 	else:
 		if(data["a2Finished?"]): return
@@ -465,6 +493,8 @@ func afterSkill(u1: String, u2: String, data: Dictionary, isU1: bool):
 		var u1Stagger = getUnitData(u1).safeGet("Attributes/CurrentStagger", -1)
 		if(u1Stagger == 0 && data["u1oldStagger"] > 0): readActionTag("OnStagger", u2)
 		readActionTag("AfterUse", u2)
+		for d in getAction(getUnitProp(u2, "action"), "data/Autosave", []):
+			unitList[u2].savedDice.push_back(d)
 		data["a2Finished?"] = true
 
 func createAction(unit: String, action: String) -> int:
@@ -472,10 +502,12 @@ func createAction(unit: String, action: String) -> int:
 	if(diceArr.is_empty()): return -1
 	actionID += 1
 	var actionTree = DataTree.new()
-	setVar("*Action" + str(actionID), actionTree)
-	actionTree.dset("path", "*Action" + str(actionID))
+	var path = "*Action" + str(actionID)
+	setVar(path, actionTree)
+	actionTree.dset("path", path)
 	actionTree.dset("id", actionID)
 	actionTree.dset("unit", unit)
+	actionTree.dset("name", action)
 	actionTree.dset("diceArr", diceArr)
 	actionTree.dset("data", Dictionary(fileTree.safeGet("Actions/" + action, TYPE_DICTIONARY)).duplicate_deep())
 	return actionID
@@ -507,9 +539,29 @@ func createDiceArr(unit: String, action: String) -> Array[String]:
 			arr.append(action + "/" + str(i))
 	return arr
 
+func moveCounterDice(aid: int):
+	if(aid < 0): return
+	var aName = getAction(aid, "name", "")
+	if(isSaveDiceArr(aName)): return
+	var data := DataTree.new(getAction(aid, "data"))
+	var fileDiceArr: Array = data.safeGet("Dice", TYPE_ARRAY)
+	var refDiceArr: Array = getAction(aid, "diceArr")
+	var index := fileDiceArr.size()
+	while(index > 0):
+		index -= 1
+		if(getDieType(DataTree.new(fileDiceArr[index])).contains("Counter")):
+			data.instantiate("Autosave", [])
+			fileDiceArr.pop_at(index)
+			refDiceArr.pop_at(index)
+			Array(data.safeGet("Autosave", TYPE_ARRAY)).append(aName + "/" + str(index))
+
+func isSaveDiceArr(action: String) -> bool:
+	var nameArr = action.replace("[lb]","[").split("SaveDice")
+	return nameArr.size() == 2 && JSON.parse_string(nameArr[1]) is Array
+
 func executeClash(u1: String, u2: String, a1id: int, a2id: int, d1: String, d2: String) -> int:
-	var d1Data := DataTree.new(getDiceData(d1, a1id))
-	var d2Data := DataTree.new(getDiceData(d2, a2id))
+	var d1Data := DataTree.new(getDiceData(d1, a1id).duplicate_deep())
+	var d2Data := DataTree.new(getDiceData(d2, a2id).duplicate_deep())
 	setUnitProp(u1, "dieData", d1Data)
 	setUnitProp(u2, "dieData", d2Data)
 	readDieTag("Check", u1)
@@ -530,7 +582,8 @@ func executeClash(u1: String, u2: String, a1id: int, a2id: int, d1: String, d2: 
 	var defDice := d2Data if(prioritySwitch) else d1Data
 	
 	if((d1Result if(prioritySwitch) else d2Result) == CLASH_WIN):
-		readDieTag("ClashWin", atkUnit)
+		if(!(dmgType(atkDice) == "Evade" && isOffense(defDice))):
+			readDieTag("ClashWin", atkUnit)
 		readDieTag("ClashLose", defUnit)
 	
 	if(canStore(atkDice) && defRoll == 0): return -1 # Defense/Counter Recycle
@@ -549,8 +602,11 @@ func executeClash(u1: String, u2: String, a1id: int, a2id: int, d1: String, d2: 
 	elif(dmgType(atkDice) == "Block"): # Block win
 		EventBus.emit_signal("dmgConsole", ["", defUnit, "0", str(max(0, atkRoll - defRoll))])
 	
-	elif(!isOffense(defDice)): # Evade beats Evade/Block
-		EventBus.emit_signal("dmgConsole", ["", atkUnit, "0", str(min(0, -atkRoll))])
+	else:
+		if(isOffense(defDice)): # Evade evades Offense
+			readDieTag("OnEvade", atkUnit)
+		else: # Evade beats Evade/Block
+			EventBus.emit_signal("dmgConsole", ["", atkUnit, "0", str(min(0, -atkRoll))])
 
 	setUnitProp(u1, "dieData", DataTree.new())
 	setUnitProp(u2, "dieData", DataTree.new())
@@ -605,7 +661,7 @@ func rollDie(_unit: String, die: DataTree) -> int:
 func getDiceData(die: String, id := -1) -> Dictionary:
 	var dieParse := die.split("/")
 	if(dieParse.size() != 2): return {}
-	if(id > 0): return getAction(id, "data/Dice/" + dieParse[1], {})
+	if(!isSaveDiceArr(getAction(id, "name"))): return getAction(id, "data/Dice/" + dieParse[1], {})
 	return fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], TYPE_DICTIONARY)
 
 func recycleDie(die: DataTree, result: int) -> int:
@@ -644,20 +700,14 @@ func getDieType(die: DataTree) -> String:
 func getResistance(unit: String, type: String) -> Array[int]:
 	if(!unitList.has(unit)): return [0, 0]
 	var unitData := unitList[unit].dataSet
-	var dmgPath = "Attributes/" + type + "Damage"
-	var stgPath = "Attributes/" + type + "Stagger"
-	var dmgRes = simpleCollapse(unitData.dget(dmgPath))
-	var stgRes = simpleCollapse(unitData.dget(stgPath))
+	var dmgPath = type + "Damage"
+	var stgPath = type + "Stagger"
+	var dmgRes = getSumAttribute(unitData, dmgPath)
+	var stgRes = getSumAttribute(unitData, stgPath)
 	return [dmgRes, stgRes]
 
-func simpleCollapse(data) -> int:
-	if(data is int || data is float): return data
-	if(data is String): return 0
-	var sum := 0
-	if(data is Array || data is Dictionary):
-		for v in data:
-			if(data is int || data is float): sum += data[v]
-	return sum
+func getSumAttribute(unitData: DataTree, attribute: String) -> int:
+	return unitData.getComplexSeqn("Attributes/" + attribute, "add", 0)
 
 func runGameStat() -> void:
 	fileTree = GameManager.filetree

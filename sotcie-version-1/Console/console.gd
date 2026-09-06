@@ -181,22 +181,25 @@ func displayUnitCommand(args: PackedStringArray) -> int:
 	text += ")\n"
 	
 	text += addStyle(" Slash ", "ffcccc", true)
+	var temp = Functions.getResistance(args[1], "Slash")
 	text += ": "
-	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/SlashDamage", 0)))
+	text += weaknessPrint(temp[0])
 	text += " , "
-	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/SlashStagger", 0)), true)
+	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	text += addStyle(" Pierce", "ccffcc", true)
+	temp = Functions.getResistance(args[1], "Pierce")
 	text += ": "
-	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/PierceDamage", 0)))
+	text += weaknessPrint(temp[0])
 	text += " , "
-	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/PierceStagger", 0)), true)
+	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	text += addStyle(" Blunt ", "ccccff", true)
+	temp = Functions.getResistance(args[1], "Blunt")
 	text += ": "
-	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/BluntDamage", 0)))
+	text += weaknessPrint(temp[0])
 	text += " , "
-	text += weaknessPrint(castNumDataToInt(unitData.dget("Attributes/BluntStagger", 0)), true)
+	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	
 	
@@ -346,6 +349,11 @@ func printSpeedDice(dice: String, listID := 0) -> void:
 	text += " ("
 	text += addStyle(dice, "ffcc64")
 	text += ")"
+	var aggro = Functions.getStatus("Aggro", 0, unit)
+	if(aggro > 0):
+		text += addStyle(" {", "ffccaa")
+		text += addStyle("!" + str(aggro), "ff8064")
+		text += addStyle("}", "ffccaa")
 	addLog(text)
 
 func executeSkillsCommand(args: PackedStringArray) -> int:
