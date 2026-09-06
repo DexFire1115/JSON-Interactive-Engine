@@ -45,6 +45,9 @@ func readCommand(text: String) -> void:
 		"exsk":
 			argPrint(args, "64ffff", "ff6464", "64ff64", "ffaa64", "64ffaa")
 			errorCode = executeSkillsCommand(args)
+		"exaw":
+			argPrint(args, "64ffff", "ff6464")
+			errorCode = executeAWSkillCommand(args)
 		"savedice":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = displaySaveDiceCommand(args)
@@ -133,7 +136,7 @@ func rollCommand(args: PackedStringArray) -> int:
 
 func displayUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var unitData = Functions.unitList[args[1]].dataSet
+	var unitData = Functions.unitList.get(args[1]).dataSet
 	if(unitData == null): return 3
 	var text := "[u]"
 	text += addStyle("Name: ", "ffffff", true)
@@ -355,6 +358,28 @@ func printSpeedDice(dice: String, listID := 0) -> void:
 		text += addStyle("!" + str(aggro), "ff8064")
 		text += addStyle("}", "ffccaa")
 	addLog(text)
+
+func executeAWSkillCommand(args: PackedStringArray) -> int:
+	if(args.size() < 6): return 1
+	var u1 := args[1]
+	var u2 := []
+	var a1 := ""
+	var a2 := []
+	var i = 2
+	var delimiter = false
+	while(i < args.size()):
+		if(delimiter):
+			a2.append(args[i])
+		elif(args[i] == ","):
+			delimiter = true
+			i += 1
+			if(i < args.size()):
+				a1 = args[i]
+		else:
+			u2.append(args[i])
+		i += 1
+	Functions.executeAWSkill(u1, u2, a1, a2)
+	return 0
 
 func executeSkillsCommand(args: PackedStringArray) -> int:
 	if(args.size() < 5): return 1

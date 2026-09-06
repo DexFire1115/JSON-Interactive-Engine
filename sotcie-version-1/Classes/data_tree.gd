@@ -20,6 +20,7 @@ func has(path: String) -> bool:
 
 func dget(path: String, default = null) -> Variant:
 	var rawFetch := fetchData(dataset, path)
+	#print("eval for : ", path, " -> ", fetchFail(rawFetch))
 	if(fetchFail(rawFetch)): return default
 	return rawFetch[0]
 
@@ -169,7 +170,8 @@ func getComplexSet(path: String, method: String, prefixDefaults := [], suffixDef
 		return evalArr
 	return null
 
-func getComplexSeqn(path: String, method: String, typeDefault = null, prefixDefaults := [], suffixDefaults := []) -> Variant:
+func getComplexSeqn(path: String, method: String, typeDefault = null, 
+prefixDefaults := [], suffixDefaults := []) -> Variant:
 	var data = dget(path)
 	var tally = typeDefault
 	if(data == null): return null
