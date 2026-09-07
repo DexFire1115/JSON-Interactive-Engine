@@ -2,17 +2,28 @@ extends Control
 
 @onready var logs = $GUIArea/VBox/Logs
 @onready var input = $GUIArea/VBox/HBox/Input
+var isScanner := false
 
 func _ready() -> void:
 	EventBus.connect("RefreshConsole", refreshConsole)
 	EventBus.connect("dmgConsole", damageCommand)
 	EventBus.connect("clashConsole", displayClash)
+	EventBus.connect("consoleInput", textPrompt)
 
 func _on_input_text_submitted(new_text: String) -> void:
 	if(new_text.is_empty()): return
-	readCommand(new_text.replace("[", "[lb]"))
+	if(isScanner): 
+		addPushConsole(boldStr("> ") + italicStr(new_text))
+		isScanner = false
+	else: readCommand(new_text.replace("[", "[lb]"))
 	refreshConsole()
 	input.text = ""
+
+func textPrompt(query := ""):
+	addPushConsole(query)
+	isScanner = true
+	_on_input_text_submitted("")
+	EventBus.emit_signal("queryOutput", await input.text_submitted)
 
 func readCommand(text: String) -> void:
 	var args := text.split(" ", false)
@@ -32,10 +43,10 @@ func readCommand(text: String) -> void:
 			errorCode = startSceneCommand(args)
 		"exfn":
 			argPrint(args, "64ffff")
-			errorCode = executeFunctionCommand(args)
+			errorCode = await executeFunctionCommand(args)
 		"roll", "r":
 			argPrint(args, "64ffff", "aa64ff", "ff64ff")
-			errorCode = rollCommand(args)
+			errorCode = await rollCommand(args)
 		"light":
 			argPrint(args, "64ffff", "aa64ff", "ff64ff")
 			errorCode = changeLightCommand(args)
@@ -118,7 +129,7 @@ func removeSpeedDiceCommand(args: PackedStringArray) -> int:
 
 func executeFunctionCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var result = Functions.isNestedArg( JSON.parse_string( " ".join( args.slice(1) ).replace("[lb]","[") ) )
+	var result = await Functions.isNestedArg( JSON.parse_string( " ".join( args.slice(1) ).replace("[lb]","[") ) )
 	addLog(addStyle("Result : ", "ffffff", true) + str(result))
 	return 0
 
@@ -127,11 +138,11 @@ func rollCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3):
 		addLog(addStyle("Result : ", "ffcc64", true) + 
 			# addStyle(str(Functions.roll(args[1].to_int(), 0)), "ffffff"))
-			addStyle(str(Functions.callj("roll", [args[1].to_int(), 0])), "ffffff"))
+			addStyle(str(await Functions.callj("roll", [args[1].to_int(), 0])), "ffffff"))
 		return 0
 	addLog(addStyle("Result : ", "ffcc64", true) + 
 		# addStyle(str(Functions.roll(args[1].to_int(), args[2].to_int())),"ffffff"))
-		addStyle(str(Functions.callj("roll", [args[1].to_int(), args[2].to_int()])), "ffffff"))
+		addStyle(str(await Functions.callj("roll", [args[1].to_int(), args[2].to_int()])), "ffffff"))
 	return 0
 
 func displayUnitCommand(args: PackedStringArray) -> int:
@@ -551,4 +562,3 @@ func renderLog(limit: int) -> void:
 
 func refreshConsole() -> void:
 	renderLog(40)
-	
