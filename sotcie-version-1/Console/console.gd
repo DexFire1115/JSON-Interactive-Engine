@@ -7,8 +7,12 @@ var isScanner := false
 func _ready() -> void:
 	EventBus.connect("RefreshConsole", refreshConsole)
 	EventBus.connect("dmgConsole", damageCommand)
+	EventBus.connect("dmgPrint", dmgVisual)
+	EventBus.connect("lightPrint", lightVisual)
 	EventBus.connect("clashConsole", displayClash)
 	EventBus.connect("consoleInput", textPrompt)
+	EventBus.connect("killedPrint", killedPrint)
+	EventBus.connect("staggeredPrint", staggeredPrint)
 
 func _on_input_text_submitted(new_text: String) -> void:
 	if(new_text.is_empty()): return
@@ -67,7 +71,7 @@ func readCommand(text: String) -> void:
 			errorCode = displaySkillCommand(args)
 		"dispunit":
 			argPrint(args, "64ffff", "aa64ff")
-			errorCode = displayUnitCommand(args)
+			errorCode = await displayUnitCommand(args)
 		"dispspeed":
 			argPrint(args, "64ffff")
 			errorCode = displaySpeedDiceCommand(args)
@@ -195,21 +199,21 @@ func displayUnitCommand(args: PackedStringArray) -> int:
 	text += ")\n"
 	
 	text += addStyle(" Slash ", "ffcccc", true)
-	var temp = Functions.getResistance(args[1], "Slash")
+	var temp = await Functions.getResistance(args[1], "Slash")
 	text += ": "
 	text += weaknessPrint(temp[0])
 	text += " , "
 	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	text += addStyle(" Pierce", "ccffcc", true)
-	temp = Functions.getResistance(args[1], "Pierce")
+	temp = await Functions.getResistance(args[1], "Pierce")
 	text += ": "
 	text += weaknessPrint(temp[0])
 	text += " , "
 	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	text += addStyle(" Blunt ", "ccccff", true)
-	temp = Functions.getResistance(args[1], "Blunt")
+	temp = await Functions.getResistance(args[1], "Blunt")
 	text += ": "
 	text += weaknessPrint(temp[0])
 	text += " , "
@@ -402,62 +406,69 @@ func executeSkillsCommand(args: PackedStringArray) -> int:
 func changeLightCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3): return 1
 	if(!Functions.unitList.has(args[1])): return 3
-	var unitData := Functions.unitList[args[1]].dataSet
 	if(!args[2].is_valid_int()): return 5
 	var diff := int(args[2])
-	var oldLight = unitData.dget("Attributes/CurrentLight", "")
-	var maxLight = unitData.dget("Attributes/MaxLight", "")
-	unitData.dset("Attributes/CurrentLight", min(max(0, oldLight + diff), maxLight))
-	var newLight = unitData.dget("Attributes/CurrentLight", "")
-	var text := ""
-	text += getNameTag(args[1])
-	text += ": "
-	text += addStyle("⬢".repeat(oldLight),"ffffcc")
-	text += addStyle("⬢".repeat(maxLight - oldLight),"646464")
-	text += " -> "
-	text += addStyle("⬢".repeat(newLight),"ffffcc")
-	text += addStyle("⬢".repeat(maxLight - newLight),"646464")
-	addPushConsole(text)
+	Functions.changeLight(diff, args[1])
 	return 0
+
+func lightVisual(unit: String, data: Array):
+	if(data.size() != 3): return
+	var text := ""
+	text += getNameTag(unit)
+	text += ": "
+	text += addStyle("⬢".repeat(data[0]),"ffffcc")
+	text += addStyle("⬢".repeat(data[1] - data[0]),"646464")
+	text += " -> "
+	text += addStyle("⬢".repeat(data[2]),"ffffcc")
+	text += addStyle("⬢".repeat(data[1] - data[2]),"646464")
+	addPushConsole(text)
 
 func damageCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3): return 1
 	if(!Functions.unitList.has(args[1])): return 3
-	var unitdata := Functions.unitList[args[1]].dataSet
 	if(!args[2].is_valid_int()): return 5
 	var hdmg := int(args[2])
 	var sdmg: int
 	if(args.size() < 4): sdmg = hdmg
 	elif(!args[3].is_valid_int()): return 5
 	else: sdmg = int(args[3])
-	var oldHealth = unitdata.safeGet("Attributes/CurrentHealth", -1)
-	var oldStagger = unitdata.safeGet("Attributes/CurrentStagger", -1)
-	unitdata.dset("Attributes/CurrentHealth", 
-		min(max(0, oldHealth - hdmg), unitdata.safeGet("Attributes/MaxHealth", -1)))
-	unitdata.dset("Attributes/CurrentStagger", 
-		min(max(0, oldStagger - sdmg), unitdata.safeGet("Attributes/MaxStagger", -1)))
-	var newHealth = unitdata.safeGet("Attributes/CurrentHealth", -1)
-	var newStagger = unitdata.safeGet("Attributes/CurrentStagger", -1)
-		
-	var text := ""
-	text += underlineStr(boldStr("Damaged : " + getNameTag(args[1])))
-	text += "\n"
+	Functions.dealCombinedDamage(hdmg, sdmg, args[1])
+	return 0
 
-	text += " "
+func dmgVisual(unit: String, data: Array):
+	if(data.size() != 4): return
+	var text := ""
+	text += boldStr(getNameTag(unit))
+	text += ": [lb] "
 	text += addStyle("Hlt", "ff6464", true)
 	text += ": "
-	text += addStyle(str(oldHealth), "ff6464")
+	text += addStyle(str(data[0]), "ff6464")
 	text += " -> "
-	text += addStyle(str(newHealth), "646464" if(newHealth <= 0) else "ff6464")
+	text += addStyle(str(data[2]), "646464" if(data[2] <= 0) else "ff6464")
 	text += " | "
 	text += addStyle("Stg", "ffff64", true)
 	text += ": "
-	text += addStyle(str(oldStagger), "ffff64")
+	text += addStyle(str(data[1]), "ffff64")
 	text += " -> "
-	text += addStyle(str(newStagger), "646464" if(newStagger <= 0) else "ffff64")
-	
+	text += addStyle(str(data[3]), "646464" if(data[3] <= 0) else "ffff64")
+	text += " ]"
 	addPushConsole(text)
-	return 0
+
+func killedPrint(unit: String):
+	var text := ""
+	text += boldStr(getNameTag(unit))
+	text += " has been "
+	text += addStyle("Killed", "ff6464", true)
+	text += "!"
+	addPushConsole(text)
+
+func staggeredPrint(unit: String):
+	var text := ""
+	text += boldStr(getNameTag(unit))
+	text += " has been "
+	text += addStyle("Staggered", "ffff64", true)
+	text += "!"
+	addPushConsole(text)
 
 func displayClash(t1: String, r1: int, t2: String, r2: int):
 	var text := ""
