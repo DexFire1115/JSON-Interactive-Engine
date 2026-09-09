@@ -200,6 +200,12 @@ func lte(v1, v2) -> bool:
 func notBool(b: bool) -> bool:
 	return !b
 
+func andBool(b1: bool, b2: bool) -> bool:
+	return b1 && b2
+
+func orBool(b1: bool, b2: bool) -> bool:
+	return b1 || b2
+
 func min(v1: int, v2: int) -> int:
 	return min(v1, v2)
 
@@ -229,6 +235,9 @@ func joinArr(arr1: Array, arr2: Array) -> Array:
 	arrSum.append_array(arr2)
 	return arrSum
 
+func getUnit(unit := "") -> String:
+	return getSingleTarget(unit)
+
 func getUnitData(unit := "") -> DataTree:
 	unit = getSingleTarget(unit)
 	var unitVar: Unit = unitList.get(unit)
@@ -252,15 +261,49 @@ func getSingleTarget(target := "") -> String:
 	if(target == "@Self"): target = getVar("Self", "")
 	return target
 
-func dealDamage(amt: int, target := ""):
-	target = getSingleTarget(target)
-	if(target.is_empty()): return
-	EventBus.emit_signal("dmgConsole", ["", target, amt, 0])
+func consoleCommand(command: String, ...args: Array):
+	args.push_front(command)
+	EventBus.callv("emit_signal", args)
 
-func dealStagger(amt: int, target := ""):
+func dealDamage(amt: int, target := "") -> Array:
 	target = getSingleTarget(target)
-	if(target.is_empty()): return
-	EventBus.emit_signal("dmgConsole", ["", target, 0, amt])
+	if(target.is_empty()): return [-1,-1,-1,-1]
+	return dealCombinedDamage(amt, 0, target)
+
+func dealStagger(amt: int, target := "") -> Array:
+	target = getSingleTarget(target)
+	if(target.is_empty()): return [-1,-1,-1,-1]
+	return dealCombinedDamage(0, amt, target)
+
+func dealCombinedDamage(hdmg: int, sdmg: int, target := "") -> Array:
+	var dataArr := [-1,-1,-1,-1]
+	target = getSingleTarget(target)
+	if(target.is_empty()): return dataArr
+	var unitdata := getUnitData(target)
+	if(unitdata.isEmpty()): return dataArr
+	dataArr[0] = unitdata.safeGet("Attributes/CurrentHealth", -1)
+	dataArr[1] = unitdata.safeGet("Attributes/CurrentStagger", -1)
+	dataArr[2] = min(max(0, dataArr[0] - hdmg), unitdata.safeGet("Attributes/MaxHealth", -1))
+	dataArr[3] = min(max(0, dataArr[1] - sdmg), unitdata.safeGet("Attributes/MaxStagger", -1))
+	unitdata.dset("Attributes/CurrentHealth", dataArr[2])
+	unitdata.dset("Attributes/CurrentStagger", dataArr[3])
+	consoleCommand("dmgPrint", target, dataArr)
+	if(dataArr[0] > 0 && dataArr[2] == 0): statusInflict("Killed", 1, target)
+	if(dataArr[1] > 0 && dataArr[3] == 0): statusInflict("Staggered", 1, target)
+	return dataArr
+
+func changeLight(amt := 0, target := "@Self") -> Array:
+	var dataArr := [-1, -1, -1]
+	target = getSingleTarget(target)
+	if(target.is_empty()): return dataArr
+	var unitdata := getUnitData(target)
+	if(unitdata.isEmpty()): return dataArr
+	dataArr[0] = unitdata.dget("Attributes/CurrentLight", "")
+	dataArr[1] = unitdata.dget("Attributes/MaxLight", "")
+	dataArr[2] = min(max(0, dataArr[0] + amt), dataArr[1])
+	unitdata.dset("Attributes/CurrentLight", dataArr[2])
+	consoleCommand("lightPrint", target, dataArr)
+	return dataArr
 
 func statusInflict(status: String, amt := 1, target := "", nextScene := false):
 	setStatus(status, getStatus(status, 0, target, nextScene) + amt, target, nextScene)
@@ -378,6 +421,7 @@ func clearSaveDice():
 func regenLight():
 	for u in unitList:
 		var unitData := unitList[u].dataSet
+		if(await isInactive(unitData)): continue
 		var newLight = min(unitData.dget("Attributes/CurrentLight", 0) + 
 		unitData.dget("Attributes/LightRegen", 0), 
 		unitData.dget("Attributes/MaxLight", 0))
@@ -389,12 +433,13 @@ func rollSpeed():
 	usedList.clear()
 	for u in unitList:
 		var unitData = unitList[u].dataSet
-		for i in int(getSumAttribute(unitData, "SpeedDiceAmt")):
+		for i in int(await getSumAttribute(unitData, "SpeedDiceAmt")):
 			var val = max(1, roll(
-				getSumAttribute(unitData, "SpeedDiceSize"),
-				getSumAttribute(unitData, "SpeedDiceBase"),
+				await getSumAttribute(unitData, "SpeedDiceSize"),
+				await getSumAttribute(unitData, "SpeedDiceBase"),
 			))
-			diceList.set(u + "D" + str(i), val)
+			if(await isInactive(unitData)): usedList.set(u + "D" + str(i), val)
+			else: diceList.set(u + "D" + str(i), val)
 
 func nextTurn():
 	var isSavedDice := diceList.is_empty()
@@ -455,6 +500,9 @@ func sortSpeedDice(dice: Dictionary) -> Array:
 
 func getUnitFromDice(dice: String) -> String:
 	return dice.rsplit("D", true, 1)[0]
+
+func isInactive(unitData: DataTree) -> bool:
+	return await unitData.getComplexSeqn("Attributes/Inactive", "orBool", false)
 
 func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	if(!unitList.has(u1)): return
@@ -559,6 +607,10 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	setUnitProp(u2, "target", u1)
 	setUnitProp(u1, "action", u1id)
 	setUnitProp(u2, "action", u2id)
+	await readActionTag("Eminence", u1)
+	await readActionTag("Eminence", u2)
+	await readActionTag("Proactive", u1)
+	await readActionTag("Reactive", u2)
 	await readActionTag("OnUse", u1)
 	await readActionTag("OnUse", u2)
 	moveCounterDice(u1id)
@@ -685,10 +737,14 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	var d2Data := d2.copy()
 	setUnitProp(u1, "dieData", d1Data)
 	setUnitProp(u2, "dieData", d2Data)
-	await readDieTag("Check", u1)
-	await readDieTag("Check", u2)
-	var d1Roll := await rollDie(u1, d1Data) if(!d1Data.dataset.is_empty()) else 0
-	var d2Roll := await rollDie(u2, d2Data) if(!d2Data.dataset.is_empty()) else 0
+	var d1Roll := 0
+	var d2Roll := 0
+	if(!d1Data.dataset.is_empty()): 
+		await readDieTag("Check", u1)
+		d1Roll = await rollDie(u1, d1Data)
+	if(!d2Data.dataset.is_empty()): 
+		await readDieTag("Check", u2)
+		d2Roll = await rollDie(u2, d2Data)
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll, getDieType(d2Data), d2Roll)
 	if(d1Roll - d2Roll == 0): # Tie or double unopposed
 		if(dmgType(d1Data) == "Evade" && isOffense(d2Data)):
@@ -706,35 +762,41 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	var defRoll := d2Roll if(prioritySwitch) else d1Roll
 	var atkDice := d1Data if(prioritySwitch) else d2Data
 	var defDice := d2Data if(prioritySwitch) else d1Data
+	var atkType := dmgType(atkDice)
 	
 	if((d1Result if(prioritySwitch) else d2Result) == CLASH_WIN):
-		if(!(dmgType(atkDice) == "Evade" && isOffense(defDice))):
+		if(!(atkType == "Evade" && isOffense(defDice))):
 			await readDieTag("ClashWin", atkUnit)
 		await readDieTag("ClashLose", defUnit)
 	
 	if(canStore(atkDice) && defRoll == 0): return -1 # Defense/Counter Recycle
 	if(isOffense(atkDice)): # Offense win
-		var res = getResistance(defUnit, dmgType(atkDice))
+		var res = await getResistance(defUnit, atkType)
 		var dmg := atkRoll
 
 		if(dmgType(defDice) == "Block"): # Offense beats Block
 			dmg -= defRoll
-		
-		EventBus.emit_signal("dmgConsole", 
-			["", defUnit, str(max(0, dmg + res[0])), str(max(0, dmg + res[1]))])
+		var dmgArr := [max(0, dmg + res[0]), max(0, dmg + res[1]), atkType]
+		await readDieTag("ConfirmDamage", atkUnit, {"dmgArr": dmgArr})
+		#await readDieTag("ValidateDamage", defUnit, {"dmgArr": dmgArr})
+		dealCombinedDamage(dmgArr[0], dmgArr[1], defUnit)
 		await readDieTag("Hit", atkUnit)
-		if(atkRoll - atkDice.dget("Base", 0) == atkDice.dget("Dice", 0)):
+		var isCrit: bool = (atkRoll - atkDice.dget("Base", 0)) == atkDice.dget("Dice", 0)
+		if(isCrit):
 			await readDieTag("Crit", atkUnit)
-		await readUnitTag("HitReceived", defUnit)
+		await readUnitTag("HitReceived", defUnit, {"isCrit": isCrit})
 
-	elif(dmgType(atkDice) == "Block"): # Block win
-		EventBus.emit_signal("dmgConsole", ["", defUnit, "0", str(max(0, atkRoll - defRoll))])
+	elif(atkType == "Block"): # Block win
+		var dmgArr := [0, max(0, atkRoll - defRoll), atkType]
+		await readDieTag("ConfirmDamage", atkUnit, {"dmgArr": dmgArr})
+		dealCombinedDamage(dmgArr[0], dmgArr[1], defUnit)
 	
 	else:
 		if(isOffense(defDice)): # Evade evades Offense
 			await readDieTag("OnEvade", atkUnit)
 		else: # Evade beats Evade/Block
-			EventBus.emit_signal("dmgConsole", ["", atkUnit, "0", str(min(0, -atkRoll))])
+			var dmgArr := [0, min(0, -atkRoll), atkType]
+			dealCombinedDamage(dmgArr[0], dmgArr[1], defUnit)
 	
 	await readUnitTag("UsedDie", u1)
 	await readUnitTag("UsedDie", u2)
@@ -749,7 +811,7 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	var unitData = getUnitData(unit)
 	if(unitData == null): return
-	if(metadata.is_empty()): metadata = composeConditionMetaData(unit)
+	metadata.merge(composeConditionMetaData(unit))
 	var conditionStatuses: Array = unitData.safeGet("Conditions/" + tag, TYPE_ARRAY)
 	if(!defaultSeq.is_empty()): 
 		conditionStatuses = unitData.safeGet("Statuses", TYPE_DICTIONARY).keys()
@@ -759,7 +821,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 		await executeCondition(tag, cond, metadata, defaultSeq)
 
 func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	if(metadata.is_empty()): metadata = composeConditionMetaData(unit)
+	metadata.merge(composeConditionMetaData(unit))
 	if(metadata.is_empty()): return
 	var dataDict = getAction(metadata["Action"], "data")
 	if(dataDict != null):
@@ -767,7 +829,7 @@ func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	await readUnitTag(tag, unit, metadata, defaultSeq)
 
 func readDieTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	if(metadata.is_empty()): metadata = composeConditionMetaData(unit)
+	metadata.merge(composeConditionMetaData(unit))
 	if(metadata.is_empty()): return
 	var dieData = metadata["DieData"]
 	if(dieData != null):
@@ -846,12 +908,12 @@ func getResistance(unit: String, type: String) -> Array[int]:
 	var unitData := unitList[unit].dataSet
 	var dmgPath = type + "Damage"
 	var stgPath = type + "Stagger"
-	var dmgRes = getSumAttribute(unitData, dmgPath)
-	var stgRes = getSumAttribute(unitData, stgPath)
+	var dmgRes = await getSumAttribute(unitData, dmgPath)
+	var stgRes = await getSumAttribute(unitData, stgPath)
 	return [dmgRes, stgRes]
 
 func getSumAttribute(unitData: DataTree, attribute: String) -> int:
-	return unitData.getComplexSeqn("Attributes/" + attribute, "add", 0)
+	return await unitData.getComplexSeqn("Attributes/" + attribute, "add", 0)
 
 func runGameStat() -> void:
 	fileTree = GameManager.filetree

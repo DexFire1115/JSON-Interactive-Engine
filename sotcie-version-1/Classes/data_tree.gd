@@ -145,47 +145,52 @@ func fetchFail(input: Array) -> bool:
 	return input[1] == -2 || input[1] > 1
 
 func callArgSet(method: String, prefix := [], main := [], suffix := []) -> Variant:
-	return Functions.callj(method, Functions.joinArr(Functions.joinArr(prefix, main), suffix))
+	return await Functions.callj(method, Functions.joinArr(Functions.joinArr(prefix, main), suffix))
 
-func getComplexArgs(path: String, method: String, prefixDefaults := []) -> Variant:
+func getComplexArgs(path: String, method: String, default = null, prefixDefaults := []) -> Variant:
 	var data = dget(path)
-	if(data == null): return null
-	if(!isComplex(data)): return callArgSet(method, prefixDefaults, [data])
+	if(data == null): return default
+	if(!isComplex(data)): return await callArgSet(method, prefixDefaults, [data])
 	if(data is Dictionary): data = data.values()
-	return Functions.callj(method, Functions.joinArr(prefixDefaults, data))
+	return await Functions.callj(method, Functions.joinArr(prefixDefaults, data))
 
-func getComplexSet(path: String, method: String, prefixDefaults := [], suffixDefaults := []) -> Variant:
+func getComplexSet(path: String, method: String, default = null, 
+prefixDefaults := [], suffixDefaults := []) -> Variant:
 	var data = dget(path)
-	if(data == null): return null
-	if(!isComplex(data)): return callArgSet(method, prefixDefaults, [data], suffixDefaults)
+	if(data == null): return default
+	if(!isComplex(data)): return await callArgSet(method, prefixDefaults, [data], suffixDefaults)
 	if(data is Dictionary):
 		var evalDict := {}
 		for key in data:
-			evalDict[key] = callArgSet(method, prefixDefaults, [data[key]], suffixDefaults)
+			evalDict[key] = await callArgSet(method, prefixDefaults, [data[key]], suffixDefaults)
 		return evalDict
 	if(data is Array):
 		var evalArr := []
 		for a in data:
-			evalArr.push_back(callArgSet(method, prefixDefaults, [a], suffixDefaults))
+			evalArr.push_back(await callArgSet(method, prefixDefaults, [a], suffixDefaults))
 		return evalArr
-	return null
+	return default
 
 func getComplexSeqn(path: String, method: String, typeDefault = null, 
 prefixDefaults := [], suffixDefaults := []) -> Variant:
 	var data = dget(path)
 	var tally = typeDefault
-	if(data == null): return null
+	if(data == null): return tally
 	if(typeDefault == null):
 		var tallyType = getComplexType(path)
 		if(tallyType == TYPE_NIL): return null
 		tally = type_convert(null, tallyType)
-	if(!isComplex(data)): tally = callArgSet(method, prefixDefaults, [tally, data], suffixDefaults)
+	if(!isComplex(data)): tally = await callArgSet(method, prefixDefaults, [tally, data], suffixDefaults)
 	if(data is Dictionary):
 		for key in data:
-			tally = callArgSet(method, prefixDefaults, [tally, data[key]], suffixDefaults)
+			var temp = data[key]
+			if(isComplex(temp)): temp = temp.duplicate_deep()
+			tally = await callArgSet(method, prefixDefaults, [tally, temp], suffixDefaults)
 	if(data is Array):
 		for a in data:
-			tally = callArgSet(method, prefixDefaults, [tally, a], suffixDefaults)
+			var temp = a
+			if(isComplex(temp)): temp = temp.duplicate_deep()
+			tally = await callArgSet(method, prefixDefaults, [tally, temp], suffixDefaults)
 	return tally
 
 func getComplexType(path: String) -> int:
@@ -201,8 +206,7 @@ func getComplexType(path: String) -> int:
 			else: return TYPE_NIL
 	return currentType
 
-func complexInstantiate(path: String, isDict := true):
-	var baseVal = null
+func complexInstantiate(path: String, isDict := true, baseVal = null):
 	if(dget(path) is Dictionary): baseVal = dget(path + "/Base")
 	if(dget(path) is Array): baseVal = dget(path + "/0")
 	if(isDict):
