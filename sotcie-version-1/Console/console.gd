@@ -432,25 +432,27 @@ func damageCommand(args: PackedStringArray) -> int:
 	if(args.size() < 4): sdmg = hdmg
 	elif(!args[3].is_valid_int()): return 5
 	else: sdmg = int(args[3])
-	Functions.dealCombinedDamage(hdmg, sdmg, args[1])
+	Functions.dealCombinedDamage([hdmg, sdmg, "Console", hdmg < 0, sdmg < 0], "Console", args[1])
 	return 0
 
 func dmgVisual(unit: String, data: Array):
-	if(data.size() != 4): return
+	if(data.size() != 5): return
 	var text := ""
 	text += boldStr(getNameTag(unit))
 	text += ": [lb] "
 	text += addStyle("Hlt", "ff6464", true)
 	text += ": "
-	text += addStyle(str(data[0]), "ff6464")
-	text += " -> "
-	text += addStyle(str(data[2]), "646464" if(data[2] <= 0) else "ff6464")
+	text += addStyle(str(data[0]), "646464" if(data[0] <= 0) else "ff6464")
+	if(data[0] != data[2]):
+		text += " -> "
+		text += addStyle(str(data[2]), "646464" if(data[2] <= 0) else "ff6464")
 	text += " | "
 	text += addStyle("Stg", "ffff64", true)
 	text += ": "
-	text += addStyle(str(data[1]), "ffff64")
-	text += " -> "
-	text += addStyle(str(data[3]), "646464" if(data[3] <= 0) else "ffff64")
+	text += addStyle(str(data[1]), "646464" if(data[1] <= 0) else "ffff64")
+	if(data[1] != data[3]):
+		text += " -> "
+		text += addStyle(str(data[3]), "646464" if(data[3] <= 0) else "ffff64")
 	text += " ]"
 	addPushConsole(text)
 
