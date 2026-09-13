@@ -63,6 +63,12 @@ func readCommand(text: String) -> void:
 		"exaw":
 			argPrint(args, "64ffff", "ff6464")
 			errorCode = executeAWSkillCommand(args)
+		"buff", "b":
+			argPrint(args, "64ffff", "aa64ff", "ffaa64", "ffff64", "64ff64")
+			errorCode = statusInflictionCommand(args)
+		"dispstatus", "bp":
+			argPrint(args, "64ffff", "aa64ff")
+			errorCode = displayStatusCommand(args)
 		"savedice":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = displaySaveDiceCommand(args)
@@ -401,6 +407,34 @@ func executeSkillsCommand(args: PackedStringArray) -> int:
 	# displaySkillCommand(["",args[3]])
 	# displaySkillCommand(["",args[4]])
 	Functions.executeSkills(args[1], args[2], args[3], args[4])
+	return 0
+
+func statusInflictionCommand(args: PackedStringArray) -> int:
+	if(args.size() < 4): return 1
+	if(!Functions.unitList.has(args[1])): return 3
+	if(!args[3].is_valid_int()): return 5
+	if(args.size() > 4 && args[4] == "s"):
+		Functions.setStatus(args[2], int(args[3]), args[1])
+		return 0
+	Functions.statusInflict(args[2], int(args[3]), args[1])
+	return 0
+
+func displayStatusCommand(args: PackedStringArray) -> int:
+	if(args.size() < 2): return 1
+	if(!Functions.unitList.has(args[1])): return 3
+	var statusList := DataTree.new(Functions.getUnitData(args[1]).safeGet("Statuses", TYPE_DICTIONARY))
+	var text = ""
+	for s in statusList.dataset:
+		var statusFile := DataTree.new(Functions.fileTree.dget(statusList.dget(s + "/File", ""), {}))
+		text += addStyle(statusFile.dget("Name", ""), statusFile.dget("Color", ""), true)
+		text += " : "
+		text += boldStr(str(statusList.dget(s + "/Stack", 0)))
+		if(statusList.dget(s + "/NextStack", 0) > 0):
+			text += " "
+			text += addStyle("(" + str(statusList.dget(s + "/NextStack", 0)) + ")", "808080")
+		text += "\n"
+	text = text.rsplit("\n", true, 1)[0]
+	addPushConsole(text)
 	return 0
 
 func changeLightCommand(args: PackedStringArray) -> int:

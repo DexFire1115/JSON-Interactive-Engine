@@ -72,6 +72,7 @@ func parseRef(varName: String) -> String:
 	if(varName.begins_with("*")): return varName.substr(1)
 	var stackName = "/".join(stack.slice(0, max(0, stack.size() - varName.count("."))))
 	varName = varName.replace(".", "")
+	#print("parsing -> ", stackName, "/", varName)
 	if(stackName.is_empty()): return varName
 	return stackName + "/" + varName
 
@@ -88,7 +89,7 @@ func sequence(stackName: String, calls := [], args := {}):
 	for arg in args:
 		setVar(arg, args[arg])
 	var val
-	#print(references)
+	#print(references.keys())
 	for method in calls:
 		if(method is String && method == "return"): break
 		val = await isNestedArg(method)
@@ -242,6 +243,9 @@ func joinArr(arr1: Array, arr2: Array) -> Array:
 	arrSum.append_array(arr2)
 	return arrSum
 
+func passArr(...arr: Array) -> Array:
+	return arr
+
 func getUnit(unit := "") -> String:
 	return getSingleTarget(unit)
 
@@ -268,8 +272,8 @@ func getSingleTarget(target := "") -> String:
 	if(target == "@Self"): target = getVar("Self", "")
 	return target
 
-func getSelf(target := "@Self") -> String:
-	if(target.is_empty()): target = getSingleTarget()
+func getSelf(target := "") -> String:
+	if(target.is_empty()): target = getSingleTarget("@Self")
 	return target
 
 func consoleCommand(command: String, ...args: Array):
@@ -333,14 +337,26 @@ func changeLight(amt := 0, target := "@Self") -> Array:
 	consoleCommand("lightPrint", target, dataArr)
 	return dataArr
 
-func statusInflict(status: String, amt := 1, target := "", nextScene := false):
-	setStatus(status, getStatus(status, 0, target, nextScene) + amt, target, nextScene)
+func statusInflict(status: String, amt := 1, target := "", nextScene := false, caster := ""):
+	setStatus(status, getStatus(status, 0, target, nextScene) + amt, target, nextScene, true, caster)
 	
-func setStatus(status: String, amt := 1, target := "", nextScene := false, apply := true):
+func setStatus(status: String, amt := 1, target := "", nextScene := false, apply := true, caster := ""):
 	target = getSingleTarget(target)
 	if(target.is_empty()): return
 	var targetData := getUnitData(target)
 	if(targetData == null): return
+	caster = getSelf(caster)
+	if(nextScene == false && apply == true):
+		var statusArr = [status, amt]
+		if(unitList.has(caster)):
+			await readDieTag("ConfirmStatus", caster, 
+				{"statusArr": statusArr, "Target": target})
+			await readDieTag("ConfirmStatus-" + statusArr[0], caster, 
+				{"statusArr": statusArr, "Target": target})
+		await readDieTag("ValidateStatus", target, {"statusArr": statusArr})
+		await readDieTag("ValidateStatus-" + statusArr[0], target, {"statusArr": statusArr})
+		status = statusArr[0]
+		amt = statusArr[1]
 	
 	var statusPath := "Statuses/" + status
 	var statConditionPath := statusPath + "/Conditions"
@@ -367,6 +383,9 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 	if(apply):
 		await readUnitTag("Applied", target)
 		await readUnitTag("Applied-" + status, target)
+		if(unitList.has(caster)):
+			await readDieTag("Caused", caster, {"Target": target})
+			await readDieTag("Caused-" + status, caster, {"Target": target})
 	if(statusData.dget("Stack", 0) <= 0 && statusData.dget("NextStack", 0) <= 0): 
 		removeStatus(status, target)
 
@@ -454,6 +473,7 @@ func queryUnit(query: String) -> String:
 	return ""
 
 func sceneStart():
+	#print("< - - - SCENE - - - >")
 	for u in unitList:
 		await readUnitTag("SceneEnd", u)
 	scene += 1
@@ -586,11 +606,17 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	setUnitProp(u1, "target", u2[0])
 	setUnitProp(u1, "action", u1id)
 	await readActionTag("OnUse", u1)
+	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0) 
+	&& getAction(u1id, "data/Limit", 0) > 0):
+		await readActionTag("Exhaust", u1)
 	moveCounterDice(u1id)
 	for i in u2.size():
 		setUnitProp(u2[i], "target", u1)
 		setUnitProp(u2[i], "action", u2id[i])
 		await readActionTag("OnUse", u2[i])
+		if(getAction(u2id[i], "data/Uses", 0) >= getAction(u2id[i], "data/Limit", 0) 
+		&& getAction(u2id[i], "data/Limit", 0) > 0):
+			await readActionTag("Exhaust", u2[i])
 		moveCounterDice(u2id[i])
 	while(!(u1dice.is_empty() && u2dice.all(isEmpty))):
 		if(u1dice.is_empty()): afterSkillAW(u1, u2, clashData)
@@ -598,7 +624,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
 		setUnitProp(u1, "dieData", d1)
-		await readDieTag("BeforeDie", u1)
+		if(!d1.isEmpty()): await readDieTag("BeforeDie", u1)
 		for i in u2.size():
 			setUnitProp(u1, "target", u2[i])
 			if(u2dice[i].is_empty()): afterSkill(u1, u2[i], clashData, false)
@@ -606,7 +632,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			getDiceData(u2dice[i].front(), u2id[i]).duplicate_deep())
 			setUnitProp(u1, "dieData", d1)
 			setUnitProp(u2[i], "dieData", d2)
-			await readDieTag("BeforeDie", u2[i])
+			if(!d2.isEmpty()): await readDieTag("BeforeDie", u2[i])
 			var result := await executeClash(
 				u1, u2[i], d1, d2)
 			if(result == -1):
@@ -667,6 +693,12 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	await readActionTag("Reactive", u2)
 	await readActionTag("OnUse", u1)
 	await readActionTag("OnUse", u2)
+	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0) 
+	&& getAction(u1id, "data/Limit", 0) > 0):
+		await readActionTag("Exhaust", u1)
+	if(getAction(u2id, "data/Uses", 0) >= getAction(u2id, "data/Limit", 0) 
+	&& getAction(u2id, "data/Limit", 0) > 0):
+		await readActionTag("Exhaust", u2)
 	moveCounterDice(u1id)
 	moveCounterDice(u2id)
 	while(!(u1dice.is_empty() && u2dice.is_empty())):
@@ -678,8 +710,8 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 			getDiceData(u2dice.front(), u2id).duplicate_deep())
 		setUnitProp(u1, "dieData", d1)
 		setUnitProp(u2, "dieData", d2)
-		await readDieTag("BeforeDie", u1)
-		await readDieTag("BeforeDie", u2)
+		if(!d1.isEmpty()): await readDieTag("BeforeDie", u1)
+		if(!d2.isEmpty()): await readDieTag("BeforeDie", u2)
 		var result := await executeClash(
 			u1, u2, d1, d2)
 		if(result == -1):
@@ -737,8 +769,9 @@ func createAction(unit: String, action: String) -> int:
 	actionTree.dset("unit", unit)
 	actionTree.dset("name", action)
 	actionTree.dset("diceArr", diceArr)
-	var dataCopy = Dictionary(fileTree.safeGet("Actions/" + action, 
-		TYPE_DICTIONARY)).duplicate_deep()
+	var data := DataTree.new(fileTree.safeGet("Actions/" + action, TYPE_DICTIONARY))
+	data.dset("Uses", data.dget("Uses", 0) + 1)
+	var dataCopy = Dictionary(data.dataset).duplicate_deep()
 	actionTree.dset("data", dataCopy)
 	if(isIntercept): 
 		dataCopy.set("Intercept", true)
@@ -799,10 +832,10 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	setUnitProp(u2, "dieData", d2Data)
 	var d1Roll := 0
 	var d2Roll := 0
-	if(!d1Data.dataset.is_empty()): 
+	if(!d1Data.isEmpty()): 
 		await readDieTag("Check", u1)
 		d1Roll = await rollDie(u1, d1Data)
-	if(!d2Data.dataset.is_empty()): 
+	if(!d2Data.isEmpty()): 
 		await readDieTag("Check", u2)
 		d2Roll = await rollDie(u2, d2Data)
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll, getDieType(d2Data), d2Roll)
@@ -811,7 +844,10 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 			await readDieTag("Evade", u1)
 		if(dmgType(d2Data) == "Evade" && isOffense(d1Data)):
 			await readDieTag("Evade", u2)
-		return 0 
+		return 0
+	if(d1Roll * d2Roll != 0): # Not Double Unopposed
+		await readDieTag("Clash", u1)
+		await readDieTag("Clash", u2)
 	var d1Result: int = 0 if(d1Roll * d2Roll == 0) else (sign(d2Roll - d1Roll) + 2)
 	var d2Result: int = 0 if(d1Roll * d2Roll == 0) else (sign(d1Roll - d2Roll) + 2)
 	
@@ -850,28 +886,39 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	
 	else:
 		if(isOffense(defDice)): # Evade evades Offense
-			await readDieTag("OnEvade", atkUnit)
+			await readDieTag("Evade", atkUnit)
 		else: # Evade beats Evade/Block
 			var dmgArr := [0, -atkRoll, atkType, true]
 			dealCombinedDamage(dmgArr, atkUnit, defUnit)
 	
-	await readUnitTag("UsedDie", u1)
-	await readUnitTag("UsedDie", u2)
-	if(isOffense(d1Data)): await readUnitTag("UsedOffense", u1)
-	else: await readUnitTag("UsedDefense", u1)
-	if(isOffense(d2Data)): await readUnitTag("UsedOffense", u2)
-	else: await readUnitTag("UsedDefense", u2)
+	if(!d1Data.isEmpty()): 
+		await readUnitTag("UsedDie", u1)
+		if(isOffense(d1Data)): await readUnitTag("UsedOffense", u1)
+		else: await readUnitTag("UsedDefense", u1)
+	if(!d2Data.isEmpty()): 
+		await readUnitTag("UsedDie", u2)
+		if(isOffense(d2Data)): await readUnitTag("UsedOffense", u2)
+		else: await readUnitTag("UsedDefense", u2)
 	
-	if(!(isOffense(atkDice) || isOffense(defDice))): return 0
-	return recycleDie(d1Data, d1Result) * 2 + recycleDie(d2Data, d2Result)
+	if(d1Data.dget("Recycle", 0) == 0): 
+		d1Data.dset("Recycle", 0 if(!(isOffense(atkDice) || isOffense(defDice)))
+			else recycleDie(d1Data, d1Result))
+	if(d2Data.dget("Recycle", 0) == 0): 
+		d2Data.dset("Recycle", 0 if(!(isOffense(atkDice) || isOffense(defDice)))
+			else recycleDie(d2Data, d2Result))
+	return d1Data.dget("Recycle", 0) * 2 + d2Data.dget("Recycle", 0)
 
 func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
+	#print("UNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	var unitData = getUnitData(unit)
 	if(unitData == null): return
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	var conditionStatuses: Array = unitData.safeGet("Conditions/" + tag, TYPE_ARRAY)
+	#print("TAG = ", tag, " -> ", conditionStatuses)
 	if(!defaultSeq.is_empty()): 
 		conditionStatuses = unitData.safeGet("Statuses", TYPE_DICTIONARY).keys()
+	#print("TAG = ", tag, " -> ", conditionStatuses)
+	conditionStatuses = conditionStatuses.duplicate_deep()
 	for status in conditionStatuses:
 		var path = unitData.safeGet("Statuses/" + status + "/File", TYPE_STRING)
 		var cond := DataTree.new(fileTree.safeGet(path + "/Conditions", TYPE_DICTIONARY))
@@ -879,6 +926,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 		await executeCondition(tag, cond, metadata, defaultSeq)
 
 func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
+	#print("ACT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	if(metadata.is_empty()): return
 	var dataDict = getAction(metadata["Action"], "data")
@@ -887,6 +935,7 @@ func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	await readUnitTag(tag, unit, metadata, defaultSeq)
 
 func readDieTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
+	#print("DIE TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	if(metadata.is_empty()): return
 	var dieData = metadata["DieData"]
