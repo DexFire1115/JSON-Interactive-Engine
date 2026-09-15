@@ -18,7 +18,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 func callj(method: String, args: Array) -> Variant:
 	for i in args.size():
 		args[i] = await isNestedArg(args[i])
-	#print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
+	print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
 		return await jFunc(method, args)
 	elif(has_method(method)):
@@ -26,7 +26,7 @@ func callj(method: String, args: Array) -> Variant:
 	else: return null
 
 func isNestedArg(arg) -> Variant:
-	#print("    is nested : ", str(arg).split("\n")[0])
+	print("    is nested : ", str(arg).split("\n")[0])
 	if(arg is Dictionary && Dictionary(arg).size() == 1):
 		var key = arg.keys()[0]
 		var val = arg[key]
@@ -57,6 +57,10 @@ func objCall(object: Object, method: String, ...args: Array) -> Variant:
 	if(!object.has_method(method)): return null
 	return object.callv(method, args)
 
+func varCall(variant, method: String, ...args: Array) -> Variant:
+	#print(variant, ".", method, args, " -> ", result)
+	return Callable.create(variant, method).callv(args)
+
 func refCall(ref: String, method: String, ...args: Array) -> Variant:
 	ref = parseRef(ref)
 	if(!references.has(ref)): return null
@@ -84,7 +88,7 @@ func clearScope(stackName := ""):
 			references.erase(k)
 
 func sequence(stackName: String, calls := [], args := {}):
-	#print(stackName, " > ", calls.map(func(element): return element.keys()[0]))
+	print(stackName, " > ", calls.map(func(element): return element.keys()[0]))
 	stack.push_back(stackName)
 	for arg in args:
 		setVar(arg, args[arg])
@@ -543,15 +547,18 @@ func highestInDict(dict: Dictionary) -> Variant:
 func removeSpeedDice(die := "") -> int:
 	if(die.is_empty()): die = getNextSpeedDie(!diceList.is_empty())
 	if(die.is_empty()): return -1 # No Dice to Remove
-	if(diceList.has(die)): # Removed from DiceList
-		usedList.set(die, diceList[die])
-		diceList.erase(die)
-		return 1
-	if(saveList.has(die)): # Removed from SaveList
+	var isHeld := saveList.has(die)
+	if(!(diceList.has(die) || isHeld)): return 0
+	if(isHeld): 
 		usedList.set(die, saveList[die])
 		saveList.erase(die)
-		return 2 
-	return 0 # Die not Found
+	else:
+		usedList.set(die, diceList[die])
+		diceList.erase(die)
+	var unitName := getUnitFromDice(die)
+	await readUnitTag("RemDie", unitName, {"SpeedDie": die, "wasHeld": isHeld})
+	unitList[unitName].speedDie = [die, isHeld]
+	return 2 if(isHeld)else 1 # Die not Found
 
 # Saves next die if unspecified
 func saveSpeedDice(die := "") -> int:
@@ -559,6 +566,7 @@ func saveSpeedDice(die := "") -> int:
 	if(die.is_empty()): return -1 # No Dice to Save
 	if(saveList.has(die)): return 1 # Die already saved
 	if(!diceList.has(die)): return 0 # Die not Found
+	await readUnitTag("HoldDie", getUnitFromDice(die), {"SpeedDie": die})
 	saveList.set(die, diceList[die])
 	diceList.erase(die)
 	return 2 # Saved
@@ -651,10 +659,12 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	setUnitProp(u1, "target", "")
 	setUnitProp(u1, "action", -1)
 	clearScope(getAction(u1id, "path", ""))
+	unitList[u1].speedDie = ["", false]
 	for i in u2.size():
 		setUnitProp(u2[i], "target", "")
 		setUnitProp(u2[i], "action", -1)
 		clearScope(getAction(u2id[i], "path", ""))
+		unitList[u2[i]].speedDie = ["", false]
 
 func isEmpty(arr: Array):
 	return arr.is_empty()
@@ -732,6 +742,8 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	setUnitProp(u2, "action", -1)
 	clearScope(getAction(u1id, "path", ""))
 	clearScope(getAction(u2id, "path", ""))
+	unitList[u1].speedDie = ["", false]
+	unitList[u2].speedDie = ["", false]
 
 func afterSkill(u1: String, u2: String, data: Dictionary, isU1: bool):
 	if(isU1):
@@ -830,28 +842,29 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	var d2Data := d2.copy()
 	setUnitProp(u1, "dieData", d1Data)
 	setUnitProp(u2, "dieData", d2Data)
-	var d1Roll := 0
-	var d2Roll := 0
+	var d1Roll := [0, 0, 0, false, false]
+	var d2Roll := d1Roll.duplicate_deep()
 	if(!d1Data.isEmpty()): 
 		await readDieTag("Check", u1)
-		d1Roll = await rollDie(u1, d1Data)
+		d1Roll = await rollDieEmbed(u1, d1Data)
 	if(!d2Data.isEmpty()): 
 		await readDieTag("Check", u2)
-		d2Roll = await rollDie(u2, d2Data)
-	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll, getDieType(d2Data), d2Roll)
-	if(d1Roll - d2Roll == 0): # Tie or double unopposed
+		d2Roll = await rollDieEmbed(u2, d2Data)
+	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll[0], getDieType(d2Data), d2Roll[0])
+	if(d1Roll[0] - d2Roll[0] == 0): # Tie or double unopposed
 		if(dmgType(d1Data) == "Evade" && isOffense(d2Data)):
 			await readDieTag("Evade", u1)
 		if(dmgType(d2Data) == "Evade" && isOffense(d1Data)):
 			await readDieTag("Evade", u2)
 		return 0
-	if(d1Roll * d2Roll != 0): # Not Double Unopposed
+	if(d1Roll[0] * d2Roll[0] != 0): # Not Double Unopposed
 		await readDieTag("Clash", u1)
 		await readDieTag("Clash", u2)
-	var d1Result: int = 0 if(d1Roll * d2Roll == 0) else (sign(d2Roll - d1Roll) + 2)
-	var d2Result: int = 0 if(d1Roll * d2Roll == 0) else (sign(d1Roll - d2Roll) + 2)
+	var clashResults = clashEval(d1Data, d2Data)
+	var d1Result: int = clashResults[0]
+	var d2Result: int = clashResults[1]
 	
-	var prioritySwitch := (d1Result <= d2Result) && d1Roll != 0
+	var prioritySwitch := bool((d1Result <= d2Result) && d1Roll[0] != 0)
 	var atkUnit := u1 if(prioritySwitch) else u2
 	var defUnit := u2 if(prioritySwitch) else u1
 	var atkRoll := d1Roll if(prioritySwitch) else d2Roll
@@ -865,31 +878,30 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 			await readDieTag("ClashWin", atkUnit)
 		await readDieTag("ClashLose", defUnit)
 	
-	if(canStore(atkDice) && defRoll == 0): return -1 # Defense/Counter Recycle
+	if(canStore(atkDice) && defRoll[0] == 0): return -1 # Defense/Counter Recycle
 	if(isOffense(atkDice)): # Offense win
 		var res = await getResistance(defUnit, atkType)
-		var dmg := atkRoll
+		var dmg := int(atkRoll[0])
 
 		if(dmgType(defDice) == "Block"): # Offense beats Block
-			dmg -= defRoll
+			dmg -= defRoll[0]
 		var dmgArr := [dmg + res[0], dmg + res[1], atkType]
 		dealCombinedDamage(dmgArr, atkUnit, defUnit)
 		await readDieTag("Hit", atkUnit)
-		var isCrit: bool = (atkRoll - atkDice.dget("Base", 0)) == atkDice.dget("Dice", 0)
-		if(isCrit):
+		if(atkRoll[4]):
 			await readDieTag("Crit", atkUnit)
-		await readUnitTag("HitReceived", defUnit, {"isCrit": isCrit})
+		await readUnitTag("HitReceived", defUnit, {"isCrit": atkRoll[4]})
 
 	elif(atkType == "Block"): # Block win
-		var dmgArr := [0, atkRoll - defRoll, atkType]
+		var dmgArr := [0, atkRoll[0] - defRoll[0], atkType]
 		dealCombinedDamage(dmgArr, atkUnit, defUnit)
 	
 	else:
 		if(isOffense(defDice)): # Evade evades Offense
 			await readDieTag("Evade", atkUnit)
 		else: # Evade beats Evade/Block
-			var dmgArr := [0, -atkRoll, atkType, true]
-			dealCombinedDamage(dmgArr, atkUnit, defUnit)
+			var dmgArr := [0, -atkRoll[0], atkType, true]
+			dealCombinedDamage(dmgArr, atkUnit, atkUnit)
 	
 	if(!d1Data.isEmpty()): 
 		await readUnitTag("UsedDie", u1)
@@ -958,22 +970,46 @@ func composeConditionMetaData(unit: String) -> Dictionary:
 		"DieData": getUnitProp(unit, "dieData"),
 	}
 
+func clashEval(d1: DataTree, d2: DataTree) -> Array:
+	var d1Result = d1.dget("Result/0", 0)
+	var d2Result = d2.dget("Result/0", 0)
+	var d1Clash := UNOPPOSED
+	var d2Clash := UNOPPOSED
+	if(d1Result * d2Result != 0):
+		d1Clash = (sign(d2Result - d1Result) + 2)
+		d2Clash = (sign(d1Result - d2Result) + 2)
+	d1.dset("ClashVal", d1Clash)
+	d2.dset("ClashVal", d2Clash)
+	return [int(d1Clash), int(d2Clash)]
+
+func rollDieEmbed(unit: String, die: DataTree) -> Array:
+	var result = await rollDie(unit, die)
+	var rawResult = die.dget("rawResult", 0)
+	var arr = [
+		result, # Final Val
+		rawResult, # Raw Val
+		rawResult - die.dget("Base"), # Baseless Roll
+		rawResult == die.dget("Dice") + die.dget("Base", 0), # isCrit
+		rawResult == 1 + die.dget("Base", 0) # isNegativeCrit
+	]
+	die.dset("Result", arr)
+	return arr
+
 func rollDie(unit: String, die: DataTree) -> int:
-	var dieTree = die
-	var minMax = dieTree.dget("FixedMax", 0) - dieTree.dget("FixedMin", 0)
-	var size = dieTree.dget("Dice", 0)
-	var base = dieTree.dget("Base", 0)
-	if(minMax > 0): return max(1, size + base)
-	if(minMax < 0): return max(1, sign(size) + base)
-	var advDis = dieTree.dget("Advantage", 0) - dieTree.dget("Disadvantage", 0)
+	var minMax = die.dget("FixedMax", 0) - die.dget("FixedMin", 0)
+	var size = die.dget("Dice", 0)
+	var base = die.dget("Base", 0)
+	if(minMax > 0): return max(1, await rollDieResult(unit, die, "add", [size, base], "*Max"))
+	if(minMax < 0): return max(1, await rollDieResult(unit, die, "add", [sign(size), base], "*Min"))
+	var advDis = die.dget("Advantage", 0) - die.dget("Disadvantage", 0)
 	if(advDis > 0): return max(1, await rollDieResult(unit, die, "rollAdv", [size, base], "Adv"))
 	if(advDis < 0): return max(1, await rollDieResult(unit, die, "rollDis", [size, base], "Dis"))
 	return max(1, await rollDieResult(unit, die, "roll", [size, base]))
 
 func rollDieResult(unit: String, die: DataTree, method: String, args: Array, type := "") -> int:
-	die.dset("tempResult", await callj(method, args))
-	await readDieTag("RolledDie", unit, {"RollType": type})
-	return die.dget("tempResult", 0)
+	die.dset("rawResult", await callj(method, args))
+	if(!type.contains("*")): await readDieTag("RolledDie", unit, {"RollType": type})
+	return die.dget("rawResult", 0)
 
 func getDiceData(die: String, id := -1) -> Dictionary:
 	var dieParse := die.split("/")
@@ -1000,6 +1036,11 @@ func isOffense(die: DataTree) -> bool:
 	var type = getDieType(die)
 	if(type.is_empty()): return false
 	return !(type.contains("Block") || type.contains("Evade"))
+
+func isDefense(die: DataTree) -> bool:
+	var type = getDieType(die)
+	if(type.is_empty()): return false
+	return !isOffense(die)
 
 func canStore(die: DataTree) -> bool:
 	var type = getDieType(die)

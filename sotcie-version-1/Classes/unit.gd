@@ -8,6 +8,7 @@ extends Resource
 @export var target: String
 @export var action: int
 @export var dieData: DataTree
+@export var speedDie: Array
 
 func _init(list: Dictionary, key: String, data: Dictionary = {}) -> void:
 	dataSet = DataTree.new(data.duplicate_deep())
@@ -17,6 +18,7 @@ func _init(list: Dictionary, key: String, data: Dictionary = {}) -> void:
 	target = ""
 	action = -1
 	dieData = DataTree.new()
+	speedDie = ["", false]
 	
 func _to_string() -> String:
 	return ("[color=" + dataSet.safeGet("Color", TYPE_STRING) + "]" + 

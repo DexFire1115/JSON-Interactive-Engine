@@ -12,14 +12,15 @@ var homeDir: String = "/home/dexfire1115/Documents/SotCIE/"
 
 # Handling Data Management
 @export var filetree: DataTree
+@onready var loadArchive = $LoadArchive
 
 func _ready() -> void:
-	$LoadArchive.current_dir = homeDir
+	loadArchive.current_dir = homeDir
 
 func _on_load_archive_file_selected(path: String) -> void:
 	homeDir = path.rsplit("/", true, 1)[0]
 	if(FileAccess.file_exists(path)):
-		loadfile.open(path);
+		loadfile.open(path)
 		var fileList := loadfile.get_files()
 		for filePath in fileList:
 				if filePath.ends_with("ref"):
