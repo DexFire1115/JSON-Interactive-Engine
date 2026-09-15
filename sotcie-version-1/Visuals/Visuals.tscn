@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dpo048m0uvph1"]
+
+[ext_resource type="PackedScene" uid="uid://73fyrh80aeww" path="res://Console/Console.tscn" id="1_5w1ao"]
+[ext_resource type="Script" uid="uid://cj8y3u48hnmkp" path="res://Visuals/visuals.gd" id="1_47q3x"]
+
+[node name="Visuals" type="Node2D" unique_id=375498207]
+script = ExtResource("1_47q3x")
+
+[node name="Console" parent="." unique_id=927690875 instance=ExtResource("1_5w1ao")]
+offset_top = 0.0
+offset_bottom = 0.0

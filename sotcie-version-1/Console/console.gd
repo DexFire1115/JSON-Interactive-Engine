@@ -87,9 +87,16 @@ func readCommand(text: String) -> void:
 		"remdice":
 			argPrint(args, "64ffff", "ffcc64")
 			errorCode = removeSpeedDiceCommand(args)
+#		"fload":
+#			argPrint(args, "64ffff")
+#			errorCode = fileLoadCommand(args)
 		_:
 			errorCode = failedCommand(args)
 	errorCommand(errorCode)
+
+func fileLoadCommand(_args: PackedStringArray) -> int:
+	GameManager.loadArchive.popup()
+	return 0
 
 func searchCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
@@ -608,4 +615,4 @@ func renderLog(limit: int) -> void:
 		logs.text += arr[i] + "\n"
 
 func refreshConsole() -> void:
-	renderLog(40)
+	renderLog(100)

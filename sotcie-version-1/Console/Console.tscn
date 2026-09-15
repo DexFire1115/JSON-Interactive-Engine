@@ -16,34 +16,37 @@
 
 [node name="Console" type="Control" unique_id=927690875]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_top = -648.0
+offset_bottom = -648.0
+grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 script = ExtResource("1_0a80t")
 
 [node name="GUIArea" type="PanelContainer" parent="." unique_id=231115894]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 2
+anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -432.0
-offset_right = 768.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_right = 98.0
+offset_bottom = 33.0
+grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_styles/panel = ExtResource("1_fkl5r")
 
 [node name="VBox" type="VBoxContainer" parent="GUIArea" unique_id=1456783829]
 layout_mode = 2
 
 [node name="Logs" type="RichTextLabel" parent="GUIArea/VBox" unique_id=1731918215]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 3
 theme_override_fonts/normal_font = ExtResource("1_eo7b8")
 theme_override_fonts/bold_font = ExtResource("4_8c4vv")
 theme_override_fonts/bold_italics_font = ExtResource("5_syfx8")
@@ -55,7 +58,8 @@ theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
-fit_content = true
+context_menu_enabled = true
+vertical_alignment = 2
 
 [node name="HBox" type="HBoxContainer" parent="GUIArea/VBox" unique_id=553685327]
 layout_mode = 2
