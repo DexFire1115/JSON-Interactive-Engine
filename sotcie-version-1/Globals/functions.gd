@@ -18,15 +18,15 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 func callj(method: String, args: Array) -> Variant:
 	for i in args.size():
 		args[i] = await isNestedArg(args[i])
-	print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
+	#print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
 		return await jFunc(method, args)
 	elif(has_method(method)):
 		return await callv(method, args)
-	else: return null
+	else: return GlobalScopeRef.globalScopeCall(method, args)
 
 func isNestedArg(arg) -> Variant:
-	print("    is nested : ", str(arg).split("\n")[0])
+	#print("    is nested : ", str(arg).split("\n")[0])
 	if(arg is Dictionary && Dictionary(arg).size() == 1):
 		var key = arg.keys()[0]
 		var val = arg[key]
@@ -88,7 +88,7 @@ func clearScope(stackName := ""):
 			references.erase(k)
 
 func sequence(stackName: String, calls := [], args := {}):
-	print(stackName, " > ", calls.map(func(element): return element.keys()[0]))
+	#print(stackName, " > ", calls.map(func(element): return element.keys()[0]))
 	stack.push_back(stackName)
 	for arg in args:
 		setVar(arg, args[arg])
@@ -112,16 +112,17 @@ func ifelse(query: bool, trueCase: Array, falseCase := []):
 			val = await isNestedArg(c)
 	return val
 
-func loop(arr: Array, commands: Array):
+func loop(arr: Array, commands: Array, varName := ""):
 	var val
 	for a in arr:
+		if(!varName.is_empty()): setVar(varName, a)
 		for c in commands.duplicate_deep():
 			val = await isNestedArg(c)
 	return val
 
-func whileLoop(query: bool, commands: Array):
+func whileLoop(query: Array, commands: Array):
 	var val
-	while(query):
+	while(query[0]):
 		for c in commands.duplicate_deep():
 			val = await isNestedArg(c)
 	return val
@@ -521,12 +522,14 @@ func rollSpeed():
 
 func nextTurn():
 	var isSavedDice := diceList.is_empty()
-	if(saveList.is_empty()): return
-	var dice := getNextSpeedDie(isSavedDice)
+	if(isSavedDice && saveList.is_empty()): return
+	var dice := getNextSpeedDie(!isSavedDice)
 	var unitName := getUnitFromDice(dice)
 	var unitData := unitList[unitName].dataSet
-	var actionList := fileTree.fetchData(unitData, "Actions")
-	actionList.push_front("Void Dice" if(isSavedDice) else "Save Dice")
+	var actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY))
+	actionList.push_front("Deploy Dice.")
+	actionList.push_front("Void Die" if(isSavedDice) else "Hold Die")
+	print(unitName, " ", actionList)
 
 func getNextSpeedDie(searchSaved := true) -> String:
 	var dict = diceList if(searchSaved) else saveList

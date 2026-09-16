@@ -19,6 +19,7 @@ config/features=PackedStringArray("4.6", "GL Compatibility")
 GameManager="*uid://do10cxiw6dru5"
 EventBus="*uid://dscqj5vvnyym3"
 Functions="*uid://dnpxt5k3cktpa"
+GlobalScopeRef="*uid://dybb63bf22ge0"
 
 [display]
 
