@@ -52,6 +52,7 @@ func fileBranch(path: String) -> void:
 		if(level.is_empty()): return
 		if(level.ends_with(".json")):
 			tempDict.set(level, JSON.parse_string(loadfile.read_file(path).get_string_from_ascii()))
+			#print(str(tempDict.get(level)).substr(0,100))
 			continue
 		if(level == "ref"):
 			tempDict.set(level, null)

@@ -58,6 +58,7 @@ theme_override_font_sizes/bold_italics_font_size = 16
 theme_override_font_sizes/italics_font_size = 16
 theme_override_font_sizes/mono_font_size = 16
 bbcode_enabled = true
+scroll_following = true
 context_menu_enabled = true
 vertical_alignment = 2
 

@@ -78,6 +78,12 @@ func readCommand(text: String) -> void:
 		"dispunit":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = await displayUnitCommand(args)
+		"dispskilllist:":
+			argPrint(args, "64ffff", "aa64ff")
+			errorCode = displaySkillListCommand(args)
+		"disptargetlist":
+			argPrint(args, "64ffff", "aa64ff")
+			errorCode = displayTargetListCommand(args)
 		"dispspeed":
 			argPrint(args, "64ffff")
 			errorCode = displaySpeedDiceCommand(args)
@@ -87,6 +93,9 @@ func readCommand(text: String) -> void:
 		"remdice":
 			argPrint(args, "64ffff", "ffcc64")
 			errorCode = removeSpeedDiceCommand(args)
+		"nextturn", "nt":
+			argPrint(args, "64ffff", "ffcc64")
+			errorCode = nextTurnCommand(args)
 #		"fload":
 #			argPrint(args, "64ffff")
 #			errorCode = fileLoadCommand(args)
@@ -142,6 +151,11 @@ func removeSpeedDiceCommand(args: PackedStringArray) -> int:
 		dice = args[1]
 		if(!(Functions.diceList.has(dice) || Functions.saveList.has(dice))): return 4
 	Functions.removeSpeedDice(dice)
+	return 0
+
+func nextTurnCommand(args: PackedStringArray) -> int:
+	if(args.size() < 1): return 1
+	Functions.nextTurn()
 	return 0
 
 func executeFunctionCommand(args: PackedStringArray) -> int:
@@ -339,6 +353,17 @@ func getTypeColor(type: String) -> String:
 	if(type.contains("Counter")):
 		return "ffcc64"
 	return "aaaaaa"
+
+func displaySkillListCommand(args: PackedStringArray) -> int:
+	if(args.size() < 2): return 1
+	
+	return 0
+
+func displayTargetListCommand(args: PackedStringArray) -> int:
+	if(args.size() < 2): return 1
+	
+	return 0
+
 
 func displaySpeedDiceCommand(_args: PackedStringArray) -> int:
 	addLog(underlineStr(boldStr("Speed Dice Turn Order")))

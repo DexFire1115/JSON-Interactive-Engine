@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dybb63bf22ge0"]
+
+[ext_resource type="Script" uid="uid://m7eqpsquf4ys" path="res://Globals/global_scope_ref.gd" id="1_esen0"]
+
+[node name="GlobalScopeRef" type="Node" unique_id=936128392]
+script = ExtResource("1_esen0")
