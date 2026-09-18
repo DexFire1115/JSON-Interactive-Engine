@@ -7,12 +7,14 @@ var isScanner := false
 func _ready() -> void:
 	EventBus.connect("RefreshConsole", refreshConsole)
 	EventBus.connect("dmgConsole", damageCommand)
-	EventBus.connect("dmgPrint", dmgVisual)
-	EventBus.connect("lightPrint", lightVisual)
+	EventBus.connect("dmgDisplay", dmgVisual)
+	EventBus.connect("lightDisplay", lightVisual)
 	EventBus.connect("clashConsole", displayClash)
 	EventBus.connect("consoleInput", textPrompt)
-	EventBus.connect("killedPrint", killedPrint)
-	EventBus.connect("staggeredPrint", staggeredPrint)
+	EventBus.connect("killedDisplay", killedPrint)
+	EventBus.connect("staggeredDisplay", staggeredPrint)
+	EventBus.connect("skillListDisplay", displaySkillOptions)
+	EventBus.connect("savediceListDisplay", displaySaveDiceOptions)
 
 func _on_input_text_submitted(new_text: String) -> void:
 	if(new_text.is_empty()): return
@@ -24,7 +26,7 @@ func _on_input_text_submitted(new_text: String) -> void:
 	input.text = ""
 
 func textPrompt(query := ""):
-	addPushConsole(query)
+	if(!query.is_empty()): addPushConsole(query)
 	isScanner = true
 	_on_input_text_submitted("")
 	EventBus.emit_signal("queryOutput", await input.text_submitted)
@@ -78,7 +80,7 @@ func readCommand(text: String) -> void:
 		"dispunit":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = await displayUnitCommand(args)
-		"dispskilllist:":
+		"dispskilllist":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = displaySkillListCommand(args)
 		"disptargetlist":
@@ -281,8 +283,7 @@ func displaySkillCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
 	var data = DataTree.new(GameManager.filetree.dget("Actions/" + args[1], {}))
 	if(data.isEmpty()): return 2
-	addLog(addStyle("[" + displaySkillTextField(data, "Cost") + "] ", "ffaa64", true) +
-		displaySkillTextField(data, "Name", "ffffff", true))
+	addLog(getSkillHeader(data))
 	for l in data.safeGet("PreText", TYPE_ARRAY):
 		if(l is String): addLog(addStyle(l, "aaaaaa"))
 	
@@ -291,6 +292,18 @@ func displaySkillCommand(args: PackedStringArray) -> int:
 	for l in data.safeGet("PostText", TYPE_ARRAY):
 		if(l is String): addLog(addStyle(l, "aaaaaa"))
 	return 0
+
+func getSkillHeader(data: DataTree, isUsable := true) -> String:
+	var text := ""
+	text += addStyle("[" + displaySkillTextField(data, "Cost") + "] ", "ffaa64", true)
+	text += displaySkillTextField(data, "Name", "ffffff" if(isUsable)else "808080", true)
+	if(data.has("Limit")):
+		var uses = data.dget("Uses", 0)
+		var limit = data.dget("Limit", 0)
+		var color := "ffff64" if(uses < limit)else "aaaaaa"
+		text += addStyle(" [" + castNumDataToString(uses) + "/" + 
+			castNumDataToString(limit) + "]", color, true)
+	return text
 
 func displaySkillDice(action, index: int):
 	var data: DataTree
@@ -307,18 +320,20 @@ func displaySkillDice(action, index: int):
 		return
 	
 	var d = DataTree.new(diceList[index])
-	var dicePower := int(displaySkillTextField(d, "Dice"))
-	var diceBase := int(displaySkillTextField(d, "Base"))
+	addLog(getDieHeader(d))
+	
+	for l in d.safeGet("Text", TYPE_ARRAY):
+		if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
+
+func getDieHeader(dieData: DataTree) -> String:
+	var dicePower := int(displaySkillTextField(dieData, "Dice"))
+	var diceBase := int(displaySkillTextField(dieData, "Base"))
 	var diceText = "" if (dicePower == 0) else ("1d" + str(abs(dicePower)))
 	if(dicePower < 0): diceText = ("" if (diceBase == 0) else str(diceBase)) + "-" + diceText
 	elif(dicePower > 0): diceText += "" if (diceBase == 0) else (("+" if (diceBase > 0) else "") + str(diceBase))
 	else: diceText = str(diceBase)
-	
-	var type := displaySkillTextField(d, "Type")
-	addLog(getTypeDisplay(type) + " " + addStyle(diceText, getTypeColor(type)))
-	
-	for l in d.safeGet("Text", TYPE_ARRAY):
-		if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
+	var type := displaySkillTextField(dieData, "Type")
+	return getTypeDisplay(type) + " " + addStyle(diceText, getTypeColor(type))
 
 func displaySkillTextField(dict: DataTree, field: String, color := "", bold := false) -> String:
 	var data = dict.dget(field, 0)
@@ -356,7 +371,61 @@ func getTypeColor(type: String) -> String:
 
 func displaySkillListCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
+	if (!Functions.unitList.has(args[1])): return 3
+	var actionArr: Array = Functions.unitList[args[1]].dataSet.safeGet("Actions", TYPE_ARRAY)
+	for i in actionArr.size():
+		displaySkillListItem(args[1], actionArr[i], i)
+	return 0
+
+func displaySkillOptions(unit: String, options: Array):
+	for i in options.size():
+		displaySkillListItem(unit, options, i)
+
+func displaySaveDiceOptions(unit: String, options: Array):
+	if (!Functions.unitList.has(unit)):
+		addLog(addStyle("<Unit does not exist!>", "ff6464", true))
+		return
+	var savedice := Functions.unitList[unit].savedDice
+	for o in options:
+		var text := ""
+		text += addStyle(" " + str(o) + " | ", "ffeecc", true)
+		if(!range(savedice.size()).has(o)):
+			addLog(addStyle("<Die out of bounds!>", "ff6464", true))
+			continue
+		var dieParse := savedice[o].split("/")
+		if(dieParse.size() != 2): 
+			addLog(addStyle("<Invalid Die!>", "ff6464", true))
+			continue
+		displaySkillDice(dieParse[0], int(dieParse[1]))
+		text += getDieHeader(DataTree.new(
+			Functions.fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], 
+			TYPE_DICTIONARY)))
+		addLog(text)
 	
+
+func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
+	if (!Functions.unitList.has(unit)): 
+		addLog(addStyle("<Unit does not exist!>", "ff6464", true))
+		return 3
+	var unitData := Functions.unitList[unit].dataSet
+	var actionName = str(actionArr[index])
+	var actionData = DataTree.new(
+		GameManager.filetree.dget("Actions/" + actionName, {}))
+	if(actionData.isEmpty()):
+		if(actionName.begins_with("*")): 
+			addLog(
+				addStyle(" " + str(index) + " | ", "cceeff", true) + 
+				actionName.substr(1)
+			)
+			return 0
+		addLog(addStyle("<Action does not exist!>", "ff6464", true))
+		return 2
+	var text := ""
+	var isUsable := Functions.isUsable(unitData, actionData)
+	var color := "ffeecc" if(isUsable)else "808080"
+	text += addStyle(" " + str(index) + " | ", color, true)
+	text += getSkillHeader(actionData, isUsable)
+	addLog(text)
 	return 0
 
 func displayTargetListCommand(args: PackedStringArray) -> int:
@@ -364,6 +433,9 @@ func displayTargetListCommand(args: PackedStringArray) -> int:
 	
 	return 0
 
+func displayTargetList(unit: String, targetStyle := ""):
+	
+	pass
 
 func displaySpeedDiceCommand(_args: PackedStringArray) -> int:
 	addLog(underlineStr(boldStr("Speed Dice Turn Order")))

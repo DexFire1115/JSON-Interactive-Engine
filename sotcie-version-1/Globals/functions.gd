@@ -319,7 +319,7 @@ func dealCombinedDamage(dmgArr: Array, caster := "", target := "") -> Array:
 	dataArr[4] = dmgArr[2]
 	unitdata.dset("Attributes/CurrentHealth", dataArr[2])
 	unitdata.dset("Attributes/CurrentStagger", dataArr[3])
-	consoleCommand("dmgPrint", target, dataArr)
+	consoleCommand("dmgDisplay", target, dataArr)
 	if(dataArr[0] > 0 && dataArr[2] == 0): statusInflict("Killed", 1, target)
 	if(dataArr[1] > 0 && dataArr[3] == 0): statusInflict("Staggered", 1, target)
 	if(unitList.has(caster)): await readDieTag("DamageResponse", caster, {"dmgArr": dmgArr})
@@ -339,7 +339,7 @@ func changeLight(amt := 0, target := "@Self") -> Array:
 	dataArr[1] = unitdata.dget("Attributes/MaxLight", "")
 	dataArr[2] = min(max(0, dataArr[0] + amt), dataArr[1])
 	unitdata.dset("Attributes/CurrentLight", dataArr[2])
-	consoleCommand("lightPrint", target, dataArr)
+	consoleCommand("lightDisplay", target, dataArr)
 	return dataArr
 
 func statusInflict(status: String, amt := 1, target := "", nextScene := false, caster := ""):
@@ -477,6 +477,17 @@ func queryUnit(query: String) -> String:
 		query = "[b][color=ff6464]ERROR : Invalid Selection[/color][/b]"
 	return ""
 
+func queryInt(query: String, choices: Array, default := -1) -> int:
+	var choicesCopy = choices.duplicate_deep()
+	for i in choicesCopy.size():
+		choicesCopy[i] = int(await isNestedArg(choicesCopy[i]))
+	while(true):
+		var result = await prompt(query)
+		if(str(result).is_valid_int() && choicesCopy.has(int(result))): return int(result)
+		if(result == "skip"): return default
+		query = "[b][color=ff6464]ERROR : Invalid Selection[/color][/b]"
+	return default
+
 func sceneStart():
 	#print("< - - - SCENE - - - >")
 	for u in unitList:
@@ -520,16 +531,36 @@ func rollSpeed():
 			if(await isInactive(unitData)): usedList.set(u + "D" + str(i), val)
 			else: diceList.set(u + "D" + str(i), val)
 
-func nextTurn():
+func nextTurn(dice := "", isProactive := false):
 	var isSavedDice := diceList.is_empty()
 	if(isSavedDice && saveList.is_empty()): return
-	var dice := getNextSpeedDie(!isSavedDice)
+	if(dice.is_empty()): dice = getNextSpeedDie(!isSavedDice)
 	var unitName := getUnitFromDice(dice)
 	var unitData := unitList[unitName].dataSet
-	var actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY))
-	actionList.push_front("Deploy Dice.")
-	actionList.push_front("Void Die" if(isSavedDice) else "Hold Die")
-	print(unitName, " ", actionList)
+	var actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
+	var optionInts := []
+	if(isProactive):
+		actionList.push_front(
+			"*[b][color=ff6480]Void Speed Die[/color][/b]" if(isSavedDice)
+			else "*[b][color=6480ff]Hold Speed Die[/color][/b]"
+		)
+		optionInts = [0]
+	else:
+		actionList.push_front("*[b][color=64ffff]Deploy Saved Dice[/color][/b]")
+		actionList.push_front("*[b][color=ff6464]No Contest[/color][/b]")
+		optionInts = [0,1]
+	for i in range(optionInts.size(),actionList.size()):
+		if(isUsable(unitData, DataTree.new(fileTree.safeGet("Actions/" + actionList[i], 
+			TYPE_DICTIONARY)))): optionInts.append(i)
+	EventBus.emit_signal("skillListDisplay", unitName, actionList)
+	var answer := await queryInt("", optionInts, 0)
+	if(answer == 0):
+		if(isProactive):
+			if(isSavedDice): removeSpeedDice(dice)
+			else: saveSpeedDice(dice)
+		return
+	if(answer == 1):
+		EventBus.emit_signal("savediceListDisplay", unitName, range(unitList[unitName].savedDice.size()))
 
 func getNextSpeedDie(searchSaved := true) -> String:
 	var dict = diceList if(searchSaved) else saveList
@@ -588,6 +619,13 @@ func getUnitFromDice(dice: String) -> String:
 
 func isInactive(unitData: DataTree) -> bool:
 	return await unitData.getComplexSeqn("Attributes/Inactive", "orBool", false)
+
+func isUsable(unitData: DataTree, actionData: DataTree) -> bool:
+	if(unitData.dget("Attributes/CurrentLight", 0) < actionData.dget("Cost", 0)):
+		return false
+	if(actionData.has("Limit") && actionData.dget("Uses", 0) >= actionData.dget("Limit", 0)): 
+		return false
+	return true
 
 func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	if(!unitList.has(u1)): return
