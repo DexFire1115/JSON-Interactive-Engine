@@ -1,0 +1,71 @@
+{
+    "Name": "Superalloy Microwave - Mini",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmStatus-Burn": [
+            {
+                "refCall": [
+                    "statusArr",
+                    "set",
+                    1,
+                    {
+                        "add": [
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "min": [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitData": [
+                                                    "@Self"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Statuses/Endurance/Stack",
+                                            0
+                                        ]
+                                    },
+                                    3
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Caused-Burn": [
+            {
+                "statusInflict": [
+                    "Induction",
+                    {
+                        "min": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Endurance/Stack",
+                                    0
+                                ]
+                            },
+                            3
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When this unit inflicts Burn, inflict additional [b][color=cc6450]Burn[/color][/b] and [b][color=cc5080]Induction Heating[/color][/b] for every [b][color=50cc50]Endurance[/color][/b] (Max: +3)."
+    ]
+}

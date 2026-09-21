@@ -1,0 +1,40 @@
+{
+    "Name": "Combative",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneEnd": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Attributes/CurrentLight",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "changeLight": [
+                                1,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

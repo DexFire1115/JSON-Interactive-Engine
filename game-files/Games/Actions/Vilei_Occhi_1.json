@@ -1,0 +1,35 @@
+{
+    "Name": "Occhi sulle Strade (Eyes on the Streets)",
+    "Cost": 0,
+    "Limit": 5,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 8,
+            "Base": 2,
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=6464ff][lb]On Evade][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b] on the attacker."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                1
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

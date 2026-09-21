@@ -1,0 +1,267 @@
+{
+    "Name": "Staggered",
+    "Color": "#ffff64",
+    "Passive": true,
+    "Hidden": true,
+    "Conditions": {
+        "Applied-Staggered": [
+            {
+                "consoleCommand": [
+                    "staggeredDisplay",
+                    {
+                        "getUnit": [
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Staggered/Tracker",
+                    0
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/Inactive",
+                    true,
+                    false
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/Inactive/Staggered",
+                    true
+                ]
+            },
+            {
+                "setVar": [
+                    "dieArr",
+                    {
+                        "getAction": [
+                            {
+                                "getVar": [
+                                    "Action"
+                                ]
+                            },
+                            "diceArr"
+                        ]
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "dieArr",
+                    "clear"
+                ]
+            }
+        ],
+        "ValidateDamage": [
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getResistance": [
+                            {
+                                "getUnit": [
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    2
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "dmgArr",
+                    "set",
+                    0,
+                    {
+                        "sub": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    0
+                                ]
+                            },
+                            {
+                                "min": [
+                                    0,
+                                    {
+                                        "refCall": [
+                                            "temp",
+                                            "get",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "dmgArr",
+                    "set",
+                    1,
+                    {
+                        "sub": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "min": [
+                                    0,
+                                    {
+                                        "refCall": [
+                                            "temp",
+                                            "get",
+                                            1
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Staggered/Tracker",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dset",
+                                "Statuses/Staggered/Tracker",
+                                1
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Staggered/Tracker",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    [
+                        {
+                            "removeStatus": [
+                                "Staggered",
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "Removed-Staggered": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/Inactive/Staggered"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/CurrentStagger",
+                    {
+                        "objCall": [
+                            {
+                                "getUnitData": [
+                                    "@Self"
+                                ]
+                            },
+                            "dget",
+                            "Attributes/MaxStagger",
+                            1
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

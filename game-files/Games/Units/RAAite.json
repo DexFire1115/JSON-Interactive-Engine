@@ -1,0 +1,61 @@
+{
+    "Name": "Radiant Alloy Amalgamite",
+    "Color": "#aa5080",
+    "Type": "Creature",
+    "Class": "?",
+    "Attributes": {
+        "CurrentHealth": 40,
+        "MaxHealth": 40,
+        "CurrentStagger": 20,
+        "MaxStagger": 20,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 0,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": -2,
+        "PierceDamage": -1,
+        "BluntDamage": 2,
+        "SlashStagger": 0,
+        "PierceStagger": 2,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+        "RAA_Microwave": {
+            "File": "Statuses/RAA_Microwave",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "ConfirmStatus-Burn",
+                "Caused-Burn"
+            ]
+        },
+        "RAA_Cook": {
+            "File": "Statuses/RAA_Cook",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneEnd"
+            ]
+        }
+    },
+    "Conditions": {
+        "ConfirmStatus-Burn": [
+            "RAA_Microwave"
+        ],
+        "Caused-Burn": [
+            "RAA_Microwave"
+        ],
+        "SceneEnd": [
+            "RAA_Cook"
+        ]
+    },
+    "Actions": [
+        "RAA_Metallic_1",
+        "RAA_Rumble_1",
+        "RAA_Heat_1",
+        "RAA_Popcorn_1"
+    ]
+}

@@ -1,0 +1,89 @@
+{
+    "Name": "Super Silly",
+    "Color": "#ff64ff",
+    "MinStack": 0,
+    "MaxStack": 5,
+    "Conditions": {
+        "OnUse": [
+            {
+                "setVar": [
+                    "SuperSillyBoost",
+                    0,
+                    "@Action"
+                ]
+            }
+        ],
+        "Check": [
+            {
+                "incVar": [
+                    "SuperSillyBoost",
+                    10,
+                    ".@Action"
+                ]
+            },
+            {
+                "changePower": [
+                    {
+                        "getVar": [
+                            "SuperSillyBoost",
+                            0,
+                            "@Action"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Hit": [
+            {
+                "addLog": [
+                    "YOO!! YOU [b][color=ffff64]LANDED A HIT!!!![/color][/b]"
+                ]
+            }
+        ],
+        "Crit": [
+            {
+                "addLog": [
+                    "YOO!! YOU [b][color=64ffff]LANDED A CRIT!!!![/color][/b]"
+                ]
+            }
+        ],
+        "ClashWin": [
+            {
+                "addLog": [
+                    "YOO!! YOU [b][color=64ff64]WINNNN!!!![/color][/b]"
+                ]
+            }
+        ],
+        "ClashLose": [
+            {
+                "addLog": [
+                    "YOO!! YOU [b][color=ff6464]LOSEEEEEE!!!![/color][/b]"
+                ]
+            },
+            {
+                "incVar": [
+                    "SuperSillyBoost",
+                    100,
+                    ".@Action"
+                ]
+            }
+        ],
+        "OnKill": [
+            {
+                "addLog": [
+                    "YOO!! YOU [b][color=aa64ff]MURDERED HIM!!!![/color][/b]"
+                ]
+            }
+        ],
+        "OnStagger": [
+            {
+                "addLog": [
+                    "YOO!! YOU [b][color=ffaa64]STAGGERED HIM!!!![/color][/b]"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=ff64ff]VERY SILLY![/color][/b]"
+    ]
+}

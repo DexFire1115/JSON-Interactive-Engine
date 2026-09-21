@@ -1,0 +1,145 @@
+{
+    "Name": "Sinking",
+    "Color": "#5064cc",
+    "Conditions": {
+        "SceneEnd": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "[b][color=5064cc]Sinking![/color] ([color=5064cc]",
+                            {
+                                "getStatus": [
+                                    "Sinking",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color])[/b]"
+                        ]
+                    }
+                ]
+            },
+            {
+                "dealStagger": [
+                    {
+                        "min": [
+                            {
+                                "getStatus": [
+                                    "Sinking",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "max": [
+                                    {
+                                        "sub": [
+                                            {
+                                                "objCall": [
+                                                    {
+                                                        "getUnitData": [
+                                                            {
+                                                                "getVar": [
+                                                                    "Self",
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    "dget",
+                                                    "Attributes/CurrentStagger",
+                                                    1
+                                                ]
+                                            },
+                                            1
+                                        ]
+                                    },
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self",
+                    "Sinking"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            {
+                                "getVar": [
+                                    "Self",
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    "dset",
+                    "Attributes/EmotionPoints",
+                    {
+                        "sub": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            {
+                                                "getVar": [
+                                                    "Self",
+                                                    ""
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "dget",
+                                    "Attributes/EmotionPoints",
+                                    1
+                                ]
+                            },
+                            {
+                                "getStatus": [
+                                    "Sinking",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Sinking",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "div": [
+                                    {
+                                        "add": [
+                                            {
+                                                "getStatus": [
+                                                    "Sinking",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            },
+                                            1
+                                        ]
+                                    },
+                                    2
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "At the end of the Scene, take [b][color=ffff64]Stagger[/color][/b] = [b][color=5064cc]Sinking[/color][/b] on self, then halve the amount. This cannot bring [b][color=ffff64]Stagger Resist[/color][/b] below 1.",
+        "Also reduce [b][color=aa64ff]Emotion Points[/color][/b] by half of [b][color=5064cc]Sinking[/color][/b] when this triggers."
+    ]
+}

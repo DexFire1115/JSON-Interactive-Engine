@@ -1,0 +1,58 @@
+{
+    "Name": "Haste",
+    "Color": "#ffaa64",
+    "Conditions": {
+        "SceneStart": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/SpeedDiceBase"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/SpeedDiceBase/Haste",
+                    {
+                        "getStatus": [
+                            "Haste",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneStartPost": [
+            {
+                "statusClearSelf": []
+            }
+        ],
+        "Removed-Haste": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SpeedDiceBase/Haste"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "At the start of a new scene, increase the value of all [b][color=ffaa64]Speed Dice[/color][/b] by the value, then remove all [b][color=ffaa64]Haste[/color][/b]."
+    ]
+}

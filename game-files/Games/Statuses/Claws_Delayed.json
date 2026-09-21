@@ -1,0 +1,227 @@
+{
+    "Name": "Delayed Aggression",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "OnUse": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Claws_Delayed/TrackerDice",
+                    0
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Claws_Delayed/TrackerLost",
+                    0
+                ]
+            }
+        ],
+        "BeforeDie": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Claws_Delayed/TrackerDice",
+                    {
+                        "add": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Claws_Delayed/TrackerDice",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ClashLose": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Claws_Delayed/TrackerLost",
+                    {
+                        "add": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Claws_Delayed/TrackerLost",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            }
+        ],
+        "AfterUse": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Claws_Delayed/TrackerDice",
+                                    0
+                                ]
+                            },
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Claws_Delayed/TrackerLost",
+                                    0
+                                ]
+                            },
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dset",
+                                "Statuses/Claws_Delayed/Special",
+                                true
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "ifelse": [
+                    {
+                        "objCall": [
+                            {
+                                "getUnitData": [
+                                    "@Self"
+                                ]
+                            },
+                            "dget",
+                            "Statuses/Claws_Delayed/Special",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dset",
+                                "Statuses/Claws_Delayed/Special",
+                                false
+                            ]
+                        },
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "complexInstantiate",
+                                "Attributes/SpeedDiceAmt"
+                            ]
+                        },
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dset",
+                                "Attributes/SpeedDiceAmt/Claws_Delayed",
+                                -1
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Strength",
+                                1,
+                                "@Self",
+                                true
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Protection",
+                                2,
+                                "@Self",
+                                true
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneStartPost": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SpeedDiceAmt/Claws_Delayed"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

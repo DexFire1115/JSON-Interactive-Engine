@@ -1,0 +1,57 @@
+{
+    "Name": "Rat",
+    "Color": "#cccccc",
+    "Type": "Rat",
+    "Class": "Canard",
+    "Attributes": {
+        "CurrentHealth": 5,
+        "MaxHealth": 5,
+        "CurrentStagger": 3,
+        "MaxStagger": 3,
+        "CurrentLight": 1,
+        "MaxLight": 1,
+        "LightRegen": 0,
+        "SpeedDiceSize": 4,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+        "Rat_Pest": {
+            "File": "Statuses/Rat_Pest",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "ValidateDamage"
+            ]
+        },
+
+        "Rat_Sewer": {
+            "File": "Statuses/Rat_Sewer",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "ValidateStatus"
+            ]
+        }
+    },
+    "Conditions": {
+        "ValidateDamage": [
+            "Rat_Pest"
+        ],
+        "ValidateStatus": [
+            "Rat_Sewer"
+        ]
+    },
+    "Actions": [
+        "Rat_Waiting_1",
+        "Rat_Big_1",
+        "Rat_Small_1"
+    ]
+}

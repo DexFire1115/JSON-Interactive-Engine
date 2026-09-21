@@ -1,0 +1,36 @@
+{
+    "Name": "Lust",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Hit": [
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Bleed",
+                                    0,
+                                    "@Target"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "dealDamage": [
+                                -2,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=64ff64][lb]Hit][/color][/b] Against target with [b][color=cc5064]Bleed[/color][/b], regain 2 HP."
+    ]
+}

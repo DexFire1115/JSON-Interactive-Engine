@@ -1,0 +1,77 @@
+{
+    "Name": "Maim and Cripple",
+    "Cost": 3,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Haste",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 3 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 2 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Bind",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=ffaa64]Bind[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Evade",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

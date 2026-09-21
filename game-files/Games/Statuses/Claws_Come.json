@@ -1,0 +1,127 @@
+{
+    "Name": "Come on... Show me what you've got!",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Claws_Come/Switch",
+                    {
+                        "greaterThan": [
+                            {
+                                "divf": [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitData": [
+                                                    "@Self"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Attributes/CurrentHealth",
+                                            0
+                                        ]
+                                    },
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitData": [
+                                                    "@Self"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Attributes/MaxHealth",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            0.5
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Claws_Come/Switch",
+                                    false
+                                ]
+                            },
+                            {
+                                "greaterThan": [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitProp": [
+                                                    "@Self",
+                                                    "dieData"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Dice",
+                                            4
+                                        ]
+                                    },
+                                    4
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitProp": [
+                                        "@Self",
+                                        "dieData"
+                                    ]
+                                },
+                                "dset",
+                                "Dice",
+                                {
+                                    "sub": [
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getUnitProp": [
+                                                        "@Self",
+                                                        "dieData"
+                                                    ]
+                                                },
+                                                "dget",
+                                                "Dice",
+                                                0
+                                            ]
+                                        },
+                                        2
+                                    ]
+                                }
+                            ]
+                        },
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

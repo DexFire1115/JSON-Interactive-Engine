@@ -1,0 +1,17 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "VileiColparino"
+        },
+        "E1": {
+            "Unit": "Marton"
+        },
+        "E2": {
+            "Unit": "Marton"
+        }
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Vilei v. 2 Martons[/u][/b]"
+    ]
+}

@@ -1,0 +1,52 @@
+{
+    "Name": "Disarm",
+    "Color": "#50cc50",
+    "Conditions": {
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "notBool": [
+                            {
+                                "isOffense": [
+                                    {
+                                        "getVar": [
+                                            "DieData"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "changePower": [
+                                {
+                                    "sub": [
+                                        0,
+                                        {
+                                            "getStatus": [
+                                                "Disarm",
+                                                0,
+                                                "@Self"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+        "Decrease the Power of all Defensive Dice by this Buff.",
+        "Remove all at the end of the scene."
+    ]
+}

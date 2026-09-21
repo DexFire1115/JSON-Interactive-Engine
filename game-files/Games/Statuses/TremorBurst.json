@@ -1,0 +1,49 @@
+{
+    "Name": "Tremor Burst",
+    "Color": "#ffff50",
+    "Conditions": {
+        "Applied-TremorBurst": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "[b][color=ffff50]Tremor Burst![/color] ([color=cccc50]",
+                            {
+                                "getStatus": [
+                                    "Tremor",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color])[/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "dealStagger": [
+                    {
+                        "getStatus": [
+                            "Tremor",
+                            0,
+                            "@Self"
+                        ]
+                    },
+                    "@Self",
+                    "TremorBurst"
+                ]
+            },
+            {
+                "removeStatus": [
+                    "TremorBurst",
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "The target takes [b][color=ffff64]Stagger[/color][/b] = the [b][color=cccc50]Tremor[/color][/b] value.",
+        "[b][color=ffff50]Tremor Burst[/color][/b] does not innately reduce the target's [b][color=cccc50]Tremor[/color][/b], but many effects that trigger [b][color=ffff50]Tremor Burst[/color][/b] will do so"
+    ]
+}

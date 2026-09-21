@@ -1,0 +1,37 @@
+{
+    "Args": [
+    ],
+    "Sequence": [
+            {
+                "loop": [
+                    {
+                        "rangeTo": [
+                            10
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                {
+                                    "concat": [
+                                        "[b][color=ff00ff]RESULT :D -> [/color][/b]",
+                                        {
+                                            "RollAdv": [
+                                                5,
+                                                {
+                                                    "randiXY": [
+                                                        5,
+                                                        500
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+}

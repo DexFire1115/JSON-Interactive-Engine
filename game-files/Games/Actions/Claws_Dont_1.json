@@ -1,0 +1,252 @@
+{
+    "Name": "Don't Try Me This Time",
+    "Cost": 5,
+    "PreText": [
+        "[b][color=ff8064][lb]Proactive][/color][/b] Destroy all dice except the first Die of opposing skill. If against deployed dice, destroy all dice and [b][color=ffff64]Stagger[/color][/b] enemy."
+    ],
+    "Proactive": [
+        {
+            "setVar": [
+                "enemyAction",
+                {
+                    "getAction": [
+                        {
+                            "getUnitProp": [
+                                "",
+                                "action"
+                            ]
+                        },
+                        "name"
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "enemyDice",
+                {
+                    "getAction": [
+                        {
+                            "getUnitProp": [
+                                "",
+                                "action"
+                            ]
+                        },
+                        "diceArr"
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "refCall": [
+                        "enemyAction",
+                        "contains",
+                        "SaveDice"
+                    ]
+                },
+                [
+                    {
+                        "loop": [
+                            {
+                                "rangeTo": [
+                                    {
+                                        "refCall": [
+                                            "enemyDice",
+                                            "size"
+                                        ]
+                                    }
+                                ]
+                            },
+                            [
+                                {
+                                    "refCall": [
+                                        "enemyDice",
+                                        "pop_front"
+                                    ]
+                                },
+                                {
+                                    "statusInflict": [
+                                        "Staggered"
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "loop": [
+                            {
+                                "rangeTo": [
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "enemyDice",
+                                                    "size"
+                                                ]
+                                            },
+                                            1
+                                        ]
+                                    }
+                                ]
+                            },
+                            [
+                                {
+                                    "refCall": [
+                                        "enemyDice",
+                                        "pop_at",
+                                        1
+                                    ]
+                                }
+                            ]
+                            
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 2,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Boost",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "setStatus": [
+                        "Bleed",
+                        0
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Feeble",
+                        2,
+                        "",
+                        true
+                    ]
+                },
+                {
+                    "setVar": [
+                        "NoDamage",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "objCall": [
+                        {
+                            "getVar": [
+                                "DieData"
+                            ]
+                        },
+                        "dset",
+                        "Recycle",
+                        1
+                    ]
+                },
+                {
+                    "setVar": [
+                        "Boost",
+                        {
+                            "add": [
+                                { 
+                                    "getVar": [
+                                        "Boost",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                10
+                            ]
+                        },
+                        "@Action"
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "NoDamage",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    1,
+                                    0
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Remove all [b][color=cc5064]Bleed[/color][/b] from target. Does not deal [b][color=ff6464]Damage[/color][/b] or [b][color=ffff64]Stagger[/color][/b]. Gain 2 [b][color=cc5050]Feeble[/color][/b] next scene.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Recycle Die with +10 [b][color=ffffff]Power[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BlockCounter",
+            "Dice": 10,
+            "Base": 4,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Strength",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=cc5050]Strength[/color][/b] next scene.",
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Fragile",
+                4,
+                "@Self",
+                true
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 4 [b][color=8050cc]Fragile[/color][/b] next scene."
+    ]
+}

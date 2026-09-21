@@ -1,0 +1,45 @@
+{
+    "Name": "Peccatulum Superbiae",
+    "Color": "#6480ff",
+    "Type": "Distortion",
+    "Class": "Class 1",
+    "Attributes": {
+        "CurrentHealth": 45,
+        "MaxHealth": 45,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 1,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": -2,
+        "BluntDamage": 0,
+        "SlashStagger": 1,
+        "PierceStagger": 0,
+        "BluntStagger": 2,
+    },
+    "Statuses": {
+        "Lust": {
+            "File": "Statuses/Pride",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "Crit"
+            ]
+        }
+    },
+    "Conditions": {
+        "Crit": [
+            "Pride"
+        ]
+    },
+    "Actions": [
+        "Supe1_Revving_1",
+        "Supe1_Run_1",
+        "Supe1_Grind_1"
+    ]
+}

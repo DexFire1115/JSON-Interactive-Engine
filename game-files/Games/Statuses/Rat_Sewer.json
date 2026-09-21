@@ -1,0 +1,42 @@
+{
+    "Name": "Sewer Immunities",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ValidateStatus": [
+            {
+                "ifelse": [
+                    {
+                        "notBool": [
+                            {
+                                "equals": [
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            0
+                                        ]
+                                    },
+                                    "Staggered"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "set",
+                                1,
+                                0
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "This unit cannot gain statuses."
+    ]
+}

@@ -1,0 +1,144 @@
+{
+    "Name": "Dummy Action",
+    "Cost": 0,
+    "Limit": 3,
+    "PreText": [
+        "[b][color=64ffff][lb]Exhaust][/color][/b] Gain 10 [b][color=8050cc]Fragile[/color][/b]."
+    ],
+    "Exhaust": [
+        {
+            "statusInflict": [
+                "Fragile",
+                10,
+                "@Self"
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 10,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Strength",
+                        10
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        10
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        1,
+                        0
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 10 [b][color=cc5050]Strength[/color][/b] and 10 [b][color=50cc50]Endurance[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Does not deal [b][color=ff6464]Damage[/color][/b] or [b][color=ffff64]Stagger[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 10,
+            "Base": 10,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Strength",
+                        10
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        10
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        1,
+                        0
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 10 [b][color=cc5050]Strength[/color][/b] and 10 [b][color=50cc50]Endurance[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Does not deal [b][color=ff6464]Damage[/color][/b] or [b][color=ffff64]Stagger[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 10,
+            "Base": 10,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Strength",
+                        10
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        10
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        0,
+                        0
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        1,
+                        0
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 10 [b][color=cc5050]Strength[/color][/b] and 10 [b][color=50cc50]Endurance[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Does not deal [b][color=ff6464]Damage[/color][/b] or [b][color=ffff64]Stagger[/color][/b]."
+            ]
+        },
+    ],
+    "PostText": [
+    ]
+}

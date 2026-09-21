@@ -1,0 +1,60 @@
+{
+    "Name": "Metallic Shell",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Protection",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 Burn.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 Protection."
+            ]
+        },
+        {
+            "Type": "BlockCounter",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 Burn.",
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                2
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 2 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

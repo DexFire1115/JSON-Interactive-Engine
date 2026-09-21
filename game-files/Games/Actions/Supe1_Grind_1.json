@@ -1,0 +1,18 @@
+{
+    "Name": "Grind",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Power +1 for every Speed above the target (max of +5, no [b][color=ffaa64]Speed Dice[/color][/b] counts as 0)."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

@@ -1,0 +1,132 @@
+{
+    "Name": "Fast Footed",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Claws_Come/Switch1",
+                    {
+                        "lessThan": [
+                            {
+                                "divf": [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitData": [
+                                                    "@Self"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Attributes/CurrentHealth",
+                                            0
+                                        ]
+                                    },
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitData": [
+                                                    "@Self"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Attributes/MaxHealth",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            0.5
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Applied-Staggered": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Claws_Come/Switch2",
+                    true
+                ]
+            }
+        ],
+        "SceneStartPost": [
+            {
+                "ifelse": [
+                    {
+                        "orBool": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Claws_Come/Switch1",
+                                    false
+                                ]
+                            },
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Claws_Come/Switch2",
+                                    false
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "savedDiceArr",
+                                {
+                                    "getUnitProp": [
+                                        "@Self",
+                                        "savedDice"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "refCall": [
+                                "savedDiceArr",
+                                "append_array",
+                                {
+                                    "createDiceArr": [
+                                        {
+                                            "getSelf": [
+                                                ""
+                                            ]
+                                        },
+                                        "Claws_Passive"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

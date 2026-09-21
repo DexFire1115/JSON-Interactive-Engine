@@ -1,0 +1,43 @@
+{
+    "Name": "Strength",
+    "Color": "#cc5050",
+    "Conditions": {
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "isOffense": [
+                            {
+                                "getVar": [
+                                    "DieData"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "changePower": [
+                                {
+                                    "getStatus": [
+                                        "Strength",
+                                        0,
+                                        "@Self"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+        "Increase the Power of all Offensive Dice by this Buff.",
+        "Remove all at the end of the scene."
+    ]
+}

@@ -1,0 +1,129 @@
+{
+    "Name": "Come At Me!",
+    "Cost": 2,
+        "OnUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                2,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Protection",
+                2,
+                "@Self"
+            ]
+        },
+        {
+            "setVar": [
+                "Boost",
+                0,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=ff8064]Aggro[/color][/b] and 2 [b][color=50ccff]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "Boost",
+                        {
+                            "add": [
+                                {
+                                    "getVar": [
+                                        "Boost",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                1
+                            ]
+                        },
+                        "@Action"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Boost the [b][color=ffffff]Power[/color][/b] of final Die by 1."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "Boost",
+                        {
+                            "add": [
+                                {
+                                    "getVar": [
+                                        "Boost",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                1
+                            ]
+                        },
+                        "@Action"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Boost the [b][color=ffffff]Power[/color][/b] of final Die by 1."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Boost",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 3 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

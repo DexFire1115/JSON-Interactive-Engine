@@ -1,0 +1,20 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "Eldric"
+        },
+        "A2": {
+            "Unit": "Marton"
+        },
+        "A3": {
+            "Unit": "VileiColparino"
+        },
+        "E1": {
+            "Unit": "Hooligan"
+        },
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Testing[/u][/b]"
+    ]
+}

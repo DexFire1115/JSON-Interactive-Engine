@@ -1,0 +1,62 @@
+{
+    "Name": "Slowing",
+    "Cost": 2,
+        "OnUse": [
+        {
+            "statusInflict": [
+                "Poise",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bind",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=ffaa64]Haste[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        2
+                    ]
+                }
+            ],
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Poise",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

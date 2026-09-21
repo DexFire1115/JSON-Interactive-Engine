@@ -40,6 +40,11 @@ scrolldown={
 ]
 }
 
+[network]
+
+limits/debugger/max_chars_per_second=327680
+limits/debugger/max_queued_messages=20480
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

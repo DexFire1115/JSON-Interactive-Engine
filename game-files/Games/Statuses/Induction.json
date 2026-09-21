@@ -1,0 +1,151 @@
+{
+    "Name": "Induction",
+    "Color": "#cc5080",
+    "MaxStack": 10,
+    "Conditions": {
+        "Applied-Induction": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Induction/BurnTracker",
+                    {
+                        "objCall": [
+                            {
+                                "getUnitData": [
+                                    "@Self"
+                                ]
+                            },
+                            "dget",
+                            "Statuses/Burn/Stack",
+                            0
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Applied-Burn": [
+            {
+                "setVar": [
+                    "InductionDamage",
+                    {
+                        "sub": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Burn/Stack",
+                                    0
+                                ]
+                            },
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Induction/BurnTracker",
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "getVar": [
+                                    "InductionDamage",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "[b][color=cc5080]Induction![/color] ([color=cc6450]",
+                            {
+                                "getVar": [
+                                    "InductionDamage",
+                                    0
+                                ]
+                            },
+                            "[/color])[/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "dealStagger": [
+                    {
+                        "getVar": [
+                            "InductionDamage",
+                            0
+                        ]
+                    },
+                    "@Self",
+                    "Induction"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Induction/BurnTracker",
+                    {
+                        "objCall": [
+                            {
+                                "getUnitData": [
+                                    "@Self"
+                                ]
+                            },
+                            "dget",
+                            "Statuses/Burn/Stack",
+                            0
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Clash": [
+            {
+                "statusInflict": [
+                    "Induction",
+                    -1,
+                    "@Self"
+                ]
+            }
+        ],
+    },
+    "Text": [
+        "Max Stack: 10.",
+        "When this unit gains [b][color=cc6450]Burn[/color][/b], take [b][color=ffff64]Stagger[/color][/b] by [b][color=cc6450]Burn[/color][/b] gained.",
+        "When this unit gains [b][color=aa64ff]Emotion Points[/color][/b], reduce stack by an equal amount."
+    ]
+}

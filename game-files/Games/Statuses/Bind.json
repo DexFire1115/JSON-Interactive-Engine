@@ -1,0 +1,63 @@
+{
+    "Name": "Bind",
+    "Color": "#ffaa64",
+    "Conditions": {
+        "SceneStart": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/SpeedDiceBase"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/SpeedDiceBase/Bind",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "Bind",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneStartPost": [
+            {
+                "statusClearSelf": []
+            }
+        ],
+        "Removed-Bind": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SpeedDiceBase/Bind"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "At the start of a new scene, reduce the value of all [b][color=ffaa64]Speed Dice[/color][/b] by the value (to a minimum of 1), then remove all [b][color=ffaa64]Bind[/color][/b]."
+    ]
+}

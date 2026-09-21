@@ -1,0 +1,26 @@
+{
+    "Name": "Liquid Form",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 8,
+            "Base": 1,
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 2 [b][color=5064cc]Sinking[/color][/b]."
+            ]
+        },
+    ],
+    "PostText": [
+    ]
+}

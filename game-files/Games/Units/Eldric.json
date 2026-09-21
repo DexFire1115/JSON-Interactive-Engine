@@ -1,0 +1,46 @@
+{
+    "Name": "Eldric",
+    "Color": "#aa5064",
+    "Type": "Human",
+    "Class": "Lvl. 1",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 1,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 4,
+        "SlashDamage": -1,
+        "PierceDamage": -1,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 1,
+    },
+    "Statuses": {
+        "Eldric_Critical": {
+            "File": "Statuses/Eldric_Critical",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "ConfirmStatus"
+            ]
+        }
+    },
+    "Conditions": {
+        "ConfirmStatus": [
+            "Eldric_Critical"
+        ],
+    },
+    "Actions": [
+        "Eldric_Slash_1",
+        "Eldric_Slowing_1",
+        "Eldric_Maim_1",
+        "Eldric_Swift_1"
+    ]
+}

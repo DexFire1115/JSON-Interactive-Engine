@@ -1,0 +1,38 @@
+{
+    "Name": "Door of the Hold",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "getStatus": [
+                                    "Aggro",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Aggro",
+                                1,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=ffffff][lb]Scene Start][/color][/b] If at less than 3 [b][color=ff8064]Aggro[/color][/b], gain 1 [b][color=ff8064]Aggro[/color][/b].",
+        "When this unit intercepts an enemy Skill, gain 3 [b][color=50cccc]Charge[/color][/b] and grant the original target 2 [b][color=50cccc]Charge[/color][/b] and 1 [b][color=ffcc50]Resolve[/color][/b]."
+    ]
+}

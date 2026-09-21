@@ -1,0 +1,52 @@
+{
+    "Args": [
+        "Var",
+        "Amt",
+        "Ref"
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                {
+                    "getVar": [
+                        "Var",
+                        ""
+                    ]
+                },
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                {
+                                    "getVar": [
+                                        "Var",
+                                        ""
+                                    ]
+                                },
+                                0,
+                                {
+                                    "getVar": [
+                                        "Ref",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "Amt",
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "getVar": [
+                        "Ref",
+                        ""
+                    ]
+                }
+            ]
+        }
+    ]
+}

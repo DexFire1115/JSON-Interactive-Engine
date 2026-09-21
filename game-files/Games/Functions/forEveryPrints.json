@@ -1,0 +1,77 @@
+{
+    "Args": [
+        "amt",
+        "interval",
+        "min",
+        "max"
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "X",
+                {
+                    "div": [
+                        {
+                            "getVar": [
+                                "amt",
+                                0
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "interval",
+                                0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "addLog": [
+                {
+                    "propCall": [
+                        "references",
+                        "duplicate"
+                    ]
+                }
+            ]
+        },
+        {
+            "addLog": [
+                {
+                    "getVar": [
+                        "X",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "min": [
+                {
+                    "max": [
+                        {
+                            "getVar": [
+                                "X",
+                                0
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "min",
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "getVar": [
+                        "max",
+                        0
+                    ]
+                }
+            ]
+        }
+    ]
+}

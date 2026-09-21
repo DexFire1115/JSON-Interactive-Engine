@@ -1,0 +1,45 @@
+{
+    "Name": "Peccatulum Morositatis",
+    "Color": "#64ffff",
+    "Type": "Distortion",
+    "Class": "Class 1",
+    "Attributes": {
+        "CurrentHealth": 40,
+        "MaxHealth": 40,
+        "CurrentStagger": 25,
+        "MaxStagger": 25,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": 3,
+        "BluntDamage": -1,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": -1,
+    },
+    "Statuses": {
+        "Gloom": {
+            "File": "Statuses/Gloom",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "Applied-Killed"
+            ]
+        }
+    },
+    "Conditions": {
+        "Applied-Killed": [
+            "Gloom"
+        ]
+    },
+    "Actions": [
+        "Moro1_Water_1",
+        "Moro1_Splash_1",
+        "Moro1_Liquid_1"
+    ]
+}

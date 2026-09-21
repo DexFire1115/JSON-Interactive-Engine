@@ -1,0 +1,88 @@
+{
+    "Name": "Thorns",
+    "Color": "#50cc80",
+    "Conditions": {
+        "HitReceived": [
+            {
+                "ifelse": [
+                    {
+                        "getVar": [
+                            "isCrit",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "multiplier",
+                                2
+                            ]
+                        },
+                        {
+                            "setVar": [
+                                "prefixString",
+                                "[b][color=aacccc]Crit [/color][/b]"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getVar": [
+                                    "prefixString",
+                                    ""
+                                ]
+                            },
+                            "[b][color=50cc80]Thorns![/color] ([color=50cc80]",
+                            {
+                                "getStatus": [
+                                    "Thorns",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color])[/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "dealDamage": [
+                    {
+                        "mult": [
+                            {
+                                "getStatus": [
+                                    "Thorns",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "multiplier",
+                                    1
+                                ]
+                            }
+                        ]
+                    },
+                    "",
+                    "Thorns"
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+        "When hit by an attack, the attack takes [b][color=ff6464]Damage[/color][/b] = this Boon's Count. If the hit was a Crit, double the [b][color=ff6464]Damage[/color][/b] dealt by this Boon.",
+        "At the end of the Scene, remove all [b][color=50cc80]Thorns[/color][/b]."
+    ]
+}

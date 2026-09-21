@@ -1,0 +1,34 @@
+{
+    "Name": "Peccatulum Pigritiae",
+    "Color": "#ffcc64",
+    "Type": "Distortion",
+    "Class": "Class 1",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 35,
+        "MaxStagger": 35,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 4,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": -2,
+        "PierceDamage": 0,
+        "BluntDamage": 2,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Pigr1_Roll_1",
+        "Pigr1_Slothful_1",
+        "Pigr1_Slam_1"
+    ]
+}

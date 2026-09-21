@@ -1,0 +1,47 @@
+{
+    "Name": "Endurance",
+    "Color": "#50cc50",
+    "Conditions": {
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "notBool": [
+                            {
+                                "isOffense": [
+                                    {
+                                        "getVar": [
+                                            "DieData"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "changePower": [
+                                {
+                                    "getStatus": [
+                                        "Endurance",
+                                        0,
+                                        "@Self"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+        "Increase the Power of all Defensive Dice by this Buff.",
+        "Remove all at the end of the scene."
+    ]
+}

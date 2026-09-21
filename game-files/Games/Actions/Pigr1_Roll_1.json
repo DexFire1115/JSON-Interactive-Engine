@@ -1,0 +1,58 @@
+{
+    "Name": "Roll",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 10,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 4 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

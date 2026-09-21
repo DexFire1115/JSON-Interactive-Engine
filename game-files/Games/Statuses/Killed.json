@@ -1,0 +1,60 @@
+{
+    "Name": "Killed",
+    "Color": "#ff6464",
+    "Passive": true,
+    "Hidden": true,
+    "Conditions": {
+        "Applied-Staggered": [
+            {
+                "consoleCommand": [
+                    "killedDisplay",
+                    {
+                        "getUnit": [
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/Inactive",
+                    true,
+                    false
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/Inactive/Killed",
+                    true
+                ]
+            }
+        ],
+        "Removed-Killed": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/Inactive/Killed"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

@@ -1,0 +1,80 @@
+{
+    "Name": "Waiting?",
+    "Cost": 0,
+    "Proactive": [
+        {
+            "setVar": [
+                "dieDict",
+                {
+                    "getAction": [
+                        {
+                            "getVar": [
+                                "Action"
+                            ]
+                        },
+                        "data/Dice/0"
+                    ]
+                }
+            ]
+        },
+        {
+            "refCall": [
+                "dieDict",
+                "set",
+                "FixedMax",
+                1
+            ]
+        }
+    ],
+    "Reactive": [
+        {
+            "setVar": [
+                "dieDict",
+                {
+                    "getAction": [
+                        {
+                            "getVar": [
+                                "Action"
+                            ]
+                        },
+                        "data/Dice/0"
+                    ]
+                }
+            ]
+        },
+        {
+            "refCall": [
+                "dieDict",
+                "set",
+                "FixedMin",
+                1
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff6480][lb]Proactive][/color][/b] All dice max roll.",
+        "[b][color=ff8064][lb]Reactive][/color][/b] All dice min roll."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 20,
+            "Base": 0,
+            "ConfirmDamage": [
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        1,
+                        0
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Does not deal [b][color=ffff64]Stagger[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

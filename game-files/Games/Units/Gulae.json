@@ -1,0 +1,34 @@
+{
+    "Name": "Peccatulum Gulae",
+    "Color": "#80ff64",
+    "Type": "Distortion",
+    "Class": "Class 1",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 2,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 1,
+        "PierceStagger": -2,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Gula1_Nibble_1",
+        "Gula1_Greedy_1",
+        "Gula1_Meal_1"
+    ]
+}

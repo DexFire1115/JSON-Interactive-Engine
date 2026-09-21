@@ -1,0 +1,45 @@
+{
+    "Name": "Peccatulum Luxuriae",
+    "Color": "#ffaa64",
+    "Type": "Distortion",
+    "Class": "Class 1",
+    "Attributes": {
+        "CurrentHealth": 45,
+        "MaxHealth": 45,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 2,
+        "PierceDamage": 0,
+        "BluntDamage": -2,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+        "Lust": {
+            "File": "Statuses/Lust",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "Hit"
+            ]
+        }
+    },
+    "Conditions": {
+        "Hit": [
+            "Lust"
+        ]
+    },
+    "Actions": [
+        "Luxu1_Strike_1",
+        "Luxu1_Piercer_1",
+        "Luxu1_Desire_1"
+    ]
+}

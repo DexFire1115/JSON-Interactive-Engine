@@ -1,0 +1,208 @@
+{
+    "Name": "Blood Mop",
+    "Cost": 3,
+    "Limit": 2,
+    "PreText": [
+        "[b][color=64aaff][lb]Exhaust][/color][/b] Gain 3 [b][color=50cc50]Disarm[/color][/b] next scene. Lose 10 [b][color=ffff64]Stagger Resist[/color][/b]. Does not cause [b][color=ffff64]Stagger[/color][/b]."
+    ],
+    "Exhaust": [
+        {
+            "statusInflict": [
+                "Disarm",
+                3,
+                "@Self",
+                true
+            ]
+        },
+        {
+            "setVar": [
+                "tempHlt",
+                {
+                    "objCall": [
+                        {
+                            "getUnitData": [
+                                "@Self"
+                            ]
+                        },
+                        "dget",
+                        "Attributes/CurrentHealth",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "tempStg",
+                {
+                    "objCall": [
+                        {
+                            "getUnitData": [
+                                "@Self"
+                            ]
+                        },
+                        "dget",
+                        "Attributes/CurrentStagger",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "objCall": [
+                {
+                    "getUnitData": [
+                        "@Self"
+                    ]
+                },
+                "dset",
+                "Attributes/CurrentStagger",
+                {
+                    "max": [
+                        {
+                            "sub": [
+                                {
+                                    "getVar": [
+                                        "tempStg",
+                                        0
+                                    ]
+                                },
+                                10
+                            ]
+                        },
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "consoleCommand": [
+                "dmgDisplay",
+                {
+                    "getUnit": [
+                        "@Self"
+                    ]
+                },
+                {
+                    "passArr": [
+                        {
+                            "getVar": [
+                                "tempHlt",
+                                0
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "tempStg",
+                                0
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "tempHlt",
+                                0
+                            ]
+                        },
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dget",
+                                "Attributes/CurrentStagger",
+                                0
+                            ]
+                        },
+                        ""
+                    ]
+                }
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 8,
+            "Base": 1,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "isOffense": [
+                                {
+                                    "getUnitProp": [
+                                        "",
+                                        "dieData"
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "setVar": [
+                                    "Boost",
+                                    4,
+                                    "@Action"
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If clashing against an [b][color=ffaaaa]Offense[/color][/b] Die, final die gains +4 [b][color=ffffff]Power[/color][/b].",
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 4,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Boost",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+    ],
+    "PostText": [
+    ]
+}

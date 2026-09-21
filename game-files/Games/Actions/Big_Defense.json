@@ -1,0 +1,26 @@
+{
+    "Name": "Big Defense",
+    "Cost": 0,
+    "PreText": [
+        "Please Delete Me Too... :("
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 12,
+            "Base": 2
+        },
+        {
+            "Type": "Block",
+            "Dice": 12,
+            "Base": 2
+        },
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0
+        }
+    ],
+    "PostText": [
+    ]
+}
