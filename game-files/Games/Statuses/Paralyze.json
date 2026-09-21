@@ -1,0 +1,59 @@
+{
+    "Name": "Paralyze",
+    "Color": "#ccaa50",
+    "Conditions": {
+        "BeforeDie": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "[b][color=ccaa50]Paralyze![/color][/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitProp": [
+                            "@Self",
+                            "dieData"
+                        ]
+                    },
+                    "dset",
+                    "FixedMin",
+                    {
+                        "add": [
+                            1,
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitProp": [
+                                            "@Self",
+                                            "dieData"
+                                        ]
+                                    },
+                                    "dget",
+                                    "FixedMin",
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Paralyze",
+                    -1,
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When rolling a die, automaticlly take the minimum value and this die cannot be rerolled, then reduce [color=ccaa50]Paralyze[/color] by 1.",
+        "If Poise was spent on the die, cancel the effects of both Statuses and roll the die as normal. For multiple Attack Weight, apply to all copies of the Die across targets."
+    ]
+}

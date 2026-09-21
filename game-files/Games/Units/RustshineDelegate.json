@@ -1,0 +1,39 @@
+{
+    "Name": "Rustshine Delegate",
+    "Color": "#cc9632",
+    "Type": "Human",
+    "Class": "Urban Myth",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 35,
+        "MaxStagger": 35,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 1,
+        "SlashDamage": -1,
+        "PierceDamage": 0,
+        "BluntDamage": -1,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": -1,
+    },
+    "Statuses": {
+        "DooroftheHold": {
+            "isPassive": true
+        }
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Rustshine_Shimmering_1",
+        "Rustshine_Light_1",
+        "Rustshine_Serrated_1",
+        "Rustshine_Corroding_1",
+        "Rustshine_Photophase_1"
+    ]
+}

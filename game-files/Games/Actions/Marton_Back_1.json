@@ -1,0 +1,94 @@
+{
+    "Name": "Back Off.",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Protection",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=ff8064]Aggro[/color][/b] and 1 [b][color=50ccff]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getAction": [
+                                {
+                                    "getVar": [
+                                        "Action"
+                                    ]
+                                },
+                                "data/Intercept",
+                                false
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +2 if this skill intercepted the opposing attack.",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 2 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

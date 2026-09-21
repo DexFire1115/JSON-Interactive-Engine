@@ -1,0 +1,36 @@
+{
+    "Name": "Greedy Glutton",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 1,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Thorns",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 2 [b][color=50cc80]Thorns[/color][/b]."
+    ]
+}

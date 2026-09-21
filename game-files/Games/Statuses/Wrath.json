@@ -1,0 +1,19 @@
+{
+    "Name": "Wrath",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Removed-Staggered": [
+            {
+                "statusInflict": [
+                    "Strength",
+                    1,
+                    "@Self"
+                ]
+            },
+        ]
+    },
+    "Text": [
+        "[b][color=ffff64][lb]Stagger Recovery][/color][/b] The Peccatula gains 1 [b][color=cc5050]Strength[/color][/b]."
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "Name": "Gloom",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Applied-Killed": [
+            {
+                "statusInflict": [
+                    "Sinking",
+                    4
+                ]
+            },
+        ]
+    },
+    "Text": [
+        "[b][color=ffff64][lb]Killed][/color][/b] The killer, if any, gains 4 [b][color=5050cc]Sinking[/color][/b]."
+    ]
+}

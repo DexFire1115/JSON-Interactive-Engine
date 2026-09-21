@@ -1,0 +1,73 @@
+{
+    "Name": "Battle Ability: Interceptor",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "HoldDie": [
+            {
+                "statusInflict": [
+                    "Protection",
+                    1,
+                    "@Self"
+                ]
+            }
+        ],
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "varCall": [
+                                    {
+                                        "getUnitProp": [
+                                            "@Self",
+                                            "speedDie"
+                                        ]
+                                    },
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "andBool": [
+                                    {
+                                        "getAction": [
+                                            {
+                                                "getVar": [
+                                                    "Action"
+                                                ]
+                                            },
+                                            "data/Intercept",
+                                            false
+                                        ]
+                                    },
+                                    {
+                                        "isDefense": [
+                                            {
+                                                "getVar": [
+                                                    "DieData"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "changePower": [
+                                1
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When choosing to Hold a [b][color=ffaa64]Speed Die[/color][/b], you gain 1 [b][color=5080cc]Protection[/color][/b].",
+        "When intercepting with a held [b][color=ffaa64]Speed Die[/color][/b], your Defensive Dice ([b][color=aaffff]Block[/color][/b] and [b][color=aaaaff]Evade[/color][/b]) gain +1 [b][color=ffffff]Power[/color][/b]."
+    ]
+}

@@ -1,0 +1,29 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "VileiColparino"
+        },
+        "A2": {
+            "Unit": "Marton"
+        },
+        "E1": {
+            "Unit": "Hooligan"
+        },
+        "E2": {
+            "Unit": "Hooligan"
+        },
+        "E3": {
+            "Unit": "Hooligan"
+        },
+        "E4": {
+            "Unit": "Hooligan"
+        },
+        "E5": {
+            "Unit": "Hooligan"
+        }
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Vilei + Marton War[/u][/b]"
+    ]
+}

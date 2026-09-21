@@ -1,0 +1,41 @@
+{
+    "Name": "Aggro",
+    "Color": "#ff8064",
+    "MinStack": 0,
+    "Conditions": {
+        "CanIntercept": [
+            {
+                "ifelse": [
+                    
+                ]
+            }
+        ],
+        "SceneEnd": [
+            "super",
+            {
+                "setStatus": [
+                    "Aggro",
+                    {
+                        "div": [
+                            {
+                                "getStatus": [
+                                    "Aggro",
+                                    0,
+                                    "@Self"
+                                ]                         
+                            },
+                            2
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When an enemy attacks, you may intercept in the following ways:",
+        "If you have a [b][color=ffaa64]Speed Die[/color][/b], you may add your [b][color=ff8064]Aggro[/color][/b] to the value, if the total is equal to or greater than the opposing [b][color=ffaa64]Speed Die[/color][/b], you may use your [b][color=ffaa64]Speed Die[/color][/b] to intercept.",
+        "If the opposing [b][color=ffaa64]Speed Die[/color][/b] is equal to or lower than your [b][color=ff8064]Aggro[/color][/b]. You may intercept without spending a [b][color=ffaa64]Speed Die[/color][/b], but only being able to deploy saved dice in response.",
+        "At the end of each scene, halve the Count."
+    ]
+}

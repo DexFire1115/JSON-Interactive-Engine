@@ -1,0 +1,139 @@
+{
+    "Name": "Fragile",
+    "Color": "#8050cc",
+    "Conditions": {
+        "Applied-Fragile": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/SlashDamage"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/SlashDamage/Fragile",
+                    {
+                        "getStatus": [
+                            "Fragile",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/PierceDamage"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/PierceDamage/Fragile",
+                    {
+                        "getStatus": [
+                            "Fragile",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/BluntDamage"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/BluntDamage/Fragile",
+                    {
+                        "getStatus": [
+                            "Fragile",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusClearSelf": []
+            }
+        ],
+        "Removed-Fragile": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SlashDamage/Fragile"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/PierceDamage/Fragile"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/BluntDamage/Fragile"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When taking [b][color=ff6464]Damage[/color][/b], your damage affinities have +1 for every [b][color=8050cc]Fragile[/color][/b].",
+        "Remove all at the end of the scene."
+    ]
+}

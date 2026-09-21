@@ -1,0 +1,24 @@
+{
+    "Name": "Small Bites...",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

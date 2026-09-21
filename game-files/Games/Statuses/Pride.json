@@ -1,0 +1,19 @@
+{
+    "Name": "Pride",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Crit": [
+            {
+                "statusInflict": [
+                    "Poise_Superbiae",
+                    1,
+                    "@Self"
+                ]
+            },
+        ]
+    },
+    "Text": [
+        "[b][color=64ffff][lb]Crit][/color][/b] The Peccatula gains 1 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

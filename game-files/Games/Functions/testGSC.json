@@ -1,0 +1,88 @@
+{
+    "Args": [
+        "switch",
+    ],
+    "Sequence": [
+        {
+            "loop": [
+                {
+                    "range": [
+                        1,
+                        10
+                    ]
+                },
+                [
+                    {
+                        "ifelse": [
+                            {
+                                "getVar": [
+                                    "switch",
+                                    false
+                                ]
+                            },
+                            [
+                                {
+                                    "addLog": [
+                                        {
+                                            "randf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "addLog": [
+                                        {
+                                            "randf_range": [
+                                                -1.0,
+                                                1.0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        "setVar": [
+                            "switch",
+                            {
+                                "notBool": [
+                                    {
+                                        "getVar": [
+                                            "switch",
+                                            false
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "printerr": [
+                            {
+                                "getVar": [
+                                    "switch",
+                                    false
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "addLog": [
+                            {
+                                "getVar": [
+                                    "iter",
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "iter"
+            ]
+        }
+    ]
+}

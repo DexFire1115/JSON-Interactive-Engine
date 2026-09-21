@@ -1,0 +1,96 @@
+{
+    "Name": "Sharp Brambles",
+    "Cost": 1,
+    "PreText": [
+        "[b][color=ff8064][lb]Proactive][/color][/b] If this skill is not clashed, gain 2 [b][color=50cc50]Endurance[/color][/b]."
+    ],
+    "Proactive": [
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "getUnitProp": [
+                                "",
+                                "action"
+                            ]
+                        },
+                        -1
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Endurance",
+                            2,
+                            "@Self"
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 2,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "mult": [
+                                {
+                                    "getStatus": [
+                                        "Protection",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                2
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Feeble",
+                        1
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Feeble",
+                        1,
+                        "",
+                        true
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        3
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Bind",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every [b][color=5080cc]Protection[/color][/b], gain +2 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc5050]Feeble[/color][/b] this scene and next scene.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Inflict 3 [b][color=cc5064]Bleed[/color][/b]. Gain 2 [b][color=ff8064]Bind[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

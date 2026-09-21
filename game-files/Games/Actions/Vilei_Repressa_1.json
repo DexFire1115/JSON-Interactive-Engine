@@ -1,0 +1,102 @@
+{
+    "Name": "Irriverenza Repressa (Quell Disrespecct)",
+    "Cost": 3,
+    "Limit": 3,
+    "PreText": [
+        "[b][color=64aaff][lb]Exhaust][/color][/b] Inflict 4 [b][color=cc6450]Burn[/color][/b] on self and all enemies. Until the end of the skill, trigger [b][color=ff6450]Blaze[/color][/b] on each hit."
+    ],
+    "Exhaust": [
+        {
+            "statusInflict": [
+                "Burn",
+                4,
+                "@Self"
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 4,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 2,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {"statusInflict": [ "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+    ],
+    "AfterUse": [
+        {
+            "removeFunction": [
+                "Vilei_Repressa_1_Exhaust",
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

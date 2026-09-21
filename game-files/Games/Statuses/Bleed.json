@@ -1,0 +1,124 @@
+{
+    "Name": "Bleed",
+    "Color": "#cc5064",
+    "MaxStack": {
+        "add": [
+            5,
+            {
+                "getStatus": [
+                    "Fragile",
+                    0,
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Conditions": {
+        "UsedOffense": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "[b][color=ffaaaa]Offense[/color] [color=cc5064]Bleed![/color] ([color=cc5064]",
+                            {
+                                "getStatus": [
+                                    "Bleed",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color])[/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "dealDamage": [
+                    {
+                        "getStatus": [
+                            "Bleed",
+                            0,
+                            "@Self"
+                        ]
+                    },
+                    "@Self",
+                    "Bleed"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Bleed",
+                    -1,
+                    "@Self"
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "[b][color=cc5064]Bleed![/color] ([color=cc5064]",
+                            {
+                                "getStatus": [
+                                    "Bleed",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color])[/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "dealDamage": [
+                    {
+                        "getStatus": [
+                            "Bleed",
+                            0,
+                            "@Self"
+                        ]
+                    },
+                    "@Self",
+                    "Bleed"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Bleed",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "div": [
+                                    {
+                                        "add": [
+                                            {
+                                                "getStatus": [
+                                                    "Bleed",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            },
+                                            1
+                                        ]                                    
+                                    },
+                                    2
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When using an Offensive die, take damage equal to the Count, then reduce by 1.",
+        "At the end of the scene, take [b][color=ff6464]Damage[/color][/b] = Count, then halve the Count.",
+        "[b][color=cc5064]Bleed[/color][/b] cannot normally be stacked higher than 5, but each [b][color=8050cc]Fragile[/color][/b] increases the cap by 1 for that creature."
+    ]
+}

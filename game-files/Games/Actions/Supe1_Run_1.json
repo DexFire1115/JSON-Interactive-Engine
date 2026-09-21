@@ -1,0 +1,42 @@
+{
+    "Name": "Run Over",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 0,
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 0,
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

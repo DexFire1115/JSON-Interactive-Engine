@@ -1,0 +1,47 @@
+{
+    "Name": "...Cook Anything for just 90.000 Ahn!",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneEnd": [
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "A1"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Induction/Stack",
+                                    0
+                                ]
+                            },
+                            10
+                        ]
+                    },
+                    [
+                        {
+                            "changeLight": [
+                                99,
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Haste",
+                                3,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

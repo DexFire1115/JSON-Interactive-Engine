@@ -1,0 +1,50 @@
+{
+    "Name": "Marton",
+    "Color": "#80aacc",
+    "Type": "Human",
+    "Class": "Lvl. 1",
+    "Attributes": {
+        "CurrentHealth": 60,
+        "MaxHealth": 60,
+        "CurrentStagger": 40,
+        "MaxStagger": 40,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 1,
+        "SlashDamage": -1,
+        "PierceDamage": 0,
+        "BluntDamage": -1,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": -1,
+    },
+    "Statuses": {
+        "Marton_Intercept": {
+            "File": "Statuses/Marton_Intercept",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "HoldDie",
+                "Check"
+            ]
+        }
+    },
+    "Conditions": {
+        "HoldDie": [
+            "Marton_Intercept"
+        ],
+        "Check": [
+            "Marton_Intercept"
+        ],
+    },
+    "Actions": [
+        "Marton_Taking_1",
+        "Marton_Back_1",
+        "Marton_Come_1",
+        "Marton_Right_1"
+    ]
+}

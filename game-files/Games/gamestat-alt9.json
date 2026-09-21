@@ -1,0 +1,14 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "Eldric"
+        },
+        "E1": {
+            "Unit": "Morositatis"
+        },
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Rat[/u][/b]"
+    ]
+}

@@ -1,0 +1,33 @@
+{
+    "Name": "Strike Down",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 10,
+            "Base": 2,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 1,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

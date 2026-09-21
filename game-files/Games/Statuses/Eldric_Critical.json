@@ -1,0 +1,95 @@
+{
+    "Name": "Battle Ability: Critical Infliction",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmStatus": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "varCall": [
+                                    [
+                                        "Burn",
+                                        "Bleed",
+                                        "Tremor",
+                                        "Sinking",
+                                        "Paralysis",
+                                        "Fragile",
+                                        "Bind"
+                                    ],
+                                    "has",
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "andBool": [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getVar": [
+                                                    "DieData"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Result/3",
+                                            false
+                                        ]
+                                    },
+                                    {
+                                        "varCall": [
+                                            {
+                                                "varCall": [
+                                                    "/",
+                                                    "join",
+                                                    {
+                                                        "get": [
+                                                            "stack"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "ends_with",
+                                            "Hit/ConfirmStatus"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "set",
+                                1,
+                                {
+                                    "add": [
+                                        {
+                                            "refCall": [
+                                                "statusArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When an Offenseive Die Crits (rolls its maximum value and hits the targe), increase the Aliments, [b][color=ffaa64]Bind[/color][/b], and [b][color=8050cc]Fragile[/color][/b] inflicted by its [b][color=64ff64][lb]Hit][/color][/b] effects by 1.",
+    ]
+}

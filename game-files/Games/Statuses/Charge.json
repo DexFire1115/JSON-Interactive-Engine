@@ -1,0 +1,43 @@
+{
+    "Name": "Charge",
+    "Color": "#50cccc",
+    "Conditions": {
+        "BeforeDie": [
+            {
+                "ifelse": [
+                    {
+                        "queryYN": [
+                            "[b]Spend [color=50cccc]Charge[/color]?[/b]"
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitProp": [
+                                        "@Self",
+                                        "dieData"
+                                    ]
+                                },
+                                "dset",
+                                "Advantage",
+                                1
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Charge",
+                                -1,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When you would roll a die, you may first spend 1 [b][color=50cccc]Charge[/color][/b] to roll that die with Advantage.",
+        "[b][color=50cccc]Charge[/color][/b] is also used as a resource for various skills to consume."
+    ]
+}

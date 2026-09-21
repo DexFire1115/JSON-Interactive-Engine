@@ -1,0 +1,23 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "Eldric"
+        },
+        "A2": {
+            "Unit": "Marton"
+        },
+        "E1": {
+            "Unit": "Pigritiae"
+        },
+        "E2": {
+            "Unit": "Gulae"
+        },
+        "E3": {
+            "Unit": "Superbiae"
+        }
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Team v. Peccatulum[/u][/b]"
+    ]
+}

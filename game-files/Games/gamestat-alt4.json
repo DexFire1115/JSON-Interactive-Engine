@@ -1,0 +1,23 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "VileiColparino"
+        },
+        "A2": {
+            "Unit": "Marton"
+        },
+        "E1": {
+            "Unit": "Morositatis"
+        },
+        "E2": {
+            "Unit": "Morositatis"
+        },
+        "E3": {
+            "Unit": "Morositatis"
+        }
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Team v. Sinking[/u][/b]"
+    ]
+}

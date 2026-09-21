@@ -1,0 +1,155 @@
+{
+    "Name": "Backstreets Evade",
+    "Cost": 0,
+    "Limit": 3,
+    "PreText": [
+        "[b][color=64aaff][lb]Exhaust][/color][/b] Lose 10 [b][color=ffff64][lb]Stagger Resist][/color][/b]. Does not cause [b][color=ffff64][lb]Stagger][/color][/b]."
+    ],
+    "Exhaust": [
+        {
+            "setVar": [
+                "tempHlt",
+                {
+                    "objCall": [
+                        {
+                            "getUnitData": [
+                                "@Self"
+                            ]
+                        },
+                        "dget",
+                        "Attributes/CurrentHealth",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "tempStg",
+                {
+                    "objCall": [
+                        {
+                            "getUnitData": [
+                                "@Self"
+                            ]
+                        },
+                        "dget",
+                        "Attributes/CurrentStagger",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "objCall": [
+                {
+                    "getUnitData": [
+                        "@Self"
+                    ]
+                },
+                "dset",
+                "Attributes/CurrentStagger",
+                {
+                    "max": [
+                        {
+                            "sub": [
+                                {
+                                    "getVar": [
+                                        "tempStg",
+                                        0
+                                    ]
+                                },
+                                10
+                            ]
+                        },
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "consoleCommand": [
+                "dmgDisplay",
+                {
+                    "getUnit": [
+                        "@Self"
+                    ]
+                },
+                {
+                    "passArr": [
+                        {
+                            "getVar": [
+                                "tempHlt",
+                                0
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "tempStg",
+                                0
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "tempHlt",
+                                0
+                            ]
+                        },
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dget",
+                                "Attributes/CurrentStagger",
+                                0
+                            ]
+                        },
+                        ""
+                    ]
+                }
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 2,
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Disarm",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Bind",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=6464ff][lb]On Evade][/color][/b] Gain 1 [b][color=50cc50]Disarm[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=ffaa64]Bind[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                1
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

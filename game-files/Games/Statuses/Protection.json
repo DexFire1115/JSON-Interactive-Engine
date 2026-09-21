@@ -1,0 +1,154 @@
+{
+    "Name": "Protection",
+    "Color": "#5080cc",
+    "Conditions": {
+        "Applied-Protection": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/SlashDamage"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/SlashDamage/Protection",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "Protection",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/PierceDamage"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/PierceDamage/Protection",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "Protection",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/BluntDamage"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/BluntDamage/Protection",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "Protection",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusClearSelf": []
+            }
+        ],
+        "Removed-Protection": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SlashDamage/Protection"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/PierceDamage/Protection"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/BluntDamage/Protection"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When taking [b][color=ff6464]Damage[/color][/b], your damage affinities have -1 for every [b][color=5080cc]Protection[/color][/b]. This applied even when [b][color=ffff64]Staggered[/color][/b].",
+        "Remove all at the end of the scene."
+    ]
+}

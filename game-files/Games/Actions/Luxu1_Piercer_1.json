@@ -1,0 +1,42 @@
+{
+    "Name": "Piercer",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

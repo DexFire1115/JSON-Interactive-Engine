@@ -15,6 +15,7 @@ func _ready() -> void:
 	EventBus.connect("staggeredDisplay", staggeredPrint)
 	EventBus.connect("skillListDisplay", displaySkillOptions)
 	EventBus.connect("savediceListDisplay", displaySaveDiceOptions)
+	EventBus.connect("targetListDisplay", displayTargetOptions)
 
 func _on_input_text_submitted(new_text: String) -> void:
 	if(new_text.is_empty()): return
@@ -83,9 +84,6 @@ func readCommand(text: String) -> void:
 		"dispskilllist":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = displaySkillListCommand(args)
-		"disptargetlist":
-			argPrint(args, "64ffff", "aa64ff")
-			errorCode = displayTargetListCommand(args)
 		"dispspeed":
 			argPrint(args, "64ffff")
 			errorCode = displaySpeedDiceCommand(args)
@@ -374,7 +372,7 @@ func displaySkillListCommand(args: PackedStringArray) -> int:
 	if (!Functions.unitList.has(args[1])): return 3
 	var actionArr: Array = Functions.unitList[args[1]].dataSet.safeGet("Actions", TYPE_ARRAY)
 	for i in actionArr.size():
-		displaySkillListItem(args[1], actionArr[i], i)
+		displaySkillListItem(args[1], actionArr, i)
 	return 0
 
 func displaySkillOptions(unit: String, options: Array):
@@ -396,16 +394,14 @@ func displaySaveDiceOptions(unit: String, options: Array):
 		if(dieParse.size() != 2): 
 			addLog(addStyle("<Invalid Die!>", "ff6464", true))
 			continue
-		displaySkillDice(dieParse[0], int(dieParse[1]))
 		text += getDieHeader(DataTree.new(
 			Functions.fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], 
 			TYPE_DICTIONARY)))
-		addLog(text)
-	
+		addPushConsole(text)
 
 func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
 	if (!Functions.unitList.has(unit)): 
-		addLog(addStyle("<Unit does not exist!>", "ff6464", true))
+		addPushConsole(addStyle("<Unit does not exist!>", "ff6464", true))
 		return 3
 	var unitData := Functions.unitList[unit].dataSet
 	var actionName = str(actionArr[index])
@@ -413,29 +409,27 @@ func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
 		GameManager.filetree.dget("Actions/" + actionName, {}))
 	if(actionData.isEmpty()):
 		if(actionName.begins_with("*")): 
-			addLog(
+			addPushConsole(
 				addStyle(" " + str(index) + " | ", "cceeff", true) + 
 				actionName.substr(1)
 			)
 			return 0
-		addLog(addStyle("<Action does not exist!>", "ff6464", true))
+		addPushConsole(addStyle("<Action does not exist!>", "ff6464", true))
 		return 2
 	var text := ""
 	var isUsable := Functions.isUsable(unitData, actionData)
 	var color := "ffeecc" if(isUsable)else "808080"
 	text += addStyle(" " + str(index) + " | ", color, true)
 	text += getSkillHeader(actionData, isUsable)
-	addLog(text)
+	addPushConsole(text)
 	return 0
 
-func displayTargetListCommand(args: PackedStringArray) -> int:
-	if(args.size() < 2): return 1
-	
-	return 0
-
-func displayTargetList(unit: String, targetStyle := ""):
-	
-	pass
+func displayTargetOptions(options: Array):
+	for i in options.size():
+		var text := ""
+		text += addStyle(" " + str(i) + " | ", "ffeecc", true)
+		text += getNameTag(options[i])
+		addPushConsole(text)
 
 func displaySpeedDiceCommand(_args: PackedStringArray) -> int:
 	addLog(underlineStr(boldStr("Speed Dice Turn Order")))

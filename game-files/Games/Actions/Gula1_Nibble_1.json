@@ -1,0 +1,42 @@
+{
+    "Name": "Nibble",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 1,
+            "Hit": [
+                {
+                    "dmgUnit": [
+                        -1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Regain 1 HP."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "dmgUnit": [
+                        -1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Regain 1 HP."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

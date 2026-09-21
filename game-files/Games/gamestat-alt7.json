@@ -1,0 +1,14 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "Eldric"
+        },
+        "E1": {
+            "Unit": "Superbiae"
+        }
+    },
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Eldric v. Pride[/u][/b]"
+    ]
+}

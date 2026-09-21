@@ -1,0 +1,154 @@
+{
+    "Name": "Resolve",
+    "Color": "#ffcc50",
+    "Conditions": {
+        "Applied-Resolve": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/SlashStagger"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/SlashStagger/Resolve",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "Resolve",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/PierceStagger"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/PierceStagger/Resolve",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "Resolve",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/BluntStagger"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/BluntStagger/Resolve",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "Resolve",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusClearSelf": []
+            }
+        ],
+        "Removed-Resolve": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SlashStagger/Resolve"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/PierceStagger/Resolve"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/BluntStagger/Resolve"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When taking [b][color=ffff64]Stagger[/color][/b], your stagger affinities have -1 for every [b][color=ffcc50]Resolve[/color][/b].",
+        "Remove all at the end of the scene."
+    ]
+}

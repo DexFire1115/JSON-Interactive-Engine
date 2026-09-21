@@ -1,0 +1,35 @@
+{
+    "Name": "Vilei Colparino",
+    "Color": "#cc5050",
+    "Type": "Human",
+    "Class": "Lvl. 1",
+    "Attributes": {
+        "CurrentHealth": 60,
+        "MaxHealth": 60,
+        "CurrentStagger": 35,
+        "MaxStagger": 35,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 1,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": -1,
+        "SlashStagger": 1,
+        "PierceStagger": -1,
+        "BluntStagger": -1,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Vilei_Occhi_1",
+        "Vilei_Lancia_1",
+        "Vilei_Doppia_1",
+        "Vilei_Repressa_1"
+    ]
+}

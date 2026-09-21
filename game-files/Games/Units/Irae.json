@@ -1,0 +1,45 @@
+{
+    "Name": "Peccatulum Irae",
+    "Color": "#ff6480",
+    "Type": "Distortion",
+    "Class": "Class 1",
+    "Attributes": {
+        "CurrentHealth": 40,
+        "MaxHealth": 40,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": -2,
+        "BluntDamage": 2,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+        "Wrath": {
+            "File": "Statuses/Wrath",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "Removed-Staggered"
+            ]
+        }
+    },
+    "Conditions": {
+        "Removed-Staggered": [
+            "Wrath"
+        ]
+    },
+    "Actions": [
+        "Irae1_Explosive_1",
+        "Irae1_Sear_1",
+        "Irae1_Adrenaline_1"
+    ]
+}

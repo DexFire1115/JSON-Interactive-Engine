@@ -1,0 +1,68 @@
+{
+    "Name": "Passive - Fast Footed",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "andBool": [
+                                {
+                                    "objCall": [
+                                        {
+                                            "getUnitData": [
+                                                "@Self"
+                                            ]
+                                        },
+                                        "dget",
+                                        "Statuses/Claws_Come/Switch1",
+                                        false
+                                    ]
+                                },
+                                {
+                                    "objCall": [
+                                        {
+                                            "getUnitData": [
+                                                "@Self"
+                                            ]
+                                        },
+                                        "dget",
+                                        "Statuses/Claws_Come/Switch2",
+                                        false
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Protection",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=5080cc]Protection[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

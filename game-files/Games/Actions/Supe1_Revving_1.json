@@ -1,0 +1,27 @@
+{
+    "Name": "Revving Up",
+    "Cost": 0,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Haste",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 4,
+            "Base": 2,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

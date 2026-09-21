@@ -1,0 +1,71 @@
+{
+    "Name": "Desire",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "lte": [
+                                {
+                                    "divf": [
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getUnitData": [
+                                                        "@Self"
+                                                    ]
+                                                },
+                                                "dget",
+                                                "Attributes/CurrentHealth",
+                                                0
+                                            ]
+                                        },
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getUnitData": [
+                                                        "@Self"
+                                                    ]
+                                                },
+                                                "dget",
+                                                "Attributes/MaxHealth",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                0.5
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Power +2 if the target is at or below half their max HP."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 1,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

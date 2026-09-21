@@ -1,0 +1,88 @@
+{
+    "Name": "Heat Up",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "dieDict",
+                        {
+                            "getAction": [
+                                {
+                                    "getVar": [
+                                        "Action"
+                                    ]
+                                },
+                                "data/Dice/1"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dieDict",
+                        "set",
+                        "Base",
+                        {
+                            "add": [
+                                {
+                                    "refCall": [
+                                        "dieDict",
+                                        "get",
+                                        "Base"
+                                    ]
+                                },
+                                2
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Final Die has +2 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b].",
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 3,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Induction",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc5080]Induction Heating[/color][/b].",
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

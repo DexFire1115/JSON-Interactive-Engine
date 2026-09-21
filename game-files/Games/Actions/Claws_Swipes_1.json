@@ -1,0 +1,152 @@
+{
+    "Name": "Swipes",
+    "Cost": 1,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=ffaa64][lb]Haste][/color][/b].",
+        "[b][color=ff8064][lb]Proactive][/color][/b] First die gains +1 [b][color=ffffff]Power[/color][/b]."
+    ],
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Haste",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "Proactive": [
+        {
+            "setVar": [
+                "dieDict",
+                {
+                    "getAction": [
+                        {
+                            "getVar": [
+                                "Action"
+                            ]
+                        },
+                        "data/Dice/0"
+                    ]
+                }
+            ]
+        },
+        {
+            "refCall": [
+                "dieDict",
+                "set",
+                "Base",
+                {
+                    "add": [
+                        {
+                            "refCall": [
+                                "dieDict",
+                                "get",
+                                "Base"
+                            ]
+                        },
+                        1
+                    ]
+                }
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "setVar": [
+                        "LessDamage",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        1
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "LessDamage",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            2
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    1,
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            2
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Deal 2 less Damage and Stagger.",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Bleed",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

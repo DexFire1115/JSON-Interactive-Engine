@@ -1,0 +1,57 @@
+{
+    "Name": "Test",
+    "Color": "#cccccc",
+    "MinStack": 0,
+    "Conditions": {
+        "UsedDie": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "Hi From -> ",
+                            {
+                                "getVar": [
+                                    "Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "UsedOffense": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "Offense From -> ",
+                            {
+                                "getVar": [
+                                    "Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "UsedDefense": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "Defense From -> ",
+                            {
+                                "getVar": [
+                                    "Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

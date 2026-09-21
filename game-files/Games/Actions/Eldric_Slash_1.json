@@ -1,0 +1,67 @@
+{
+    "Name": "Slash and Dash",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Haste",
+                1,
+                {
+                    "queryUnit": [
+                        "Give another ally 1 [b][color=ffaa64]Haste[/color][/b]:"
+                    ]
+                }
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Give another ally 1 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 0,
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Haste",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=6464ff][lb]On Evade][/color][/b] Gain 1 [b][color=ffaa64]Haste[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Poise",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

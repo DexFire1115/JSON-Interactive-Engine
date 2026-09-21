@@ -1,0 +1,159 @@
+{
+    "Name": "Popcorn Cooker",
+    "Cost": 3,
+    "Limit": 1,
+    "Proactive": [
+        {
+            "inflictStatus": [
+                "RAA_Popcorn",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff6480][lb]Proactive][/color][/b] Until skill end, all dice have +2 [b][color=ffffff]Power[/color][/b] and inflict twice as much [b][color=cc6450]Burn[/color][/b] from all sources."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0,
+                                        ""
+                                    ]
+                                },
+                                2,
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 2 [b][color=cc5080]Induction Heating[/color][/b] on target, +1 Power.",
+                "[b][color=ff6464][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0,
+                                        ""
+                                    ]
+                                },
+                                2,
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 2 [b][color=cc5080]Induction Heating[/color][/b] on target, +1 Power.",
+                "[b][color=ff6464][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0,
+                                        ""
+                                    ]
+                                },
+                                2,
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 2 [b][color=cc5080]Induction Heating[/color][/b] on target, +1 Power.",
+                "[b][color=ff6464][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

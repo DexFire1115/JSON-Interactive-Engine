@@ -1,0 +1,113 @@
+{
+    "Name": "Hard Pest to Catch",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ValidateDamage": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getUnit": [
+                                    ""
+                                ]
+                            },
+                            ""
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getStatus": [
+                                    "Staggered",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "ifelse": [
+                                {
+                                    "orBool": [
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getUnitProp": [
+                                                        "",
+                                                        "dieData"
+                                                    ]
+                                                },
+                                                "isEmpty"
+                                            ]
+                                        },
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getVar": [
+                                                        "DieData"
+                                                    ]
+                                                },
+                                                "isEmpty"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "refCall": [
+                                            "dmgArr",
+                                            "set",
+                                            0,
+                                            0
+                                        ]
+                                    },
+                                    {
+                                        "refCall": [
+                                            "dmgArr",
+                                            "set",
+                                            1,
+                                            0
+                                        ]
+                                    }
+                                ],
+                                [
+                                    {
+                                        "refCall": [
+                                            "dmgArr",
+                                            "set",
+                                            0,
+                                            1
+                                        ]
+                                    },
+                                    {
+                                        "refCall": [
+                                            "dmgArr",
+                                            "set",
+                                            1,
+                                            1
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "This unit always takes 1 [b][color=ff6464]Damage[/color][/b] and [b][color=ffff64]Stagger[/color][/b] from enemy dice, and only from those which it clashed with.",
+        "When Staggered, the above effect does not occur."
+    ]
+}

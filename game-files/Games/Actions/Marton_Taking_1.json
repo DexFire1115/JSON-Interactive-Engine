@@ -1,0 +1,178 @@
+{
+    "Name": "Taking The Hit.",
+    "Cost": 0,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Protection",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=50ccff]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 2,
+            "RolledDie": [
+                {
+                    "ifelse": [
+                        {
+                            "andBool": [
+                                {
+                                    "equals": [
+                                        {
+                                            "sub": [
+                                                {
+                                                    "objCall": [
+                                                        {
+                                                            "getVar": [
+                                                                "DieData"
+                                                            ]
+                                                        },
+                                                        "dget",
+                                                        "tempResult",
+                                                        0
+                                                    ]
+                                                },
+                                                {
+                                                    "objCall": [
+                                                        {
+                                                            "getVar": [
+                                                                "DieData"
+                                                            ]
+                                                        },
+                                                        "dget",
+                                                        "Base",
+                                                        0
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                },
+                                {
+                                    "equals": [
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getVar": [
+                                                        "DieData"
+                                                    ]
+                                                },
+                                                "dget",
+                                                "reliableReroll",
+                                                0
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "ifelse": [
+                                    {
+                                        "queryYN": [
+                                            "Reroll?"
+                                        ]
+                                    },
+                                    [
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getVar": [
+                                                        "DieData"
+                                                    ]
+                                                },
+                                                "dset",
+                                                "reliableReroll",
+                                                {
+                                                    "add": [
+                                                        {
+                                                            "objCall": [
+                                                                {
+                                                                    "getVar": [
+                                                                        "DieData"
+                                                                    ]
+                                                                },
+                                                                "dget",
+                                                                "reliableReroll",
+                                                                0
+                                                            ]
+                                                        },
+                                                        1
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getVar": [
+                                                        "DieData"
+                                                    ]
+                                                },
+                                                "dset",
+                                                "tempResult",
+                                                {
+                                                    "rollDie": [
+                                                        {
+                                                            "getVar": [
+                                                                "Self"
+                                                            ]
+                                                        },
+                                                        {
+                                                            "getVar": [
+                                                                "DieData"
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        -4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If this Die rolled minimum value, you may re-roll it once.",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Trigger [b][color=ffff50]Tremor Burst[/color][/b], then reduce target's [b][color=cccc50]Tremor[/color][/b] by 4."    
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

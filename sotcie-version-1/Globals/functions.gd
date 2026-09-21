@@ -16,9 +16,10 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 @export var stack: Array[String] = []
 
 func callj(method: String, args: Array) -> Variant:
+	print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	for i in args.size():
 		args[i] = await isNestedArg(args[i])
-	#print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
+	print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
 		return await jFunc(method, args)
 	elif(has_method(method)):
@@ -26,7 +27,7 @@ func callj(method: String, args: Array) -> Variant:
 	else: return GlobalScopeRef.globalScopeCall(method, args)
 
 func isNestedArg(arg) -> Variant:
-	#print("    is nested : ", str(arg).split("\n")[0])
+	print("    is nested : ", str(arg).split("\n")[0])
 	if(arg is Dictionary && Dictionary(arg).size() == 1):
 		var key = arg.keys()[0]
 		var val = arg[key]
@@ -88,12 +89,12 @@ func clearScope(stackName := ""):
 			references.erase(k)
 
 func sequence(stackName: String, calls := [], args := {}):
-	#print(stackName, " > ", calls.map(func(element): return element.keys()[0]))
+	print("\n", stackName, " > ", calls.map(func(element): return element.keys()[0]))
 	stack.push_back(stackName)
 	for arg in args:
 		setVar(arg, args[arg])
 	var val
-	#print(references.keys())
+	print(references.keys())
 	for method in calls:
 		if(method is String && method == "return"): break
 		val = await isNestedArg(method)
@@ -531,14 +532,15 @@ func rollSpeed():
 			if(await isInactive(unitData)): usedList.set(u + "D" + str(i), val)
 			else: diceList.set(u + "D" + str(i), val)
 
-func nextTurn(dice := "", isProactive := false):
+func nextTurn(dice := "", isProactive := true):
 	var isSavedDice := diceList.is_empty()
-	if(isSavedDice && saveList.is_empty()): return
 	if(dice.is_empty()): dice = getNextSpeedDie(!isSavedDice)
+	if(dice.is_empty()): return "_"
 	var unitName := getUnitFromDice(dice)
 	var unitData := unitList[unitName].dataSet
 	var actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
 	var optionInts := []
+	
 	if(isProactive):
 		actionList.push_front(
 			"*[b][color=ff6480]Void Speed Die[/color][/b]" if(isSavedDice)
@@ -554,16 +556,51 @@ func nextTurn(dice := "", isProactive := false):
 			TYPE_DICTIONARY)))): optionInts.append(i)
 	EventBus.emit_signal("skillListDisplay", unitName, actionList)
 	var answer := await queryInt("", optionInts, 0)
+	
 	if(answer == 0):
 		if(isProactive):
 			if(isSavedDice): removeSpeedDice(dice)
 			else: saveSpeedDice(dice)
-		return
-	if(answer == 1):
-		EventBus.emit_signal("savediceListDisplay", unitName, range(unitList[unitName].savedDice.size()))
+		return "_"
+	
+	if(!isProactive && answer == 1):
+		EventBus.emit_signal("savediceListDisplay", unitName, 
+			range(unitList[unitName].savedDice.size()))
+		return "SaveDice[]"
+	
+	removeSpeedDice(dice)
+	var actionChoice: String = actionList[answer]
+	var actionData := DataTree.new(fileTree.safeGet("Actions/" + actionChoice, TYPE_DICTIONARY))
+	changeLight(-actionData.dget("Cost") , unitName)
+	if(!isProactive): return actionChoice
+	
+	var targetList = unitList.keys()
+	var weight: int = actionData.dget("AttackWeight", 1)
+	var skillTargets := {}
+	for i in range(weight):
+		EventBus.emit_signal("targetListDisplay", targetList)
+		answer = await queryInt("", range(targetList.size()), 0)
+		skillTargets.set(targetList[answer], "")
+	for u in skillTargets:
+		var targetDie := getNextUnitSpeedDie(u)
+		if(targetDie.is_empty()): targetDie = getNextUnitSpeedDie(u, false)
+		skillTargets[u] = await nextTurn(targetDie, false)
+	await executeAWSkill(unitName, skillTargets.keys(), actionChoice, skillTargets.values())
 
-func getNextSpeedDie(searchSaved := true) -> String:
-	var dict = diceList if(searchSaved) else saveList
+func getNextUnitSpeedDie(unit: String, searchUnused := true) -> String:
+	unit = getSingleTarget(unit)
+	if(!unitList.has(unit)): return ""
+	
+	var dict := diceList if(searchUnused) else saveList
+	var unitKeys := dict.keys().filter(func(key: String): return key.begins_with(unit))
+	var unitDict := {}
+	for k in unitKeys: unitDict.set(k, dict[k])
+	var val = highestInDict(unitDict)
+	return(val if(val != null) else "")
+	
+
+func getNextSpeedDie(searchUnused := true) -> String:
+	var dict = diceList if(searchUnused) else saveList
 	var val = highestInDict(dict)
 	return(val if(val != null) else "")
 
@@ -627,6 +664,9 @@ func isUsable(unitData: DataTree, actionData: DataTree) -> bool:
 		return false
 	return true
 
+func isTargettable(_unitData: DataTree, _targetData: DataTree) -> bool:
+	return true
+
 func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	if(!unitList.has(u1)): return
 	if(u2.size() != a2.size() || u2.size() == 0): return
@@ -676,7 +716,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		if(!d1.isEmpty()): await readDieTag("BeforeDie", u1)
 		for i in u2.size():
 			setUnitProp(u1, "target", u2[i])
-			if(u2dice[i].is_empty()): afterSkill(u1, u2[i], clashData, false)
+			if(u2dice[i].is_empty()): afterSkillAW(u1, u2, clashData)
 			var d2 := DataTree.new({} if(u2dice[i].is_empty()) else 
 			getDiceData(u2dice[i].front(), u2id[i]).duplicate_deep())
 			setUnitProp(u1, "dieData", d1)
@@ -718,6 +758,7 @@ func afterSkillAW(u1: String, u2: Array, data: Dictionary):
 		subdata["a2Finished?"] = data["a2Finished?"][i]
 		afterSkill(u1, u2[i], subdata, true)
 		afterSkill(u1, u2[i], subdata, false)
+		data["a2Finished?"][i] = subdata["a2Finished?"]
 
 func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	if(!unitList.has(u1)): return
@@ -962,7 +1003,7 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	return d1Data.dget("Recycle", 0) * 2 + d2Data.dget("Recycle", 0)
 
 func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	#print("UNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
+	print("\n\nUNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	var unitData = getUnitData(unit)
 	if(unitData == null): return
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
@@ -970,7 +1011,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	#print("TAG = ", tag, " -> ", conditionStatuses)
 	if(!defaultSeq.is_empty()): 
 		conditionStatuses = unitData.safeGet("Statuses", TYPE_DICTIONARY).keys()
-	#print("TAG = ", tag, " -> ", conditionStatuses)
+	print("TAG = ", tag, " -> ", conditionStatuses)
 	conditionStatuses = conditionStatuses.duplicate_deep()
 	for status in conditionStatuses:
 		var path = unitData.safeGet("Statuses/" + status + "/File", TYPE_STRING)
@@ -979,7 +1020,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 		await executeCondition(tag, cond, metadata, defaultSeq)
 
 func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	#print("ACT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
+	print("\n\nACT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	if(metadata.is_empty()): return
 	var dataDict = getAction(metadata["Action"], "data")
@@ -988,7 +1029,7 @@ func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	await readUnitTag(tag, unit, metadata, defaultSeq)
 
 func readDieTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	#print("DIE TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
+	print("\n\nDIE TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	if(metadata.is_empty()): return
 	var dieData = metadata["DieData"]

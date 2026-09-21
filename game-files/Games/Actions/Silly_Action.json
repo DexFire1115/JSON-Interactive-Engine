@@ -1,0 +1,163 @@
+{
+    "Name": "Silly Action!",
+    "Cost": 4,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "silly-status",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "setVar": [
+                "Boost",
+                0,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 4 [b][color=cccc50]Tremor[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": -2,
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "Boost",
+                        {
+                            "add": [
+                                {
+                                    "getVar": [
+                                        "Boost",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                5
+                            ]
+                        },
+                        "@Action"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Boost the [b][color=ffffff]Power[/color][/b] of final Die by 2."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "setVar": [
+                        "Transfer",
+                        4,
+                        "@Action"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        -4,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        {
+                            "getVar": [
+                                "Transfer",
+                                0,
+                                "@Action"
+                            ]
+                        },
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 3 [b][color=cccc50]Tremor[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Transfer up to 4 of an Ailment from self to target."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 10,
+            "Base": 1,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Boost",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        -4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 3 [b][color=cccc50]Tremor[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ffff50]Tremor Burst 5x[/color][/b], then reduce target's [b][color=cccc50]Tremor[/color][/b] by 4."    
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                4,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 4 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

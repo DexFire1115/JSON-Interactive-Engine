@@ -1,0 +1,74 @@
+{
+    "Name": "Big Pounce!",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 10,
+            "Base": 0,
+            "Evade": [
+                {
+                    "setVar": [
+                        "dieDict",
+                        {
+                            "getAction": [
+                                {
+                                    "getVar": [
+                                        "Action"
+                                    ]
+                                },
+                                "data/Dice/1"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dieDict",
+                        "set",
+                        "FixedMin",
+                        1
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "dieArr",
+                        {
+                            "getAction": [
+                                {
+                                    "getVar": [
+                                        "Action"
+                                    ]
+                                },
+                                "diceArr"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dieArr",
+                        "pop_back"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=6464ff][lb]On Evade][/color][/b] Final die will min roll.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Destroy final die."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 4,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

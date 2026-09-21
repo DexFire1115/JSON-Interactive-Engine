@@ -1,0 +1,70 @@
+{
+    "Name": "Burn",
+    "Color": "#cc6450",
+    "Conditions": {
+        "SceneEnd": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "[b][color=cc6450]Burn![/color] ([color=cc6450]",
+                            {
+                                "getStatus": [
+                                    "Burn",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color])[/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "dealDamage": [
+                    {
+                        "getStatus": [
+                            "Burn",
+                            0,
+                            "@Self"
+                        ]
+                    },
+                    "@Self",
+                    "Burn"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Burn",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "div": [
+                                    {
+                                        "add": [
+                                            {
+                                                "getStatus": [
+                                                    "Burn",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            },
+                                            1
+                                        ]                                    
+                                    },
+                                    2
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "At the end of the Scene, take [b][color=ff6464]Damage[/color][/b] = [b][color=cc6450]Burn[/color][/b] on self, then halve the Count."
+    ]
+}

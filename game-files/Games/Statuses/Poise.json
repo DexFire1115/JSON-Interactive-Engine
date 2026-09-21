@@ -1,0 +1,128 @@
+{
+    "Name": "Poise",
+    "Color": "#aacccc",
+    "Conditions": {
+        "BeforeDie": [
+            {
+                "setVar": [
+                    "PoiseCost",
+                    {
+                        "div": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitProp": [
+                                            "@Self",
+                                            "dieData"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Dice",
+                                    1
+                                ]
+                            },
+                            2
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "getStatus": [
+                                    "Poise",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "PoiseCost",
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "queryYN": [
+                            {
+                                "concat": [
+                                    "[b]Spend ",
+                                    {
+                                        "getVar": [
+                                            "PoiseCost",
+                                            0
+                                        ]
+                                    },
+                                    " [color=aacccc]Poise[/color]?[/b]"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitProp": [
+                                        "@Self",
+                                        "dieData"
+                                    ]
+                                },
+                                "dset",
+                                "FixedMax",
+                                {
+                                    "add": [
+                                        1,
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getUnitProp": [
+                                                        "@Self",
+                                                        "dieData"
+                                                    ]
+                                                },
+                                                "dget",
+                                                "FixedMax",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Poise",
+                                {
+                                    "sub": [
+                                        0,
+                                        {
+                                            "getVar": [
+                                                "PoiseCost",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Before rolling a die, you may instead spend X [color=aacccc]Poise[/color] to take the max value instead. Where X equals half the max roll of the die's size category (2 for 1d4, 3 for 1d6, etc.)",
+        "For multiple Attack Weight, apply to all copies of the Die across targets."
+    ]
+}

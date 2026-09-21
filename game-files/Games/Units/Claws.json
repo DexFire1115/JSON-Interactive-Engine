@@ -1,0 +1,107 @@
+{
+    "Name": "Claws",
+    "Color": "#aa50cc",
+    "Type": "Human",
+    "Class": "Canard",
+    "Attributes": {
+        "CurrentHealth": 45,
+        "MaxHealth": 45,
+        "CurrentStagger": 35,
+        "MaxStagger": 35,
+        "CurrentLight": 5,
+        "MaxLight": 5,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 2,
+        "SpeedDiceAmt": 2,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 1,
+        "PierceStagger": 1,
+        "BluntStagger": 1,
+    },
+    "Statuses": {
+        "Claws_Combative": {
+            "File": "Statuses/Claws_Combative",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneEnd"
+            ]
+        },
+        "Claws_Delayed": {
+            "File": "Statuses/Claws_Delayed",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "OnUse",
+                "BeforeDie",
+                "ClashLose",
+                "AfterUse",
+                "SceneEnd",
+                "SceneStartPost"
+            ]
+        },
+        "Claws_Come": {
+            "File": "Statuses/Claws_Come",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneStart",
+                "Check"
+            ]
+        },
+        "Claws_Fast": {
+            "File": "Statuses/Claws_Fast",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneStart",
+                "Applied-Staggered",
+                "SceneStartPost"
+            ]
+        }
+    },
+    "Conditions": {
+        "SceneEnd": [
+            "Claws_Combative",
+            "Claws_Delayed"
+        ],
+        "SceneStart": [
+            "Claws_Come",
+            "Claws_Fast"
+        ],
+        "SceneStartPost": [
+            "Claws_Delayed",
+            "Claws_Fast"
+        ],
+        "OnUse": [
+            "Claws_Delayed"
+        ],
+        "BeforeDie": [
+            "Claws_Delayed"
+        ],
+        "ClashLose": [
+            "Claws_Delayed"
+        ],
+        "Check": [
+            "Claws_Come"
+        ],
+        "AfterUse": [
+            "Claws_Delayed"
+        ],
+        "Applied-Staggered": [
+            "Claws_Fast"
+        ]
+    },
+    "Actions": [
+        "Claws_Evade_1",
+        "Claws_Swipes_1",
+        "Claws_Sharp_1",
+        "Claws_Uppercut_1",
+        "Claws_Blood_1",
+        "Claws_Dont_1"
+    ]
+}
