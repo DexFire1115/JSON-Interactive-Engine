@@ -400,8 +400,7 @@ func displaySaveDiceOptions(unit: String, savedice: Array, options: Array):
 		text += getDieHeader(DataTree.new(
 			Functions.fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], 
 			TYPE_DICTIONARY)))
-		addLog(text)
-	refreshConsole()
+		addPushConsole(text)
 
 func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
 	if (!Functions.unitList.has(unit)): 

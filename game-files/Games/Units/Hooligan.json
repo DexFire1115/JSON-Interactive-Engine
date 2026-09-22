@@ -14,7 +14,6 @@
         "SpeedDiceSize": 6,
         "SpeedDiceBase": 0,
         "SpeedDiceAmt": 1,
-        "SlashDamage": 0,
         "PierceDamage": 0,
         "BluntDamage": 2,
         "SlashStagger": 2,
@@ -22,6 +21,10 @@
         "BluntStagger": -2,
     },
     "Statuses": {
+        "Protection": {
+            "File": "Statuses/Protection",
+            "Stack": 10
+        }
     },
     "Conditions": {
     },
