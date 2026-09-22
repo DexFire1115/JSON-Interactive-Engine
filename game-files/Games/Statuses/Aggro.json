@@ -3,15 +3,145 @@
     "Color": "#ff8064",
     "MinStack": 0,
     "Conditions": {
-        "CanIntercept": [
+        "InterceptCheck": [
+            {
+                "setVar": [
+                    "selfSpeed",
+                    {
+                        "getDieSpeed": [
+                            {
+                                "getNextUnitSpeedDie": [
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "setVar": [
+                    "targetSpeed",
+                    {
+                        "getDieSpeed": [
+                            {
+                                "varCall": [
+                                    {
+                                        "getUnitProp": [
+                                            "",
+                                            "speedDie"
+                                        ]
+                                    },
+                                    "get",
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
             {
                 "ifelse": [
-                    
+                    {
+                        "andBool": [
+                            {
+                                "notBool": [
+                                    {
+                                        "equals": [
+                                            {
+                                                "getVar": [
+                                                    "selfSpeed",
+                                                    0
+                                                ]
+                                            },
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "gte": [
+                                    {
+                                        "add": [
+                                            {
+                                                "getVar": [
+                                                    "selfSpeed",
+                                                    0
+                                                ]
+                                            },
+                                            {
+                                                "getStatus": [
+                                                    "Aggro",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "getVar": [
+                                            "targetSpeed",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "varCall": [
+                                {
+                                    "getVar": [
+                                        "choiceDict",
+                                        {}
+                                    ]
+                                },
+                                "set",
+                                "[b][color=ff8064]Use Die w/ Aggro[/color][/b]",
+                                "LowAggro"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getStatus": [
+                                    "Aggro",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "targetSpeed",
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "varCall": [
+                                {
+                                    "getVar": [
+                                        "choiceDict",
+                                        {}
+                                    ]
+                                },
+                                "set",
+                                "[b][color=ff6480]Deploy Dice w/ Aggro[/color][/b]",
+                                "HighAggro"
+                            ]
+                        }
+                    ]
                 ]
             }
         ],
         "SceneEnd": [
-            "super",
             {
                 "setStatus": [
                     "Aggro",

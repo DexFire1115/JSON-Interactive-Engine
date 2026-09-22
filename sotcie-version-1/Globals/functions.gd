@@ -16,10 +16,10 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 @export var stack: Array[String] = []
 
 func callj(method: String, args: Array) -> Variant:
-	print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
+	#print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	for i in args.size():
 		args[i] = await isNestedArg(args[i])
-	print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
+	#print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
 		return await jFunc(method, args)
 	elif(has_method(method)):
@@ -27,7 +27,7 @@ func callj(method: String, args: Array) -> Variant:
 	else: return GlobalScopeRef.globalScopeCall(method, args)
 
 func isNestedArg(arg) -> Variant:
-	print("    is nested : ", str(arg).split("\n")[0])
+	#print("    is nested : ", str(arg).split("\n")[0])
 	if(arg is Dictionary && Dictionary(arg).size() == 1):
 		var key = arg.keys()[0]
 		var val = arg[key]
@@ -89,12 +89,13 @@ func clearScope(stackName := ""):
 			references.erase(k)
 
 func sequence(stackName: String, calls := [], args := {}):
-	print("\n", stackName, " > ", calls.map(func(element): return element.keys()[0]))
+	#print("\n", stackName, " > ", calls.map(func(element): 
+	#	return element if(!element is Dictionary)else element.keys()[0]))
 	stack.push_back(stackName)
 	for arg in args:
 		setVar(arg, args[arg])
 	var val
-	print(references.keys())
+	#print(references.keys())
 	for method in calls:
 		if(method is String && method == "return"): break
 		val = await isNestedArg(method)
@@ -243,6 +244,14 @@ func maxSet(...args: Array) -> Variant:
 		maxV = max(args[index - 1], args[index])
 		index += 1
 	return maxV
+
+func safeDict(input: Array, returnIndex := 0) -> Dictionary:
+	for d in input:
+		if(d.size() == 1 && d.keys()[0] is String):
+			d.set("_", null)
+	if(abs(returnIndex) >= input.size()): return {}
+	if(returnIndex < 0): return input[input.size() - 1 - returnIndex]
+	return input[returnIndex]
 
 func joinArr(arr1: Array, arr2: Array) -> Array:
 	var arrSum := arr1.duplicate()
@@ -538,7 +547,9 @@ func nextTurn(dice := "", isProactive := true):
 	if(dice.is_empty()): return "_"
 	var unitName := getUnitFromDice(dice)
 	var unitData := unitList[unitName].dataSet
-	var actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
+	var actionList := []
+	if(!dice.contains("*")):
+		actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
 	var optionInts := []
 	
 	if(isProactive):
@@ -564,9 +575,21 @@ func nextTurn(dice := "", isProactive := true):
 		return "_"
 	
 	if(!isProactive && answer == 1):
-		EventBus.emit_signal("savediceListDisplay", unitName, 
-			range(unitList[unitName].savedDice.size()))
-		return "SaveDice[]"
+		var savediceList := Array(unitList[unitName].savedDice.duplicate())
+		savediceList.push_front("*[b][color=64ff64]Deploy Dice[/color][/b]")
+		optionInts = range(savediceList.size())
+		var selectedInts := []
+		answer = -1
+		while(answer != 0):
+			addLog("[u][b]Select Saved Dice:[/b][/u]")
+			optionInts = range(savediceList.size())
+			EventBus.emit_signal("savediceListDisplay", unitName, savediceList, optionInts)
+			answer = await queryInt("", optionInts, 0)
+			if(answer == 0): break
+			selectedInts.append(answer - 1)
+			savediceList.remove_at(answer)
+			if(savediceList.size() == 1): break
+		return "SaveDice" + str(selectedInts)
 	
 	removeSpeedDice(dice)
 	var actionChoice: String = actionList[answer]
@@ -581,11 +604,56 @@ func nextTurn(dice := "", isProactive := true):
 		EventBus.emit_signal("targetListDisplay", targetList)
 		answer = await queryInt("", range(targetList.size()), 0)
 		skillTargets.set(targetList[answer], "")
+	for u in unitList.keys():
+		if(skillTargets.keys().has(u)): continue
+		var interceptArr := await interceptCheck(u, unitName, skillTargets.keys())
+		if(interceptArr[0]):
+			skillTargets.erase(interceptArr[1])
+			skillTargets.set(u, "")
 	for u in skillTargets:
 		var targetDie := getNextUnitSpeedDie(u)
 		if(targetDie.is_empty()): targetDie = getNextUnitSpeedDie(u, false)
+		if(targetDie.is_empty()): targetDie = u + "D*"
 		skillTargets[u] = await nextTurn(targetDie, false)
 	await executeAWSkill(unitName, skillTargets.keys(), actionChoice, skillTargets.values())
+
+func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
+	var choiceDict := {"[b][color=ff6464]No Contest[/color][/b]": "No"}
+	if(!getNextUnitSpeedDie(unit, false).is_empty()):
+		choiceDict.set("[b][color=64aaff]Use Saved Die[/color][/b]", "SavedDie")
+	await readUnitTag("InterceptCheck", unit, {
+		"Self": unit, 
+		"Target": proactive,
+		"choiceDict": choiceDict
+	})
+	addLog("[u][b]Select Intercept Option:[/b][/u]")
+	var optionInts := range(choiceDict.size())
+	for o in optionInts:
+		var text := ""
+		text += "[b][color=cceeff] " + str(o) + " | [/color][/b]"
+		text += choiceDict.keys()[o]
+		addLog(text)
+	var answer = choiceDict.values()[await queryInt("", optionInts, 0)]
+	
+	var interceptUnit := ""
+	if(reactives.size() == 1): interceptUnit = reactives[0]
+	else:
+		addLog("[u][b]Intercept For Whom?:[/b][/u]")
+		EventBus.emit_signal("targetListDisplay", reactives)
+		interceptUnit = reactives[await queryInt("", range(reactives.size()), 0)]
+	
+	var answerArr := [answer, choiceDict.values(), interceptUnit, reactives]
+	await readUnitTag("ConfirmIntercept", unit, {
+		"Self": unit, 
+		"Target": proactive,
+		"answerArr": answerArr
+	})
+	await readUnitTag("ValidateIntercept", unit, {
+		"Self": proactive, 
+		"Target": unit,
+		"answerArr": answerArr
+	})
+	return [answerArr[0] != "No", answerArr[2]]
 
 func getNextUnitSpeedDie(unit: String, searchUnused := true) -> String:
 	unit = getSingleTarget(unit)
@@ -597,7 +665,6 @@ func getNextUnitSpeedDie(unit: String, searchUnused := true) -> String:
 	for k in unitKeys: unitDict.set(k, dict[k])
 	var val = highestInDict(unitDict)
 	return(val if(val != null) else "")
-	
 
 func getNextSpeedDie(searchUnused := true) -> String:
 	var dict = diceList if(searchUnused) else saveList
@@ -650,6 +717,13 @@ func sortSpeedDice(dice: Dictionary) -> Array:
 		sorted.push_back(key)
 		diceCopy.erase(key)
 	return sorted
+
+func getDieSpeed(dice: String) -> int:
+	if(dice.is_empty()): return 0
+	if(diceList.has(dice)): return diceList[dice]
+	if(saveList.has(dice)): return saveList[dice]
+	if(usedList.has(dice)): return usedList[dice]
+	return 0
 
 func getUnitFromDice(dice: String) -> String:
 	return dice.rsplit("D", true, 1)[0]
@@ -710,6 +784,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	while(!(u1dice.is_empty() && u2dice.all(isEmpty))):
 		if(u1dice.is_empty()): afterSkillAW(u1, u2, clashData)
 		var u1Recycle = true
+		var u1Store = true
 		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
 		setUnitProp(u1, "dieData", d1)
@@ -725,15 +800,16 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			var result := await executeClash(
 				u1, u2[i], d1, d2)
 			if(result == -1):
-				if(u2dice[i].is_empty()):
-					unitList[u1].savedDice.push_back(u1dice.pop_front())
-				else:
+				if(!u2dice[i].is_empty()):
 					unitList[u2[i]].savedDice.push_back(u2dice[i].pop_front())
 				continue
+			else:
+				u1Store = false
 			@warning_ignore("integer_division")
 			if((result / 2) % 2 == 0): u1Recycle = false
 			if(result % 2 == 0): u2dice[i].pop_front()
-		if(!u1Recycle): u1dice.pop_front()
+		if(u1Store): unitList[u1].savedDice.push_back(u1dice.pop_front())
+		elif(!u1Recycle): u1dice.pop_front()
 
 	afterSkillAW(u1, u2, clashData)
 	afterSkillAW(u1, u2, clashData)
@@ -758,6 +834,7 @@ func afterSkillAW(u1: String, u2: Array, data: Dictionary):
 		subdata["a2Finished?"] = data["a2Finished?"][i]
 		afterSkill(u1, u2[i], subdata, true)
 		afterSkill(u1, u2[i], subdata, false)
+		data["a1Finished?"] = subdata["a1Finished?"]
 		data["a2Finished?"][i] = subdata["a2Finished?"]
 
 func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
@@ -1003,7 +1080,7 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	return d1Data.dget("Recycle", 0) * 2 + d2Data.dget("Recycle", 0)
 
 func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	print("\n\nUNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
+	#print("\n\nUNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	var unitData = getUnitData(unit)
 	if(unitData == null): return
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
@@ -1011,7 +1088,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	#print("TAG = ", tag, " -> ", conditionStatuses)
 	if(!defaultSeq.is_empty()): 
 		conditionStatuses = unitData.safeGet("Statuses", TYPE_DICTIONARY).keys()
-	print("TAG = ", tag, " -> ", conditionStatuses)
+	#print("TAG = ", tag, " -> ", conditionStatuses)
 	conditionStatuses = conditionStatuses.duplicate_deep()
 	for status in conditionStatuses:
 		var path = unitData.safeGet("Statuses/" + status + "/File", TYPE_STRING)
@@ -1020,7 +1097,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 		await executeCondition(tag, cond, metadata, defaultSeq)
 
 func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	print("\n\nACT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
+	#print("\n\nACT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	if(metadata.is_empty()): return
 	var dataDict = getAction(metadata["Action"], "data")
@@ -1029,7 +1106,7 @@ func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	await readUnitTag(tag, unit, metadata, defaultSeq)
 
 func readDieTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
-	print("\n\nDIE TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
+	#print("\n\nDIE TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	if(metadata.is_empty()): return
 	var dieData = metadata["DieData"]

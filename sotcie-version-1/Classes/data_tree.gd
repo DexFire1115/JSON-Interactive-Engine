@@ -182,9 +182,11 @@ prefixDefaults := [], suffixDefaults := []) -> Variant:
 		tally = type_convert(null, tallyType)
 	if(!isComplex(data)): tally = await callArgSet(method, prefixDefaults, [tally, data], suffixDefaults)
 	if(data is Dictionary):
+		#print("GetComplexSeqn Data = ", data)
 		for key in data:
 			var temp = data[key]
 			if(isComplex(temp)): temp = temp.duplicate_deep()
+			#print(tally, " += (", method, ", ", prefixDefaults, ", ", temp, ", ", suffixDefaults, ")")
 			tally = await callArgSet(method, prefixDefaults, [tally, temp], suffixDefaults)
 	if(data is Array):
 		for a in data:
