@@ -379,18 +379,21 @@ func displaySkillOptions(unit: String, options: Array):
 	for i in options.size():
 		displaySkillListItem(unit, options, i)
 
-func displaySaveDiceOptions(unit: String, options: Array):
+func displaySaveDiceOptions(unit: String, savedice: Array, options: Array):
 	if (!Functions.unitList.has(unit)):
 		addLog(addStyle("<Unit does not exist!>", "ff6464", true))
 		return
-	var savedice := Functions.unitList[unit].savedDice
 	for o in options:
 		var text := ""
 		text += addStyle(" " + str(o) + " | ", "ffeecc", true)
 		if(!range(savedice.size()).has(o)):
 			addLog(addStyle("<Die out of bounds!>", "ff6464", true))
 			continue
-		var dieParse := savedice[o].split("/")
+		if(savedice[o].begins_with("*")): 
+			text += savedice[o].substr(1)
+			addLog(text)
+			continue
+		var dieParse: Array = savedice[o].split("/")
 		if(dieParse.size() != 2): 
 			addLog(addStyle("<Invalid Die!>", "ff6464", true))
 			continue

@@ -1,0 +1,74 @@
+{
+    "Name": "Light Cut",
+    "Cost": 0,
+    "Reactive": [
+        {
+            "statusInflict": [
+                "Aggro",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff8064][lb]Reactive][/color][/b] Gain 2 [b][color=ff8064]Aggro[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getAction": [
+                                        {
+                                            "getVar": [
+                                                "Action"
+                                            ]
+                                        },
+                                        "name",
+                                        ""
+                                    ]
+                                },
+                                "contains",
+                                "SaveDice"
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If deployed, gain +2 [b][color=ffffff]Power[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 4,
+            "Base": 1,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Vulnerable",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=aa6450]Vulnerable[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

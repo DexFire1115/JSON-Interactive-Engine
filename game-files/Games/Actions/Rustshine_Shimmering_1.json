@@ -1,0 +1,63 @@
+{
+    "Name": "Shimmering Surge",
+    "Cost": 0,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 3 [b][color=50cccc]Charge[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 2,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Charge",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                8
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Vulnerable",
+                        1,
+                        "",
+                        true
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If at 8+ [b][color=50cccc]Charge[/color][/b], gain +2 [b]Power[/b].",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=aa6450]Vulnerable[/color][/b] next scene."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                1
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

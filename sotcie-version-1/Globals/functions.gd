@@ -244,6 +244,14 @@ func maxSet(...args: Array) -> Variant:
 		index += 1
 	return maxV
 
+func safeDict(input: Array, returnIndex := 0) -> Dictionary:
+	for d in input:
+		if(d.size() == 1 && d.keys()[0] is String):
+			d.set("_", null)
+	if(abs(returnIndex) >= input.size()): return {}
+	if(returnIndex < 0): return input[input.size() - 1 - returnIndex]
+	return input[returnIndex]
+
 func joinArr(arr1: Array, arr2: Array) -> Array:
 	var arrSum := arr1.duplicate()
 	arrSum.append_array(arr2)
@@ -538,7 +546,9 @@ func nextTurn(dice := "", isProactive := true):
 	if(dice.is_empty()): return "_"
 	var unitName := getUnitFromDice(dice)
 	var unitData := unitList[unitName].dataSet
-	var actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
+	var actionList := []
+	if(!dice.contains("*")):
+		actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
 	var optionInts := []
 	
 	if(isProactive):
@@ -651,6 +661,13 @@ func sortSpeedDice(dice: Dictionary) -> Array:
 		diceCopy.erase(key)
 	return sorted
 
+func getDieSpeed(dice: String) -> int:
+	if(dice.is_empty()): return 0
+	if(diceList.has(dice)): return diceList[dice]
+	if(saveList.has(dice)): return saveList[dice]
+	if(usedList.has(dice)): return usedList[dice]
+	return 0
+
 func getUnitFromDice(dice: String) -> String:
 	return dice.rsplit("D", true, 1)[0]
 
@@ -710,6 +727,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	while(!(u1dice.is_empty() && u2dice.all(isEmpty))):
 		if(u1dice.is_empty()): afterSkillAW(u1, u2, clashData)
 		var u1Recycle = true
+		var u1Store = true
 		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
 		setUnitProp(u1, "dieData", d1)
@@ -725,15 +743,16 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			var result := await executeClash(
 				u1, u2[i], d1, d2)
 			if(result == -1):
-				if(u2dice[i].is_empty()):
-					unitList[u1].savedDice.push_back(u1dice.pop_front())
-				else:
+				if(!u2dice[i].is_empty()):
 					unitList[u2[i]].savedDice.push_back(u2dice[i].pop_front())
 				continue
+			else:
+				u1Store = false
 			@warning_ignore("integer_division")
 			if((result / 2) % 2 == 0): u1Recycle = false
 			if(result % 2 == 0): u2dice[i].pop_front()
-		if(!u1Recycle): u1dice.pop_front()
+		if(u1Store): unitList[u1].savedDice.push_back(u1dice.pop_front())
+		elif(!u1Recycle): u1dice.pop_front()
 
 	afterSkillAW(u1, u2, clashData)
 	afterSkillAW(u1, u2, clashData)

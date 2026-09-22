@@ -1,0 +1,106 @@
+{
+    "Name": "Serrated Rip",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 4,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Charge",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                3
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            },
+                            {
+                                "statusInflict": [
+                                    "Charge",
+                                    -3,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "dieArr",
+                        {
+                            "getAction": [
+                                {
+                                    "getVar": [
+                                        "Action"
+                                    ]
+                                },
+                                "diceArr"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dieArr",
+                        "pop_back"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Vulnerable",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Spend 3 [b][color=50cccc]Charge[/color][/b] to gain +2 Power.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Next Die is destroyed.",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=aa6450]Vulnerable[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        {
+                            "getStatus": [
+                                "Vulnerable",
+                                0
+                            ],
+                        },
+                        "@self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b] for every [b][color=aa6450]Vulnerable[/color][/b] on target."
+
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}
