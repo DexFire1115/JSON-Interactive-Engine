@@ -4,6 +4,7 @@ extends Node
 @warning_ignore("unused_signal") signal dmgConsole
 @warning_ignore("unused_signal") signal dmgDisplay
 @warning_ignore("unused_signal") signal lightDisplay
+@warning_ignore("unused_signal") signal emotionDisplay
 @warning_ignore("unused_signal") signal clashConsole
 @warning_ignore("unused_signal") signal consoleInput
 @warning_ignore("unused_signal") signal queryOutput

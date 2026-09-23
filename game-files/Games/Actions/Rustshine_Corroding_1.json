@@ -67,8 +67,16 @@
                 {
                     "statusInflict": [
                         "Charge",
-                        1,
+                        3,
                         "@Self"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Vulnerable",
+                        1
                     ]
                 }
             ],
@@ -76,9 +84,110 @@
                 "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 3 [b][color=50cccc]Charge[/color][/b].",
                 "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=aa6450]Vulnerable[/color][/b]."
             ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 4,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Aggro",
+                        3,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Vulnerable",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 3 [b][color=ff8064]Aggro[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=aa6450]Vulnerable[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "greaterThan": [
+                                {
+                                    "getStatus": [
+                                        "Paralysis",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                0
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Vulnerable",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If target has [b][color=ccaa50]Paralysis[/color][/b], +2 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=aa6450]Vulnerable[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "greaterThan": [
+                                {
+                                    "getStatus": [
+                                        "Paralysis",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                0
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    4
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If target has [b][color=ccaa50]Paralysis[/color][/b], +4 [b][color=ffffff]Power[/color][/b]."
+            ]
         }
     ],
-    "Stagger": [
+    "Rustshine_Corroding_Condition": [
         {
             "statusInflict": [
                 "Aggro",

@@ -1,0 +1,158 @@
+{
+    "Args": [
+        "unit"
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "returnArr",
+                []
+            ]
+        },
+        {
+            "setVar": [
+                "statusArr",
+                ["Feeble", "Disarm", "Fragile", "Vulnerable", "Bind", "Burn", "Bleed", "Tremor", "Sinking", "Paralyze"]
+            ]
+        },
+        {
+            "setVar": [
+                "colorsArr",
+                ["cc5050", "50cc50", "8050cc", "aa6450", "ffaa64", "cc6450", "cc5064", "cccc50", "5050cc", "ccaa50"]
+            ]
+        },
+        {
+            "setVar": [
+                "i",
+                {
+                    "add": [
+                        0,
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "addLog": [
+                "[b]Panacea : Select a Debuff/Aliment to remove.[/b]"
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "size"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "fetch",
+                            {
+                                "getIndexedStatus": [
+                                    {
+                                        "getVar": [
+                                            "i",
+                                            0
+                                        ]
+                                    },
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            {
+                                                "getVar": [
+                                                    "j",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "refCall": [
+                                            "colorsArr",
+                                            "get",
+                                            {
+                                                "getVar": [
+                                                    "j",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "getVar": [
+                                            "unit",
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "ifelse": [
+                            {
+                                "equals": [
+                                    {
+                                        "typeof": [
+                                            {
+                                                "getVar": [
+                                                    "fetch",
+                                                    -1
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    4
+                                ]
+                            },
+                            [
+                                {
+                                    "refCall": [
+                                        "returnArr",
+                                        "append",
+                                        {
+                                            "getVar": [
+                                                "fetch",
+                                                ""
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "setVar": [
+                                        "i",
+                                        {
+                                            "add": [
+                                                {
+                                                    "getVar": [
+                                                        "i",
+                                                        0
+                                                    ]
+                                                },
+                                                1
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                "j"
+            ]
+        },
+        {
+            "getVar": [
+                "returnArr",
+                []
+            ]
+        }
+    ]
+}

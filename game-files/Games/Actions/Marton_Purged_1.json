@@ -1,0 +1,121 @@
+{
+    "Name": "Purged Aristocracy",
+    "Risk": "ZAYIN",
+    "Cost": 3,
+    "Emotion": 6,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Protection",
+                4,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 4 [b][color=5080cc]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 10,
+            "Base": 2,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 4 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 2,
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        4
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        -2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Inflict 4 [b][color=cccc50]Tremor[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ffff50]Tremor Burst[/color][/b], then reduce target's [b][color=cccc50]Tremor[/color][/b] by 2."    
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "setVar": [
+                "panaceaArr",
+                {
+                    "getDebuffAlimentArr": [
+                        {
+                            "getUnit": [
+                                "@Self"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setStatus": [
+                {
+                    "refCall": [
+                        "panaceaArr",
+                        "get",
+                        {
+                            "queryInt": [
+                                "",
+                                {
+                                    "range": [
+                                        {
+                                            "refCall": [
+                                                "panaceaArr",
+                                                "size"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                0,
+                "@Self"
+            ]
+        }
+    ],
+    "AfterReq": [
+        {
+            "statusInflict": [
+                "EGO_Immunity",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 4 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

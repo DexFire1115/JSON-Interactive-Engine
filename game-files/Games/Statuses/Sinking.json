@@ -65,72 +65,34 @@
                 ]
             },
             {
-                "objCall": [
+                "changeEmotion": [
                     {
-                        "getUnitData": [
-                            {
-                                "getVar": [
-                                    "Self",
-                                    ""
-                                ]
-                            }
-                        ]
-                    },
-                    "dset",
-                    "Attributes/EmotionPoints",
-                    {
-                        "sub": [
-                            {
-                                "objCall": [
-                                    {
-                                        "getUnitData": [
-                                            {
-                                                "getVar": [
-                                                    "Self",
-                                                    ""
-                                                ]
-                                            }
-                                        ]
-                                    },
-                                    "dget",
-                                    "Attributes/EmotionPoints",
-                                    1
-                                ]
-                            },
+                        "div": [
                             {
                                 "getStatus": [
                                     "Sinking",
                                     0,
                                     "@Self"
                                 ]
-                            }
+                            },
+                            -2
                         ]
                     }
                 ]
             },
             {
-                "statusInflict": [
+                "setStatus": [
                     "Sinking",
                     {
-                        "sub": [
-                            0,
+                        "div": [
                             {
-                                "div": [
-                                    {
-                                        "add": [
-                                            {
-                                                "getStatus": [
-                                                    "Sinking",
-                                                    0,
-                                                    "@Self"
-                                                ]
-                                            },
-                                            1
-                                        ]
-                                    },
-                                    2
-                                ]
-                            }
+                                "getStatus": [
+                                    "Sinking",
+                                    0,
+                                    "@Self"
+                                ]                         
+                            },
+                            2
                         ]
                     },
                     "@Self"

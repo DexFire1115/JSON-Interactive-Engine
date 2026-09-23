@@ -3,12 +3,14 @@ extends Control
 @onready var logs = $GUIArea/VBox/Logs
 @onready var input = $GUIArea/VBox/HBox/Input
 var isScanner := false
+var unitCase := false
 
 func _ready() -> void:
 	EventBus.connect("RefreshConsole", refreshConsole)
 	EventBus.connect("dmgConsole", damageCommand)
 	EventBus.connect("dmgDisplay", dmgVisual)
 	EventBus.connect("lightDisplay", lightVisual)
+	EventBus.connect("emotionDisplay", emotionVisual)
 	EventBus.connect("clashConsole", displayClash)
 	EventBus.connect("consoleInput", textPrompt)
 	EventBus.connect("killedDisplay", killedPrint)
@@ -54,10 +56,13 @@ func readCommand(text: String) -> void:
 		"roll", "r":
 			argPrint(args, "64ffff", "aa64ff", "ff64ff")
 			errorCode = await rollCommand(args)
-		"light":
+		"light", "lc":
 			argPrint(args, "64ffff", "aa64ff", "ff64ff")
 			errorCode = changeLightCommand(args)
-		"dmgunit":
+		"emotion", "emo", "ec":
+			argPrint(args, "64ffff", "aa64ff", "ff64ff")
+			errorCode = changeEmotionCommand(args)
+		"dmgunit", "du":
 			argPrint(args, "64ffff", "aa64ff", "ff6464", "ffff64")
 			errorCode = damageCommand(args)
 		"exsk":
@@ -69,22 +74,22 @@ func readCommand(text: String) -> void:
 		"buff", "b":
 			argPrint(args, "64ffff", "aa64ff", "ffaa64", "ffff64", "64ff64")
 			errorCode = statusInflictionCommand(args)
-		"dispstatus", "bp":
+		"dispbuff", "bp":
 			argPrint(args, "64ffff", "aa64ff")
-			errorCode = displayStatusCommand(args)
+			errorCode = displayBuffsCommand(args)
 		"savedice":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = displaySaveDiceCommand(args)
-		"dispskill":
+		"dispskill", "dsk":
 			argPrint(args, "64ffff", "ffff64")
 			errorCode = displaySkillCommand(args)
-		"dispunit":
+		"dispunit", "dun":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = await displayUnitCommand(args)
-		"dispskilllist":
+		"dispskilllist", "dsl":
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = displaySkillListCommand(args)
-		"dispspeed":
+		"dispspeed", "dsp":
 			argPrint(args, "64ffff")
 			errorCode = displaySpeedDiceCommand(args)
 		"holddice":
@@ -155,7 +160,7 @@ func removeSpeedDiceCommand(args: PackedStringArray) -> int:
 
 func nextTurnCommand(args: PackedStringArray) -> int:
 	if(args.size() < 1): return 1
-	Functions.nextTurn()
+	Functions.nextTurn("" if(args.size() == 1)else args[1])
 	return 0
 
 func executeFunctionCommand(args: PackedStringArray) -> int:
@@ -178,11 +183,12 @@ func rollCommand(args: PackedStringArray) -> int:
 
 func displayUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var unitData = Functions.unitList.get(args[1]).dataSet
+	var unit := unitCaps(args[1])
+	var unitData = Functions.unitList.get(unit).dataSet
 	if(unitData == null): return 3
 	var text := "[u]"
 	text += addStyle("Name: ", "ffffff", true)
-	text += getNameTag(args[1])
+	text += getNameTag(unit)
 	text += " [lb]"
 	text += addStyle(unitData.dget("Type", ""), "ffffff")
 	text += " , "
@@ -226,21 +232,21 @@ func displayUnitCommand(args: PackedStringArray) -> int:
 	text += ")\n"
 	
 	text += addStyle(" Slash ", "ffcccc", true)
-	var temp = await Functions.getResistance(args[1], "Slash")
+	var temp = await Functions.getResistance(unit, "Slash")
 	text += ": "
 	text += weaknessPrint(temp[0])
 	text += " , "
 	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	text += addStyle(" Pierce", "ccffcc", true)
-	temp = await Functions.getResistance(args[1], "Pierce")
+	temp = await Functions.getResistance(unit, "Pierce")
 	text += ": "
 	text += weaknessPrint(temp[0])
 	text += " , "
 	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	text += addStyle(" Blunt ", "ccccff", true)
-	temp = await Functions.getResistance(args[1], "Blunt")
+	temp = await Functions.getResistance(unit, "Blunt")
 	text += ": "
 	text += weaknessPrint(temp[0])
 	text += " , "
@@ -269,9 +275,10 @@ func weaknessPrint(val: int, isStagger := false) -> String:
 
 func displaySaveDiceCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	if (!Functions.unitList.has(args[1])): return 3
-	var unit := Functions.unitList[args[1]]
-	for d in unit.savedDice:
+	var unit := unitCaps(args[1])
+	if (!Functions.unitList.has(unit)): return 3
+	var unitObj := Functions.unitList[unit]
+	for d in unitObj.savedDice:
 		var dieParse := d.split("/")
 		if(dieParse.size() != 2): return 4
 		displaySkillDice(dieParse[0], int(dieParse[1]))
@@ -294,6 +301,8 @@ func displaySkillCommand(args: PackedStringArray) -> int:
 func getSkillHeader(data: DataTree, isUsable := true) -> String:
 	var text := ""
 	text += addStyle("[" + displaySkillTextField(data, "Cost") + "] ", "ffaa64", true)
+	if(data.has("Emotion")):
+		text += addStyle("[" + displaySkillTextField(data, "Emotion") + "] ", "aa64ff", true)
 	text += displaySkillTextField(data, "Name", "ffffff" if(isUsable)else "808080", true)
 	if(data.has("Limit")):
 		var uses = data.dget("Uses", 0)
@@ -369,10 +378,11 @@ func getTypeColor(type: String) -> String:
 
 func displaySkillListCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	if (!Functions.unitList.has(args[1])): return 3
-	var actionArr: Array = Functions.unitList[args[1]].dataSet.safeGet("Actions", TYPE_ARRAY)
+	var unit := unitCaps(args[1])
+	if (!Functions.unitList.has(unit)): return 3
+	var actionArr: Array = Functions.unitList[unit].dataSet.safeGet("Actions", TYPE_ARRAY)
 	for i in actionArr.size():
-		displaySkillListItem(args[1], actionArr, i)
+		displaySkillListItem(unit, actionArr, i)
 	return 0
 
 func displaySkillOptions(unit: String, options: Array):
@@ -400,7 +410,8 @@ func displaySaveDiceOptions(unit: String, savedice: Array, options: Array):
 		text += getDieHeader(DataTree.new(
 			Functions.fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], 
 			TYPE_DICTIONARY)))
-		addPushConsole(text)
+		addLog(text)
+	refreshConsole()
 
 func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
 	if (!Functions.unitList.has(unit)): 
@@ -505,25 +516,29 @@ func executeAWSkillCommand(args: PackedStringArray) -> int:
 
 func executeSkillsCommand(args: PackedStringArray) -> int:
 	if(args.size() < 5): return 1
+	var u1 := unitCaps(args[1])
+	var u2 := unitCaps(args[2])
 	# displaySkillCommand(["",args[3]])
 	# displaySkillCommand(["",args[4]])
-	Functions.executeSkills(args[1], args[2], args[3], args[4])
+	Functions.executeSkills(u1, u2, args[3], args[4])
 	return 0
 
 func statusInflictionCommand(args: PackedStringArray) -> int:
 	if(args.size() < 4): return 1
-	if(!Functions.unitList.has(args[1])): return 3
+	var unit := unitCaps(args[1])
+	if(!Functions.unitList.has(unit)): return 3
 	if(!args[3].is_valid_int()): return 5
 	if(args.size() > 4 && args[4] == "s"):
-		Functions.setStatus(args[2], int(args[3]), args[1])
+		Functions.setStatus(args[2], int(args[3]), unit)
 		return 0
-	Functions.statusInflict(args[2], int(args[3]), args[1])
+	Functions.statusInflict(args[2], int(args[3]), unit)
 	return 0
 
-func displayStatusCommand(args: PackedStringArray) -> int:
+func displayBuffsCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	if(!Functions.unitList.has(args[1])): return 3
-	var statusList := DataTree.new(Functions.getUnitData(args[1]).safeGet("Statuses", TYPE_DICTIONARY))
+	var unit := unitCaps(args[1])
+	if(!Functions.unitList.has(unit)): return 3
+	var statusList := DataTree.new(Functions.getUnitData(unit).safeGet("Statuses", TYPE_DICTIONARY))
 	var text = ""
 	for s in statusList.dataset:
 		var statusFile := DataTree.new(Functions.fileTree.dget(statusList.dget(s + "/File", ""), {}))
@@ -540,10 +555,11 @@ func displayStatusCommand(args: PackedStringArray) -> int:
 
 func changeLightCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3): return 1
-	if(!Functions.unitList.has(args[1])): return 3
+	var unit := unitCaps(args[1])
+	if(!Functions.unitList.has(unit)): return 3
 	if(!args[2].is_valid_int()): return 5
 	var diff := int(args[2])
-	Functions.changeLight(diff, args[1])
+	Functions.changeLight(diff, unit)
 	return 0
 
 func lightVisual(unit: String, data: Array):
@@ -551,23 +567,45 @@ func lightVisual(unit: String, data: Array):
 	var text := ""
 	text += getNameTag(unit)
 	text += ": "
-	text += addStyle("⬢".repeat(data[0]),"ffffcc")
-	text += addStyle("⬢".repeat(data[1] - data[0]),"646464")
+	text += addStyle("⬢".repeat(data[0]), "ffffcc")
+	text += addStyle("⬢".repeat(data[1] - data[0]), "646464")
 	text += " -> "
-	text += addStyle("⬢".repeat(data[2]),"ffffcc")
-	text += addStyle("⬢".repeat(data[1] - data[2]),"646464")
+	text += addStyle("⬢".repeat(data[2]), "ffffcc")
+	text += addStyle("⬢".repeat(data[1] - data[2]), "646464")
+	addPushConsole(text)
+
+func changeEmotionCommand(args: PackedStringArray) -> int:
+	if(args.size() < 3): return 1
+	var unit := unitCaps(args[1])
+	if(!Functions.unitList.has(unit)): return 3
+	if(!args[2].is_valid_int()): return 5
+	var diff := int(args[2])
+	Functions.changeEmotion(diff, unit)
+	return 0
+
+func emotionVisual(unit: String, data: Array):
+	if(data.size() != 2): return
+	var text := ""
+	var color := "ff6464" if(data[0] > data[1])else "64ff64"
+	text += getNameTag(unit)
+	text += ": "
+	
+	text += addStyle(castNumDataToString(data[0]) + "ep", "aa64ff")
+	text += addStyle(" -> ", color)
+	text += addStyle(castNumDataToString(data[1]) + "ep", "aa64ff")
 	addPushConsole(text)
 
 func damageCommand(args: PackedStringArray) -> int:
 	if(args.size() < 3): return 1
-	if(!Functions.unitList.has(args[1])): return 3
+	var unit := unitCaps(args[1])
+	if(!Functions.unitList.has(unit)): return 3
 	if(!args[2].is_valid_int()): return 5
 	var hdmg := int(args[2])
 	var sdmg: int
 	if(args.size() < 4): sdmg = hdmg
 	elif(!args[3].is_valid_int()): return 5
 	else: sdmg = int(args[3])
-	Functions.dealCombinedDamage([hdmg, sdmg, "Console", hdmg < 0, sdmg < 0], "Console", args[1])
+	Functions.dealCombinedDamage([hdmg, sdmg, "Console", hdmg < 0, sdmg < 0], "Console", unit)
 	return 0
 
 func dmgVisual(unit: String, data: Array):
@@ -689,6 +727,10 @@ func italicStr(text: String) -> String:
 
 func underlineStr(text: String) -> String:
 	return "[u]" + text + "[/u]"
+
+func unitCaps(unit: String) -> String:
+	if(unitCase): return unit
+	return unit.to_upper()
 
 func addPushConsole(s: String) -> void:
 	var lines: PackedStringArray = s.split("\n");
