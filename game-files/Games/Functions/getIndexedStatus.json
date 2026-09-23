@@ -1,0 +1,98 @@
+{
+    "Args": [
+        "i",
+        "status",
+        "color",
+        "unit"
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "lte": [
+                        {
+                            "getStatus": [
+                                {
+                                    "getVar": [
+                                        "status",
+                                        ""
+                                    ]
+                                },
+                                0,
+                                {
+                                    "getVar": [
+                                        "unit"
+                                    ]
+                                }
+                            ]
+                        },
+                        0
+                    ]
+                },
+                [
+                    {
+                        "": [
+                        ]
+                    },
+                    "return"
+                ]
+            ]
+        },
+        {
+            "setVar": [
+                "codedStatus",
+                {
+                    "concat": [
+                        "[b][color=",
+                        {
+                            "getVar": [
+                                "color",
+                                ""
+                            ]
+                        },
+                        "]",
+                        {
+                            "getVar": [
+                                "status",
+                                ""
+                            ]
+                        },
+                        "[/color][/b]"
+                    ]
+                }
+            ]
+        },
+        {
+            "addLog": [
+                {
+                    "concat": [
+                        "[b][color=cceeff] ",
+                        {
+                            "str": [
+                                {
+                                    "getVar": [
+                                        "i",
+                                        -1
+                                    ]
+                                }
+                            ]
+                        },
+                        " | [/color][/b]",
+                        {
+                            "getVar": [
+                                "codedStatus",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "getVar": [
+                "codedStatus",
+                ""
+            ]
+        }
+    ]
+}

@@ -94,40 +94,85 @@ func sequence(stackName: String, calls := [], args := {}):
 	stack.push_back(stackName)
 	for arg in args:
 		setVar(arg, args[arg])
-	var val
+	var retval = ""
+	var val = ""
 	#print(references.keys())
 	for method in calls:
-		if(method is String && method == "return"): break
 		val = await isNestedArg(method)
 		if(val is String && val == "return"): break
+		retval = val
+		if(retval is Dictionary && retval.has("*") && retval["*"] == null):
+			if(retval["retStack"] == stackName): retval = retval["retVal"]
+			break
 	clearScope()
 	stack.pop_back()
-	return val
+	return retval
 
 func ifelse(query: bool, trueCase: Array, falseCase := []):
-	var val
+	var retval = ""
+	var val = ""
 	if(query):
 		for c in trueCase.duplicate_deep():
 			val = await isNestedArg(c)
+			if(val is String && val == "break"): break
+			if(val is String && val == "return"): val = returnBlock(retval, stack.back())
+			retval = val
+			if(retval is Dictionary && val.has("*") && val["*"] == null): break
 	else:
 		for c in falseCase.duplicate_deep():
 			val = await isNestedArg(c)
-	return val
+			if(val is String && val == "break"): break
+			if(val is String && val == "return"): val = returnBlock(retval, stack.back())
+			retval = val
+			if(retval is Dictionary && val.has("*") && val["*"] == null): break
+	return retval
 
 func loop(arr: Array, commands: Array, varName := ""):
-	var val
+	var retval = ""
+	var val = ""
+	var conBool := false
 	for a in arr:
+		conBool = false
 		if(!varName.is_empty()): setVar(varName, a)
 		for c in commands.duplicate_deep():
 			val = await isNestedArg(c)
-	return val
+			if(val is String && val == "break"):
+				return retval
+			if(val is String && val == "continue"):
+				conBool = true
+				break
+			if(val is String && val == "return"): val = returnBlock(retval, stack.back())
+			retval = val
+			if(retval is Dictionary && val.has("*") && val["*"] == null):
+				return retval
+		if(conBool): continue
+	return retval
 
 func whileLoop(query: Array, commands: Array):
-	var val
+	var retval = ""
+	var val = ""
+	var conBool := false
 	while(query[0]):
 		for c in commands.duplicate_deep():
 			val = await isNestedArg(c)
-	return val
+			if(val is String && val == "break"):
+				return retval
+			if(val is String && val == "continue"):
+				conBool = true
+				break
+			if(val is String && val == "return"): val = returnBlock(retval, stack.back())
+			retval = val
+			if(retval is Dictionary && val.has("*") && val["*"] == null):
+				return retval
+		if(conBool): continue
+	return retval
+
+func returnBlock(val, stackName):
+	return {
+		"*": null,
+		"retVal": val,
+		"retStack": stackName
+	}
 
 func rangeTo(val: int):
 	return range(val)
@@ -352,6 +397,18 @@ func changeLight(amt := 0, target := "@Self") -> Array:
 	consoleCommand("lightDisplay", target, dataArr)
 	return dataArr
 
+func changeEmotion(amt := 0, target := "@Self", display := true) -> Array:
+	var dataArr := [-1, -1]
+	target = getSingleTarget(target)
+	if(target.is_empty()): return dataArr
+	var unitdata := getUnitData(target)
+	if(unitdata.isEmpty()): return dataArr
+	dataArr[0] = unitdata.safeGet("Attributes/EmotionPoints", -1)
+	dataArr[1] = max(0, dataArr[0] + amt)
+	unitdata.dset("Attributes/EmotionPoints", dataArr[1])
+	if(display): consoleCommand("emotionDisplay", target, dataArr)
+	return dataArr
+
 func statusInflict(status: String, amt := 1, target := "", nextScene := false, caster := ""):
 	setStatus(status, getStatus(status, 0, target, nextScene) + amt, target, nextScene, true, caster)
 	
@@ -546,6 +603,7 @@ func nextTurn(dice := "", isProactive := true):
 	if(dice.is_empty()): dice = getNextSpeedDie(!isSavedDice)
 	if(dice.is_empty()): return "_"
 	var unitName := getUnitFromDice(dice)
+	if(!unitList.has(unitName)): return "_"
 	var unitData := unitList[unitName].dataSet
 	var actionList := []
 	if(!dice.contains("*")):
@@ -595,6 +653,7 @@ func nextTurn(dice := "", isProactive := true):
 	var actionChoice: String = actionList[answer]
 	var actionData := DataTree.new(fileTree.safeGet("Actions/" + actionChoice, TYPE_DICTIONARY))
 	changeLight(-actionData.dget("Cost") , unitName)
+	if(actionData.has("Emotion")): changeEmotion(-actionData.dget("Emotion") , unitName)
 	if(!isProactive): return actionChoice
 	
 	var targetList = unitList.keys()
@@ -734,6 +793,8 @@ func isInactive(unitData: DataTree) -> bool:
 func isUsable(unitData: DataTree, actionData: DataTree) -> bool:
 	if(unitData.dget("Attributes/CurrentLight", 0) < actionData.dget("Cost", 0)):
 		return false
+	if(unitData.dget("Attributes/EmotionPoints", 0) < actionData.dget("Emotion", 0)):
+		return false
 	if(actionData.has("Limit") && actionData.dget("Uses", 0) >= actionData.dget("Limit", 0)): 
 		return false
 	return true
@@ -753,16 +814,20 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	for id in u2id: u2dice.append(Array(getAction(id, "diceArr", [])))
 	var u2oldHealth := []
 	var u2oldStagger := []
+	var u2oldEmotion := []
 	var a2Finished := []
 	for u in u2:
 		u2oldHealth.append(getUnitData(u).safeGet("Attributes/CurrentHealth", -1))
 		u2oldStagger.append(getUnitData(u).safeGet("Attributes/CurrentStagger", -1))
+		u2oldEmotion.append(getUnitData(u).safeGet("Attributes/EmotionPoints", -1))
 		a2Finished.append(false)
 	var clashData := {
 		"u1oldHealth": getUnitData(u1).safeGet("Attributes/CurrentHealth", -1),
 		"u1oldStagger": getUnitData(u1).safeGet("Attributes/CurrentStagger", -1),
+		"u1oldEmotion": getUnitData(u1).safeGet("Attributes/EmotionPoints", -1),
 		"u2oldHealth": u2oldHealth,
 		"u2oldStagger": u2oldStagger,
+		"u2oldEmotion": u2oldEmotion,
 		"a1Finished?": false,
 		"a2Finished?": a2Finished
 	}
@@ -785,6 +850,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		if(u1dice.is_empty()): afterSkillAW(u1, u2, clashData)
 		var u1Recycle = true
 		var u1Store = true
+		var u1EmoState = true
 		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
 		setUnitProp(u1, "dieData", d1)
@@ -799,20 +865,29 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			if(!d2.isEmpty()): await readDieTag("BeforeDie", u2[i])
 			var result := await executeClash(
 				u1, u2[i], d1, d2)
-			if(result == -1):
+			if(result.is_empty()):
 				if(!u2dice[i].is_empty()):
 					unitList[u2[i]].savedDice.push_back(u2dice[i].pop_front())
 				continue
 			else:
 				u1Store = false
 			@warning_ignore("integer_division")
-			if((result / 2) % 2 == 0): u1Recycle = false
-			if(result % 2 == 0): u2dice[i].pop_front()
+			if(result[0] != 0 && u1EmoState): 
+				changeEmotion(1, u1, false)
+				u1EmoState = false
+			if(result[1] != 0): changeEmotion(1, u2[i], false)
+			if(result[2] == 0): u1Recycle = false
+			if(result[3] == 0): u2dice[i].pop_front()
 		if(u1Store): unitList[u1].savedDice.push_back(u1dice.pop_front())
 		elif(!u1Recycle): u1dice.pop_front()
 
 	afterSkillAW(u1, u2, clashData)
 	afterSkillAW(u1, u2, clashData)
+	var u1Emotion = getUnitData(u1).safeGet("Attributes/EmotionPoints", -1)
+	consoleCommand("emotionDisplay", u1, [clashData["u1oldEmotion"], u1Emotion])
+	for i in u2.size():
+		var u2iEmotion = getUnitData(u2[i]).safeGet("Attributes/EmotionPoints", -1)
+		consoleCommand("emotionDisplay", u2[i], [clashData["u2oldEmotion"][i], u2iEmotion])
 	setUnitProp(u1, "target", "")
 	setUnitProp(u1, "action", -1)
 	clearScope(getAction(u1id, "path", ""))
@@ -847,8 +922,10 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	var clashData := {
 		"u1oldHealth": getUnitData(u1).safeGet("Attributes/CurrentHealth", -1),
 		"u1oldStagger": getUnitData(u1).safeGet("Attributes/CurrentStagger", -1),
+		"u1oldEmotion": getUnitData(u1).safeGet("Attributes/EmotionPoints", -1),
 		"u2oldHealth": getUnitData(u2).safeGet("Attributes/CurrentHealth", -1),
 		"u2oldStagger": getUnitData(u2).safeGet("Attributes/CurrentStagger", -1),
+		"u2oldEmotion": getUnitData(u2).safeGet("Attributes/EmotionPoints", -1),
 		"a1Finished?": false,
 		"a2Finished?": false
 	}
@@ -883,18 +960,23 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 		if(!d2.isEmpty()): await readDieTag("BeforeDie", u2)
 		var result := await executeClash(
 			u1, u2, d1, d2)
-		if(result == -1):
+		if(result.is_empty()):
 			if(u2dice.is_empty()):
 				unitList[u1].savedDice.push_back(u1dice.pop_front())
 			else:
 				unitList[u2].savedDice.push_back(u2dice.pop_front())
 			continue
-		@warning_ignore("integer_division")
-		if((result / 2) % 2 == 0): u1dice.pop_front()
-		if(result % 2 == 0): u2dice.pop_front()
+		if(result[0] != 0): changeEmotion(1, u1, false)
+		if(result[1] != 0): changeEmotion(1, u2, false)
+		if(result[2] == 0): u1dice.pop_front()
+		if(result[3]== 0): u2dice.pop_front()
 
 	afterSkill(u1, u2, clashData, true)
 	afterSkill(u1, u2, clashData, false)
+	var u1Emotion = getUnitData(u1).safeGet("Attributes/EmotionPoints", -1)
+	consoleCommand("emotionDisplay", u1, [clashData["u1oldEmotion"], u1Emotion])
+	var u2Emotion = getUnitData(u2).safeGet("Attributes/EmotionPoints", -1)
+	consoleCommand("emotionDisplay", u2, [clashData["u2oldEmotion"], u2Emotion])
 	setUnitProp(u1, "target", "")
 	setUnitProp(u2, "target", "")
 	setUnitProp(u1, "action", -1)
@@ -996,7 +1078,7 @@ func isSaveDiceArr(action: String) -> bool:
 	var nameArr = action.replace("[lb]","[").split("SaveDice")
 	return nameArr.size() == 2 && JSON.parse_string(nameArr[1]) is Array
 
-func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
+func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 	var d1Data := d1.copy()
 	var d2Data := d2.copy()
 	setUnitProp(u1, "dieData", d1Data)
@@ -1010,18 +1092,20 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 		await readDieTag("Check", u2)
 		d2Roll = await rollDieEmbed(u2, d2Data)
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll[0], getDieType(d2Data), d2Roll[0])
-	if(d1Roll[0] - d2Roll[0] == 0): # Tie or double unopposed
-		if(dmgType(d1Data) == "Evade" && isOffense(d2Data)):
-			await readDieTag("Evade", u1)
-		if(dmgType(d2Data) == "Evade" && isOffense(d1Data)):
-			await readDieTag("Evade", u2)
-		return 0
+
 	if(d1Roll[0] * d2Roll[0] != 0): # Not Double Unopposed
 		await readDieTag("Clash", u1)
 		await readDieTag("Clash", u2)
 	var clashResults = clashEval(d1Data, d2Data)
 	var d1Result: int = clashResults[0]
 	var d2Result: int = clashResults[1]
+	
+	if(d1Roll[0] - d2Roll[0] == 0): # Tie or double unopposed
+		if(dmgType(d1Data) == "Evade" && isOffense(d2Data)):
+			await readDieTag("Evade", u1)
+		if(dmgType(d2Data) == "Evade" && isOffense(d1Data)):
+			await readDieTag("Evade", u2)
+		return [d1Result, d2Result, 0, 0]
 	
 	var prioritySwitch := bool((d1Result <= d2Result) && d1Roll[0] != 0)
 	var atkUnit := u1 if(prioritySwitch) else u2
@@ -1037,7 +1121,7 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 			await readDieTag("ClashWin", atkUnit)
 		await readDieTag("ClashLose", defUnit)
 	
-	if(canStore(atkDice) && defRoll[0] == 0): return -1 # Defense/Counter Recycle
+	if(canStore(atkDice) && defRoll[0] == 0): return [] # Unopposed Defense/Counter Recycle
 	if(isOffense(atkDice)): # Offense win
 		var res = await getResistance(defUnit, atkType)
 		var dmg := int(atkRoll[0])
@@ -1077,7 +1161,8 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> int:
 	if(d2Data.dget("Recycle", 0) == 0): 
 		d2Data.dset("Recycle", 0 if(!(isOffense(atkDice) || isOffense(defDice)))
 			else recycleDie(d2Data, d2Result))
-	return d1Data.dget("Recycle", 0) * 2 + d2Data.dget("Recycle", 0)
+	return [d1Result, d2Result, d1Data.dget("Recycle", 0), d2Data.dget("Recycle", 0)]
+	#return d1Data.dget("Recycle", 0) * 2 + d2Data.dget("Recycle", 0)
 
 func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	#print("\n\nUNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
