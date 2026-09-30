@@ -16,7 +16,7 @@
                                     "concat": [
                                         "[b][color=ff00ff]RESULT :D -> [/color][/b]",
                                         {
-                                            "RollAdv": [
+                                            "rollAdv": [
                                                 5,
                                                 {
                                                     "randiXY": [

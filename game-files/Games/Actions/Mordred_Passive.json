@@ -1,0 +1,17 @@
+{
+    "Name": "Passive - Retort",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "SlashCounter",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

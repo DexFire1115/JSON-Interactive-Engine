@@ -1,0 +1,97 @@
+{
+    "Name": "Lightning Current",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getStatus": [
+                                "Charge",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        5
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Charge",
+                            -5,
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "setVar": [
+                            "Charge_Ripper",
+                            true,
+                            "@Action"
+                        ]
+                    },
+                    {
+                        "addLog": [
+                            "Spent 5 [b][color=50cccc]Charge[/color][/b] to give all Dice on this skill +4 [b][color=ffffff]Power[/color][/b]."
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Spend 5 [b][color=50cccc]Charge[/color][/b] to give all Dice on this skill +4 [b][color=ffffff]Power[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 10,
+            "Base": 4,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "Charge_Ripper",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    4
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Charge",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+    ]
+}

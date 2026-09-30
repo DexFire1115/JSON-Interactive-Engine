@@ -30,6 +30,16 @@
                                 -1,
                                 "@Self"
                             ]
+                        },
+                        {
+                            "readDieTag": [
+                                "ChargeAdvantage",
+                                {
+                                    "getUnit": [
+                                        "@Self"
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 ]

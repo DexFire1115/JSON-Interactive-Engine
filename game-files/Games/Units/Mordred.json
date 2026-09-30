@@ -1,0 +1,80 @@
+{
+    "Name": "Mordred",
+    "Color": "#50cccc",
+    "Type": "Human",
+    "Class": "Lvl. 2",
+    "Attributes": {
+        "CurrentHealth": 70,
+        "MaxHealth": 70,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 4,
+        "SlashDamage": -1,
+        "PierceDamage": 2,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": -1,
+    },
+    "Statuses": {
+        "Mordred_Retort": {
+            "File": "Statuses/Mordred_Retort",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneStartPost"
+            ]
+        },
+        "Mordred_Energy": {
+            "File": "Statuses/Mordred_Energy",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "Check",
+                "SceneEnd"
+            ]
+        },
+        "ChargeCycle": {
+            "File": "Statuses/ChargeCycle",
+            "Stack": 1,
+            "Conditions": [
+                "ChargeAdvantage",
+                "ValidateStatus-Charge",
+                "SceneStart"
+            ]
+        },
+    },
+    "Conditions": {
+        "Check": [
+            "Mordred_Energy"
+        ],
+        "ChargeAdvantage": [
+            "ChargeCycle"
+        ],
+        "ValidateStatus-Charge": [
+            "ChargeCycle"
+        ],
+        "SceneStart": [
+            "ChargeCycle"
+        ],
+        "SceneStartPost": [
+            "Mordred_Retort"
+        ],
+        "SceneEnd": [
+            "Mordred_Energy"
+        ]
+    },
+    "Actions": [
+        "Mordred_Recharge_1",
+        "Mordred_Lightning_1",
+        "Mordred_Blade_1",
+        "Mordred_Rip_1",
+        "Mordred_The_1"
+    ]
+}

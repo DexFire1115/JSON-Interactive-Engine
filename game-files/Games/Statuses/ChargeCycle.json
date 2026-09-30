@@ -1,0 +1,142 @@
+{
+    "Name": "Charge Cycle",
+    "Color": "#50ccaa",
+    "MinStack": 1,
+    "MaxStack": 5,
+    "Conditions": {
+        "ChargeAdvantage": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/ChargeCycle/ChargeTracker",
+                    {
+                        "sub": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/ChargeCycle/ChargeTracker",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ValidateStatus-Charge": [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dset",
+                                "Statuses/ChargeCycle/ChargeTracker",
+                                {
+                                    "sub": [
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getUnitData": [
+                                                        "@Self"
+                                                    ]
+                                                },
+                                                "dget",
+                                                "Statuses/ChargeCycle/ChargeTracker",
+                                                0
+                                            ]
+                                        },
+                                        {
+                                            "refCall": [
+                                                "statusArr",
+                                                "get",
+                                                1
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setStatus": [
+                                "ChargeCycle",
+                                {
+                                    "max": [
+                                        {
+                                            "div": [
+                                                {
+                                                    "objCall": [
+                                                        {
+                                                            "getUnitData": [
+                                                                "@Self"
+                                                            ]
+                                                        },
+                                                        "dget",
+                                                        "Statuses/ChargeCycle/ChargeTracker",
+                                                        0
+                                                    ]
+                                                },
+                                                10
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "Charge",
+                    {
+                        "getStatus": [
+                            "ChargeCycle",
+                            0,
+                            "@Self"
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Min Stack: 0. Max Stack: 5.",
+        "This status cannot be removed. Count [b][color=50cccc]Charge[/color][/b] spent during the encounter.",
+        "Increase stack by 1 for every 10 cumulative [b][color=50cccc]Charge[/color][/b] spent.",
+        "[b][color=50cccc]Charge[/color][/b] spent for rolling Advantage does not contribute to [b][color=50ccaa]Charge Cycle[/color][/b].",
+        "[b][color=ffffff][lb]Scene Start][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b] for every [b][color=50ccaa]Charge Cycle[/color][/b] (Max: 3)."
+    ]
+}
