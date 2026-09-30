@@ -3,6 +3,7 @@ extends Control
 @onready var logs = $GUIArea/VBox/Logs
 @onready var input = $GUIArea/VBox/HBox/Input
 var isScanner := false
+var canScan := false
 var unitCase := false
 
 func _ready() -> void:
@@ -23,6 +24,7 @@ func _on_input_text_submitted(new_text: String) -> void:
 	if(new_text.is_empty()): return
 	if(isScanner): 
 		addPushConsole(boldStr("> ") + italicStr(new_text))
+		canScan = false
 		isScanner = false
 	else: readCommand(new_text.replace("[", "[lb]"))
 	refreshConsole()
@@ -30,9 +32,14 @@ func _on_input_text_submitted(new_text: String) -> void:
 
 func textPrompt(query := ""):
 	if(!query.is_empty()): addPushConsole(query)
+	canScan = true
 	isScanner = true
 	_on_input_text_submitted("")
-	EventBus.emit_signal("queryOutput", await input.text_submitted)
+	var s = await input.text_submitted
+	if(s == "pause" || s == "`"): 
+		canScan = true
+		return
+	EventBus.emit_signal("queryOutput", s)
 
 func readCommand(text: String) -> void:
 	var args := text.split(" ", false)
@@ -47,7 +54,10 @@ func readCommand(text: String) -> void:
 		"editunit":
 			argPrint(args, "64ffff", "aa64ff", "ffff64", "ff64aa")
 			errorCode = editUnitCommand(args)
-		"scene":
+		"resume", "`":
+			argPrint(args, "ffffff")
+			errorCode = resumeCommand(args)
+		"scene", "s":
 			argPrint(args, "64ffff")
 			errorCode = startSceneCommand(args)
 		"exfn":
@@ -136,6 +146,12 @@ func editUnitCommand(args: PackedStringArray) -> int:
 	if(args[3] == "[]arr*" || args[3] == "[lb]]arr*"): val = []
 	if(args[3] == "{}obj*"): val = {}
 	addPushConsole(JSON.stringify(unitData.dset(args[2],val), "    ",false))
+	return 0
+
+func resumeCommand(_args: PackedStringArray) -> int:
+	if(!canScan): return -2
+	isScanner = true
+	textPrompt()
 	return 0
 
 func startSceneCommand(_args: PackedStringArray) -> int:
@@ -545,7 +561,7 @@ func displayBuffsCommand(args: PackedStringArray) -> int:
 		text += addStyle(statusFile.dget("Name", ""), statusFile.dget("Color", ""), true)
 		text += " : "
 		text += boldStr(str(statusList.dget(s + "/Stack", 0)))
-		if(statusList.dget(s + "/NextStack", 0) > 0):
+		if(statusList.safeGet(s + "/NextStack", -1) > 0):
 			text += " "
 			text += addStyle("(" + str(statusList.dget(s + "/NextStack", 0)) + ")", "808080")
 		text += "\n"
@@ -669,6 +685,7 @@ func failedCommand(args: PackedStringArray) -> int:
 func errorCommand(code: int) -> void:
 	var text := ""
 	match code:
+		-2: text = "No Scan Operations!"
 		-1: text = "No Command!"
 		0: return
 		1: text = "Missing Args!"

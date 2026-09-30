@@ -1,0 +1,61 @@
+{
+    "Name": "[E.G.O.] Purged Aristocracy",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "Safeguard",
+                    {
+                        "add": [
+                            1,
+                            {
+                                "ifelse": [
+                                    {
+                                        "gte": [
+                                            {
+                                                "type_convert": [
+                                                    {
+                                                        "varCall": [
+                                                            {
+                                                                "objCall": [
+                                                                    {
+                                                                        "getUnitData": [
+                                                                            "@Self"
+                                                                        ]
+                                                                    },
+                                                                    "dget",
+                                                                    "Class"
+                                                                ]
+                                                            },
+                                                            "replace",
+                                                            "Lvl. ",
+                                                            ""
+                                                        ]
+                                                    },
+                                                    3
+                                                ]
+                                            },
+                                            8
+                                        ]
+                                    },
+                                    [
+                                        1
+                                    ],
+                                    [
+                                        0
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[Scene Start] Gain 1 [b][color=ccbbaa]Safeguard[/color][/b], or 2 if you are Level 8 or higher."
+    ]
+}

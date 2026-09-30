@@ -1,0 +1,137 @@
+{
+    "Name": "Safeguard",
+    "Color": "#ccbbaa",
+    "Conditions": {
+        "ValidateStatus": [
+            {
+                "setVar": [
+                    "removables",
+                    {
+                        "Feeble": "cc5050",
+                        "Disarm": "50cc50",
+                        "Fragile": "8050cc",
+                        "Vulnerable": "aa6450",
+                        "Bind": "ffaa64",
+                        "Burn": "cc6450",
+                        "Bleed": "cc5064",
+                        "Tremor": "cccc50",
+                        "Sinking": "5064cc",
+                        "Paralyze": "ccaa50"
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "notBool": [
+                            {
+                                "andBool": [
+                                    {
+                                        "refCall": [
+                                            "removables",
+                                            "has",
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "greaterThan": [
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    1
+                                                ]
+                                            },
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "queryYN": [
+                            {
+                                "concat": [
+                                    "[b]Spend [color=ccbbaa]Safeguard[/color] against ",
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            1
+                                        ]
+                                    },
+                                    " [color=",
+                                    {
+                                        "refCall": [
+                                            "removables",
+                                            "get",
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "]",
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            0
+                                        ]
+                                    },
+                                    "[/color]?[/b]"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "set",
+                                0,
+                                ""
+                            ]
+                        },
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "set",
+                                1,
+                                0
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Safeguard",
+                                -1,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }            
+        ],
+    },
+    "Text": [
+        "When you gain a Debuff or Ailment, nullify it and reduce this Boon by 1. This nullifies the entirety of 1 stack, but does not nullify multiple stacks applied at once.",
+        "You cannot choose whether or not to use this Boon or save it for later, it must be used when gaining a Debuff or Ailment."
+    ]
+}
