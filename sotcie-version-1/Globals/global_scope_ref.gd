@@ -139,5 +139,5 @@ func globalScopeCall(method: String, args: Array) -> Variant:
 			2: return range(args[0], args[1])
 			3: return range(args[0], args[1], args[2])
 		"type_exists": return type_exists(args[0])
-		
+		_: return {"@": null}
 	return null

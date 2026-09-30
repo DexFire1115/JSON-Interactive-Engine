@@ -24,7 +24,11 @@ func callj(method: String, args: Array) -> Variant:
 		return await jFunc(method, args)
 	elif(has_method(method)):
 		return await callv(method, args)
-	else: return GlobalScopeRef.globalScopeCall(method, args)
+	else:
+		var retVal = GlobalScopeRef.globalScopeCall(method, args)
+		if(retVal is Dictionary && retVal.has("@") && retVal["@"] == null):
+			addLog("[b][color=ff6464]/!\\ Function \"" + method + "\" does not exist! /!\\[/color][/b]")
+		return retVal
 
 func isNestedArg(arg) -> Variant:
 	#print("    is nested : ", str(arg).split("\n")[0])
@@ -375,8 +379,8 @@ func dealCombinedDamage(dmgArr: Array, caster := "", target := "") -> Array:
 	unitdata.dset("Attributes/CurrentHealth", dataArr[2])
 	unitdata.dset("Attributes/CurrentStagger", dataArr[3])
 	consoleCommand("dmgDisplay", target, dataArr)
-	if(dataArr[0] > 0 && dataArr[2] == 0): statusInflict("Killed", 1, target)
-	if(dataArr[1] > 0 && dataArr[3] == 0): statusInflict("Staggered", 1, target)
+	if(dataArr[0] > 0 && dataArr[2] == 0): await statusInflict("Killed", 1, target)
+	if(dataArr[1] > 0 && dataArr[3] == 0): await statusInflict("Staggered", 1, target)
 	if(unitList.has(caster)): await readDieTag("DamageResponse", caster, {"dmgArr": dmgArr})
 	return dataArr
 
@@ -410,16 +414,18 @@ func changeEmotion(amt := 0, target := "@Self", display := true) -> Array:
 	return dataArr
 
 func statusInflict(status: String, amt := 1, target := "", nextScene := false, caster := ""):
-	setStatus(status, getStatus(status, 0, target, nextScene) + amt, target, nextScene, true, caster)
+	await setStatus(status, getStatus(status, 0, target, nextScene) + amt, target, nextScene, true, caster)
 	
 func setStatus(status: String, amt := 1, target := "", nextScene := false, apply := true, caster := ""):
+	if(status.is_empty()): return
 	target = getSingleTarget(target)
 	if(target.is_empty()): return
 	var targetData := getUnitData(target)
 	if(targetData == null): return
 	caster = getSelf(caster)
 	if(nextScene == false && apply == true):
-		var statusArr = [status, amt]
+		var oldVal = getStatus(status, 0, target, nextScene)
+		var statusArr = [status, amt - oldVal, oldVal]
 		if(unitList.has(caster)):
 			await readDieTag("ConfirmStatus", caster, 
 				{"statusArr": statusArr, "Target": target})
@@ -427,8 +433,9 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 				{"statusArr": statusArr, "Target": target})
 		await readDieTag("ValidateStatus", target, {"statusArr": statusArr})
 		await readDieTag("ValidateStatus-" + statusArr[0], target, {"statusArr": statusArr})
+		if(statusArr[0].is_empty()): return
 		status = statusArr[0]
-		amt = statusArr[1]
+		amt = statusArr[1] + statusArr[2]
 	
 	var statusPath := "Statuses/" + status
 	var statConditionPath := statusPath + "/Conditions"
@@ -497,7 +504,7 @@ func clampStatus(statusData: DataTree):
 
 func statusClearSelf(status := ""):
 	if(status.is_empty()): status = str(getVar("Status", ""))
-	setStatus(status, 0, "@Self", false, false)
+	await setStatus(status, 0, "@Self", false, false)
 	await readUnitTag("Removed-" + status, "@Self")
 
 func statusNextStack():
@@ -505,7 +512,7 @@ func statusNextStack():
 	if(statusName.is_empty()): return
 	var statusData := DataTree.new(getUnitData("@Self").dget("Statuses/" + getVar("Status"), {}))
 	if(statusData.has("NextStack")):
-		statusInflict(statusName, statusData.dget("NextStack", 0), getUnit("@Self"))
+		await statusInflict(statusName, statusData.dget("NextStack", 0), getUnit("@Self"))
 		statusData.erase("NextStack")
 
 func changePower(amt: int, die := DataTree.new()):
@@ -555,6 +562,13 @@ func queryInt(query: String, choices: Array, default := -1) -> int:
 		query = "[b][color=ff6464]ERROR : Invalid Selection[/color][/b]"
 	return default
 
+func queryQInt(query: String, choices: Array, default := -1, persistTitle := true) -> int:
+	if(choices.size() <= 1): 
+		if(persistTitle): addLog(query)
+		if(choices.is_empty()): return default
+		return choices[0]
+	return await queryInt(query, choices, default)
+
 func sceneStart():
 	#print("< - - - SCENE - - - >")
 	for u in unitList:
@@ -600,6 +614,7 @@ func rollSpeed():
 
 func nextTurn(dice := "", isProactive := true):
 	var isSavedDice := diceList.is_empty()
+	var canDeploy := !isProactive
 	if(dice.is_empty()): dice = getNextSpeedDie(!isSavedDice)
 	if(dice.is_empty()): return "_"
 	var unitName := getUnitFromDice(dice)
@@ -608,8 +623,8 @@ func nextTurn(dice := "", isProactive := true):
 	var actionList := []
 	if(!dice.contains("*")):
 		actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
-	var optionInts := []
-	
+	var optionInts := [0
+	]
 	if(isProactive):
 		actionList.push_front(
 			"*[b][color=ff6480]Void Speed Die[/color][/b]" if(isSavedDice)
@@ -617,14 +632,19 @@ func nextTurn(dice := "", isProactive := true):
 		)
 		optionInts = [0]
 	else:
-		actionList.push_front("*[b][color=64ffff]Deploy Saved Dice[/color][/b]")
+		if(!unitList[unitName].savedDice.is_empty()):
+			actionList.push_front("*[b][color=64ffff]Deploy Saved Dice[/color][/b]")
+			optionInts.append(1)
+		else: canDeploy = false
 		actionList.push_front("*[b][color=ff6464]No Contest[/color][/b]")
-		optionInts = [0,1]
 	for i in range(optionInts.size(),actionList.size()):
 		if(isUsable(unitData, DataTree.new(fileTree.safeGet("Actions/" + actionList[i], 
 			TYPE_DICTIONARY)))): optionInts.append(i)
-	EventBus.emit_signal("skillListDisplay", unitName, actionList)
-	var answer := await queryInt("", optionInts, 0)
+	var answer := 0
+	if(actionList.size() > 1):
+		addLog("[u]" + getIDTag(unitName) + "[b]: Select Action:[/b][/u]")
+		EventBus.emit_signal("skillListDisplay", unitName, actionList)
+		answer = await queryInt("", optionInts, 0)
 	
 	if(answer == 0):
 		if(isProactive):
@@ -632,14 +652,13 @@ func nextTurn(dice := "", isProactive := true):
 			else: saveSpeedDice(dice)
 		return "_"
 	
-	if(!isProactive && answer == 1):
+	if(canDeploy && answer == 1):
 		var savediceList := Array(unitList[unitName].savedDice.duplicate())
 		savediceList.push_front("*[b][color=64ff64]Deploy Dice[/color][/b]")
-		optionInts = range(savediceList.size())
 		var selectedInts := []
 		answer = -1
-		while(answer != 0):
-			addLog("[u][b]Select Saved Dice:[/b][/u]")
+		while(answer != 0 && savediceList.size() > 1):
+			addLog("[u]" + getIDTag(unitName) + "[b]: Select Saved Dice:[/b][/u]")
 			optionInts = range(savediceList.size())
 			EventBus.emit_signal("savediceListDisplay", unitName, savediceList, optionInts)
 			answer = await queryInt("", optionInts, 0)
@@ -660,15 +679,18 @@ func nextTurn(dice := "", isProactive := true):
 	var weight: int = actionData.dget("AttackWeight", 1)
 	var skillTargets := {}
 	for i in range(weight):
+		addLog("[u]" + getIDTag(unitName) + "[b]: Select Target [color=ffff64](" + 
+			str(i + 1) + "/" + str(weight) + ")[/color]:[/b][/u]")
 		EventBus.emit_signal("targetListDisplay", targetList)
 		answer = await queryInt("", range(targetList.size()), 0)
 		skillTargets.set(targetList[answer], "")
 	for u in unitList.keys():
-		if(skillTargets.keys().has(u)): continue
+		if(skillTargets.keys().has(u) || u == unitName): continue
 		var interceptArr := await interceptCheck(u, unitName, skillTargets.keys())
 		if(interceptArr[0]):
 			skillTargets.erase(interceptArr[1])
 			skillTargets.set(u, "")
+			break
 	for u in skillTargets:
 		var targetDie := getNextUnitSpeedDie(u)
 		if(targetDie.is_empty()): targetDie = getNextUnitSpeedDie(u, false)
@@ -678,14 +700,15 @@ func nextTurn(dice := "", isProactive := true):
 
 func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	var choiceDict := {"[b][color=ff6464]No Contest[/color][/b]": "No"}
-	if(!getNextUnitSpeedDie(unit, false).is_empty()):
+	if(!(getNextUnitSpeedDie(unit, false).is_empty() || unitList[unit].savedDice.is_empty())):
 		choiceDict.set("[b][color=64aaff]Use Saved Die[/color][/b]", "SavedDie")
 	await readUnitTag("InterceptCheck", unit, {
 		"Self": unit, 
 		"Target": proactive,
 		"choiceDict": choiceDict
 	})
-	addLog("[u][b]Select Intercept Option:[/b][/u]")
+	if(choiceDict.size() <= 1): return [false, ""]
+	addLog("[u]" + getIDTag(unit) + "[b]: Select Intercept Strategy:[/b][/u]")
 	var optionInts := range(choiceDict.size())
 	for o in optionInts:
 		var text := ""
@@ -849,7 +872,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	while(!(u1dice.is_empty() && u2dice.all(isEmpty))):
 		if(u1dice.is_empty()): afterSkillAW(u1, u2, clashData)
 		var u1Recycle = true
-		var u1Store = true
+		var u1Store = !u1dice.is_empty()
 		var u1EmoState = true
 		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
@@ -878,6 +901,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			if(result[1] != 0): changeEmotion(1, u2[i], false)
 			if(result[2] == 0): u1Recycle = false
 			if(result[3] == 0): u2dice[i].pop_front()
+			if(u1dice.is_empty()): d1 = DataTree.new({})
 		if(u1Store): unitList[u1].savedDice.push_back(u1dice.pop_front())
 		elif(!u1Recycle): u1dice.pop_front()
 
@@ -1128,7 +1152,7 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 
 		if(dmgType(defDice) == "Block"): # Offense beats Block
 			dmg -= defRoll[0]
-		var dmgArr := [dmg + res[0], dmg + res[1], atkType]
+		var dmgArr := [dmg + res[0], dmg + res[1], atkType, dmg < 0, dmg < 0]
 		dealCombinedDamage(dmgArr, atkUnit, defUnit)
 		await readDieTag("Hit", atkUnit)
 		if(atkRoll[4]):
@@ -1136,7 +1160,8 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 		await readUnitTag("HitReceived", defUnit, {"isCrit": atkRoll[4]})
 
 	elif(atkType == "Block"): # Block win
-		var dmgArr := [0, atkRoll[0] - defRoll[0], atkType]
+		var dmg := int(atkRoll[0] - defRoll[0])
+		var dmgArr := [0, dmg, atkType, dmg < 0, dmg < 0]
 		dealCombinedDamage(dmgArr, atkUnit, defUnit)
 	
 	else:
@@ -1310,6 +1335,13 @@ func getResistance(unit: String, type: String) -> Array[int]:
 
 func getSumAttribute(unitData: DataTree, attribute: String) -> int:
 	return await unitData.getComplexSeqn("Attributes/" + attribute, "add", 0)
+
+func getIDTag(unit: String) -> String:
+	if(!unitList.has(unit)): return ""
+	var unitData := unitList[unit].dataSet
+	var unitColor = unitData.dget("Color","")
+	if(!(unitColor is String)): unitColor = "aaaaaa"
+	return "[b][color=" + unitColor + "][lb]" + unit + "][/color][/b]"
 
 func runGameStat() -> void:
 	fileTree = GameManager.filetree

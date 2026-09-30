@@ -18,7 +18,7 @@
         {
             "setVar": [
                 "colorsArr",
-                ["cc5050", "50cc50", "8050cc", "aa6450", "ffaa64", "cc6450", "cc5064", "cccc50", "5050cc", "ccaa50"]
+                ["cc5050", "50cc50", "8050cc", "aa6450", "ffaa64", "cc6450", "cc5064", "cccc50", "5064cc", "ccaa50"]
             ]
         },
         {
@@ -30,11 +30,6 @@
                         0
                     ]
                 }
-            ]
-        },
-        {
-            "addLog": [
-                "[b]Panacea : Select a Debuff/Aliment to remove.[/b]"
             ]
         },
         {

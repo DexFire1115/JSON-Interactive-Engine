@@ -65,6 +65,11 @@
     ],
     "AfterUse": [
         {
+            "addLog": [
+                "[b]Panacea : Select a Debuff/Aliment to remove.[/b]"
+            ]
+        },
+        {
             "setVar": [
                 "panaceaArr",
                 {
@@ -78,44 +83,93 @@
                 }
             ]
         },
+
         {
-            "setStatus": [
+            "ifelse": [
                 {
                     "refCall": [
                         "panaceaArr",
-                        "get",
-                        {
-                            "queryInt": [
-                                "",
+                        "is_empty"
+                    ]
+                },
+                [
+                    {
+                        "addLog": [
+                            "[b][color=ff6464]No Debuff/Ailment to remove![/color][/b]"
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "setVar": [
+                            "panaceaChoice",
+                            {
+                                "refCall": [
+                                    "panaceaArr",
+                                    "get",
+                                    {
+                                        "queryInt": [
+                                            "",
+                                            {
+                                                "range": [
+                                                    {
+                                                        "refCall": [
+                                                            "panaceaArr",
+                                                            "size"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "ifelse": [
+                            {
+                                "equals": [
+                                    {
+                                        "typeof": [
+                                            {
+                                                "getVar": [
+                                                    "panaceaArr"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    4
+                                ]
+                            },
+                            [
                                 {
-                                    "range": [
+                                    "setStatus": [
                                         {
-                                            "refCall": [
+                                            "getVar": [
                                                 "panaceaArr",
-                                                "size"
+                                                ""
                                             ]
-                                        }
+                                        },
+                                        0,
+                                        "@Self"
                                     ]
                                 }
                             ]
-                        }
-                    ]
-                },
-                0,
-                "@Self"
+                        ]
+                    }
+                ]
             ]
-        }
-    ],
-    "AfterReq": [
+        },
         {
             "statusInflict": [
-                "EGO_Immunity",
+                "Marton_Purged_Immunity",
                 1,
                 "@Self"
             ]
         }
     ],
     "PostText": [
-        "[b][color=ffffff][lb]After Use][/color][/b] Gain 4 [b][color=ff8064]Aggro[/color][/b]."
+        "[b][color=ffffff][lb]After Use][/color][/b] Remove all of 1 Debuff or Ailment on self."
     ]
 }

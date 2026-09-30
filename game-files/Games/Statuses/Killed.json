@@ -4,7 +4,7 @@
     "Passive": true,
     "Hidden": true,
     "Conditions": {
-        "Applied-Staggered": [
+        "Applied-Killed": [
             {
                 "consoleCommand": [
                     "killedDisplay",
@@ -38,6 +38,27 @@
                     "dset",
                     "Attributes/Inactive/Killed",
                     true
+                ]
+            },
+            {
+                "setVar": [
+                    "dieArr",
+                    {
+                        "getAction": [
+                            {
+                                "getVar": [
+                                    "Action"
+                                ]
+                            },
+                            "diceArr"
+                        ]
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "dieArr",
+                    "clear"
                 ]
             }
         ],
