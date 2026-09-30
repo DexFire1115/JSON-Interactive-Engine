@@ -1,0 +1,115 @@
+{
+    "Name": "Blade of Rebellion",
+    "Cost": 2,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Charge",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 1,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getStatus": [
+                                "Charge",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        5
+                    ]
+                },
+                [
+                    {
+                        "ifelse": [
+                            {
+                                "queryYN": [
+                                    "Spend 5 [b][color=50cccc]Charge[/color][/b] to regain 1 [b][color=ffeecc]Light[/color][/b]?"
+                                ]
+                            },
+                            [
+                                {
+                                    "statusInflict": [
+                                        "Charge",
+                                        -5,
+                                        "@Self"
+                                    ]
+                                },
+                                {
+                                    "changeLight": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] You may spend 5 [b][color=50cccc]Charge[/color][/b] to regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

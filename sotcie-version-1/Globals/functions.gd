@@ -36,6 +36,9 @@ func isNestedArg(arg) -> Variant:
 		var key = arg.keys()[0]
 		var val = arg[key]
 		if((key is String && val is Array)):
+			#var result = await isNestedArg(await callj(key, val))
+			#print("    is nested = ", result)
+			#return result
 			return await isNestedArg(await callj(key, val))
 	return arg
 
@@ -465,7 +468,7 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 		if(unitList.has(caster)):
 			await readDieTag("Caused", caster, {"Target": target})
 			await readDieTag("Caused-" + status, caster, {"Target": target})
-	if(statusData.dget("Stack", 0) <= 0 && statusData.dget("NextStack", 0) <= 0): 
+	if(statusData.dget("Stack", 0) < statusData.dget("MinStack", 1) && statusData.dget("NextStack", 0) <= 0): 
 		removeStatus(status, target)
 
 func removeStatus(status: String, target := ""):
@@ -870,7 +873,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			await readActionTag("Exhaust", u2[i])
 		moveCounterDice(u2id[i])
 	while(!(u1dice.is_empty() && u2dice.all(isEmpty))):
-		if(u1dice.is_empty()): afterSkillAW(u1, u2, clashData)
+		if(u1dice.is_empty()): await afterSkillAW(u1, u2, clashData)
 		var u1Recycle = true
 		var u1Store = !u1dice.is_empty()
 		var u1EmoState = true
@@ -880,7 +883,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		if(!d1.isEmpty()): await readDieTag("BeforeDie", u1)
 		for i in u2.size():
 			setUnitProp(u1, "target", u2[i])
-			if(u2dice[i].is_empty()): afterSkillAW(u1, u2, clashData)
+			if(u2dice[i].is_empty()): await afterSkillAW(u1, u2, clashData)
 			var d2 := DataTree.new({} if(u2dice[i].is_empty()) else 
 			getDiceData(u2dice[i].front(), u2id[i]).duplicate_deep())
 			setUnitProp(u1, "dieData", d1)
@@ -905,8 +908,8 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		if(u1Store): unitList[u1].savedDice.push_back(u1dice.pop_front())
 		elif(!u1Recycle): u1dice.pop_front()
 
-	afterSkillAW(u1, u2, clashData)
-	afterSkillAW(u1, u2, clashData)
+	await afterSkillAW(u1, u2, clashData)
+	await afterSkillAW(u1, u2, clashData)
 	var u1Emotion = getUnitData(u1).safeGet("Attributes/EmotionPoints", -1)
 	consoleCommand("emotionDisplay", u1, [clashData["u1oldEmotion"], u1Emotion])
 	for i in u2.size():
@@ -931,8 +934,8 @@ func afterSkillAW(u1: String, u2: Array, data: Dictionary):
 		subdata["u2oldHealth"] = data["u2oldHealth"][i]
 		subdata["u2oldStagger"] = data["u2oldStagger"][i]
 		subdata["a2Finished?"] = data["a2Finished?"][i]
-		afterSkill(u1, u2[i], subdata, true)
-		afterSkill(u1, u2[i], subdata, false)
+		await afterSkill(u1, u2[i], subdata, true)
+		await afterSkill(u1, u2[i], subdata, false)
 		data["a1Finished?"] = subdata["a1Finished?"]
 		data["a2Finished?"][i] = subdata["a2Finished?"]
 
@@ -972,8 +975,8 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	moveCounterDice(u1id)
 	moveCounterDice(u2id)
 	while(!(u1dice.is_empty() && u2dice.is_empty())):
-		if(u1dice.is_empty()): afterSkill(u1, u2, clashData, true)
-		if(u2dice.is_empty()): afterSkill(u1, u2, clashData, false)
+		if(u1dice.is_empty()): await afterSkill(u1, u2, clashData, true)
+		if(u2dice.is_empty()): await afterSkill(u1, u2, clashData, false)
 		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
 		var d2 := DataTree.new({} if(u2dice.is_empty()) else 
@@ -995,8 +998,8 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 		if(result[2] == 0): u1dice.pop_front()
 		if(result[3]== 0): u2dice.pop_front()
 
-	afterSkill(u1, u2, clashData, true)
-	afterSkill(u1, u2, clashData, false)
+	await afterSkill(u1, u2, clashData, true)
+	await afterSkill(u1, u2, clashData, false)
 	var u1Emotion = getUnitData(u1).safeGet("Attributes/EmotionPoints", -1)
 	consoleCommand("emotionDisplay", u1, [clashData["u1oldEmotion"], u1Emotion])
 	var u2Emotion = getUnitData(u2).safeGet("Attributes/EmotionPoints", -1)

@@ -1,0 +1,258 @@
+{
+    "Name": "Rip Space",
+    "Cost": 3,
+    "OnUse": [
+        {
+            "ifelse": [
+                {
+                    "andBool": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "ChargeCycle",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                3
+                            ]
+                        },
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Charge",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                10
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Charge",
+                            -10,
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "setVar": [
+                            "Charge_Cycled_Ripper",
+                            {
+                                "getStatus": [
+                                    "ChargeCycle",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "@Action"
+                        ]
+                    },
+                    {
+                        "setStatus": [
+                            "ChargeCycle",
+                            1,
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "addLog": [
+                            "Spent [b][color=50ccaa]Charge Cycle[/color][/b] and [b][color=50cccc]Charge[/color][/b] to give all Dice +[b][color=ffffff]Power[/color][/b]."
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] At 3+ [b][color=50ccaa]Charge Cycle[/color][/b], spend 10 [b][color=50cccc]Charge[/color][/b] to give all Dice +1 [b][color=ffffff]Power[/color][/b] for every [b][color=50ccaa]Charge Cycle[/color][/b], then set [b][color=50ccaa]Charge Cycle[/color][/b] to 0."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 1,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Charge_Cycled_Ripper",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Charge_Cycled_Ripper",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Charge_Cycled_Ripper",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "setVar": [
+                        "Powered_Strike",
+                        {
+                            "min": [
+                                {
+                                    "getStatus": [
+                                        "Charge",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                3
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "setVar": [
+                        "Powered_Strike_Dmg",
+                        {
+                            "mult": [
+                                {
+                                    "getVar": [
+                                        "Powered_Strike",
+                                        0
+                                    ]
+                                },
+                                3
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getVar": [
+                                        "Powered_Strike",
+                                        0
+                                    ]
+                                },
+                                1
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Charge",
+                                    {
+                                        "sub": [
+                                            0,
+                                            {
+                                                "getVar": [
+                                                    "Powered_Strike",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "add": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "Powered_Strike_Dmg",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "addLog": [
+                                    "Spent up to 3 [b][color=50cccc]Charge[/color][/b] to deal additional [b][color=ff6464]Damage[/color][/b] = 3x the [b][color=50cccc]Charge[/color][/b] spent."
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Spend up to 3 [b][color=50cccc]Charge[/color][/b] to deal additional [b][color=ff6464]Damage[/color][/b] = 3x the [b][color=50cccc]Charge[/color][/b] spent."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

@@ -1,0 +1,193 @@
+{
+    "Name": "The Blood of Arthur",
+    "Cost": 3,
+    "Emotion": 6,
+    "OnUse": [
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getStatus": [
+                                "Charge",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        5
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Charge",
+                            -5,
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "setVar": [
+                            "Charge_Ripper",
+                            true,
+                            "@Action"
+                        ]
+                    },
+                    {
+                        "addLog": [
+                            "Spent 5 [b][color=50cccc]Charge[/color][/b] to give all Dice on this skill +2 [b][color=ffffff]Power[/color][/b]."
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Spend 5 [b][color=50cccc]Charge[/color][/b] to give all Dice on this skill +2 [b][color=ffffff]Power[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 12,
+            "Base": 8,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "Charge_Ripper",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+            ]
+        },
+        {
+            "Type": "SlashCounter",
+            "Dice": 10,
+            "Base": 1,
+            "ConfirmDamage": [
+                {
+                    "setVar": [
+                        "Powered_Strike",
+                        {
+                            "min": [
+                                {
+                                    "getStatus": [
+                                        "Charge",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                3
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "setVar": [
+                        "Powered_Strike_Dmg",
+                        {
+                            "mult": [
+                                {
+                                    "getVar": [
+                                        "Powered_Strike",
+                                        0
+                                    ]
+                                },
+                                3
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getVar": [
+                                        "Powered_Strike",
+                                        0
+                                    ]
+                                },
+                                1
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Charge",
+                                    {
+                                        "sub": [
+                                            0,
+                                            {
+                                                "getVar": [
+                                                    "Powered_Strike",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "add": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "Powered_Strike_Dmg",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "addLog": [
+                                    "Spent up to 3 [b][color=50cccc]Charge[/color][/b] to deal additional [b][color=ff6464]Damage[/color][/b] = 3x the [b][color=50cccc]Charge[/color][/b] spent."
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Spend up to 3 [b][color=50cccc]Charge[/color][/b] to deal additional [b][color=ff6464]Damage[/color][/b] = 3x the [b][color=50cccc]Charge[/color][/b] spent."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Mordred_The_Confrontational",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

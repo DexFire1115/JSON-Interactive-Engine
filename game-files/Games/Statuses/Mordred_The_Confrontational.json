@@ -1,0 +1,75 @@
+{
+    "Name": "[E.G.O.] Confrontational",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "isOffense": [
+                                    {
+                                        "getVar": [
+                                            "DieData"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                               "notBool": [
+                                   {
+                                        "varCall": [
+                                            {
+                                                "getDieType": [
+                                                    {
+                                                        "getVar": [
+                                                            "DieData"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "contains",
+                                            "Counter"
+                                        ]
+                                    }
+                               ] 
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "changePower": [
+                                {
+                                    "ifelse": [
+                                        {
+                                            "objCall": [
+                                                {
+                                                    "getUnitProp": [
+                                                        "@Target",
+                                                        "dieData"
+                                                    ]
+                                                },
+                                                "is_empty"
+                                            ]
+                                        },
+                                        [
+                                            -1
+                                        ],
+                                        [
+                                            1
+                                        ]
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+    },
+    "Text": [
+        "All non-counter Offensive Dice gain +1 Power in a Clash, but lose 1 Power when unopposed."
+    ]
+}

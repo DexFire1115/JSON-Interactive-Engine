@@ -1,0 +1,121 @@
+{
+    "Name": "Energy Recycling",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "varCall": [
+                                    {
+                                        "getAction": [
+                                            {
+                                                "getVar": [
+                                                    "Action"
+                                                ]
+                                            },
+                                            "name",
+                                            ""
+                                        ]
+                                    },
+                                    "contains",
+                                    "SaveDice"
+                                ]
+                            },
+                            {
+                               "notBool": [
+                                   {
+                                        "varCall": [
+                                            {
+                                                "getDieType": [
+                                                    {
+                                                        "getVar": [
+                                                            "DieData"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "contains",
+                                            "Counter"
+                                        ]
+                                    }
+                               ] 
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "changePower": [
+                                1
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "Energy_Charge",
+                    {
+                        "mult": [
+                            {
+                                "varCall": [
+                                    {
+                                        "getUnitProp": [
+                                            "@Self",
+                                            "savedDice"
+                                        ]
+                                    },
+                                    "size"
+                                ]
+                            },
+                            2
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getVar": [
+                                    "Energy_Charge",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "Gained [b][color=50cccc]Charge[/color][/b] from unused saved Dice."
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Charge",
+                                {
+                                    "getVar": [
+                                        "Energy_Charge",
+                                        0
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Your deployed non-counter Defensive Dice gain +1 [b][color=ffffff]Power[/color][/b].",
+        "[b][color=ffffff][lb]Scene End][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b] for every saved Die that's gone unused."
+    ]
+}

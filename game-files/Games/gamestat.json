@@ -1,20 +1,17 @@
 {
     "Units": {
         "A1": {
-            "Unit": "Eldric"
+            "Unit": "Mordred"
         },
         "A2": {
-            "Unit": "Marton"
-        },
-        "A3": {
             "Unit": "VileiColparino"
         },
         "E1": {
-            "Unit": "Morositatis"
+            "Unit": "RAAite"
         },
         "E2": {
-            "Unit": "Luxuriae"
-        },
+            "Unit": "RAAite"
+        }
     },
     "Scene": 0,
     "Console": [

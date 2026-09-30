@@ -1,0 +1,106 @@
+{
+    "Name": "Recharge",
+    "Cost": 0,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Charge",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getAction": [
+                                {
+                                    "getVar": [
+                                        "Action"
+                                    ]
+                                },
+                                "data/Intercept",
+                                false
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +2 if this skill intercepted the opposing attack.",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getStatus": [
+                                "Charge",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        5
+                    ]
+                },
+                [
+                    {
+                        "ifelse": [
+                            {
+                                "queryYN": [
+                                    "Spend 5 [b][color=50cccc]Charge[/color][/b] to regain 1 [b][color=ffeecc]Light[/color][/b]?"
+                                ]
+                            },
+                            [
+                                {
+                                    "statusInflict": [
+                                        "Charge",
+                                        -5,
+                                        "@Self"
+                                    ]
+                                },
+                                {
+                                    "changeLight": [
+                                        1
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] You may spend 5 [b][color=50cccc]Charge[/color][/b] to regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

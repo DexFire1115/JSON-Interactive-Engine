@@ -1,0 +1,53 @@
+{
+    "Name": "Battle Ability: Retort",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStartPost": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "mod": [
+                                    {
+                                        "get": [
+                                            "scene"
+                                        ]
+                                    },
+                                    2
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "varCall": [
+                                {
+                                    "getUnitProp": [
+                                        "@Self",
+                                        "savedDice"
+                                    ]
+                                },
+                                "append_array",
+                                {
+                                    "createDiceArr": [
+                                        {
+                                            "getSelf": [
+                                                ""
+                                            ]
+                                        },
+                                        "Mordred_Passive"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}
