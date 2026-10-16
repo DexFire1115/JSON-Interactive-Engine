@@ -1,0 +1,33 @@
+{
+    "Name": "[Mod] Inspirational Eminence",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Clash": [
+            {
+                "changeEmotion": [
+                    -1,
+                    "@Self",
+                    false
+                ]
+            },
+            {
+                "changeEmotion": [
+                    1,
+                    {
+                        "queryUnit": [
+                            "[b][color=64ffaa][lb]Eminence][/color][/b]: Give an ally [b][color=aa64ff]Emotion Point[/color][/b] gained from clashing:"
+                        ]
+                    }
+                ]
+            },
+        ],
+        "AfterUse": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

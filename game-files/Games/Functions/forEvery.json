@@ -5,6 +5,10 @@
         "min",
         "max"
     ],
+    "Defaults": [
+        0,
+        100
+    ],
     "Sequence": [
         {
             "setVar": [

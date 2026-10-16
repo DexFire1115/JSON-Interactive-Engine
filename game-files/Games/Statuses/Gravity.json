@@ -1,0 +1,131 @@
+{
+    "Name": "Gravity",
+    "Color": "#8064ff",
+    "Conditions": {
+        "Applied-Gravity": [
+            {
+                "statusInflict": [
+                    "Tremor",
+                    1,
+                    "@Self"
+                ]
+            }
+        ],
+        "Check": [
+            {
+                "setVar": [
+                    "TremorCost",
+                    {
+                        "abs": [
+                            {
+                                "div": [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitProp": [
+                                                    "@Self",
+                                                    "dieData"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Dice",
+                                            1
+                                        ]
+                                    },
+                                    2
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "orBool": [
+                            {
+                                "lessThan": [
+                                    {
+                                        "getStatus": [
+                                            "Tremor",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    {
+                                        "getVar": [
+                                            "TremorCost",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "lessThan": [
+                                    {
+                                        "getStatus": [
+                                            "Sinking",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "addLog": [
+                    "Rolling Disadvantage due to [b][color=8064ff]Gravity[/color][/b]!"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitProp": [
+                            "@Self",
+                            "dieData"
+                        ]
+                    },
+                    "dset",
+                    "Disadvantage",
+                    1
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Tremor",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getVar": [
+                                    "TremorCost",
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Sinking",
+                    -1,
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Max Stack: 10.",
+        "When applied (including at max stack), gain 1 [b][color=cccc50]Tremor[/color][/b].",
+        "Before rolling a die, spend X [b][color=cccc50]Tremor[/color][/b] and 1 [b][color=5064cc]Sinking[/color][/b] to roll with Disadvantage. X is half the max roll of the die's size category (2 for 1d4, 3 for 1d6, etc.)."
+    ]
+}

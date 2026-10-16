@@ -73,7 +73,7 @@
                 {
                     "statusInflict": [
                         "Bleed",
-                        3
+                        2
                     ]
                 },
                 {
@@ -87,7 +87,7 @@
             "Text": [
                 "[b][color=64ffff][lb]Check][/color][/b] For every [b][color=5080cc]Protection[/color][/b], gain +2 [b][color=ffffff]Power[/color][/b].",
                 "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc5050]Feeble[/color][/b] this scene and next scene.",
-                "[b][color=ff6464][lb]Clash Lose][/color][/b] Inflict 3 [b][color=cc5064]Bleed[/color][/b]. Gain 2 [b][color=ff8064]Bind[/color][/b]."
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]. Gain 2 [b][color=ff8064]Bind[/color][/b]."
             ]
         }
     ],

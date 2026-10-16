@@ -2,7 +2,7 @@
     "Name": "Eldric",
     "Color": "#aa5064",
     "Type": "Human",
-    "Class": "Lvl. 1",
+    "Class": "Lvl. 2",
     "Attributes": {
         "CurrentHealth": 50,
         "MaxHealth": 50,
@@ -41,6 +41,7 @@
         "Eldric_Slash_1",
         "Eldric_Slowing_1",
         "Eldric_Maim_1",
-        "Eldric_Swift_1"
+        "Eldric_Swift_1",
+        "Eldric_Feral_1"
     ]
 }

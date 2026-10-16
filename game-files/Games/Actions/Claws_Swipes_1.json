@@ -127,13 +127,13 @@
             ],
             "Text": [
                 "[b][color=64ff64][lb]Clash Win][/color][/b] Deal 2 less Damage and Stagger.",
-                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc5064]Bleed[/color][/b]."
             ]
         },
         {
             "Type": "SlashOffense",
             "Dice": 6,
-            "Base": 0,
+            "Base": -1,
             "Hit": [
                 {
                     "statusInflict": [

@@ -61,6 +61,88 @@
                 ]
             },
             {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "greaterThan": [
+                                    {
+                                        "getStatus": [
+                                            "Controlled_Chaos",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "Source",
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "getSelf": [
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "ifelse": [
+                                {
+                                    "queryYN": [
+                                        {
+                                            "concat": [
+                                                "[b]Controlled Chaos: Bypass [color=ccbbaa]Safeguard[/color] for ",
+                                                {
+                                                    "refCall": [
+                                                        "statusArr",
+                                                        "get",
+                                                        1
+                                                    ]
+                                                },
+                                                " [color=",
+                                                {
+                                                    "refCall": [
+                                                        "removables",
+                                                        "get",
+                                                        {
+                                                            "refCall": [
+                                                                "statusArr",
+                                                                "get",
+                                                                0
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "]",
+                                                {
+                                                    "refCall": [
+                                                        "statusArr",
+                                                        "get",
+                                                        0
+                                                    ]
+                                                },
+                                                "[/color]?[/b]"
+                                            ]
+                                        },
+                                        [
+                                            "return"
+                                        ]
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
                 "refCall": [
                     "statusArr",
                     "set",

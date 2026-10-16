@@ -1,0 +1,82 @@
+{
+    "Name": "Dr. Henry Jekyll",
+    "Color": "#ffefba",
+    "Type": "Human",
+    "Class": "Lvl. 1",
+    "Attributes": {
+        "CurrentHealth": 40,
+        "MaxHealth": 40,
+        "CurrentStagger": 25,
+        "MaxStagger": 25,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 3,
+        "SlashDamage": 0,
+        "PierceDamage": 1,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+        "Efflorescence": {
+            "File": "Statuses/Efflorescence",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneStart"
+            ]
+        },
+        "Charge_Cycler_Acceleration": {
+            "File": "Statuses/Charge_Cycler_Acceleration",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneStart",
+                "ValidateStatus-Charge"
+            ]
+        },
+        "ChargeCycle": {
+            "File": "Statuses/ChargeCycle",
+            "Stack": 0,
+            "ChargeTracker": 0,
+            "AlterState": false,
+            "Conditions": [
+                "Applied-ChargeCycle",
+                "ChargeAdvantage",
+                "ValidateStatus-Charge",
+                "ValidateStatus-ChargeCycle"
+            ]
+        }
+    },
+    "Conditions": {
+        "Applied-ChargeCycle": [
+            "ChargeCycle"
+        ],
+        "ChargeAdvantage": [
+            "ChargeCycle"
+        ],
+        "ValidateStatus-Charge": [
+            "Charge_Cycler_Acceleration",
+            "ChargeCycle"
+        ],
+        "ValidateStatus-ChargeCycle": [
+            "ChargeCycle"
+        ],
+        "SceneStart": [
+            "Efflorescence",
+            "Charge_Cycler_Acceleration"
+        ],
+    },
+    "Actions": [
+        "Henry_Pattern_1",
+        "Henry_Wax_1",
+        "Henry_Quiet_1",
+        "Henry_Counter_1",
+        "Henry_Two_1"
+    ]
+}

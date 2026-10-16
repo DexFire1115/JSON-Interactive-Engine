@@ -7,7 +7,20 @@
                 "ifelse": [
                     {
                         "queryYN": [
-                            "[b]Spend [color=50cccc]Charge[/color]?[/b]"
+                            {
+                                "concat": [
+                                    {
+                                        "getIDTag": [
+                                            {
+                                                "getSelf": [
+                                                    
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "[b] Spend [color=50cccc]Charge[/color]?[/b]"
+                                ]
+                            }
                         ]
                     },
                     [

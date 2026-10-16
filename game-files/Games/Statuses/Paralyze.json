@@ -7,7 +7,16 @@
                 "addLog": [
                     {
                         "concat": [
-                            "[b][color=ccaa50]Paralyze![/color][/b]"
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b][color=ccaa50]Paralyze![/color][/b]"
                         ]
                     }
                     

@@ -1,0 +1,99 @@
+{
+    "Name": "Charge Cycler Acceleration",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ValidateStatus-Charge": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "lte": [
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            1
+                                        ]
+                                    },
+                                    -5
+                                ]
+                            },
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Charge_Cycler_Acceleration/HasteTracker",
+                                    true
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "dset",
+                                "Statuses/Charge_Cycler_Acceleration/HasteTracker",
+                                false
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Haste",
+                                1,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Charge_Cycler_Acceleration/HasteTracker",
+                    true
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Charge",
+                    {
+                        "min": [
+                            {
+                                "getStatus": [
+                                    "ChargeCycle",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[Encounter Start] Gain 0 Charge Cycle.",
+        "When this unit consumes 5+ Charge at once, gain 1 Haste (once pers scene).",
+        "[Scene Start] Gain 1 Charge for every Charge Cycle (Max: 3)."
+    ]
+}

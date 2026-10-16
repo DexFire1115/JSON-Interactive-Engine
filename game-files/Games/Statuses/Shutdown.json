@@ -1,0 +1,77 @@
+{
+    "Name": "Feat: Shutdown",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmStatus-Sinking": [
+            {
+                "statusInflict": [
+                    "Gravity",
+                    1
+                ]
+            }
+        ],
+        "OnStagger": [
+            {
+                "setVar": [
+                    "gravityLight",
+                    {
+                        "forEvery": [
+                            {
+                                "getStatus": [
+                                    "Gravity",
+                                    0
+                                ]
+                            },
+                            3,
+                            0,
+                            3
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getVar": [
+                                    "gravityLight",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "changeLight": [
+                                {
+                                    "sub": [
+                                        0,
+                                        {
+                                            "getVar": [
+                                                "gravityLight"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "@Target"
+                            ]
+                        },
+                        {
+                            "setStatus": [
+                                "Gravity",
+                                0
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When inflicting [b][color=50cccc]Sinking[/color][/b], inflict 1 [b][color=8064ff]Gravity[/color][/b].",
+        "[b][color=ffff64][lb]On Stagger][/color][/b] Remove 1 [b][color=ffeecc]Light[/color][/b] from the target for every 3 [b][color=8064ff]Gravity[/color][/b], then remove all [b][color=8064ff]Gravity[/color][/b]."
+    ]
+}

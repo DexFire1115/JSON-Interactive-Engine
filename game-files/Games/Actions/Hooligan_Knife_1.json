@@ -1,7 +1,6 @@
 {
     "Name": "Knife Rush",
     "Cost": 2,
-    "AttackWeight": 3,
     "PreText": [
     ],
     "Dice": [

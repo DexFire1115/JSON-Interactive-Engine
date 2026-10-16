@@ -200,6 +200,7 @@ func rollCommand(args: PackedStringArray) -> int:
 func displayUnitCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
 	var unit := unitCaps(args[1])
+	if(!Functions.unitList.has(unit)): return 3
 	var unitData = Functions.unitList.get(unit).dataSet
 	if(unitData == null): return 3
 	var text := "[u]"
@@ -621,7 +622,7 @@ func damageCommand(args: PackedStringArray) -> int:
 	if(args.size() < 4): sdmg = hdmg
 	elif(!args[3].is_valid_int()): return 5
 	else: sdmg = int(args[3])
-	Functions.dealCombinedDamage([hdmg, sdmg, "Console", hdmg < 0, sdmg < 0], "Console", unit)
+	Functions.dealCombinedDamage([hdmg, sdmg, "Console", 0, 0, hdmg < 0, sdmg < 0], "Console", unit)
 	return 0
 
 func dmgVisual(unit: String, data: Array):

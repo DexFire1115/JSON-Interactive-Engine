@@ -138,7 +138,7 @@
                     "statusInflict": [
                         "Feeble",
                         2,
-                        "",
+                        "@Self",
                         true
                     ]
                 },

@@ -56,7 +56,7 @@
                     {
                         "setStatus": [
                             "ChargeCycle",
-                            1,
+                            0,
                             "@Self"
                         ]
                     },

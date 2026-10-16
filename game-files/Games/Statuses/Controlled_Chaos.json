@@ -1,0 +1,516 @@
+{
+    "Name": "Battle Ability: Controlled Chaos",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Controlled_Chaos/InflictTracker",
+                    false
+                ]
+            }
+        ],
+        "ConfirmStatus": [
+            {
+                "setVar": [
+                    "statusList",
+                    ["Feeble", "Disarm", "Fragile", "Vulnerable", "Bind", "Burn", "Bleed", "Tremor", "Sinking", "Paralyze"]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "andBool": [
+                                    {
+                                        "refCall": [
+                                            "statusList",
+                                            "has",
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "notBool": [
+                                            {
+                                                "objCall": [
+                                                    {
+                                                        "getUnitData": [
+                                                            "@Self"
+                                                        ]
+                                                    },
+                                                    "dget",
+                                                    "Statuses/Controlled_Chaos/InflictTracker",
+                                                    true
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "andBool": [
+                                    {
+                                        "notBool": [
+                                            {
+                                                "equals": [
+                                                    {
+                                                        "getVar": [
+                                                            "Target",
+                                                            ""
+                                                        ]
+                                                    },
+                                                    {
+                                                        "getSelf": [
+                                                            
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "greaterThan": [
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    1
+                                                ]
+                                            },
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "colorsArr",
+                                ["cc5050", "50cc50", "8050cc", "aa6450", "ffaa64", "cc6450", "cc5064", "cccc50", "5064cc", "ccaa50"]
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "queryYN": [
+                                        {
+                                            "concat": [
+                                                {
+                                                    "getIDTag": [
+                                                        {
+                                                            "getSelf": [
+                                                                
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                " [b]Controlled Chaos[/b]: Increase infliction by +1 and gain +3 for ",
+                                                "[b][color=",
+                                                {
+                                                    "refCall": [
+                                                        "colorsArr",
+                                                        "get",
+                                                        {
+                                                            "refCall": [
+                                                                "statusList",
+                                                                "find",
+                                                                {
+                                                                    "refCall": [
+                                                                        "statusArr",
+                                                                        "get",
+                                                                        0
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                "]",
+                                                {
+                                                    "refCall": [
+                                                        "statusArr",
+                                                        "get",
+                                                        0
+                                                    ]
+                                                },
+                                                "[/color][/b]",
+                                                "?"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitData": [
+                                                    "@Self"
+                                                ]
+                                            },
+                                            "dset",
+                                            "Statuses/Controlled_Chaos/InflictTracker",
+                                            true
+                                        ]
+                                    },
+                                    {
+                                        "statusInflict": [
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            3,
+                                            "@Self"
+                                        ]
+                                    },
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "set",
+                                            1,
+                                            {
+                                                "add": [
+                                                    {
+                                                        "refCall": [
+                                                            "statusArr",
+                                                            "get",
+                                                            1
+                                                        ]
+                                                    },
+                                                    1
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "ifelse": [
+                                            {
+                                                "equals": [
+                                                    {
+                                                        "getVar": [
+                                                            "target",
+                                                            ""
+                                                        ]
+                                                    },
+                                                    {
+                                                        "getSelf": [
+                                                            
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            [
+                                                {
+                                                    "refCall": [
+                                                        "statusArr",
+                                                        "set",
+                                                        2,
+                                                        {
+                                                            "getStatus": [
+                                                                {
+                                                                    "refCall": [
+                                                                        "statusArr",
+                                                                        "get",
+                                                                        0
+                                                                    ]
+                                                                },
+                                                                0,
+                                                                "@Self"
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        ],
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "statusArr",
+                    ["Feeble", "Disarm", "Fragile", "Vulnerable", "Bind", "Burn", "Bleed", "Tremor", "Sinking", "Paralyze"]
+                ]
+            },
+            {
+                "loop": [
+                    {
+                        "range": [
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "size"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "statName",
+                                {
+                                    "refCall": [
+                                        "statusArr",
+                                        "get",
+                                        {
+                                            "getVar": [
+                                                "j",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setVar": [
+                                "statVal",
+                                {
+                                    "getStatus": [
+                                        {
+                                            "getVar": [
+                                                "statName"
+                                            ]
+                                        },
+                                        0,
+                                        "@Self"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "equals": [
+                                        {
+                                            "getVar": [
+                                                "statName"
+                                            ]
+                                        },
+                                        "Tremor"
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setVar": [
+                                            "statVal",
+                                            {
+                                                "div": [
+                                                    {
+                                                        "getVar": [
+                                                            "statVal",
+                                                            0
+                                                        ]
+                                                    },
+                                                    2
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "andBool": [
+                                        {
+                                            "gte": [
+                                                {
+                                                    "getVar": [
+                                                        "statVal",
+                                                        0
+                                                    ]
+                                                },
+                                                5
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "CC-Buff-1",
+                                                true
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setVar": [
+                                            "CC-Buff-1",
+                                            false
+                                        ]
+                                    },
+                                    {
+                                        "ifelse": [
+                                            {
+                                                "queryYN": [
+                                                    {
+                                                        "concat": [
+                                                            {
+                                                                "getIDTag": [
+                                                                    {
+                                                                        "getSelf": [
+                                                                            
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            " Gain [b][color=ccbbaa]Safeguard[/color][/b] (y) or [b][color=ffcc50]Resolve[/color][/b] (n) from [b][color=cccccc]Controlled Chaos[/color][/b]?"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            [
+                                                {
+                                                    "statusInflict": [
+                                                        "Safeguard",
+                                                        {
+                                                            "ifelse": [
+                                                                {
+                                                                    "gte": [
+                                                                        {
+                                                                            "type_convert": [
+                                                                                {
+                                                                                    "varCall": [
+                                                                                        {
+                                                                                            "objCall": [
+                                                                                                {
+                                                                                                    "getUnitData": [
+                                                                                                        "@Self"
+                                                                                                    ]
+                                                                                                },
+                                                                                                "dget",
+                                                                                                "Class"
+                                                                                            ]
+                                                                                        },
+                                                                                        "replace",
+                                                                                        "Lvl. ",
+                                                                                        ""
+                                                                                    ]
+                                                                                },
+                                                                                3
+                                                                            ]
+                                                                        },
+                                                                        9
+                                                                    ]
+                                                                },
+                                                                [
+                                                                    2
+                                                                ],
+                                                                [
+                                                                    1
+                                                                ]
+                                                            ]
+                                                        },
+                                                        "@Self"
+                                                    ]
+                                                }
+                                            ],
+                                            [
+                                                {
+                                                    "statusInflict": [
+                                                        "Resolve",
+                                                        1,
+                                                        "@Self"
+                                                    ]
+                                                }
+                                            ]
+                                        ]
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "ifelse": [{
+                                    "andBool": [
+                                        {
+                                            "gte": [
+                                                {
+                                                    "getVar": [
+                                                        "statVal",
+                                                        0
+                                                    ]
+                                                },
+                                                9
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "CC-Buff-2",
+                                                true
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setVar": [
+                                            "CC-Buff-2",
+                                            false
+                                        ]
+                                    },
+                                    {
+                                        "addLog": [
+                                            {
+                                                "concat": [
+                                                    {
+                                                        "getIDTag": [
+                                                            {
+                                                                "getSelf": [
+                                                                    
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    " gained [b][color=cc5050]Strength[/color][/b] from [b][color=cccccc]Controlled Chaos[/color][/b]!"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "statusInflict": [
+                                            "Strength",
+                                            1,
+                                            "@Self"
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ],
+                    "j"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When you gain an Ailment through an effect you control, you may ignore your [b][color=ccbbaa]Safeguard[/color][/b].",
+        "Once per scene, when you inflict an Ailment on one or more targets, you may increase the amount inflicted by 1, and gain 3 of that same Ailment.",
+        "When you end a scene with 5 or more of an Ailment, you may gain either 1 [b][color=ccbbaa]Safeguard[/color][/b] or 1 [b][color=ffcc50]Resolve[/color][/b] at the start of the next scene. At Level 9, increase the Safeguard to 2.",
+        "When you end a scene with 9 or more of an Ailment, you gain 1 [b][color=cc5050]Strength[/color][/b] at the start of the next scene.",
+        "The ailment thresholds for these benefits are doubled for [b][color=cccc50]Tremor[/color][/b]. The above also applies for Debuffs."
+    ]
+}

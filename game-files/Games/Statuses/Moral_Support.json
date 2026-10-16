@@ -1,0 +1,112 @@
+{
+    "Name": "Battle Ability: Moral Support",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmStatus": [
+            {
+                "ifelse": [
+                    {
+                        "orBool": [
+                            {
+                                "refCall": [
+                                    "Target",
+                                    "contains",
+                                    "E"
+                                ]
+                            },
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "Target"
+                                        ]
+                                    },
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "buffSet",
+                    ["Strength", "Endurance", "Protection", "Resolve", "Haste"]
+                ]
+            },
+            {
+                "setVar": [
+                    "boonSet",
+                    ["Charge", "Aggro", "Thorns", "Safeguard", "Poise"]
+                ]
+            },
+            {
+                "dealMixed": [
+                    {
+                        "ifelse": [
+                            {
+                                "refCall": [
+                                    "boonSet",
+                                    "has",
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            [
+                                -2
+                            ],
+                            [
+                                0
+                            ]
+                        ]
+                    },
+                    {
+                        "ifelse": [
+                            {
+                                "refCall": [
+                                    "buffSet",
+                                    "has",
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            [
+                                -2
+                            ],
+                            [
+                                0
+                            ]
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Protected": [
+            {
+                "changeEmotion": [
+                    1
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

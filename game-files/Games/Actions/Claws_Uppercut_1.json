@@ -185,14 +185,14 @@
                 {
                     "statusInflict": [
                         "Bleed",
-                        3
+                        2
                     ]
                 }
             ],
             "Text": [
-                "[b][color=64ffff][lb]Check][/color][/b] If clashing against an [b][color=aaaaff]Evade[/color][/b] or [b][color=aaffff]Block[/color][/b] Die, max roll (overrides min roll effects).",
+                "[b][color=64ffff][lb]Check][/color][/b] If clashing against an [b][color=aaaaff]Evade[/color][/b] or [b][color=aaccff]Block[/color][/b] Die, max roll (overrides min roll effects).",
                 "[b][color=64ff64][lb]Clash Lose][/color][/b] Gain 1 [b][color=cc5050]Feeble[/color][/b] and 1 [b][color=aa6450]Vulnerable[/color][/b].",
-                "[b][color=ff6464][lb]Hit][/color][/b] Inflict 2 [b][color=8050cc]Fragile[/color][/b] next scene. Inflict 4 [b][color=cc5064]Bleed[/color][/b]."
+                "[b][color=ff6464][lb]Hit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b] next scene. Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
             ]
         }
     ],

@@ -29,26 +29,22 @@
     ],
     "Dice": [
         {
-            "Type": "Block",
-            "Dice": 8,
+            "Type": "BluntOffense",
+            "Dice": 6,
             "Base": 0,
             "ClashLose": [
                 {
-                    "setVar": [
-                        "Boost",
-                        {
-                            "add": [
-                                {
-                                    "getVar": [
-                                        "Boost",
-                                        0,
-                                        "@Action"
-                                    ]
-                                },
-                                1
-                            ]
-                        },
-                        "@Action"
+                    "statusInflict": [
+                        "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        1
                     ]
                 }
             ],
@@ -58,7 +54,7 @@
         },
         {
             "Type": "Block",
-            "Dice": 8,
+            "Dice": 6,
             "Base": 0,
             "ClashLose": [
                 {
@@ -73,7 +69,7 @@
                                         "@Action"
                                     ]
                                 },
-                                1
+                                2
                             ]
                         },
                         "@Action"
@@ -86,7 +82,7 @@
         },
         {
             "Type": "BluntOffense",
-            "Dice": 8,
+            "Dice": 6,
             "Base": 0,
             "Check": [
                 {
@@ -105,7 +101,7 @@
                 {
                     "statusInflict": [
                         "Tremor",
-                        2
+                        1
                     ]
                 }
             ],

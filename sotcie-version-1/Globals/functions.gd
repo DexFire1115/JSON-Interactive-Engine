@@ -46,11 +46,13 @@ func jFunc(method: String, args: Array) -> Variant:
 	var funcData := Dictionary(fileTree.dget("Functions/" + method, {})).duplicate_deep()
 	var argPairs = {}
 	var argNames = funcData["Args"]
+	var defaults = funcData.get_or_add("Defaults", [])
 	if(!argNames is Array): return null
-	if(args.size() < argNames.size()): return null
-	for i in args.size():
-		argPairs[argNames[i]] = args[i]
+	if(args.size() + defaults.size() < argNames.size()): return null
+	for i in argNames.size():
+		argPairs[argNames[i]] = args[i] if(i < args.size())else defaults[i - args.size()]
 	if(argPairs.size() == 1): argPairs["_"] = "_"
+	#print(argPairs)
 	return await sequence(method, funcData["Sequence"], argPairs)
 
 func propCall(property: String, method: String, ...args: Array) -> Variant:
@@ -103,6 +105,9 @@ func sequence(stackName: String, calls := [], args := {}):
 		setVar(arg, args[arg])
 	var retval = ""
 	var val = ""
+	print("/".join(stack))
+	print("  > ", calls.map(func(element): 
+		return element if(!element is Dictionary)else element.keys()[0]))
 	#print(references.keys())
 	for method in calls:
 		val = await isNestedArg(method)
@@ -272,31 +277,7 @@ func andBool(b1: bool, b2: bool) -> bool:
 
 func orBool(b1: bool, b2: bool) -> bool:
 	return b1 || b2
-
-func min(v1: int, v2: int) -> int:
-	return min(v1, v2)
-
-func minSet(...args: Array) -> Variant:
-	if(args.is_empty()): return null
-	var minV = args[0]
-	var index = 1
-	while(index < args.size()):
-		minV = min(args[index - 1], args[index])
-		index += 1
-	return minV
 	
-func max(v1: int, v2: int) -> int:
-	return max(v1, v2)
-
-func maxSet(...args: Array) -> Variant:
-	if(args.is_empty()): return null
-	var maxV = args[0]
-	var index = 1
-	while(index < args.size()):
-		maxV = max(args[index - 1], args[index])
-		index += 1
-	return maxV
-
 func safeDict(input: Array, returnIndex := 0) -> Dictionary:
 	for d in input:
 		if(d.size() == 1 && d.keys()[0] is String):
@@ -312,6 +293,15 @@ func joinArr(arr1: Array, arr2: Array) -> Array:
 
 func passArr(...arr: Array) -> Array:
 	return arr
+
+func lambda(methodname: String, calls: Array, ...argnames: Array) -> Callable:
+	return func(...args: Array): return await sequence(methodname, calls.duplicate_deep(), pairArrays(argnames, args))
+
+func pairArrays(keys: Array, values: Array) -> Dictionary:
+	var dict := {}
+	for i in keys.size():
+		dict.set(keys[i], null if(i >= values.size())else values[i])
+	return dict
 
 func getUnit(unit := "") -> String:
 	return getSingleTarget(unit)
@@ -350,17 +340,17 @@ func consoleCommand(command: String, ...args: Array):
 func dealDamage(amt: int, target := "", source := "") -> Array:
 	target = getSingleTarget(target)
 	if(target.is_empty()): return [-1, -1, -1, -1, ""]
-	return await dealCombinedDamage([amt, 0, source], "", target)
+	return await dealCombinedDamage([amt, 0, source, 0, 0], "", target)
 
 func dealStagger(amt: int, target := "", source := "") -> Array:
 	target = getSingleTarget(target)
 	if(target.is_empty()): return [-1, -1, -1, -1, ""]
-	return await dealCombinedDamage([0, amt, source], "", target)
+	return await dealCombinedDamage([0, amt, source, 0, 0], "", target)
 
 func dealMixed(hdmg: int, sdmg: int, target := "", source := "") -> Array:
 	target = getSingleTarget(target)
 	if(target.is_empty()): return [-1, -1, -1, -1, ""]
-	return await dealCombinedDamage([hdmg, sdmg, source], "", target)
+	return await dealCombinedDamage([hdmg, sdmg, source, 0, 0], "", target)
 
 func dealCombinedDamage(dmgArr: Array, caster := "", target := "") -> Array:
 	var dataArr := [-1, -1, -1, -1, ""]
@@ -371,9 +361,11 @@ func dealCombinedDamage(dmgArr: Array, caster := "", target := "") -> Array:
 	var unitdata := getUnitData(target)
 	if(unitList.has(caster)): await readDieTag("ConfirmDamage", caster, {"dmgArr": dmgArr})
 	await readDieTag("ValidateDamage", target, {"dmgArr": dmgArr})
-	if(dmgArr.size() > 3): # Heal/Dmg Clamp
-		dmgArr[0] = clampDamage(dmgArr[0], dmgArr[3])
-		dmgArr[1] = clampDamage(dmgArr[1], dmgArr[4] if(dmgArr.size() > 4)else dmgArr[3])
+	dmgArr[0] += dmgArr[3]
+	dmgArr[1] += dmgArr[4]
+	if(dmgArr.size() > 5): # Heal/Dmg Clamp
+		dmgArr[0] = clampDamage(dmgArr[0], dmgArr[5])
+		dmgArr[1] = clampDamage(dmgArr[1], dmgArr[6] if(dmgArr.size() > 6)else dmgArr[5])
 	dataArr[0] = unitdata.safeGet("Attributes/CurrentHealth", -1)
 	dataArr[1] = unitdata.safeGet("Attributes/CurrentStagger", -1)
 	dataArr[2] = min(max(0, dataArr[0] - dmgArr[0]), unitdata.safeGet("Attributes/MaxHealth", -1))
@@ -434,8 +426,8 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 				{"statusArr": statusArr, "Target": target})
 			await readDieTag("ConfirmStatus-" + statusArr[0], caster, 
 				{"statusArr": statusArr, "Target": target})
-		await readDieTag("ValidateStatus", target, {"statusArr": statusArr})
-		await readDieTag("ValidateStatus-" + statusArr[0], target, {"statusArr": statusArr})
+		await readDieTag("ValidateStatus", target, {"statusArr": statusArr, "Source": caster})
+		await readDieTag("ValidateStatus-" + statusArr[0], target, {"statusArr": statusArr, "Source": caster})
 		if(statusArr[0].is_empty()): return
 		status = statusArr[0]
 		amt = statusArr[1] + statusArr[2]
@@ -446,6 +438,7 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 	
 	targetData.instantiate(statusPath, {})
 	var statusData = DataTree.new(targetData.dget(statusPath, {}))
+	var statusFile = DataTree.new(fileTree.dget(statusPath, {}))
 	statusData.dset("File", statusPath)
 	var stackName := "Stack" if(!nextScene) else "NextStack"
 	statusData.dset(stackName, amt)
@@ -468,7 +461,7 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 		if(unitList.has(caster)):
 			await readDieTag("Caused", caster, {"Target": target})
 			await readDieTag("Caused-" + status, caster, {"Target": target})
-	if(statusData.dget("Stack", 0) < statusData.dget("MinStack", 1) && statusData.dget("NextStack", 0) <= 0): 
+	if(statusData.dget("Stack", 0) < statusFile.dget("MinStack", 1) && statusData.dget("NextStack", 0) <= 0): 
 		removeStatus(status, target)
 
 func removeStatus(status: String, target := ""):
@@ -703,8 +696,10 @@ func nextTurn(dice := "", isProactive := true):
 
 func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	var choiceDict := {"[b][color=ff6464]No Contest[/color][/b]": "No"}
-	if(!(getNextUnitSpeedDie(unit, false).is_empty() || unitList[unit].savedDice.is_empty())):
-		choiceDict.set("[b][color=64aaff]Use Saved Die[/color][/b]", "SavedDie")
+	if(!(getNextUnitSpeedDie(unit, false).is_empty())):
+		choiceDict.set("[b][color=64aaff]Use Held Die[/color][/b]", "HeldDie")
+	#if(!(getNextUnitSpeedDie(unit, false).is_empty() || unitList[unit].savedDice.is_empty())):
+	#	choiceDict.set("[b][color=64aaff]Use Saved Die[/color][/b]", "SavedDie")
 	await readUnitTag("InterceptCheck", unit, {
 		"Self": unit, 
 		"Target": proactive,
@@ -859,6 +854,8 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	}
 	setUnitProp(u1, "target", u2[0])
 	setUnitProp(u1, "action", u1id)
+	await readActionTag("Eminence", u1)
+	await readActionTag("Proactive", u1)
 	await readActionTag("OnUse", u1)
 	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0) 
 	&& getAction(u1id, "data/Limit", 0) > 0):
@@ -867,6 +864,8 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	for i in u2.size():
 		setUnitProp(u2[i], "target", u1)
 		setUnitProp(u2[i], "action", u2id[i])
+		await readActionTag("Eminence", u2[i])
+		await readActionTag("Reactive", u2[i])
 		await readActionTag("OnUse", u2[i])
 		if(getAction(u2id[i], "data/Uses", 0) >= getAction(u2id[i], "data/Limit", 0) 
 		&& getAction(u2id[i], "data/Limit", 0) > 0):
@@ -1039,7 +1038,7 @@ func createAction(unit: String, action: String) -> int:
 	var isIntercept = action.begins_with("*")
 	if(isIntercept): action = action.substr(1)
 	var diceArr = createDiceArr(unit, action)
-	if(diceArr.is_empty()): return -1
+	#if(diceArr.is_empty()): return -1
 	actionID += 1
 	var actionTree = DataTree.new()
 	var path = "*Action" + str(actionID)
@@ -1152,26 +1151,28 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 	if(isOffense(atkDice)): # Offense win
 		var res = await getResistance(defUnit, atkType)
 		var dmg := int(atkRoll[0])
-
 		if(dmgType(defDice) == "Block"): # Offense beats Block
 			dmg -= defRoll[0]
-		var dmgArr := [dmg + res[0], dmg + res[1], atkType, dmg < 0, dmg < 0]
+		var stg := dmg
+		if(dmgType(defDice) == "Evade"): # Offense beats Evade
+			stg -= defRoll[0]
+		var dmgArr := [dmg, stg, atkType, res[0], res[1], dmg < 0, dmg < 0]
 		dealCombinedDamage(dmgArr, atkUnit, defUnit)
 		await readDieTag("Hit", atkUnit)
-		if(atkRoll[4]):
+		if(atkRoll[3]):
 			await readDieTag("Crit", atkUnit)
-		await readUnitTag("HitReceived", defUnit, {"isCrit": atkRoll[4]})
+		await readUnitTag("HitReceived", defUnit, {"isCrit": atkRoll[3]})
 
 	elif(atkType == "Block"): # Block win
 		var dmg := int(atkRoll[0] - defRoll[0])
-		var dmgArr := [0, dmg, atkType, dmg < 0, dmg < 0]
+		var dmgArr := [0, dmg, atkType, 0, 0, dmg < 0, dmg < 0]
 		dealCombinedDamage(dmgArr, atkUnit, defUnit)
 	
 	else:
 		if(isOffense(defDice)): # Evade evades Offense
 			await readDieTag("Evade", atkUnit)
 		else: # Evade beats Evade/Block
-			var dmgArr := [0, -atkRoll[0], atkType, true]
+			var dmgArr := [0, -atkRoll[0], atkType, 0, 0, true]
 			dealCombinedDamage(dmgArr, atkUnit, atkUnit)
 	
 	if(!d1Data.isEmpty()): 
@@ -1250,8 +1251,8 @@ func clashEval(d1: DataTree, d2: DataTree) -> Array:
 	if(d1Result * d2Result != 0):
 		d1Clash = (sign(d2Result - d1Result) + 2)
 		d2Clash = (sign(d1Result - d2Result) + 2)
-	d1.dset("ClashVal", d1Clash)
-	d2.dset("ClashVal", d2Clash)
+	if!(d1.isEmpty()): d1.dset("ClashVal", d1Clash)
+	if(!d2.isEmpty()): d2.dset("ClashVal", d2Clash)
 	return [int(d1Clash), int(d2Clash)]
 
 func rollDieEmbed(unit: String, die: DataTree) -> Array:

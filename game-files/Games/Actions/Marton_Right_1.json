@@ -51,7 +51,7 @@
         },
         {
             "Type": "SlashOffense",
-            "Dice": 6,
+            "Dice": 8,
             "Base": 0,
             "ClashWin": [
                 {
