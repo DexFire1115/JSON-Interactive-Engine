@@ -1,0 +1,34 @@
+{
+    "Name": "Sustained Assault Doctrine",
+    "Cost": 0,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Strength",
+                2,
+                {
+                    "queryUnit": [
+                        "Give an ally 1 [b][color=cc5050]Strength[/color][/b]:"
+                    ]
+                }
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Give an ally 1 [b][color=cc5050]Strength[/color][/b]."
+    ],
+    "Dice": [
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Charge",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+    ]
+}

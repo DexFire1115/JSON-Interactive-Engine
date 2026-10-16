@@ -62,20 +62,35 @@
                 "Applied-Staggered",
                 "SceneStartPost"
             ]
+        },
+        "Claws_Dont": {
+            "File": "Statuses/Claws_Dont",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "ValidateDamage",
+                "Removed-Staggered",
+                "SceneStart",
+                "SceneStartPost",
+                "SceneEnd"
+            ]
         }
     },
     "Conditions": {
         "SceneEnd": [
             "Claws_Combative",
-            "Claws_Delayed"
+            "Claws_Delayed",
+            "Claws_Dont"
         ],
         "SceneStart": [
             "Claws_Come",
-            "Claws_Fast"
+            "Claws_Fast",
+            "Claws_Dont"
         ],
         "SceneStartPost": [
             "Claws_Delayed",
-            "Claws_Fast"
+            "Claws_Fast",
+            "Claws_Dont"
         ],
         "OnUse": [
             "Claws_Delayed"
@@ -94,6 +109,12 @@
         ],
         "Applied-Staggered": [
             "Claws_Fast"
+        ],
+        "Removed-Staggered": [
+            "Claws_Dont"
+        ],
+        "ValidateDamage": [
+            "Claws_Dont"
         ]
     },
     "Actions": [

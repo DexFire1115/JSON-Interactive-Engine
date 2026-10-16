@@ -1,0 +1,50 @@
+{
+    "Name": "[Mod] Frightening Eminence",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "BeforeDie": [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "getStatus": [
+                                    "Sinking",
+                                    0
+                                ]
+                            },
+                            6
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "addLog": [
+                    "[b][color=64ffaa][lb]Eminence][/color][/b]: Target [b]Power[/b] -1."
+                ]
+            },
+            {
+                "changePower": [
+                    -1,
+                    {
+                        "getUnitProp": [
+                            "",
+                            "dieData"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "AfterUse": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

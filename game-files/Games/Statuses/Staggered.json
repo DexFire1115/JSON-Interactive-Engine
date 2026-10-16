@@ -100,26 +100,15 @@
                 "refCall": [
                     "dmgArr",
                     "set",
-                    0,
+                    3,
                     {
-                        "sub": [
+                        "max": [
+                            0,
                             {
                                 "refCall": [
-                                    "dmgArr",
+                                    "temp",
                                     "get",
                                     0
-                                ]
-                            },
-                            {
-                                "min": [
-                                    0,
-                                    {
-                                        "refCall": [
-                                            "temp",
-                                            "get",
-                                            0
-                                        ]
-                                    }
                                 ]
                             }
                         ]
@@ -130,26 +119,15 @@
                 "refCall": [
                     "dmgArr",
                     "set",
-                    1,
+                    4,
                     {
-                        "sub": [
+                        "max": [
+                            0,
                             {
                                 "refCall": [
-                                    "dmgArr",
+                                    "temp",
                                     "get",
                                     1
-                                ]
-                            },
-                            {
-                                "min": [
-                                    0,
-                                    {
-                                        "refCall": [
-                                            "temp",
-                                            "get",
-                                            1
-                                        ]
-                                    }
                                 ]
                             }
                         ]

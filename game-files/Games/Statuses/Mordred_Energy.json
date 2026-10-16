@@ -112,10 +112,31 @@
                     ]
                 ]
             }
+        ],
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "Charge",
+                    {
+                        "min": [
+                            {
+                                "getStatus": [
+                                    "ChargeCycle",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
         ]
     },
     "Text": [
         "Your deployed non-counter Defensive Dice gain +1 [b][color=ffffff]Power[/color][/b].",
-        "[b][color=ffffff][lb]Scene End][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b] for every saved Die that's gone unused."
+        "[b][color=ffffff][lb]Scene End][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b] for every saved Die that's gone unused.",
+        "[b][color=ffffff][lb]Scene Start][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b] for every [b][color=50ccaa]Charge Cycle[/color][/b] (Max: 3)."
     ]
 }

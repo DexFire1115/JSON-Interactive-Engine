@@ -151,8 +151,18 @@
                     ]
                 }
             ],
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Strength",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
             "Text": [
                 "[b][color=64ffff][lb]Check][/color][/b] If clashing against an [b][color=ffaaaa]Offense[/color][/b] Die, final die gains +4 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=6464ff][lb]On Evade][/color][/b] Gain 2 [b][color=cc5050]Strength[/color][/b]."
             ]
         },
         {
@@ -168,13 +178,13 @@
                 }
             ],
             "Text": [
-                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc5064]Bleed[/color][/b]."
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
             ]
         },
         {
             "Type": "SlashOffense",
             "Dice": 6,
-            "Base": 0,
+            "Base": -2,
             "Check": [
                 {
                     "changePower": [
@@ -197,7 +207,7 @@
                 }
             ],
             "Text": [
-                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc5064]Bleed[/color][/b]."
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
             ]
         }
     ],

@@ -1,16 +1,31 @@
 {
     "Units": {
         "A1": {
-            "Unit": "Mordred"
+            "Unit": "CAD"
         },
         "A2": {
+            "Unit": "Lilli"
+        },
+        "A3": {
+            "Unit": "Henry"
+        },
+        "A4": {
+            "Unit": "Eldric"
+        },
+        "A5": {
+            "Unit": "Marton"
+        },
+        "A6": {
             "Unit": "VileiColparino"
         },
+        "A7": {
+            "Unit": "Mordred"
+        },
         "E1": {
-            "Unit": "RAAite"
+            "Unit": "HooliganSuper"
         },
         "E2": {
-            "Unit": "RAAite"
+            "Unit": "HooliganSuper"
         }
     },
     "Scene": 0,

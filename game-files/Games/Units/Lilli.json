@@ -1,0 +1,69 @@
+{
+    "Name": "Lilli Nivia",
+    "Color": "#57759e",
+    "Type": "Human",
+    "Class": "Lvl. 1",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 1,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+        "Controlled_Chaos": {
+            "File": "Statuses/Controlled_Chaos",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "SceneEnd",
+                "SceneStart",
+                "ConfirmStatus"
+            ]
+        },
+        "Shutdown": {
+            "File": "Statuses/Shutdown",
+            "Stack": 1,
+            "isPassive": true,
+            "Conditions": [
+                "ConfirmStatus-Sinking",
+                "OnStagger"
+            ]
+        }
+    },
+    "Conditions": {
+        "SceneEnd": [
+            "Controlled_Chaos"
+        ],
+        "SceneStart": [
+            "Controlled_Chaos"
+        ],
+        "ConfirmStatus": [
+            "Controlled_Chaos"
+        ],
+        "ConfirmStatus-Sinking": [
+            "Shutdown"
+        ],
+        "OnStagger": [
+            "Shutdown"
+        ],
+    },
+    "Actions": [
+        "Lilli_Forecast_1",
+        "Lilli_Flash_1",
+        "Lilli_Pattering_1",
+        "Lilli_Tempestuous_1"
+    ]
+}

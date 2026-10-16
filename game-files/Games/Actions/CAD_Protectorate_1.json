@@ -1,0 +1,88 @@
+{
+    "Name": "Protectorate Protocol",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Module_Inspirational",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Protection",
+                1,
+                {
+                    "queryUnit": [
+                        "Give 1 [b][color=5080cc]Protection[/color][/b] to 1 Ally:"
+                    ]
+                }
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=64ffaa][lb]Eminence][/color][/b] Whenever you would gain an [b][color=aa64ff]Emotion Point[/color][/b] from clashing, an ally of your choice gains them instead.",
+        "[b][color=ffffff][lb]On Use][/color][/b] Give 1 [b][color=5080cc]Protection[/color][/b] to 1 Ally."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 3,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getAction": [
+                                {
+                                    "getVar": [
+                                        "Action"
+                                    ]
+                                },
+                                "data/Intercept",
+                                false
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +2 if this skill intercepted the opposing attack.",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Safeguard",
+                1,
+                {
+                    "queryUnit": [
+                        "Give another ally 1 [b][color=ccbbaa]Safeguard[/color][/b]:"
+                    ]
+                }
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Give another ally 1 [b][color=ccbbaa]Safeguard[/color][/b]."
+    ],
+}

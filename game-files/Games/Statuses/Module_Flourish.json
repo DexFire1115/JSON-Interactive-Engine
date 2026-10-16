@@ -1,0 +1,116 @@
+{
+    "Name": "[Mod] Flourish After Use",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Applied-Module_Flourish": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Module_Flourish/NetTracker",
+                    0
+                ]
+            }
+        ],
+        "BeforeDie": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Module_Flourish/NetTracker",
+                    {
+                        "sub": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Module_Flourish/NetTracker",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ClashWin": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/Module_Flourish/NetTracker",
+                    {
+                        "add": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Module_Flourish/NetTracker",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            }
+        ],
+        "AfterUse": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Module_Flourish/NetTracker",
+                                    -1
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "[b][color=ffffff][lb]After Use][/color][/b]: All dice won clash! +1 [b][color=aa64ff]Emotion Point[/color][/b] and +3 [b][color=ffff64]Stagger[/color][/b]."
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

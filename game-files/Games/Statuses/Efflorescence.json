@@ -1,0 +1,53 @@
+{
+    "Name": "Battle Ability: Efflorescence",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "changeEmotion": [
+                    {
+                        "ifelse": [
+                            {
+                                "gte": [
+                                    {
+                                        "type_convert": [
+                                            {
+                                                "varCall": [
+                                                    {
+                                                        "objCall": [
+                                                            {
+                                                                "getUnitData": [
+                                                                    "@Self"
+                                                                ]
+                                                            },
+                                                            "dget",
+                                                            "Class"
+                                                        ]
+                                                    },
+                                                    "replace",
+                                                    "Lvl. ",
+                                                    ""
+                                                ]
+                                            },
+                                            3
+                                        ]
+                                    },
+                                    13
+                                ]
+                            },
+                            [
+                                3
+                            ],
+                            [
+                                2
+                            ]
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

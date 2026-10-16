@@ -1,0 +1,151 @@
+{
+    "Name": "Flash of Lightning",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Poise",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "setVar": [
+                "Boost",
+                0,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "Boost",
+                        {
+                            "add": [
+                                {
+                                    "getVar": [
+                                        "Boost",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                2
+                            ]
+                        },
+                        "@Action"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Boost the [b][color=ffffff]Power[/color][/b] of final Die by 2."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getVar": [
+                                "Boost",
+                                0,
+                                "@Action"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "setVar": [
+                        "targetSinking",
+                        {
+                            "getStatus": [
+                                "Sinking",
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        -3
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        {
+                            "getVar": [
+                                "targetSinking",
+                                0
+                            ]
+                        },
+                        "@Self"
+                    ]
+                },
+                {
+                    "ifelse": [
+                        {
+                            "equals": [
+                                {
+                                    "getVar": [
+                                        "targetSinking",
+                                        0
+                                    ]
+                                },
+                                3
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Strength",
+                                    1,
+                                    "@Self",
+                                    true
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Paralyze",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Absorb up to 3 [b][color=5064cc]Sinking[/color][/b] from target. If 3 [b][color=cc5050]Sinking[/color][/b] was absorbed this way, gain 1 [b][color=5064cc]Strength[/color][/b] next scene.",
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=ccaa50]Paralyze[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Charge",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+    ]
+}

@@ -68,7 +68,16 @@
             "Type": "Evade",
             "Dice": 8,
             "Base": 0,
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        1
+                    ]
+                }
+            ],
             "Text": [
+                "[b][color=6464ff][lb]On Evade][/color][/b] Inflict 1 [b][color=5064cc]Sinking[/color][/b].",
             ]
         }
     ],

@@ -1,0 +1,215 @@
+{
+    "Args": [
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "Self",
+                {
+                    "getVar": [
+                        ".Self"
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "amt",
+                {
+                    "queryInt": [
+                        "[b]Plummy Tune: Spend 0~3 [color=aa64ff]Emotion Points[/color].[/b]",
+                        {
+                            "range": [
+                                {
+                                    "min": [
+                                        {
+                                            "add": [
+                                                {
+                                                    "objCall": [
+                                                        {
+                                                            "getUnitData": [
+                                                                "@Self"
+                                                            ]
+                                                        },
+                                                        "dget",
+                                                        "Attributes/EmotionPoints",
+                                                        0
+                                                    ]
+                                                },
+                                                1
+                                            ]
+                                        },
+                                        4
+                                    ]
+                                }
+                            ]
+                        },
+                        0
+                    ]
+                }
+            ],
+        },
+        {
+            "changeEmotion": [
+                {
+                    "sub": [
+                        0,
+                        {
+                            "getVar": [
+                                "amt",
+                                0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "getVar": [
+                                "amt",
+                                0
+                            ]
+                        },
+                        0
+                    ]
+                },
+                [
+                    "return"
+                ]
+            ]
+        },
+        {
+            "setVar": [
+                "foe",
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getSelf": [
+                                        
+                                    ]
+                                },
+                                "contains",
+                                "A"
+                            ]
+                        },
+                        [
+                            "E"
+                        ],
+                        [
+                            "A"
+                        ]
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "inflictArr",
+                {
+                    "varCall": [
+                        {
+                            "propCall": [
+                                "unitList",
+                                "keys"
+                            ]
+                        },
+                        "filter",
+                        {
+                            "lambda": [
+                                "findFoes",
+                                [
+                                    {
+                                        "varCall": [
+                                            {
+                                                "getVar": [
+                                                    "x",
+                                                    ""
+                                                ]
+                                            },
+                                            "contains",
+                                            {
+                                                "getVar": [
+                                                    ".foe",
+                                                    "_"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "x"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "refCall": [
+                                "inflictArr",
+                                "size"
+                            ]
+                        },
+                        1
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "amt",
+                            {
+                                "add": [
+                                    {
+                                        "getVar": [
+                                            "amt",
+                                            0
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "getVar": [
+                        "inflictArr",
+                        []
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Tremor",
+                            {
+                                "getVar": [
+                                    "amt",
+                                    0
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "i"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "i"
+            ]
+        }
+    ]
+}

@@ -37,16 +37,20 @@
             "isPassive": true,
             "Conditions": [
                 "Check",
-                "SceneEnd"
+                "SceneEnd",
+                "SceneStart"
             ]
         },
         "ChargeCycle": {
             "File": "Statuses/ChargeCycle",
-            "Stack": 1,
+            "Stack": 0,
+            "ChargeTracker": 0,
+            "AlterState": false,
             "Conditions": [
+                "Applied-ChargeCycle",
                 "ChargeAdvantage",
                 "ValidateStatus-Charge",
-                "SceneStart"
+                "ValidateStatus-ChargeCycle"
             ]
         },
     },
@@ -54,14 +58,20 @@
         "Check": [
             "Mordred_Energy"
         ],
+        "Applied-ChargeCycle": [
+            "ChargeCycle"
+        ],
         "ChargeAdvantage": [
             "ChargeCycle"
         ],
         "ValidateStatus-Charge": [
             "ChargeCycle"
         ],
-        "SceneStart": [
+        "ValidateStatus-ChargeCycle": [
             "ChargeCycle"
+        ],
+        "SceneStart": [
+            "Mordred_Energy"
         ],
         "SceneStartPost": [
             "Mordred_Retort"

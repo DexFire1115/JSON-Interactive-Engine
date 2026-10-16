@@ -14,13 +14,7 @@
                                 "Power",
                                 0
                             ]
-                        },
-                        {
-                            "getVar": [
-                                "Base",
-                                0
-                            ]
-                        },
+                        }
                     ]
                 }
             ]
@@ -35,49 +29,60 @@
                                 "Power",
                                 0
                             ]
-                        },
-                        {
-                            "getVar": [
-                                "Base",
-                                0
-                            ]
-                        },
+                        }
                     ]
                 }
             ]
         },
         {
-            "ifelse": [
+            "add": [
                 {
-                    "greaterThan": [
+                    "ifelse": [
                         {
-                            "getVar": [
-                                "r1"
+                            "greaterThan": [
+                                {
+                                    "abs": [
+                                        {
+                                            "getVar": [
+                                                "r1"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "abs": [
+                                        {
+                                            "getVar": [
+                                                "r2"
+                                            ]
+                                        }
+                                    ]
+                                }
                             ]
                         },
-                        {
-                            "getVar": [
-                                "r2"
-                            ]
-                        },
+                        [
+                            {
+                                "getVar": [
+                                    "r1"
+                                ]
+                            },
+                        ],
+                        [
+                            {
+                                "getVar": [
+                                    "r2"
+                                ]
+                            },
+                        ]
                     ]
                 },
-                [
-                    {
-                        "getVar": [
-                            "r1"
-                        ]
-                    },
-                ],
-                [
-                    {
-                        "getVar": [
-                            "r2"
-                        ]
-                    },
-                ]
+                {
+                    "getVar": [
+                        "Base",
+                        0
+                    ]
+                }
             ]
-        },
-        "return"
+        }
     ]
 }
