@@ -150,6 +150,13 @@
                 3,
                 "@Self"
             ]
+        },
+        {
+            "statusInflict": [
+                "Henry_Two_Duality",
+                1,
+                "@Self"
+            ]
         }
     ],
     "PostText": [

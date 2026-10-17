@@ -10,6 +10,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 @export var usedList: Dictionary[String, int]
 @export var fileTree := DataTree.new()
 @export var actionID: int = 0
+@export var switches: Dictionary[String, bool]
 
 # Temporary Function Vars
 @export var references: Dictionary[String, Variant] = {}
@@ -105,9 +106,9 @@ func sequence(stackName: String, calls := [], args := {}):
 		setVar(arg, args[arg])
 	var retval = ""
 	var val = ""
-	print("/".join(stack))
-	print("  > ", calls.map(func(element): 
-		return element if(!element is Dictionary)else element.keys()[0]))
+	#print("/".join(stack))
+	#print("  > ", calls.map(func(element): 
+	#	return element if(!element is Dictionary)else element.keys()[0]))
 	#print(references.keys())
 	for method in calls:
 		val = await isNestedArg(method)
@@ -619,8 +620,8 @@ func nextTurn(dice := "", isProactive := true):
 	var actionList := []
 	if(!dice.contains("*")):
 		actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
-	var optionInts := [0
-	]
+	var optionInts := [0]
+	var defaultCount := 1
 	if(isProactive):
 		actionList.push_front(
 			"*[b][color=ff6480]Void Speed Die[/color][/b]" if(isSavedDice)
@@ -633,6 +634,7 @@ func nextTurn(dice := "", isProactive := true):
 			optionInts.append(1)
 		else: canDeploy = false
 		actionList.push_front("*[b][color=ff6464]No Contest[/color][/b]")
+	defaultCount = optionInts.size()
 	for i in range(optionInts.size(),actionList.size()):
 		if(isUsable(unitData, DataTree.new(fileTree.safeGet("Actions/" + actionList[i], 
 			TYPE_DICTIONARY)))): optionInts.append(i)
@@ -666,6 +668,7 @@ func nextTurn(dice := "", isProactive := true):
 	
 	removeSpeedDice(dice)
 	var actionChoice: String = actionList[answer]
+	if(switches["skillUseDisp"]): EventBus.emit_signal("skillListDisplay", unitName, actionList, answer - defaultCount)
 	var actionData := DataTree.new(fileTree.safeGet("Actions/" + actionChoice, TYPE_DICTIONARY))
 	changeLight(-actionData.dget("Cost") , unitName)
 	if(actionData.has("Emotion")): changeEmotion(-actionData.dget("Emotion") , unitName)
@@ -680,13 +683,20 @@ func nextTurn(dice := "", isProactive := true):
 		EventBus.emit_signal("targetListDisplay", targetList)
 		answer = await queryInt("", range(targetList.size()), 0)
 		skillTargets.set(targetList[answer], "")
+	var interceptCount := 0
 	for u in unitList.keys():
 		if(skillTargets.keys().has(u) || u == unitName): continue
 		var interceptArr := await interceptCheck(u, unitName, skillTargets.keys())
 		if(interceptArr[0]):
 			skillTargets.erase(interceptArr[1])
 			skillTargets.set(u, "")
-			break
+			await readUnitTag("Protected", interceptArr[1], {
+				"Self": interceptArr[1], 
+				"Target": unitName,
+				"Interceptor": u
+			})
+			interceptCount += 1
+		if(interceptCount >= weight): break
 	for u in skillTargets:
 		var targetDie := getNextUnitSpeedDie(u)
 		if(targetDie.is_empty()): targetDie = getNextUnitSpeedDie(u, false)
@@ -714,6 +724,7 @@ func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 		text += choiceDict.keys()[o]
 		addLog(text)
 	var answer = choiceDict.values()[await queryInt("", optionInts, 0)]
+	if(answer == "No"): return [false, "No"]
 	
 	var interceptUnit := ""
 	if(reactives.size() == 1): interceptUnit = reactives[0]
@@ -728,7 +739,7 @@ func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 		"Target": proactive,
 		"answerArr": answerArr
 	})
-	await readUnitTag("ValidateIntercept", unit, {
+	await readUnitTag("ValidateIntercept", proactive, {
 		"Self": proactive, 
 		"Target": unit,
 		"answerArr": answerArr
@@ -854,6 +865,9 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	}
 	setUnitProp(u1, "target", u2[0])
 	setUnitProp(u1, "action", u1id)
+	for i in u2.size():
+		setUnitProp(u2[i], "target", u1)
+		setUnitProp(u2[i], "action", u2id[i])
 	await readActionTag("Eminence", u1)
 	await readActionTag("Proactive", u1)
 	await readActionTag("OnUse", u1)
@@ -862,8 +876,6 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		await readActionTag("Exhaust", u1)
 	moveCounterDice(u1id)
 	for i in u2.size():
-		setUnitProp(u2[i], "target", u1)
-		setUnitProp(u2[i], "action", u2id[i])
 		await readActionTag("Eminence", u2[i])
 		await readActionTag("Reactive", u2[i])
 		await readActionTag("OnUse", u2[i])
@@ -872,7 +884,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			await readActionTag("Exhaust", u2[i])
 		moveCounterDice(u2id[i])
 	while(!(u1dice.is_empty() && u2dice.all(isEmpty))):
-		if(u1dice.is_empty()): await afterSkillAW(u1, u2, clashData)
+		if(u1dice.is_empty()): await afterSkillAWProactive(u1, u2, clashData)
 		var u1Recycle = true
 		var u1Store = !u1dice.is_empty()
 		var u1EmoState = true
@@ -882,7 +894,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		if(!d1.isEmpty()): await readDieTag("BeforeDie", u1)
 		for i in u2.size():
 			setUnitProp(u1, "target", u2[i])
-			if(u2dice[i].is_empty()): await afterSkillAW(u1, u2, clashData)
+			if(u2dice[i].is_empty()): await afterSkill(u1, u2[i], clashData, false)
 			var d2 := DataTree.new({} if(u2dice[i].is_empty()) else 
 			getDiceData(u2dice[i].front(), u2id[i]).duplicate_deep())
 			setUnitProp(u1, "dieData", d1)
@@ -908,7 +920,6 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		elif(!u1Recycle): u1dice.pop_front()
 
 	await afterSkillAW(u1, u2, clashData)
-	await afterSkillAW(u1, u2, clashData)
 	var u1Emotion = getUnitData(u1).safeGet("Attributes/EmotionPoints", -1)
 	consoleCommand("emotionDisplay", u1, [clashData["u1oldEmotion"], u1Emotion])
 	for i in u2.size():
@@ -927,13 +938,31 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 func isEmpty(arr: Array):
 	return arr.is_empty()
 
+func afterSkillAWProactive(u1: String, u2: Array, data: Dictionary):
+	if(data["a1Finished?"]): return
+	for i in u2.size():
+		var u2Health = getUnitData(u2[i]).safeGet("Attributes/CurrentHealth", -1)
+		if(u2Health == 0 && data["u2oldHealth"][i] > 0): 
+			setUnitProp(u1, "target", u2[i])
+			await readActionTag("OnKill", u1)
+	for i in u2.size():
+		var u2Stagger = getUnitData(u2[i]).safeGet("Attributes/CurrentStagger", -1)
+		if(u2Stagger == 0 && data["u2oldStagger"][i] > 0):
+			setUnitProp(u1, "target", u2[i])
+			await readActionTag("OnStagger", u1)
+	setUnitProp(u1, "target", u2[0])
+	await readActionTag("AfterUse", u1)
+	for d in getAction(getUnitProp(u1, "action"), "data/Autosave", []):
+		unitList[u1].savedDice.push_back(d)
+	data["a1Finished?"] = true
+
 func afterSkillAW(u1: String, u2: Array, data: Dictionary):
 	var subdata := data.duplicate_deep()
+	afterSkillAWProactive(u1, u2, data)
 	for i in u2.size():
 		subdata["u2oldHealth"] = data["u2oldHealth"][i]
 		subdata["u2oldStagger"] = data["u2oldStagger"][i]
 		subdata["a2Finished?"] = data["a2Finished?"][i]
-		await afterSkill(u1, u2[i], subdata, true)
 		await afterSkill(u1, u2[i], subdata, false)
 		data["a1Finished?"] = subdata["a1Finished?"]
 		data["a2Finished?"][i] = subdata["a2Finished?"]
@@ -1058,6 +1087,7 @@ func createAction(unit: String, action: String) -> int:
 	return actionID
 
 func getAction(id: int, path := "", default = null) -> Variant:
+	if(id < 0): id = getVar("Action", -1)
 	var data = getVar("*Action" + str(id))
 	if(!(data is DataTree)): return default
 	if(path.is_empty()): return data
@@ -1274,9 +1304,13 @@ func rollDie(unit: String, die: DataTree) -> int:
 	var base = die.dget("Base", 0)
 	if(minMax > 0): return max(1, await rollDieResult(unit, die, "add", [size, base], "*Max"))
 	if(minMax < 0): return max(1, await rollDieResult(unit, die, "add", [sign(size), base], "*Min"))
-	var advDis = die.dget("Advantage", 0) - die.dget("Disadvantage", 0)
-	if(advDis > 0): return max(1, await rollDieResult(unit, die, "rollAdv", [size, base], "Adv"))
-	if(advDis < 0): return max(1, await rollDieResult(unit, die, "rollDis", [size, base], "Dis"))
+	var adv = die.dget("Advantage", 0)
+	var dis = die.dget("Disadvantage", 0)
+	var advDis = adv - dis
+	if(adv * dis == 0 && advDis != 0):
+		return max(1, await rollDieResult(unit, die, "rollWeighted", [size, base, advDis], "Adv"))
+	#if(advDis > 0): return max(1, await rollDieResult(unit, die, "rollAdv", [size, base, advDis], "Adv"))
+	#if(advDis < 0): return max(1, await rollDieResult(unit, die, "rollDis", [size, base, advDis], "Dis"))
 	return max(1, await rollDieResult(unit, die, "roll", [size, base]))
 
 func rollDieResult(unit: String, die: DataTree, method: String, args: Array, type := "") -> int:

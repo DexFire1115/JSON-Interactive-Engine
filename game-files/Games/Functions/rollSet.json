@@ -1,0 +1,183 @@
+{
+    "Args": [
+        "Samples",
+        "Power",
+        "Base",
+        "Adv",
+        "Dis"
+    ],
+    "Defaults": [
+        0,
+        0,
+        0
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "rollArr",
+                []
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        {
+                            "abs": [
+                                {
+                                    "getVar": [
+                                        "Power",
+                                        0
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "refCall": [
+                            "rollArr",
+                            "append",
+                            {
+                                "absi": [
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        {
+                            "getVar": [
+                                "Samples",
+                                0
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "index",
+                            {
+                                "sub": [
+                                    {
+                                        "rollWeighted": [
+                                            {
+                                                "getVar": [
+                                                    "Power"
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "Base"
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "Adv"
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "Dis"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "add": [
+                                            {
+                                                "add": [
+                                                    {
+                                                        "getVar": [
+                                                            "Base"
+                                                        ]
+                                                    },
+                                                    {
+                                                        "ifelse": [
+                                                            {
+                                                                "lessThan": [
+                                                                    {
+                                                                        "getVar": [
+                                                                            "Power"
+                                                                        ]
+                                                                    },
+                                                                    0
+                                                                ]
+                                                            },
+                                                            [
+                                                                {
+                                                                    "sub": [
+                                                                        {
+                                                                            "getVar": [
+                                                                                "Power"
+                                                                            ]
+                                                                        },
+                                                                        1
+                                                                    ]
+                                                                }
+                                                            ],
+                                                            [
+                                                                0
+                                                            ]
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            1
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "refCall": [
+                            "rollArr",
+                            "set",
+                            {
+                                "getVar": [
+                                    "index",
+                                    -1
+                                ]
+                            },
+                            {
+                                "add": [
+                                    {
+                                        "refCall": [
+                                            "rollArr",
+                                            "get",
+                                            {
+                                                "getVar": [
+                                                    "index",
+                                                    -1
+                                                ]
+                                            },
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "addLog": [
+                {
+                    "getVar": [
+                        "rollArr"
+                    ]
+                }
+            ]
+        }
+    ]
+}
