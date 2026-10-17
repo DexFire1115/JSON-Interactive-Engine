@@ -43,5 +43,6 @@
         "Eldric_Maim_1",
         "Eldric_Swift_1",
         "Eldric_Feral_1"
-    ]
+    ],
+    "CensorHealth": true
 }

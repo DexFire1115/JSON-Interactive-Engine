@@ -5,6 +5,16 @@ extends Control
 var isScanner := false
 var canScan := false
 var unitCase := false
+var switches: Dictionary[String, bool] = {
+	"unitCase": false,
+	"censorHealth": false,
+	"skillUseDisp": false
+}
+var aliases: Dictionary[String, String] = {
+	"uc": "unitCase",
+	"ch": "censorHealth",
+	"sud": "skillUseDisp"
+}
 
 func _ready() -> void:
 	EventBus.connect("RefreshConsole", refreshConsole)
@@ -19,6 +29,7 @@ func _ready() -> void:
 	EventBus.connect("skillListDisplay", displaySkillOptions)
 	EventBus.connect("savediceListDisplay", displaySaveDiceOptions)
 	EventBus.connect("targetListDisplay", displayTargetOptions)
+	Functions.switches = switches
 
 func _on_input_text_submitted(new_text: String) -> void:
 	if(new_text.is_empty()): return
@@ -45,6 +56,9 @@ func readCommand(text: String) -> void:
 	var args := text.split(" ", false)
 	var errorCode := 0
 	match args[0]:
+		"switch", "sw":
+			argPrint(args, "64ffff", "ffcc64", "ff6464")
+			errorCode = switchCommand(args)
 		"search":
 			argPrint(args, "64ffff", "ffff64")
 			errorCode = searchCommand(args)
@@ -97,7 +111,7 @@ func readCommand(text: String) -> void:
 			argPrint(args, "64ffff", "aa64ff")
 			errorCode = await displayUnitCommand(args)
 		"dispskilllist", "dsl":
-			argPrint(args, "64ffff", "aa64ff")
+			argPrint(args, "64ffff", "aa64ff", "ffff64")
 			errorCode = displaySkillListCommand(args)
 		"dispspeed", "dsp":
 			argPrint(args, "64ffff")
@@ -121,6 +135,33 @@ func readCommand(text: String) -> void:
 func fileLoadCommand(_args: PackedStringArray) -> int:
 	GameManager.loadArchive.popup()
 	return 0
+
+func switchCommand(args: PackedStringArray) -> int:
+	if(args.size() < 2): return 1
+	var switchName = aliases.get(args[1], args[1])
+	if(!switches.has(switchName)): return -3
+	var text := "Assert: " + addStyle(switchName, "64ccff")
+	var state := switches[switchName]
+	if(args.size() == 2): 
+		addPushConsole(boldStr(
+			text + " is " + addStyle(str(state), "ff6464", false, true)
+		))
+		return 0
+	var switch := state
+	match args[2]:
+		"flip", "x": switch = !state
+		"true", "t": switch = true
+		"false", "f": switch = false
+		_: return 5
+	switches[switchName] = switch
+	addPushConsole(boldStr(
+		text + " was " + addStyle(str(state), "ff6464", false, true) +
+		" and is now " + addStyle(str(switch), "ff6464", false, true) 
+	))
+	return 0
+
+func fetchSwitches() -> Dictionary:
+	return switches
 
 func searchCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
@@ -214,9 +255,9 @@ func displayUnitCommand(args: PackedStringArray) -> int:
 	
 	text += addStyle(" Health", "ff6464", true)
 	text += ": "
-	text += addStyle(castNumDataToString(unitData.dget("Attributes/CurrentHealth", 0)), "ff6464")
+	text += displayHealth(unit, unitData.dget("Attributes/CurrentHealth", 0))
 	text += "/"
-	text += addStyle(castNumDataToString(unitData.dget("Attributes/MaxHealth", 0)), "ff6464")
+	text += displayHealth(unit, unitData.dget("Attributes/MaxHealth", 0))
 	text += " | "
 	text += addStyle("Stagger", "ffff64", true)
 	text += ": "
@@ -398,11 +439,21 @@ func displaySkillListCommand(args: PackedStringArray) -> int:
 	var unit := unitCaps(args[1])
 	if (!Functions.unitList.has(unit)): return 3
 	var actionArr: Array = Functions.unitList[unit].dataSet.safeGet("Actions", TYPE_ARRAY)
+	if(args.size() > 2):
+		var index := int(args[2])
+		if(index < 0 || index >= actionArr.size()): return 2
+		displaySkillCommand(["", actionArr[index]])
+		return 0
 	for i in actionArr.size():
 		displaySkillListItem(unit, actionArr, i)
 	return 0
 
-func displaySkillOptions(unit: String, options: Array):
+func displaySkillOptions(unit: String, options: Array, describe := -1):
+	if(describe >= 0):
+		addLog("")
+		displaySkillListCommand(["", unit, describe])
+		addLog("")
+		return
 	for i in options.size():
 		displaySkillListItem(unit, options, i)
 
@@ -632,10 +683,10 @@ func dmgVisual(unit: String, data: Array):
 	text += ": [lb] "
 	text += addStyle("Hlt", "ff6464", true)
 	text += ": "
-	text += addStyle(str(data[0]), "646464" if(data[0] <= 0) else "ff6464")
+	text += displayHealth(unit, data[0])
 	if(data[0] != data[2]):
 		text += " -> "
-		text += addStyle(str(data[2]), "646464" if(data[2] <= 0) else "ff6464")
+		text += displayHealth(unit, data[2])
 	text += " | "
 	text += addStyle("Stg", "ffff64", true)
 	text += ": "
@@ -686,6 +737,7 @@ func failedCommand(args: PackedStringArray) -> int:
 func errorCommand(code: int) -> void:
 	var text := ""
 	match code:
+		-3: text = "Switch does not exist!"
 		-2: text = "No Scan Operations!"
 		-1: text = "No Command!"
 		0: return
@@ -729,6 +781,12 @@ func getNameTag(unit: String) -> String:
 	if(unitName is String):
 		return addStyle("[lb]" + unit + "] " + unitName, unitColor, true)
 	return ""
+
+func displayHealth(unit: String, data) -> String:
+	var displayValue := castNumDataToString(data)
+	if(switches["censorHealth"] && Functions.getUnitData(unit).safeGet("CensorHealth", TYPE_BOOL)):
+		displayValue = "?".repeat(displayValue.length())
+	return addStyle(displayValue, "646464" if(float(data) <= 0) else "ff6464")
 
 func addStyle(text: String, color := "ffffff", bold := false, italic := false, underline := false) -> String:
 	var styleText := "[color=" + color + "]" + text + "[/color]"

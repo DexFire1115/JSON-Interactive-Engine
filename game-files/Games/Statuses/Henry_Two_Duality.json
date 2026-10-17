@@ -1,0 +1,116 @@
+{
+    "Name": "[E.G.O.] Two Sides, Same Coin",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ValidateStatus-Charge": [
+            {
+                "ifelse": [
+                    {
+                        "notBool": [
+                            {
+                                "andBool": [
+                                    {
+                                        "varCall": [
+                                            {
+                                                "varCall": [
+                                                    "/",
+                                                    "join",
+                                                    {
+                                                        "get": [
+                                                            "stack"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            "ends_with",
+                                            "OnUse/ValidateStatus-Charge"
+                                        ]
+                                    },
+                                    {
+                                        "lte": [
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    1
+                                                ]
+                                            },
+                                            -5
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "DualityAdv",
+                    true,
+                    "@Action"
+                ]
+            }
+        ],
+        "BeforeDie": [
+            {
+                "ifelse": [
+                    {
+                        "getVar": [
+                            "DualityAdv",
+                            false,
+                            "@Action"
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitProp": [
+                                        "@Self",
+                                        "dieData"
+                                    ]
+                                },
+                                "dset",
+                                "Advantage",
+                                {
+                                    "ifelse": [
+                                        {
+                                            "equals": [
+                                                {
+                                                    "varCall": [
+                                                        {
+                                                            "getAction": [
+                                                                -1,
+                                                                "DiceArr"
+                                                            ]
+                                                        },
+                                                        "size"
+                                                    ]
+                                                },
+                                                1
+                                            ]
+                                        },
+                                        [
+                                            2
+                                        ],
+                                        [
+                                            1
+                                        ]
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        ""
+    ]
+}
