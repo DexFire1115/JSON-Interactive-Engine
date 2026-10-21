@@ -2,14 +2,14 @@
     "Name": "Eldric",
     "Color": "#aa5064",
     "Type": "Human",
-    "Class": "Lvl. 2",
+    "Class": "Lvl. 3",
     "Attributes": {
-        "CurrentHealth": 50,
-        "MaxHealth": 50,
+        "CurrentHealth": 60,
+        "MaxHealth": 60,
         "CurrentStagger": 30,
         "MaxStagger": 30,
-        "CurrentLight": 4,
-        "MaxLight": 4,
+        "CurrentLight": 5,
+        "MaxLight": 5,
         "LightRegen": 1,
         "SpeedDiceSize": 8,
         "SpeedDiceBase": 1,
@@ -42,7 +42,7 @@
         "Eldric_Slowing_1",
         "Eldric_Maim_1",
         "Eldric_Swift_1",
+        "Eldric_Charging_1",
         "Eldric_Feral_1"
-    ],
-    "CensorHealth": true
+    ]
 }

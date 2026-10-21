@@ -1,10 +1,13 @@
 {
     "Units": {
         "A1": {
-            "Unit": "Henry"
+            "Unit": "Eldric"
+        },
+        "A2": {
+            "Unit": "Marton"
         },
         "E1": {
-            "Unit": "Eldric"
+            "Unit": "EXClaws"
         }
     },
     "Scene": 0,

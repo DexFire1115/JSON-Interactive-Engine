@@ -1,0 +1,66 @@
+{
+    "Aliases": [
+        "thingie",
+        "t"
+    ],
+    "Args": [
+        "64ffaa",
+        "ffcc64"
+    ],
+    "Commands": [
+        {
+            "addLog": [
+                {
+                    "getVar": [
+                        "&thing_args"
+                    ]
+                }
+            ]
+        },
+        {
+            "addLog": [
+                {
+                    "getVar": [
+                        "&thing_out"
+                    ]
+                }
+            ]
+        },
+        "sw ch x",
+        {
+            "ifelse": [
+                {  
+                    "gte": [
+                        {
+                            "get": [
+                                "scene"
+                            ]
+                        },
+                        4
+                    ]
+                },
+                [
+                    "sw ch t"
+                ],
+                [
+                    "sw ch f"
+                ]
+            ]
+        },
+        {
+            "addLog": [
+                {
+                    "getVar": [
+                        "&thing_out"
+                    ]
+                }
+            ]
+        },
+        1
+    ],
+    "Help": [
+        "This is basic help",
+        "And this is a second line of help",
+        "Teach a man to fish idk"
+    ]
+}

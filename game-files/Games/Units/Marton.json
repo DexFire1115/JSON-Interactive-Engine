@@ -2,14 +2,14 @@
     "Name": "Marton",
     "Color": "#80aacc",
     "Type": "Human",
-    "Class": "Lvl. 2",
+    "Class": "Lvl. 3",
     "Attributes": {
         "CurrentHealth": 60,
         "MaxHealth": 60,
         "CurrentStagger": 40,
         "MaxStagger": 40,
-        "CurrentLight": 4,
-        "MaxLight": 4,
+        "CurrentLight": 5,
+        "MaxLight": 5,
         "LightRegen": 1,
         "SpeedDiceSize": 6,
         "SpeedDiceBase": 0,
@@ -46,6 +46,7 @@
         "Marton_Back_1",
         "Marton_Come_1",
         "Marton_Right_1",
+        "Marton_Stay_1",
         "Marton_Purged_1"
     ]
 }

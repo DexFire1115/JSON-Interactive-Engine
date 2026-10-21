@@ -31,6 +31,16 @@
                 ]
             },
             {
+                "readDieTag": [
+                    "ConfirmPoiseCost",
+                    {
+                        "getUnit": [
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
                 "ifelse": [
                     {
                         "lessThan": [

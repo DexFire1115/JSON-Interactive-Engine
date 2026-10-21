@@ -1,5 +1,9 @@
 {
     "Args": [
+        "Points"
+    ],
+    "Defaults": [
+        1
     ],
     "Sequence": [
         {
@@ -17,7 +21,22 @@
                 "amt",
                 {
                     "queryInt": [
-                        "[b]Plummy Tune: Spend 0~3 [color=aa64ff]Emotion Points[/color].[/b]",
+                        {
+                            "concat": [
+                                "[b]Plummy Tune: Spend 0~",
+                                {
+                                    "absi": [
+                                        {
+                                            "getVar": [
+                                                "Points",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " [color=aa64ff]Emotion Points[/color].[/b]"
+                            ]
+                        },
                         {
                             "range": [
                                 {
@@ -39,7 +58,17 @@
                                                 1
                                             ]
                                         },
-                                        4
+                                        {
+                                            "add": [
+                                                {
+                                                    "getVar": [
+                                                        "Points",
+                                                        0
+                                                    ]
+                                                },
+                                                1
+                                            ]
+                                        }
                                     ]
                                 }
                             ]

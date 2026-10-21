@@ -93,4 +93,6 @@ caret_blink = true
 caret_blink_interval = 0.5
 text_direction = 1
 
+[connection signal="gui_input" from="GUIArea/VBox/HBox/Input" to="." method="_on_input_gui_input"]
+[connection signal="text_changed" from="GUIArea/VBox/HBox/Input" to="." method="_on_input_text_changed"]
 [connection signal="text_submitted" from="GUIArea/VBox/HBox/Input" to="." method="_on_input_text_submitted"]
