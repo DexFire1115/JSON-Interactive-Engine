@@ -866,6 +866,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	setUnitProp(u1, "target", u2[0])
 	setUnitProp(u1, "action", u1id)
 	for i in u2.size():
+		if(u2[i] == u1): continue
 		setUnitProp(u2[i], "target", u1)
 		setUnitProp(u2[i], "action", u2id[i])
 	await readActionTag("Eminence", u1)
@@ -876,6 +877,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		await readActionTag("Exhaust", u1)
 	moveCounterDice(u1id)
 	for i in u2.size():
+		if(u2[i] == u1): continue
 		await readActionTag("Eminence", u2[i])
 		await readActionTag("Reactive", u2[i])
 		await readActionTag("OnUse", u2[i])
@@ -1391,4 +1393,14 @@ func runGameStat() -> void:
 	for k in unitKeys:
 		var unitName = fileTree.fetchData(gameStat, "Units/" + k + "/Unit")[0]
 		addUnit(k, fileTree.dget("Units/" + unitName, {}))
+	var macroNames: Array = fileTree.dget("Macros", {}).keys()
+	for m: String in macroNames:
+		m = m.trim_suffix(".json")
+		var aliases: Array = fileTree.dget("Macros/" + m + "/Aliases", [])
+		aliases.append(m)
+		EventBus.emit_signal("consoleStore", "&init_aliases", "jcaliases")
+		var jcaliases: Dictionary = references.get("&init_aliases", {})
+		references.erase("&init_aliases")
+		for a in aliases:
+			jcaliases.set(a, m)
 	GameManager.pushConsole()

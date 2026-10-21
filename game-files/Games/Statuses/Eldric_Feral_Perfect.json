@@ -1,0 +1,64 @@
+{
+    "Name": "[E.G.O.] Feral Survival",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmPoiseCost": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "varCall": [
+                                    {
+                                        "getDieType": [
+                                            {
+                                                "getVar": [
+                                                    "DieData"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "contains",
+                                    "Evade"
+                                ]
+                            },
+                            {
+                                "greaterThan": [
+                                    {
+                                        "getVar": [
+                                            ".PoiseCost",
+                                            0
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                ".PoiseCost",
+                                {
+                                    "sub": [
+                                        {
+                                            "getVar": [
+                                                ".PoiseCost",
+                                                0
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=aaaaff]Evade Dice[/color][/b] cost 1 less [b][color=aacccc]Poise[/color][/b] to max out (to a minimum of 1)."
+    ]
+}

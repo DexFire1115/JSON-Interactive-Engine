@@ -10,13 +10,20 @@ var switches: Dictionary[String, bool] = {
 	"censorHealth": false,
 	"skillUseDisp": false
 }
-var aliases: Dictionary[String, String] = {
+var swaliases: Dictionary[String, String] = {
 	"uc": "unitCase",
 	"ch": "censorHealth",
 	"sud": "skillUseDisp"
 }
+var jcaliases: Dictionary[String, String] = {
+	"": ""
+}
+var commandHistory: Array[String] = [""]
+var mutatedHistory: Dictionary[int, String] = {0: ""}
+var historyIndex := 0
 
 func _ready() -> void:
+	EventBus.connect("consoleStore", consoleStore)
 	EventBus.connect("RefreshConsole", refreshConsole)
 	EventBus.connect("dmgConsole", damageCommand)
 	EventBus.connect("dmgDisplay", dmgVisual)
@@ -31,13 +38,36 @@ func _ready() -> void:
 	EventBus.connect("targetListDisplay", displayTargetOptions)
 	Functions.switches = switches
 
+func _on_input_gui_input(event: InputEvent) -> void:
+	if(event.is_action_pressed("HistoryUp")): moveHistory(1)
+	if(event.is_action_pressed("HistoryDown")): moveHistory(-1)
+
+func moveHistory(delta: int):
+	if(isScanner): return
+	mutatedHistory.set(historyIndex, input.text)
+	historyIndex += delta;
+	historyIndex = clamp(historyIndex, 0, commandHistory.size() - 1)
+	input.text = mutatedHistory.get_or_add(historyIndex, commandHistory[historyIndex])
+	input.caret_column = input.text.length()
+
+func _on_input_text_changed(new_text: String) -> void:
+	if(isScanner): return
+	mutatedHistory.set(historyIndex, new_text)
+
 func _on_input_text_submitted(new_text: String) -> void:
 	if(new_text.is_empty()): return
 	if(isScanner): 
 		addPushConsole(boldStr("> ") + italicStr(new_text))
 		canScan = false
 		isScanner = false
-	else: readCommand(new_text.replace("[", "[lb]"))
+	else: 
+		readCommand(new_text.replace("[", "[lb]"))
+		mutatedHistory.set(historyIndex, new_text)
+		commandHistory[0] = mutatedHistory.get(historyIndex, "")
+		commandHistory.push_front("")
+		mutatedHistory.clear()
+		mutatedHistory.set(0, "")
+		historyIndex = 0
 	refreshConsole()
 	input.text = ""
 
@@ -52,9 +82,9 @@ func textPrompt(query := ""):
 		return
 	EventBus.emit_signal("queryOutput", s)
 
-func readCommand(text: String) -> void:
+func readCommand(text: String) -> int:
 	var args := text.split(" ", false)
-	var errorCode := 0
+	var errorCode := -1
 	match args[0]:
 		"switch", "sw":
 			argPrint(args, "64ffff", "ffcc64", "ff6464")
@@ -62,6 +92,9 @@ func readCommand(text: String) -> void:
 		"search":
 			argPrint(args, "64ffff", "ffff64")
 			errorCode = searchCommand(args)
+		"edit":
+			argPrint(args, "64ffff", "ffff64", "ff64aa")
+			errorCode = editCommand(args)
 		"unitsearch":
 			argPrint(args, "64ffff", "aa64ff", "ffff64")
 			errorCode = searchUnitCommand(args)
@@ -129,8 +162,31 @@ func readCommand(text: String) -> void:
 #			argPrint(args, "64ffff")
 #			errorCode = fileLoadCommand(args)
 		_:
-			errorCode = failedCommand(args)
+			errorCode = await jCommand(args)
+			if(errorCode == -1): errorCode = failedCommand(args)
 	errorCommand(errorCode)
+	return errorCode
+
+func jCommand(args: PackedStringArray) -> int:
+	var command: String = jcaliases.get(args[0], "")
+	if(command.is_empty()): return -1
+	var commandData = DataTree.new(Functions.fileTree.dget("Macros/" + command, {}))
+	if(commandData.isEmpty()): return -1
+	var argPrintArr = [args]
+	argPrintArr.append_array(commandData.dget("Args", []))
+	callv("argPrint", argPrintArr)
+	var commands: Array = commandData.dget("Commands", [])
+	var outputs := []
+	Functions.references.set("&" + command + "_args", args)
+	Functions.references.set("&" + command + "_out", outputs)
+	for c in commands:
+		if(c is Dictionary): c = await Functions.isNestedArg(c.duplicate_deep())
+		if(c is float || c is int): return int(c)
+		if(c is String): c = await readCommand(c)
+		outputs.append(c)
+	Functions.references.erase("&" + command + "_args")
+	Functions.references.erase("&" + command + "_out")
+	return 0
 
 func fileLoadCommand(_args: PackedStringArray) -> int:
 	GameManager.loadArchive.popup()
@@ -138,7 +194,7 @@ func fileLoadCommand(_args: PackedStringArray) -> int:
 
 func switchCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var switchName = aliases.get(args[1], args[1])
+	var switchName = swaliases.get(args[1], args[1])
 	if(!switches.has(switchName)): return -3
 	var text := "Assert: " + addStyle(switchName, "64ccff")
 	var state := switches[switchName]
@@ -174,6 +230,18 @@ func searchUnitCommand(args: PackedStringArray) -> int:
 		addPushConsole(JSON.stringify(GameManager.fetchUnit(args[1]), "    ",false))
 		return 0
 	addPushConsole(JSON.stringify(GameManager.fetchUnit(args[1] + "/" + args[2]), "    ",false))
+	return 0
+
+func editCommand(args: PackedStringArray) -> int:
+	if(args.size() < 3): return 1
+	var val = args[2]
+	if(args[2].ends_with("f") && args[2].trim_suffix("f").is_valid_float()):
+		val = args[2].trim_suffix("f").to_float()
+	if(args[2].ends_with("i") && args[2].trim_suffix("i").is_valid_int()):
+		val = args[2].trim_suffix("i").to_int()
+	if(args[2] == "[]arr*" || args[2] == "[lb]]arr*"): val = []
+	if(args[2] == "{}obj*"): val = {}
+	Functions.fileTree.dset(args[1], val)
 	return 0
 
 func editUnitCommand(args: PackedStringArray) -> int:
@@ -222,7 +290,32 @@ func nextTurnCommand(args: PackedStringArray) -> int:
 
 func executeFunctionCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
-	var result = await Functions.isNestedArg( JSON.parse_string( " ".join( args.slice(1) ).replace("[lb]","[") ) )
+	var json = JSON.parse_string( " ".join( args.slice(1) ).replace("[lb]","[") )
+	if(json == null):
+		json = {}
+		var arr = []
+		json.set(args[1], arr)
+		for a in args.slice(2):
+			if(a.begins_with("\"") && a.ends_with("\"")):
+				arr.append(a.substr(1, a.length() - 1))
+				continue
+			if(a == "true"):
+				arr.append(true)
+				continue
+			if(a == "false"):
+				arr.append(false)
+				continue
+			if(a == "null"):
+				arr.append(null)
+				continue
+			if(a.is_valid_int()):
+				arr.append(int(a))
+				continue
+			if(a.is_valid_float()):
+				arr.append(float(a))
+				continue
+			arr.append(a)
+	var result = await Functions.isNestedArg(json)
 	addLog(addStyle("Result : ", "ffffff", true) + str(result))
 	return 0
 
@@ -807,6 +900,11 @@ func underlineStr(text: String) -> String:
 func unitCaps(unit: String) -> String:
 	if(unitCase): return unit
 	return unit.to_upper()
+
+func consoleStore(dest: String, ref: String, ...args: Array):
+	var fetch = get(ref)
+	if(fetch is Callable): fetch = callv(ref, args)
+	Functions.references.set(dest, fetch)
 
 func addPushConsole(s: String) -> void:
 	var lines: PackedStringArray = s.split("\n");
