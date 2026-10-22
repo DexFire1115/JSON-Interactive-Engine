@@ -22,6 +22,10 @@
         "PierceStagger": 0,
         "BluntStagger": 0,
     },
+    "Vars": {
+        "ReserveOnDeath": true,
+        "ActionUses": {}
+    },
     "Statuses": {
         "Rat_Pest": {
             "File": "Statuses/Rat_Pest",

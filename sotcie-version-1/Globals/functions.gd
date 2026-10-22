@@ -4,6 +4,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 
 # Handling Game Processes
 @export var unitList: Dictionary[String, Unit]
+@export var unitReserve: Dictionary[String, Unit] 
 @export var scene: int = 0
 @export var diceList: Dictionary[String, int]
 @export var saveList: Dictionary[String, int]
@@ -67,6 +68,9 @@ func propCallFrom(object: Object, property: String, method: String, ...args: Arr
 
 # Deprecated (Day 32)
 func objCall(object: Object, method: String, ...args: Array) -> Variant:
+	if(object == null): 
+		print("ALERT ", method, " ", args)
+		return null
 	if(!object.has_method(method)): return null
 	return object.callv(method, args)
 
@@ -167,7 +171,7 @@ func whileLoop(query: Array, commands: Array):
 	var retval = ""
 	var val = ""
 	var conBool := false
-	while(query[0]):
+	while(await isNestedArg(Dictionary(query[0]).duplicate_deep())):
 		for c in commands.duplicate_deep():
 			val = await isNestedArg(c)
 			if(val is String && val == "break"):
@@ -315,6 +319,16 @@ func getUnitData(unit := "") -> DataTree:
 	if(unitVar == null): return null
 	return unitVar.dataSet
 
+func getUnitDataElem(unit := "", path := "", default = null) -> Variant:
+	var data := getUnitData(unit)
+	if(data == null): return default
+	return data.dget(path, default)
+
+func setUnitDataElem(unit := "", path := "", value = null) -> Variant:
+	var data := getUnitData(unit)
+	if(data == null): return null
+	return data.dset(path, value)
+
 func getUnitProp(unit := "", prop := "") -> Variant:
 	unit = getSingleTarget(unit)
 	var unitVar: Unit = unitList.get(unit)
@@ -435,8 +449,9 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 		status = statusArr[0]
 		amt = statusArr[1] + statusArr[2]
 	
+	var flatStatus := status.replace("/", "_")
 	var statusPath := "Statuses/" + status
-	var statusFlatPath := "Statuses/" + status.replace("/", "_")
+	var statusFlatPath := "Statuses/" + flatStatus
 	var statConditionPath := statusPath + "/Conditions"
 	if(fileTree.dget(statusPath) == null): return
 	
@@ -455,8 +470,8 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 			statusDataConditions.append(k)
 		targetConditions.instantiate(str(k), [])
 		var targetConditionArr = targetConditions.safeGet(str(k), TYPE_ARRAY)
-		if(!targetConditionArr.has(status)):
-			targetConditionArr.append(status)
+		if(!targetConditionArr.has(flatStatus)):
+			targetConditionArr.append(flatStatus)
 	
 	await readUnitTag("StatusClamp", target, {}, [{"clampStatus": [statusData]}])
 	if(apply):
@@ -525,9 +540,39 @@ func roll(power: int, base := 0) -> int:
 	if(power > 0): return randi_range(1, power) + base
 	return base
 
+func generateUniqueUID(prefix: String) -> String:
+	var high := 0
+	for u in unitList:
+		var num = u.trim_prefix(prefix)
+		if(num.is_valid_int() && int(num) > high): high = int(num)
+	for u in unitReserve:
+		var num = u.trim_prefix(prefix)
+		if(num.is_valid_int() && int(num) > high): high = int(num)
+	return prefix + str(high + 1)
+
 func addUnit(code: String, data: Dictionary) -> Dictionary:
 	var oldData = unitList.get(code, {})
 	Unit.new(unitList, code, data)
+	sequence("Initialize", getUnitData(code).safeGet("Initialize", TYPE_ARRAY), {"Self": code})
+	return oldData
+
+func hideUnit(code: String) -> bool:
+	if(unitReserve.has(code) || !unitList.has(code)): return false
+	unitReserve.set(code, unitList.get(code))
+	unitList.erase(code)
+	return true
+
+func showUnit(code: String) -> bool:
+	if(unitList.has(code) || !unitReserve.has(code)): return false
+	unitList.set(code, unitReserve.get(code))
+	unitReserve.erase(code)
+	return true
+
+func remUnit(code: String) -> Dictionary:
+	sequence("Teardown", getUnitData(code).safeGet("Teardown", TYPE_ARRAY), {"Self": code})
+	clearUnitSpeedDice(code)
+	var oldData = getUnitData(code).dataset
+	unitList.erase(code)
 	return oldData
 
 func prompt(query: String):
@@ -572,16 +617,16 @@ func queryQInt(query: String, choices: Array, default := -1, persistTitle := tru
 
 func sceneStart():
 	#print("< - - - SCENE - - - >")
-	for u in unitList:
+	for u in unitList.keys().duplicate():
 		await readUnitTag("SceneEnd", u)
 	scene += 1
 	GameManager.addPushConsole("[u][b][lb]Scene " + str(scene) + "][/b][/u]")
-	for u in unitList:
+	for u in unitList.keys().duplicate():
 		await readUnitTag("SceneStart", u)
 	rollSpeed()
 	regenLight()
 	clearSaveDice()
-	for u in unitList:
+	for u in unitList.keys().duplicate():
 		await readUnitTag("SceneStartPost", u)
 		await readUnitTag("StatusNextStack", u, {}, [{"statusNextStack": []}])
 
@@ -621,6 +666,9 @@ func nextTurn(dice := "", isProactive := true):
 	var unitName := getUnitFromDice(dice)
 	if(!unitList.has(unitName)): return "_"
 	var unitData := unitList[unitName].dataSet
+	if(await isInactive(unitData)): 
+		removeSpeedDice(dice)
+		return "_"
 	var actionList := []
 	if(!dice.contains("*")):
 		actionList = Array(unitData.safeGet("Actions", TYPE_ARRAY)).duplicate_deep()
@@ -678,7 +726,7 @@ func nextTurn(dice := "", isProactive := true):
 	if(actionData.has("Emotion")): changeEmotion(-actionData.dget("Emotion") , unitName)
 	if(!isProactive): return actionChoice
 	
-	var targetList = unitList.keys()
+	var targetList = unitList.keys().filter(func(x: String): return !x.contains("*"))
 	var weight: int = actionData.dget("AttackWeight", 1)
 	var skillTargets := {}
 	for i in range(weight):
@@ -690,6 +738,7 @@ func nextTurn(dice := "", isProactive := true):
 	var interceptCount := 0
 	for u in unitList.keys():
 		if(skillTargets.keys().has(u) || u == unitName): continue
+		if(await isInactive(getUnitData(u))): continue
 		var interceptArr := await interceptCheck(u, unitName, skillTargets.keys())
 		if(interceptArr[0]):
 			skillTargets.erase(interceptArr[1])
@@ -775,6 +824,18 @@ func highestInDict(dict: Dictionary) -> Variant:
 			highVal = val
 			highKey = k
 	return highKey
+
+func clearUnitSpeedDice(unit: String):
+	if(!unitList.has(unit)): return
+	for d in diceList.keys().duplicate(): if(getUnitFromDice(d) == unit): diceList.erase(d)
+	for d in saveList.keys().duplicate(): if(getUnitFromDice(d) == unit): saveList.erase(d)
+	for d in usedList.keys().duplicate(): if(getUnitFromDice(d) == unit): usedList.erase(d)
+
+func remAllUnitSpeedDice(unit: String):
+	if(!unitList.has(unit)): return
+	for d in diceList.keys().duplicate(): if(getUnitFromDice(d) == unit): removeSpeedDice(d)
+	for d in saveList.keys().duplicate(): if(getUnitFromDice(d) == unit): removeSpeedDice(d)
+	
 
 # Removes next die if unspecified
 func removeSpeedDice(die := "") -> int:
@@ -1245,6 +1306,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 		var cond := DataTree.new(fileTree.safeGet(path + "/Conditions", TYPE_DICTIONARY))
 		metadata.merge({"Status": status}, true)
 		await executeCondition(tag, cond, metadata, defaultSeq)
+		if(!unitList.has(unit)): return
 
 func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	#print("\n\nACT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
@@ -1387,6 +1449,12 @@ func getIDTag(unit: String) -> String:
 	if(!(unitColor is String)): unitColor = "aaaaaa"
 	return "[b][color=" + unitColor + "][lb]" + unit + "][/color][/b]"
 
+func runMacro(input: String) -> int:
+	EventBus.emit_signal("consoleStore", "&rM_temp", "readCommand", input)
+	var temp = references.get("&rM_temp", 0)
+	references.erase("&rM_temp")
+	return temp
+
 func addMacro(m: String):
 	m = m.trim_prefix("Macros/").trim_suffix(".json")
 	var aliases: Array = fileTree.dget("Macros/" + m + "/Aliases", [])
@@ -1424,6 +1492,5 @@ func runGameStat() -> void:
 		for k in unitKeys:
 			var unitName = gameStat.dget("Units/" + k + "/Unit", "")
 			addUnit(k, fileTree.dget("Units/" + unitName, {}))
-			sequence("Initialize", getUnitData(k).safeGet("Initialize", TYPE_ARRAY), {"Self": k})
 	
 	GameManager.pushConsole()

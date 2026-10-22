@@ -3,19 +3,9 @@
     "Defaults": [],
     "Sequence": [
         {
-            "addLog": [
-                {
-                    "varCall": [
-                        {
-                            "get": [
-                                "fileTree"
-                            ]
-                        },
-                        "getAllFilesfromPath",
-                        "Units"
-                    ]
-                }
+            "runMacro": [
+                "sw sud t"
             ]
-        },
+        }
     ]
 }

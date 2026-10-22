@@ -72,6 +72,15 @@
                     "dieArr",
                     "clear"
                 ]
+            },
+            {
+                "remAllUnitSpeedDice": [
+                    {
+                        "getSelf": [
+                            
+                        ]
+                    }
+                ]
             }
         ],
         "ValidateDamage": [

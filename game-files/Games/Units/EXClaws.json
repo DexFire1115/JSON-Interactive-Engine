@@ -65,7 +65,7 @@
         },
         {
             "statusInflict": [
-                "Claws/Dont",
+                "EXClaws/Dont",
                 1,
                 "@Self"
             ]
