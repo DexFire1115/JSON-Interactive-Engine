@@ -430,8 +430,7 @@ func displaySaveDiceCommand(args: PackedStringArray) -> int:
 	if (!Functions.unitList.has(unit)): return 3
 	var unitObj := Functions.unitList[unit]
 	for d in unitObj.savedDice:
-		var dieParse := d.split("/")
-		if(dieParse.size() != 2): return 4
+		var dieParse := d.rsplit("/", true, 1)
 		displaySkillDice(dieParse[0], int(dieParse[1]))
 	return 0
 
@@ -564,10 +563,7 @@ func displaySaveDiceOptions(unit: String, savedice: Array, options: Array):
 			text += savedice[o].substr(1)
 			addLog(text)
 			continue
-		var dieParse: Array = savedice[o].split("/")
-		if(dieParse.size() != 2): 
-			addLog(addStyle("<Invalid Die!>", "ff6464", true))
-			continue
+		var dieParse: Array = savedice[o].rsplit("/", true, 1)
 		text += getDieHeader(DataTree.new(
 			Functions.fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], 
 			TYPE_DICTIONARY)))
@@ -628,7 +624,7 @@ func printSpeedDice(dice: String, listID := 0) -> void:
 			color = "64aaff"
 		2: 
 			dict = Functions.usedList
-			color = "ff64aa"
+			color = "ff64aa" if(Functions.getStatus("Killed", 0, unit) == 0)else "646464"
 		_: 
 			dict = Functions.diceList
 			color = "ffaa64"

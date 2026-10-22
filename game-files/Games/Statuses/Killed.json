@@ -60,6 +60,15 @@
                     "dieArr",
                     "clear"
                 ]
+            },
+            {
+                "remAllUnitSpeedDice": [
+                    {
+                        "getSelf": [
+                            
+                        ]
+                    }
+                ]
             }
         ],
         "Removed-Killed": [
@@ -72,6 +81,35 @@
                     },
                     "complexErase",
                     "Attributes/Inactive/Killed"
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "ifelse": [
+                    {
+                        "objCall": [
+                            {
+                                "getUnitData": [
+                                    "@Self"
+                                ]
+                            },
+                            "dget",
+                            "Vars/ReserveOnDeath",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "hideUnit": [
+                                {
+                                    "getSelf": [
+                                        
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
                 ]
             }
         ]

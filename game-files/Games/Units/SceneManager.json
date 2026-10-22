@@ -1,0 +1,27 @@
+{
+    "Name": "SceneManager",
+    "Color": "#646464",
+    "Attributes": {
+    },
+    "Vars": {
+        "Wave": 0,
+        "Progress": 0,
+        "Limit": 3,
+        "Count": 6
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Global",
+                1,
+                "@Self"
+            ]
+        },
+    ]
+}

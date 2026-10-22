@@ -22,40 +22,34 @@
         "PierceStagger": 2,
         "BluntStagger": 0,
     },
+    "Vars": {
+        "ReserveOnDeath": true,
+        "ActionUses": {}
+    },
     "Statuses": {
-        "RAA_Microwave": {
-            "File": "Statuses/RAA_Microwave",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "ConfirmStatus-Burn",
-                "Caused-Burn"
-            ]
-        },
-        "RAA_Cook": {
-            "File": "Statuses/RAA_Cook",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "SceneEnd"
-            ]
-        }
     },
     "Conditions": {
-        "ConfirmStatus-Burn": [
-            "RAA_Microwave"
-        ],
-        "Caused-Burn": [
-            "RAA_Microwave"
-        ],
-        "SceneEnd": [
-            "RAA_Cook"
-        ]
     },
     "Actions": [
         "RAA_Metallic_1",
         "RAA_Rumble_1",
         "RAA_Heat_1",
         "RAA_Popcorn_1"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "RAA_Microwave",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA_Cook",
+                1,
+                "@Self"
+            ]
+        }
     ]
 }

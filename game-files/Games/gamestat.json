@@ -1,16 +1,34 @@
 {
     "Units": {
+        "**": {
+            "Unit": "SceneManager"
+        },
         "A1": {
             "Unit": "Eldric"
         },
         "A2": {
             "Unit": "Marton"
         },
-        "E1": {
-            "Unit": "EXClaws"
+        "A3": {
+            "Unit": "VileiColparino"
         },
+        "A4": {
+            "Unit": "Mordred"
+        },
+        "A5": {
+            "Unit": "CAD"
+        },
+        "A6": {
+            "Unit": "Lilli"
+        },
+        "A7": {
+            "Unit": "Henry"
+        },
+        "E1": {
+            "Unit": "HooliganSuper"
+        }
     },
-    "Autoloader": "",
+    "Autoloader": "baseAutoload",
     "Scene": 0,
     "Console": [
         "[b][u]Star of the City Interactive Engine : Testing[/u][/b]"

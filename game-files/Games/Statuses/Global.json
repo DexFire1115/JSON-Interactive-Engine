@@ -1,0 +1,245 @@
+{
+    "Name": "Global",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "setVar": [
+                    "unitCount",
+                    {
+                        "varCall": [
+                            {
+                                "varCall": [
+                                    {
+                                        "propCall": [
+                                            "unitList",
+                                            "keys"
+                                        ]
+                                    },
+                                    "filter",
+                                    {
+                                        "lambda": [
+                                            "countEnemies",
+                                            [
+                                                {
+                                                    "varCall": [
+                                                        {
+                                                            "getVar": [
+                                                                "x",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "contains",
+                                                        "E"
+                                                    ]
+                                                }
+                                            ],
+                                            "x"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "size"
+                        ]
+                    }
+                ]
+            },
+            {
+               "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "gte": [
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Vars/Progress",
+                                            0
+                                        ]
+                                    },
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Vars/Count",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "unitCount",
+                                            0
+                                        ]
+                                    },
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Vars/Wave",
+                                {
+                                    "add": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/Wave",
+                                                0
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Vars/Progress",
+                                0
+                            ]
+                        }
+                    ]
+               ] 
+            },
+            {
+                "whileLoop": [
+                    [
+                        {
+                            "andBool": [
+                                {
+                                    "lessThan": [
+                                        {
+                                            "getVar": [
+                                                "unitCount",
+                                                0
+                                            ]
+                                        },
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/Limit",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "lessThan": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/Progress",
+                                                0
+                                            ]
+                                        },
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/Count",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    [
+                        {
+                            "addUnit": [
+                                {
+                                    "generateUniqueUID": [
+                                        "E"
+                                    ]
+                                },
+                                {
+                                    "varCall": [
+                                        {
+                                            "get": [
+                                                "fileTree"
+                                            ]
+                                        },
+                                        "dget",
+                                        {
+                                            "ifelse": [
+                                                {
+                                                    "equals": [
+                                                        {
+                                                            "mod": [
+                                                                {
+                                                                    "getUnitDataElem": [
+                                                                        "@Self",
+                                                                        "Vars/Wave",
+                                                                        0
+                                                                    ]
+                                                                },
+                                                                2
+                                                            ]
+                                                        },
+                                                        1
+                                                    ]
+                                                },
+                                                [
+                                                    "Units/Pigritiae"
+                                                ],
+                                                [
+                                                    "Units/Irae.json"
+                                                ]
+                                            ]
+                                        },
+                                        {}
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Vars/Progress",
+                                {
+                                    "add": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/Progress",
+                                                0
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setVar": [
+                                "unitCount",
+                                {
+                                    "add": [
+                                        {
+                                            "getVar": [
+                                                "unitCount",
+                                                0
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        ""
+    ]
+}

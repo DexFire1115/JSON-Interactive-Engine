@@ -14,7 +14,7 @@
                                         "propCall": [
                                             "fileTree",
                                             "dget",
-                                            "Actions/Claws_Dont_1/Uses",
+                                            "Actions/Claws/Dont_1/Uses",
                                             0
                                         ]
                                     },
@@ -183,7 +183,7 @@
                                 "propCall": [
                                     "fileTree",
                                     "dget",
-                                    "Actions/Claws_Dont_1/Uses",
+                                    "Actions/Claws/Dont_1/Uses",
                                     0
                                 ]
                             },

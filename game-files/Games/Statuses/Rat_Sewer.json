@@ -9,15 +9,31 @@
                     {
                         "notBool": [
                             {
-                                "equals": [
+                                "orBool": [
                                     {
-                                        "refCall": [
-                                            "statusArr",
-                                            "get",
-                                            0
+                                        "equals": [
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            "Staggered"
                                         ]
                                     },
-                                    "Staggered"
+                                    {
+                                        "equals": [
+                                            {
+                                                "refCall": [
+                                                    "statusArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            "Killed"
+                                        ]
+                                    }
                                 ]
                             }
                         ]
