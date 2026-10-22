@@ -8,8 +8,9 @@
         },
         "E1": {
             "Unit": "EXClaws"
-        }
+        },
     },
+    "Autoloader": "",
     "Scene": 0,
     "Console": [
         "[b][u]Star of the City Interactive Engine : Testing[/u][/b]"
