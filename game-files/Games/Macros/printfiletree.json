@@ -1,0 +1,13 @@
+{
+    "Aliases": [
+        "pft"
+    ],
+    "Args": [
+        "64ffaa",
+    ],
+    "Commands": [
+        "exfn {\"get\": [\"fileTree\"]}"
+    ],
+    "Help": [
+    ]
+}

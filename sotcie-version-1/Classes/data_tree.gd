@@ -231,6 +231,21 @@ func complexErase(path: String):
 	else:
 		dset(parentPath, dget(parentPath + "/0"))
 
+func getAllFilesfromPath(path := "") -> Array:
+	path = path.trim_prefix("/")
+	return getAllFilesfromDict(safeGet(path, TYPE_DICTIONARY), path)
+
+func getAllFilesfromDict(dict: Dictionary, path := "") -> Array:
+	var arr = []
+	for k in dict.keys():
+		var v = dict[k]
+		if(k is String && str(k).ends_with(".json")):
+			arr.append(path + "/" + k)
+			continue
+		if(v is Dictionary):
+			arr.append_array(getAllFilesfromDict(v, path + "/" + k))
+	return arr
+
 func getPrimitve(path: String, default = null) -> Variant:
 	var val = dget(path, default)
 	if(val == default): return val

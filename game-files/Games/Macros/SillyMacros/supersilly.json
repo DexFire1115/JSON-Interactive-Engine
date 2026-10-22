@@ -1,0 +1,20 @@
+{
+    "Aliases": [
+        "S.supersilly",
+        "silly"
+    ],
+    "Args": [
+        "64ffaa",
+    ],
+    "Commands": [
+        {
+            "statusInflict": [
+                "Burn",
+                999,
+                "A1"
+            ]
+        }
+    ],
+    "Help": [
+    ]
+}

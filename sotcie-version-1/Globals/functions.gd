@@ -21,7 +21,8 @@ func callj(method: String, args: Array) -> Variant:
 	for i in args.size():
 		args[i] = await isNestedArg(args[i])
 	#print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
-	if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
+	#if(fileTree.dget("Functions", {}).keys().has(method + ".json")):
+	if(!fileTree.dget("Functions/" + method.trim_prefix("/") + ".json", {}).is_empty()):
 		return await jFunc(method, args)
 	elif(has_method(method)):
 		return await callv(method, args)
@@ -64,6 +65,7 @@ func propCallFrom(object: Object, property: String, method: String, ...args: Arr
 	if(object.get(property) == null): return null
 	return Callable.create(object.get(property), method).callv(args)
 
+# Deprecated (Day 32)
 func objCall(object: Object, method: String, ...args: Array) -> Variant:
 	if(!object.has_method(method)): return null
 	return object.callv(method, args)
@@ -423,9 +425,9 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 		var oldVal = getStatus(status, 0, target, nextScene)
 		var statusArr = [status, amt - oldVal, oldVal]
 		if(unitList.has(caster)):
-			await readDieTag("ConfirmStatus", caster, 
+			await readDieTag("ConfirmStatus", caster,
 				{"statusArr": statusArr, "Target": target})
-			await readDieTag("ConfirmStatus-" + statusArr[0], caster, 
+			await readDieTag("ConfirmStatus-" + statusArr[0], caster,
 				{"statusArr": statusArr, "Target": target})
 		await readDieTag("ValidateStatus", target, {"statusArr": statusArr, "Source": caster})
 		await readDieTag("ValidateStatus-" + statusArr[0], target, {"statusArr": statusArr, "Source": caster})
@@ -434,11 +436,12 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 		amt = statusArr[1] + statusArr[2]
 	
 	var statusPath := "Statuses/" + status
+	var statusFlatPath := "Statuses/" + status.replace("/", "_")
 	var statConditionPath := statusPath + "/Conditions"
 	if(fileTree.dget(statusPath) == null): return
 	
-	targetData.instantiate(statusPath, {})
-	var statusData = DataTree.new(targetData.dget(statusPath, {}))
+	targetData.instantiate(statusFlatPath, {})
+	var statusData = DataTree.new(targetData.dget(statusFlatPath, {}))
 	var statusFile = DataTree.new(fileTree.dget(statusPath, {}))
 	statusData.dset("File", statusPath)
 	var stackName := "Stack" if(!nextScene) else "NextStack"
@@ -462,7 +465,7 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 		if(unitList.has(caster)):
 			await readDieTag("Caused", caster, {"Target": target})
 			await readDieTag("Caused-" + status, caster, {"Target": target})
-	if(statusData.dget("Stack", 0) < statusFile.dget("MinStack", 1) && statusData.dget("NextStack", 0) <= 0): 
+	if(statusData.dget("Stack", 0) < statusFile.dget("MinStack", 1) && statusData.dget("NextStack", 0) <= 0):
 		removeStatus(status, target)
 
 func removeStatus(status: String, target := ""):
@@ -472,30 +475,31 @@ func removeStatus(status: String, target := ""):
 	if(targetData == null): return
 	await readUnitTag("Removed", target)
 	await readUnitTag("Removed-" + status, target)
-	var statusConditions: Array = targetData.safeGet("Statuses/" + status + "/Conditions", TYPE_ARRAY)
+	var statusConditions: Array = targetData.safeGet("Statuses/" + 
+		status.replace("/", "_") + "/Conditions", TYPE_ARRAY)
 	var unitConditions := DataTree.new(targetData.safeGet("Conditions", TYPE_DICTIONARY))
 	for c in statusConditions:
 		var conditionArr: Array = unitConditions.safeGet(c, TYPE_ARRAY)
 		conditionArr.erase(status)
 		if(conditionArr.is_empty()):
 			unitConditions.erase(c)
-	targetData.erase("Statuses/" + status)
+	targetData.erase("Statuses/" + status.replace("/", "_"))
 
 func getStatus(status: String, default := 0, target := "", nextScene := false) -> int:
 	target = getSingleTarget(target)
 	if(target.is_empty()): return default
 	var targetData := getUnitData(target)
 	if(targetData == null): return default
-	var statusData = DataTree.new(targetData.dget("Statuses/" + status, {}))
+	var statusData = DataTree.new(targetData.dget("Statuses/" + status.replace("/", "_"), {}))
 	var stackName := "Stack" if(!nextScene) else "NextStack"
 	return statusData.dget(stackName, default)
 
 func clampStatus(statusData: DataTree):
-	var fileStatus = DataTree.new(fileTree.safeGet(statusData.dget("File", ""), 
+	var fileStatus = DataTree.new(fileTree.safeGet(statusData.dget("File", ""),
 		TYPE_DICTIONARY).duplicate_deep())
 	statusData.dset("Stack", clamp(
-		statusData.dget("Stack", 0), 
-		await isNestedArg(fileStatus.dget("MinStack", 0)), 
+		statusData.dget("Stack", 0),
+		await isNestedArg(fileStatus.dget("MinStack", 0)),
 		await isNestedArg(fileStatus.dget("MaxStack", INF))
 	))
 
@@ -560,7 +564,7 @@ func queryInt(query: String, choices: Array, default := -1) -> int:
 	return default
 
 func queryQInt(query: String, choices: Array, default := -1, persistTitle := true) -> int:
-	if(choices.size() <= 1): 
+	if(choices.size() <= 1):
 		if(persistTitle): addLog(query)
 		if(choices.is_empty()): return default
 		return choices[0]
@@ -590,8 +594,8 @@ func regenLight():
 	for u in unitList:
 		var unitData := unitList[u].dataSet
 		if(await isInactive(unitData)): continue
-		var newLight = min(unitData.dget("Attributes/CurrentLight", 0) + 
-		unitData.dget("Attributes/LightRegen", 0), 
+		var newLight = min(unitData.dget("Attributes/CurrentLight", 0) +
+		unitData.dget("Attributes/LightRegen", 0),
 		unitData.dget("Attributes/MaxLight", 0))
 		unitData.dset("Attributes/CurrentLight", newLight)
 
@@ -636,7 +640,7 @@ func nextTurn(dice := "", isProactive := true):
 		actionList.push_front("*[b][color=ff6464]No Contest[/color][/b]")
 	defaultCount = optionInts.size()
 	for i in range(optionInts.size(),actionList.size()):
-		if(isUsable(unitData, DataTree.new(fileTree.safeGet("Actions/" + actionList[i], 
+		if(isUsable(unitData, DataTree.new(fileTree.safeGet("Actions/" + actionList[i],
 			TYPE_DICTIONARY)))): optionInts.append(i)
 	var answer := 0
 	if(actionList.size() > 1):
@@ -678,7 +682,7 @@ func nextTurn(dice := "", isProactive := true):
 	var weight: int = actionData.dget("AttackWeight", 1)
 	var skillTargets := {}
 	for i in range(weight):
-		addLog("[u]" + getIDTag(unitName) + "[b]: Select Target [color=ffff64](" + 
+		addLog("[u]" + getIDTag(unitName) + "[b]: Select Target [color=ffff64](" +
 			str(i + 1) + "/" + str(weight) + ")[/color]:[/b][/u]")
 		EventBus.emit_signal("targetListDisplay", targetList)
 		answer = await queryInt("", range(targetList.size()), 0)
@@ -691,7 +695,7 @@ func nextTurn(dice := "", isProactive := true):
 			skillTargets.erase(interceptArr[1])
 			skillTargets.set(u, "")
 			await readUnitTag("Protected", interceptArr[1], {
-				"Self": interceptArr[1], 
+				"Self": interceptArr[1],
 				"Target": unitName,
 				"Interceptor": u
 			})
@@ -711,7 +715,7 @@ func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	#if(!(getNextUnitSpeedDie(unit, false).is_empty() || unitList[unit].savedDice.is_empty())):
 	#	choiceDict.set("[b][color=64aaff]Use Saved Die[/color][/b]", "SavedDie")
 	await readUnitTag("InterceptCheck", unit, {
-		"Self": unit, 
+		"Self": unit,
 		"Target": proactive,
 		"choiceDict": choiceDict
 	})
@@ -735,12 +739,12 @@ func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	
 	var answerArr := [answer, choiceDict.values(), interceptUnit, reactives]
 	await readUnitTag("ConfirmIntercept", unit, {
-		"Self": unit, 
+		"Self": unit,
 		"Target": proactive,
 		"answerArr": answerArr
 	})
 	await readUnitTag("ValidateIntercept", proactive, {
-		"Self": proactive, 
+		"Self": proactive,
 		"Target": unit,
 		"answerArr": answerArr
 	})
@@ -778,7 +782,7 @@ func removeSpeedDice(die := "") -> int:
 	if(die.is_empty()): return -1 # No Dice to Remove
 	var isHeld := saveList.has(die)
 	if(!(diceList.has(die) || isHeld)): return 0
-	if(isHeld): 
+	if(isHeld):
 		usedList.set(die, saveList[die])
 		saveList.erase(die)
 	else:
@@ -827,7 +831,7 @@ func isUsable(unitData: DataTree, actionData: DataTree) -> bool:
 		return false
 	if(unitData.dget("Attributes/EmotionPoints", 0) < actionData.dget("Emotion", 0)):
 		return false
-	if(actionData.has("Limit") && actionData.dget("Uses", 0) >= actionData.dget("Limit", 0)): 
+	if(actionData.has("Limit") && actionData.dget("Uses", 0) >= actionData.dget("Limit", 0)):
 		return false
 	return true
 
@@ -872,7 +876,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	await readActionTag("Eminence", u1)
 	await readActionTag("Proactive", u1)
 	await readActionTag("OnUse", u1)
-	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0) 
+	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0)
 	&& getAction(u1id, "data/Limit", 0) > 0):
 		await readActionTag("Exhaust", u1)
 	moveCounterDice(u1id)
@@ -881,7 +885,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		await readActionTag("Eminence", u2[i])
 		await readActionTag("Reactive", u2[i])
 		await readActionTag("OnUse", u2[i])
-		if(getAction(u2id[i], "data/Uses", 0) >= getAction(u2id[i], "data/Limit", 0) 
+		if(getAction(u2id[i], "data/Uses", 0) >= getAction(u2id[i], "data/Limit", 0)
 		&& getAction(u2id[i], "data/Limit", 0) > 0):
 			await readActionTag("Exhaust", u2[i])
 		moveCounterDice(u2id[i])
@@ -890,14 +894,14 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		var u1Recycle = true
 		var u1Store = !u1dice.is_empty()
 		var u1EmoState = true
-		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
+		var d1 := DataTree.new({} if(u1dice.is_empty()) else
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
 		setUnitProp(u1, "dieData", d1)
 		if(!d1.isEmpty()): await readDieTag("BeforeDie", u1)
 		for i in u2.size():
 			setUnitProp(u1, "target", u2[i])
 			if(u2dice[i].is_empty()): await afterSkill(u1, u2[i], clashData, false)
-			var d2 := DataTree.new({} if(u2dice[i].is_empty()) else 
+			var d2 := DataTree.new({} if(u2dice[i].is_empty()) else
 			getDiceData(u2dice[i].front(), u2id[i]).duplicate_deep())
 			setUnitProp(u1, "dieData", d1)
 			setUnitProp(u2[i], "dieData", d2)
@@ -911,7 +915,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			else:
 				u1Store = false
 			@warning_ignore("integer_division")
-			if(result[0] != 0 && u1EmoState): 
+			if(result[0] != 0 && u1EmoState):
 				changeEmotion(1, u1, false)
 				u1EmoState = false
 			if(result[1] != 0): changeEmotion(1, u2[i], false)
@@ -944,7 +948,7 @@ func afterSkillAWProactive(u1: String, u2: Array, data: Dictionary):
 	if(data["a1Finished?"]): return
 	for i in u2.size():
 		var u2Health = getUnitData(u2[i]).safeGet("Attributes/CurrentHealth", -1)
-		if(u2Health == 0 && data["u2oldHealth"][i] > 0): 
+		if(u2Health == 0 && data["u2oldHealth"][i] > 0):
 			setUnitProp(u1, "target", u2[i])
 			await readActionTag("OnKill", u1)
 	for i in u2.size():
@@ -996,10 +1000,10 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	await readActionTag("Reactive", u2)
 	await readActionTag("OnUse", u1)
 	await readActionTag("OnUse", u2)
-	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0) 
+	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0)
 	&& getAction(u1id, "data/Limit", 0) > 0):
 		await readActionTag("Exhaust", u1)
-	if(getAction(u2id, "data/Uses", 0) >= getAction(u2id, "data/Limit", 0) 
+	if(getAction(u2id, "data/Uses", 0) >= getAction(u2id, "data/Limit", 0)
 	&& getAction(u2id, "data/Limit", 0) > 0):
 		await readActionTag("Exhaust", u2)
 	moveCounterDice(u1id)
@@ -1007,9 +1011,9 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	while(!(u1dice.is_empty() && u2dice.is_empty())):
 		if(u1dice.is_empty()): await afterSkill(u1, u2, clashData, true)
 		if(u2dice.is_empty()): await afterSkill(u1, u2, clashData, false)
-		var d1 := DataTree.new({} if(u1dice.is_empty()) else 
+		var d1 := DataTree.new({} if(u1dice.is_empty()) else
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
-		var d2 := DataTree.new({} if(u2dice.is_empty()) else 
+		var d2 := DataTree.new({} if(u2dice.is_empty()) else
 			getDiceData(u2dice.front(), u2id).duplicate_deep())
 		setUnitProp(u1, "dieData", d1)
 		setUnitProp(u2, "dieData", d2)
@@ -1083,7 +1087,7 @@ func createAction(unit: String, action: String) -> int:
 	data.dset("Uses", data.dget("Uses", 0) + 1)
 	var dataCopy = Dictionary(data.dataset).duplicate_deep()
 	actionTree.dset("data", dataCopy)
-	if(isIntercept): 
+	if(isIntercept):
 		dataCopy.set("Intercept", true)
 		await readActionTag("OnIntercept", unit)
 	return actionID
@@ -1143,10 +1147,10 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 	setUnitProp(u2, "dieData", d2Data)
 	var d1Roll := [0, 0, 0, false, false]
 	var d2Roll := d1Roll.duplicate_deep()
-	if(!d1Data.isEmpty()): 
+	if(!d1Data.isEmpty()):
 		await readDieTag("Check", u1)
 		d1Roll = await rollDieEmbed(u1, d1Data)
-	if(!d2Data.isEmpty()): 
+	if(!d2Data.isEmpty()):
 		await readDieTag("Check", u2)
 		d2Roll = await rollDieEmbed(u2, d2Data)
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll[0], getDieType(d2Data), d2Roll[0])
@@ -1207,19 +1211,19 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 			var dmgArr := [0, -atkRoll[0], atkType, 0, 0, true]
 			dealCombinedDamage(dmgArr, atkUnit, atkUnit)
 	
-	if(!d1Data.isEmpty()): 
+	if(!d1Data.isEmpty()):
 		await readUnitTag("UsedDie", u1)
 		if(isOffense(d1Data)): await readUnitTag("UsedOffense", u1)
 		else: await readUnitTag("UsedDefense", u1)
-	if(!d2Data.isEmpty()): 
+	if(!d2Data.isEmpty()):
 		await readUnitTag("UsedDie", u2)
 		if(isOffense(d2Data)): await readUnitTag("UsedOffense", u2)
 		else: await readUnitTag("UsedDefense", u2)
 	
-	if(d1Data.dget("Recycle", 0) == 0): 
+	if(d1Data.dget("Recycle", 0) == 0):
 		d1Data.dset("Recycle", 0 if(!(isOffense(atkDice) || isOffense(defDice)))
 			else recycleDie(d1Data, d1Result))
-	if(d2Data.dget("Recycle", 0) == 0): 
+	if(d2Data.dget("Recycle", 0) == 0):
 		d2Data.dset("Recycle", 0 if(!(isOffense(atkDice) || isOffense(defDice)))
 			else recycleDie(d2Data, d2Result))
 	return [d1Result, d2Result, d1Data.dget("Recycle", 0), d2Data.dget("Recycle", 0)]
@@ -1232,7 +1236,7 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
 	var conditionStatuses: Array = unitData.safeGet("Conditions/" + tag, TYPE_ARRAY)
 	#print("TAG = ", tag, " -> ", conditionStatuses)
-	if(!defaultSeq.is_empty()): 
+	if(!defaultSeq.is_empty()):
 		conditionStatuses = unitData.safeGet("Statuses", TYPE_DICTIONARY).keys()
 	#print("TAG = ", tag, " -> ", conditionStatuses)
 	conditionStatuses = conditionStatuses.duplicate_deep()
@@ -1321,7 +1325,7 @@ func rollDieResult(unit: String, die: DataTree, method: String, args: Array, typ
 	return die.dget("rawResult", 0)
 
 func getDiceData(die: String, id := -1) -> Dictionary:
-	var dieParse := die.split("/")
+	var dieParse := die.rsplit("/", true, 1)
 	if(dieParse.size() != 2): return {}
 	if(!isSaveDiceArr(getAction(id, "name"))): return getAction(id, "data/Dice/" + dieParse[1], {})
 	return fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], TYPE_DICTIONARY)
@@ -1383,24 +1387,43 @@ func getIDTag(unit: String) -> String:
 	if(!(unitColor is String)): unitColor = "aaaaaa"
 	return "[b][color=" + unitColor + "][lb]" + unit + "][/color][/b]"
 
+func addMacro(m: String):
+	m = m.trim_prefix("Macros/").trim_suffix(".json")
+	var aliases: Array = fileTree.dget("Macros/" + m + "/Aliases", [])
+	aliases.append(m)
+	EventBus.emit_signal("consoleStore", "&init_aliases", "jcaliases")
+	var jcaliases: Dictionary = references.get("&init_aliases", {})
+	references.erase("&init_aliases")
+	for a in aliases:
+		jcaliases.set(a, m)
+
+func loaderCommand(loadFunc) -> void:
+	if(loadFunc == null): return
+	if(loadFunc is String && !loadFunc.is_empty()): isNestedArg({loadFunc: []})
+	if(loadFunc is Dictionary): isNestedArg(loadFunc)
+	if(loadFunc is Array): for f in loadFunc: loaderCommand(f)
+
 func runGameStat() -> void:
 	fileTree = GameManager.filetree
 	unitList.clear()
-	var gameStat = fileTree.dget("gamestat", {})
-	scene = fileTree.fetchData(gameStat, "Scene")[0]
-	GameManager.consoleLog = fileTree.fetchData(gameStat, "Console")[0]
-	var unitKeys = Dictionary(fileTree.fetchData(gameStat, "Units")[0]).keys()
-	for k in unitKeys:
-		var unitName = fileTree.fetchData(gameStat, "Units/" + k + "/Unit")[0]
-		addUnit(k, fileTree.dget("Units/" + unitName, {}))
-	var macroNames: Array = fileTree.dget("Macros", {}).keys()
+	var gameStat := DataTree.new(fileTree.dget("gamestat", {}))
+	scene = gameStat.dget("Scene", 0)
+	GameManager.consoleLog = gameStat.dget("Console", [])
+	
+	var macroNames: Array = fileTree.getAllFilesfromPath("Macros")
 	for m: String in macroNames:
-		m = m.trim_suffix(".json")
-		var aliases: Array = fileTree.dget("Macros/" + m + "/Aliases", [])
-		aliases.append(m)
-		EventBus.emit_signal("consoleStore", "&init_aliases", "jcaliases")
-		var jcaliases: Dictionary = references.get("&init_aliases", {})
-		references.erase("&init_aliases")
-		for a in aliases:
-			jcaliases.set(a, m)
+		addMacro(m)
+			
+	if(gameStat.dget("Loaded", false)): # TRUE CASE , Loaded before
+		loaderCommand(gameStat.dget("OnImport"))
+	else:								# FALSE CASE , New game
+		gameStat.dset("Loaded", true)
+		loaderCommand(gameStat.dget("Autoloader"))
+		loaderCommand(gameStat.dget("OnImport"))
+		var unitKeys = Dictionary(gameStat.dget("Units", {})).keys()
+		for k in unitKeys:
+			var unitName = gameStat.dget("Units/" + k + "/Unit", "")
+			addUnit(k, fileTree.dget("Units/" + unitName, {}))
+			sequence("Initialize", getUnitData(k).safeGet("Initialize", TYPE_ARRAY), {"Self": k})
+	
 	GameManager.pushConsole()

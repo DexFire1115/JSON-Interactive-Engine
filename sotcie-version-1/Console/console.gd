@@ -783,10 +783,10 @@ func dmgVisual(unit: String, data: Array):
 	text += " | "
 	text += addStyle("Stg", "ffff64", true)
 	text += ": "
-	text += addStyle(str(data[1]), "646464" if(data[1] <= 0) else "ffff64")
+	text += addStyle(castNumDataToString(data[1]), "646464" if(data[1] <= 0) else "ffff64")
 	if(data[1] != data[3]):
 		text += " -> "
-		text += addStyle(str(data[3]), "646464" if(data[3] <= 0) else "ffff64")
+		text += addStyle(castNumDataToString(data[3]), "646464" if(data[3] <= 0) else "ffff64")
 	text += " ]"
 	addPushConsole(text)
 

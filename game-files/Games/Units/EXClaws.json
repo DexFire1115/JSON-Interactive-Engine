@@ -23,106 +23,52 @@
         "BluntStagger": 0,
     },
     "Statuses": {
-        "Claws_Combative": {
-            "File": "Statuses/Claws_Combative",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "SceneEnd"
-            ]
-        },
-        "Claws_Delayed": {
-            "File": "Statuses/Claws_Delayed",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "OnUse",
-                "BeforeDie",
-                "ClashLose",
-                "AfterUse",
-                "SceneEnd",
-                "SceneStartPost"
-            ]
-        },
-        "Claws_Come": {
-            "File": "Statuses/Claws_Come",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "SceneStart",
-                "Check"
-            ]
-        },
-        "Claws_Fast": {
-            "File": "Statuses/Claws_Fast",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "SceneStart",
-                "Applied-Staggered",
-                "SceneStartPost"
-            ]
-        },
-        "Claws_Dont": {
-            "File": "Statuses/EXClaws_Dont",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "ValidateDamage",
-                "Removed-Staggered",
-                "SceneStart",
-                "SceneStartPost",
-                "SceneEnd"
-            ]
-        }
     },
     "Conditions": {
-        "SceneEnd": [
-            "Claws_Combative",
-            "Claws_Delayed",
-            "Claws_Dont"
-        ],
-        "SceneStart": [
-            "Claws_Come",
-            "Claws_Fast",
-            "Claws_Dont"
-        ],
-        "SceneStartPost": [
-            "Claws_Delayed",
-            "Claws_Fast",
-            "Claws_Dont"
-        ],
-        "OnUse": [
-            "Claws_Delayed"
-        ],
-        "BeforeDie": [
-            "Claws_Delayed"
-        ],
-        "ClashLose": [
-            "Claws_Delayed"
-        ],
-        "Check": [
-            "Claws_Come"
-        ],
-        "AfterUse": [
-            "Claws_Delayed"
-        ],
-        "Applied-Staggered": [
-            "Claws_Fast"
-        ],
-        "Removed-Staggered": [
-            "Claws_Dont"
-        ],
-        "ValidateDamage": [
-            "Claws_Dont"
-        ]
     },
     "Actions": [
-        "EXClaws_Evade_1",
-        "EXClaws_Swipes_1",
-        "EXClaws_Sharp_1",
-        "EXClaws_Uppercut_1",
-        "EXClaws_Blood_1",
-        "EXClaws_Dont_1"
+        "EXClaws/Evade_1",
+        "EXClaws/Swipes_1",
+        "EXClaws/Sharp_1",
+        "EXClaws/Uppercut_1",
+        "EXClaws/Blood_1",
+        "EXClaws/Dont_1"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Claws/Combative",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Claws/Delayed",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Claws/Come",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Claws/Fast",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Claws/Dont",
+                1,
+                "@Self"
+            ]
+        }
     ]
 }
