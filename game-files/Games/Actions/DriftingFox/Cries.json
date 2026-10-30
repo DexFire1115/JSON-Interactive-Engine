@@ -1,0 +1,150 @@
+{
+    "Name": "Cries Seeking Something",
+    "Cost": 6,
+    "AttackWeight": 5,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "SpawnUmbrellas",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Spawn 2 [b][color=408064]Old Umbrellas[/color][/b] next scene."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 12,
+            "Base": 8,
+            "ConfirmDamage": [
+                {
+                    "setVar": [
+                        "amt",
+                        {
+                            "varCall": [
+                                {
+                                    "propCall": [
+                                        "unitList",
+                                        "keys"
+                                    ]
+                                },
+                                "reduce",
+                                {
+                                    "lambda": [
+                                        "findUmbrellas",
+                                        [
+                                            {
+                                                "add": [
+                                                    {
+                                                        "getVar": [
+                                                            "a",
+                                                            0
+                                                        ]
+                                                    },
+                                                    {
+                                                        "ifelse": [
+                                                            {
+                                                                "equals": [
+                                                                    {
+                                                                        "getUnitDataElem": [
+                                                                            {
+                                                                                "getVar": [
+                                                                                    "n",
+                                                                                    ""
+                                                                                ]
+                                                                            },
+                                                                            "Name",
+                                                                            ""
+                                                                        ]
+                                                                    },
+                                                                    "Old Umbrella"
+                                                                ]
+                                                            },
+                                                            [
+                                                                2
+                                                            ],
+                                                            [
+                                                                0
+                                                            ]
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "a",
+                                        "n"
+                                    ]
+                                },
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        0,
+                        {
+                            "add": [
+                                {
+                                    "refCall": [
+                                        "dmgArr",
+                                        "get",
+                                        0
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "amt",
+                                        0
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dmgArr",
+                        "set",
+                        1,
+                        {
+                            "add": [
+                                {
+                                    "refCall": [
+                                        "dmgArr",
+                                        "get",
+                                        1
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "amt",
+                                        0
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        8
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 8 [b][color=5064cc]Sinking[/color][/b]. Deal bonus 2 [b][color=ff6464]Damage[/color][/b] and [b][color=ffff64]Stagger[/color][/b] for every [b][color=408064]Old Umbrella[/color][/b] in combat.",
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

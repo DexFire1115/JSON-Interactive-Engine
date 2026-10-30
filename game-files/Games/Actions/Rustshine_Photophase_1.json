@@ -1,0 +1,205 @@
+{
+    "Name": "Photophase",
+    "Cost": 3,
+    "OnUse": [
+        {
+            "setVar": [
+                "BuffVal",
+                {
+                    "min": [
+                        {
+                            "getStatus": [
+                                "Charge",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        5
+                    ]
+                },
+                "@Action"
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getVar": [
+                                "BuffVal",
+                                0,
+                                "@Action"
+                            ]
+                        },
+                        1
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Charge",
+                            {
+                                "sub": [
+                                    0,
+                                    {
+                                        "getVar": [
+                                            "BuffVal",
+                                            0,
+                                            "@Action"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "statusInflict": [
+                            "Aggro",
+                            {
+                                "getVar": [
+                                    "BuffVal",
+                                    0,
+                                    "@Action"
+                                ]
+                            },
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "addLog": [
+                            "Spent [b][color=50cccc]Charge[/color][/b] to gain [b][color=ff8064]Aggro[/color][/b]."
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Spend up to 5 [b][color=50cccc]Charge[/color][/b], gain 1 [b][color=ff8064]Aggro[/color][/b] for every [b][color=50cccc]Charge[/color][/b] spent."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 2,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "min": [
+                                {
+                                    "getStatus": [
+                                        "Vulnerable",
+                                        0,
+                                    ]
+                                },
+                                3
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every [b][color=aa6450]Vulnerable[/color][/b] on target, gain +1 [b][color=ffffff]Power[/color][/b] (Max: +3).",
+                "[b][color=6464ff][lb]On Evade][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        3,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 3 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getAction": [
+                                        {
+                                            "getVar": [
+                                                "Action"
+                                            ]
+                                        },
+                                        "name",
+                                        ""
+                                    ]
+                                },
+                                "contains",
+                                "SaveDice"
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Resolve",
+                                    2,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If deployed, gain 2 [b][color=ffcc50]Resolve[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BlockCounter",
+            "Dice": 8,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Vulnerable",
+                        1,
+                        "",
+                        true
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        5,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=aa6450]Vulnerable[/color][/b] next scene.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 5 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+    ],
+    "PostText": [
+    ]
+}

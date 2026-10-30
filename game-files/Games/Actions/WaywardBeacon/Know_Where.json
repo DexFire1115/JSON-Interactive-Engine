@@ -1,0 +1,140 @@
+{
+    "Name": "Signal : Know Where?",
+    "Cost": 2,
+    "OnUse": [
+        {
+            "ifelse": [
+                {
+                    "lte": [
+                        {
+                            "getStatus": [
+                                "Barrier",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        20
+                    ],
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Charge",
+                            5,
+                            "@Self"
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] If at 20- [b][color=80ffff]Barrier[/color][/b], gain 5 [b][color=50cccc]Charge[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 8,
+            "Base": 0,
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Strength",
+                        2
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Feeble",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=6464ff][lb]On Evade][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Grant 2 [b][color=cc5050]Strength[/color][/b]. Gain 2 [b][color=cc5050]Feeble[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "manualDmg": [
+                        {
+                            "getSelf": []
+                        },
+                        0,
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Take 1 [b][color=ffff64]Stagger[/color][/b]."                
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 12,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "manualDmg": [
+                        {
+                            "getSelf": []
+                        },
+                        0,
+                        2
+                    ]
+                },
+                {
+                    "addLog": [
+                        "Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Connection.'"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Take 2 [b][color=ffff64]Stagger[/color][/b]. Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Connection.'"                
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "ifelse": [
+                {
+                    "greaterThan": [
+                        {
+                            "getStatus": [
+                                "Feeble",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        0
+                    ]
+                },
+                [
+                    {
+                        "addLog": [
+                            "Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Unrest' if not already directed to use another skill."
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] If this unit has [b][color=cc5050]Feeble[/color][/b], Next [b][color=ffaa64]Speed Die[/color][/b] must use 'Signal : Unrest' if not already directed to use another skill."
+    ]
+}

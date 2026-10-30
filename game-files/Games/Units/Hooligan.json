@@ -21,6 +21,10 @@
         "PierceStagger": 0,
         "BluntStagger": -2,
     },
+    "Vars": {
+        "ReserveOnDeath": true,
+        "ActionUses": {}
+    },
     "Statuses": {
     },
     "Conditions": {

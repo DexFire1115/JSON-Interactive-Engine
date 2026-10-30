@@ -1,0 +1,142 @@
+{
+    "Aliases": [
+        "qb"
+    ],
+    "Args": [
+        "64ffaa",
+        "aa64ff",
+        "ffaa64",
+        "ffff64",
+        "64ff64",
+        "64ffff"
+    ],
+    "Commands": [
+        [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "refCall": [
+                                    "&quickbuff_args",
+                                    "size"
+                                ]
+                            },
+                            4
+                        ]
+                    },
+                    [
+                        1,
+                        "return"
+                    ]
+                ]
+            }
+        ],
+        {
+            "concat": [
+                "b ",
+                {
+                    "refCall": [
+                        "&quickbuff_args",
+                        "get",
+                        1
+                    ]
+                },
+                " ",
+                {
+                    "varCall": [
+                        {
+                            "ran": "Random_Ailment",
+                            "bur": "Burn",
+                            "ble": "Bleed",
+                            "tre": "Tremor",
+                            "sin": "Sinking",
+                            "par": "Paralyze",
+                            "saf": "Safeguard",
+                            "cha": "Charge",
+                            "poi": "Poise",
+                            "hst": "Haste",
+                            "bin": "Bind",
+                            "fat": "Fate",
+                            "pro": "Protection",
+                            "fra": "Fragile",
+                            "fee": "Feeble",
+                            "dis": "Disarm",
+                            "agg": "Aggro"
+                        },
+                        "get",
+                        {
+                            "refCall": [
+                                "&quickbuff_args",
+                                "get",
+                                2
+                            ]
+                        },
+                        ""
+                    ]
+                },
+                " ",
+                {
+                    "refCall": [
+                        "&quickbuff_args",
+                        "get",
+                        3
+                    ]
+                },
+                " ",
+                {
+                    "ifelse": [
+                        {
+                            "greaterThan": [
+                                {
+                                    "refCall": [
+                                        "&quickbuff_args",
+                                        "size"
+                                    ]
+                                },
+                                4
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "&quickbuff_args",
+                                    "get",
+                                    4
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                " ",
+                {
+                    "ifelse": [
+                        {
+                            "greaterThan": [
+                                {
+                                    "refCall": [
+                                        "&quickbuff_args",
+                                        "size"
+                                    ]
+                                },
+                                5
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "&quickbuff_args",
+                                    "get",
+                                    5
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ]
+        }
+    ],
+    "Help": [
+        "Quick Inflictions"
+    ]
+}

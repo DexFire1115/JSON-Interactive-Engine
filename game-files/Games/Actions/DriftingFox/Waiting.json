@@ -1,0 +1,77 @@
+{
+    "Name": "Waiting",
+    "Cost": 0,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Charge",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "This skill contains 10 copies of the Die below.",
+        "[b][color=ffffff][lb]On Use][/color][/b] All enemies lose 5 Emotion Points."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 10,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "equals": [
+                                {
+                                    "getUnitDataElem": [
+                                        "@Target",
+                                        "Attributes/EmotionPoints",
+                                        0
+                                    ]
+                                },
+                                0
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    4
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "changeEmotion": [
+                        -2,
+                        "@Target"
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Strength",
+                        2,
+                        "@Self"
+                    ]
+                },
+                {
+                    "addLog": [
+                        "Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Unrest.'"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Take 2 [b][color=ffff64]Stagger[/color][/b]. Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Tranquil.'",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=cc5050]Strength[/color][/b]. Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Unrest.'" 
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

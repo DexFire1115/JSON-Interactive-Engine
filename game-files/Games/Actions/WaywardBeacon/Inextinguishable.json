@@ -1,0 +1,66 @@
+{
+    "Name": "Signal : Inextinguishable?",
+    "Cost": 3,
+    "AttackWeight": 3,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Hit": [
+                {
+                    "changeLight": [
+                        1,
+                        "@Target"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Target regains 1 [b][color=ffeecc]Light[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Hit": [
+                {
+                    "dealStagger": [
+                        5
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Charge",
+                        3,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Deal 5 [b][color=ffff64]Stagger[/color][/b]. Gain 3 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

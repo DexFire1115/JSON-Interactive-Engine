@@ -1,0 +1,36 @@
+{
+    "Name": "Bandage",
+    "Cost": 0,
+    "Limit": 2,
+    "PreText": [
+        "Expends a use."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 4,
+            "Base": 0
+        }
+    ],
+    "AfterUse": [
+        {
+            "dealDamage": [
+                {
+                    "sub": [
+                        0,
+                        {
+                            "randi_range": [
+                                1,
+                                8
+                            ]
+                        }
+                    ]
+                },
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "Heals some health lol"
+    ]
+}

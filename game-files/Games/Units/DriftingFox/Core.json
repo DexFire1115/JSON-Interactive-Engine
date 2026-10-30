@@ -1,0 +1,195 @@
+{
+    "Name": "Drifting Fox",
+    "Color": "#64aa80",
+    "Type": "Abnormality",
+    "Class": "HE-04",
+    "Attributes": {
+        "CurrentHealth": 200,
+        "MaxHealth": 200,
+        "CurrentStagger": 100,
+        "MaxStagger": 100,
+        "CurrentLight": 0,
+        "MaxLight": 10,
+        "LightRegen": 6,
+        "SpeedDiceSize": 4,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 2,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": 2,
+        "BluntDamage": -2,
+        "SlashStagger": 0,
+        "PierceStagger": 2,
+        "BluntStagger": -2,
+    },
+    "Vars": {
+        "UmbrellasKilled": 0,
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "DriftingFox/Gloomy",
+        "DriftingFox/Raging",
+        "DriftingFox/SRecoil",
+        "DriftingFox/STorrent",
+        "DriftingFox/Waiting",
+        "DriftingFox/Cries"
+    ],
+    "Initialize": [
+        {
+            "setVar": [
+                "allies",
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getSelf": [
+                                        
+                                    ]
+                                },
+                                "contains",
+                                "A"
+                            ]
+                        },
+                        [
+                            "A"
+                        ],
+                        [
+                            "E"
+                        ]
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "newID",
+                {
+                    "generateUniqueUID": [
+                        {
+                            "getVar": [
+                                "allies",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "addUnit": [
+                {
+                    "getVar": [
+                        "newID",
+                        ""
+                    ]
+                },
+                {
+                    "propCall": [
+                        "fileTree",
+                        "dget",
+                        "Units/DriftingFox/Head"
+                    ]
+                }
+            ]
+        },
+        {
+            "setUnitDataElem": [
+                {
+                    "getVar": [
+                        "newID",
+                        ""
+                    ]
+                },
+                "Attributes/Parent",
+                {
+                    "getSelf": [
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        4
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "newID",
+                            {
+                                "generateUniqueUID": [
+                                    {
+                                        "getVar": [
+                                            "allies",
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "addUnit": [
+                            {
+                                "getVar": [
+                                    "newID",
+                                    ""
+                                ]
+                            },
+                            {
+                                "propCall": [
+                                    "fileTree",
+                                    "dget",
+                                    "Units/DriftingFox/Umbrella"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "setUnitDataElem": [
+                            {
+                                "getVar": [
+                                    "newID",
+                                    ""
+                                ]
+                            },
+                            "Attributes/Parent",
+                            {
+                                "getSelf": [
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "statusInflict": [
+                "DriftingFox/Seeking",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "DriftingFox/Broken",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "DriftingFox/Gloom",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

@@ -551,10 +551,10 @@ func generateUniqueUID(prefix: String) -> String:
 	return prefix + str(high + 1)
 
 func addUnit(code: String, data: Dictionary) -> Dictionary:
-	var oldData = unitList.get(code, {})
+	var oldData := getUnitData(code)
 	Unit.new(unitList, code, data)
 	sequence("Initialize", getUnitData(code).safeGet("Initialize", TYPE_ARRAY), {"Self": code})
-	return oldData
+	return oldData.dataset if(oldData != null)else {}
 
 func hideUnit(code: String) -> bool:
 	if(unitReserve.has(code) || !unitList.has(code)): return false
@@ -689,7 +689,7 @@ func nextTurn(dice := "", isProactive := true):
 	defaultCount = optionInts.size()
 	for i in range(optionInts.size(),actionList.size()):
 		if(isUsable(unitData, DataTree.new(fileTree.safeGet("Actions/" + actionList[i],
-			TYPE_DICTIONARY)))): optionInts.append(i)
+			TYPE_DICTIONARY)), actionList[i])): optionInts.append(i)
 	var answer := 0
 	if(actionList.size() > 1):
 		addLog("[u]" + getIDTag(unitName) + "[b]: Select Action:[/b][/u]")
@@ -887,17 +887,23 @@ func getUnitFromDice(dice: String) -> String:
 func isInactive(unitData: DataTree) -> bool:
 	return await unitData.getComplexSeqn("Attributes/Inactive", "orBool", false)
 
-func isUsable(unitData: DataTree, actionData: DataTree) -> bool:
+func isUsable(unitData: DataTree, actionData: DataTree, actionName: String) -> bool:
 	if(unitData.dget("Attributes/CurrentLight", 0) < actionData.dget("Cost", 0)):
 		return false
 	if(unitData.dget("Attributes/EmotionPoints", 0) < actionData.dget("Emotion", 0)):
 		return false
-	if(actionData.has("Limit") && actionData.dget("Uses", 0) >= actionData.dget("Limit", 0)):
+	if(actionData.has("Limit") && unitData.dget("Vars/ActionUses/" + actionName, 0) >= actionData.dget("Limit", 0)):
 		return false
 	return true
 
 func isTargettable(_unitData: DataTree, _targetData: DataTree) -> bool:
 	return true
+
+func actionSaveDie(unit: String, die: DataTree, dieArr: Array):
+	if(die.dget("RecycleCount", 0) == 0): 
+		dieArr.pop_front()
+		return
+	unitList[unit].savedDice.push_back(dieArr.pop_front())
 
 func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	if(!unitList.has(u1)): return
@@ -937,7 +943,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	await readActionTag("Eminence", u1)
 	await readActionTag("Proactive", u1)
 	await readActionTag("OnUse", u1)
-	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0)
+	if(getUnitDataElem(u1, "Vars/ActionUses/" + a1, 0) >= getAction(u1id, "data/Limit", 0)
 	&& getAction(u1id, "data/Limit", 0) > 0):
 		await readActionTag("Exhaust", u1)
 	moveCounterDice(u1id)
@@ -946,7 +952,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		await readActionTag("Eminence", u2[i])
 		await readActionTag("Reactive", u2[i])
 		await readActionTag("OnUse", u2[i])
-		if(getAction(u2id[i], "data/Uses", 0) >= getAction(u2id[i], "data/Limit", 0)
+		if(getUnitDataElem(u2[i], "Vars/ActionUses/" + a2[i], 0) >= getAction(u2id[i], "data/Limit", 0)
 		&& getAction(u2id[i], "data/Limit", 0) > 0):
 			await readActionTag("Exhaust", u2[i])
 		moveCounterDice(u2id[i])
@@ -957,13 +963,19 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		var u1EmoState = true
 		var d1 := DataTree.new({} if(u1dice.is_empty()) else
 			getDiceData(u1dice.front(), u1id).duplicate_deep())
+		if(u2dice.all(func(u): return u.is_empty()) && canStore(d1)):
+			actionSaveDie(u1, d1, u1dice)
+			continue
 		setUnitProp(u1, "dieData", d1)
 		if(!d1.isEmpty()): await readDieTag("BeforeDie", u1)
 		for i in u2.size():
 			setUnitProp(u1, "target", u2[i])
 			if(u2dice[i].is_empty()): await afterSkill(u1, u2[i], clashData, false)
 			var d2 := DataTree.new({} if(u2dice[i].is_empty()) else
-			getDiceData(u2dice[i].front(), u2id[i]).duplicate_deep())
+				getDiceData(u2dice[i].front(), u2id[i]).duplicate_deep())
+			if(d1.isEmpty() && canStore(d2)):
+				actionSaveDie(u2[i], d2, u2dice[i])
+				continue
 			setUnitProp(u1, "dieData", d1)
 			setUnitProp(u2[i], "dieData", d2)
 			if(!d2.isEmpty()): await readDieTag("BeforeDie", u2[i])
@@ -971,7 +983,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 				u1, u2[i], d1, d2)
 			if(result.is_empty()):
 				if(!u2dice[i].is_empty()):
-					unitList[u2[i]].savedDice.push_back(u2dice[i].pop_front())
+					actionSaveDie(u2[i], d2, u2dice)
 				continue
 			else:
 				u1Store = false
@@ -982,9 +994,16 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 			if(result[1] != 0): changeEmotion(1, u2[i], false)
 			if(result[2] == 0): u1Recycle = false
 			if(result[3] == 0): u2dice[i].pop_front()
+			elif(!u2dice[i].is_empty()):
+				DataTree.new(getDiceData(u2dice[i].front(), u2id[i])).dset(
+					"RecycleCount", d2.dget("RecycleCount", 0) + 1)
 			if(u1dice.is_empty()): d1 = DataTree.new({})
-		if(u1Store): unitList[u1].savedDice.push_back(u1dice.pop_front())
-		elif(!u1Recycle): u1dice.pop_front()
+		if(u1Store): 
+			actionSaveDie(u1, d1, u1dice)
+		elif(u1Recycle && !u1dice.is_empty()):
+			DataTree.new(getDiceData(u1dice.front(), u1id)).dset(
+				"RecycleCount", d1.dget("RecycleCount", 0) + 1)
+		else: u1dice.pop_front()
 
 	await afterSkillAW(u1, u2, clashData)
 	var u1Emotion = getUnitData(u1).safeGet("Attributes/EmotionPoints", -1)
@@ -1145,6 +1164,7 @@ func createAction(unit: String, action: String) -> int:
 	actionTree.dset("name", action)
 	actionTree.dset("diceArr", diceArr)
 	var data := DataTree.new(fileTree.safeGet("Actions/" + action, TYPE_DICTIONARY))
+	setUnitDataElem(unit, "Vars/ActionUses/" + action, getUnitDataElem(unit, "Vars/ActionUses/" + action, 0) + 1)
 	data.dset("Uses", data.dget("Uses", 0) + 1)
 	var dataCopy = Dictionary(data.dataset).duplicate_deep()
 	actionTree.dset("data", dataCopy)
@@ -1216,14 +1236,14 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 		d2Roll = await rollDieEmbed(u2, d2Data)
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll[0], getDieType(d2Data), d2Roll[0])
 
-	if(d1Roll[0] * d2Roll[0] != 0): # Not Double Unopposed
+	if(d1Roll[0] * d2Roll[0] != 0): # Not Unopposed
 		await readDieTag("Clash", u1)
 		await readDieTag("Clash", u2)
 	var clashResults = clashEval(d1Data, d2Data)
 	var d1Result: int = clashResults[0]
 	var d2Result: int = clashResults[1]
 	
-	if(d1Roll[0] - d2Roll[0] == 0): # Tie or double unopposed
+	if(d1Roll[0] - d2Roll[0] == 0): # Tie or double Unopposed
 		if(dmgType(d1Data) == "Evade" && isOffense(d2Data)):
 			await readDieTag("Evade", u1)
 		if(dmgType(d2Data) == "Evade" && isOffense(d1Data)):
@@ -1254,7 +1274,7 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 		if(dmgType(defDice) == "Evade"): # Offense beats Evade
 			stg -= defRoll[0]
 		var dmgArr := [dmg, stg, atkType, res[0], res[1], dmg < 0, dmg < 0]
-		dealCombinedDamage(dmgArr, atkUnit, defUnit)
+		await dealCombinedDamage(dmgArr, atkUnit, defUnit)
 		await readDieTag("Hit", atkUnit)
 		if(atkRoll[3]):
 			await readDieTag("Crit", atkUnit)
@@ -1263,14 +1283,14 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 	elif(atkType == "Block"): # Block win
 		var dmg := int(atkRoll[0] - defRoll[0])
 		var dmgArr := [0, dmg, atkType, 0, 0, dmg < 0, dmg < 0]
-		dealCombinedDamage(dmgArr, atkUnit, defUnit)
+		await dealCombinedDamage(dmgArr, atkUnit, defUnit)
 	
 	else:
 		if(isOffense(defDice)): # Evade evades Offense
 			await readDieTag("Evade", atkUnit)
 		else: # Evade beats Evade/Block
 			var dmgArr := [0, -atkRoll[0], atkType, 0, 0, true]
-			dealCombinedDamage(dmgArr, atkUnit, atkUnit)
+			await dealCombinedDamage(dmgArr, atkUnit, atkUnit)
 	
 	if(!d1Data.isEmpty()):
 		await readUnitTag("UsedDie", u1)
@@ -1359,8 +1379,8 @@ func rollDieEmbed(unit: String, die: DataTree) -> Array:
 	var arr = [
 		result, # Final Val
 		rawResult, # Raw Val
-		rawResult - die.dget("Base"), # Baseless Roll
-		rawResult == die.dget("Dice") + die.dget("Base", 0), # isCrit
+		rawResult - die.dget("Base", 0), # Baseless Roll
+		rawResult == die.dget("Dice", 0) + die.dget("Base", 0), # isCrit
 		rawResult == 1 + die.dget("Base", 0) # isNegativeCrit
 	]
 	die.dset("Result", arr)

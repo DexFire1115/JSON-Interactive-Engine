@@ -1,0 +1,26 @@
+{
+    "Name": "Gloomy Moan",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 4,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        3
+                    ]
+                },
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=5064cc]Sinking[/color][/b].",
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

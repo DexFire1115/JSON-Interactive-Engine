@@ -1,0 +1,67 @@
+{
+    "Aliases": [
+        "au"
+    ],
+    "Args": [
+        "64ffaa",
+        "aa64ff",
+        "ffff64"
+    ],
+    "Commands": [
+        [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "refCall": [
+                                    "&addunit_args",
+                                    "size"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        1,
+                        "return"
+                    ]
+                ]
+            }
+        ],
+        {
+           "addUnit": [
+                {
+                    "refCall": [
+                        "&addunit_args",
+                        "get",
+                        1
+                    ]
+                },
+                {
+                    "propCall": [
+                        "fileTree",
+                        "dget",
+                        {
+                            "concat": [
+                                "Units/",
+                                {
+                                    "refCall": [
+                                        "&addunit_args",
+                                        "get",
+                                        2
+                                    ]
+                                }
+                            ]
+                        },
+                        {}
+                    ]
+                }
+           ] 
+        },
+        0
+    ],
+    "Help": [
+        "Adds a unit by tag and name"
+    ]
+}

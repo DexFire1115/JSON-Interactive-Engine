@@ -1,0 +1,260 @@
+{
+    "Name": "Combat Preparation",
+    "Cost": 2,
+    "OnUse": [
+        {
+            "setVar": [
+                "allies",
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getSelf": [
+                                        
+                                    ]
+                                },
+                                "contains",
+                                "A"
+                            ]
+                        },
+                        [
+                            "A"
+                        ],
+                        [
+                            "E"
+                        ]
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "inflictArr",
+                {
+                    "varCall": [
+                        {
+                            "propCall": [
+                                "unitList",
+                                "keys"
+                            ]
+                        },
+                        "filter",
+                        {
+                            "lambda": [
+                                "findAllies",
+                                [
+                                    {
+                                        "varCall": [
+                                            {
+                                                "getVar": [
+                                                    "x",
+                                                    ""
+                                                ]
+                                            },
+                                            "contains",
+                                            {
+                                                "getVar": [
+                                                    ".allies",
+                                                    "_"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "x"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "getVar": [
+                        "inflictArr",
+                        []
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Endurance",
+                            1,
+                            {
+                                "getVar": [
+                                    "i"
+                                ]
+                            },
+                            true
+                        ]
+                    },
+                    {
+                        "statusInflict": [
+                            "Protection",
+                            1,
+                            {
+                                "getVar": [
+                                    "i"
+                                ]
+                            },
+                            true
+                        ]
+                    }
+                ],
+                "i"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Aggro",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "Check": [
+        {
+            "ifelse": [
+                {
+                    "getVar": [
+                        "Laemshi_Boost",
+                        false,
+                        "@Action"
+                    ]
+                },
+                [
+                    {
+                        "changePower": [
+                            1
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Grant 1 [b][color=50cc50]Endurance[/color][/b] and [b][color=50ccff]Protection[/color][/b] to all allies next scene. Gain 3 [b][color=ff8064]Aggro[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        3,
+                        "@Self"
+                    ]
+                },
+                {
+                    "setVar": [
+                        "Laemshi_Boost",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 3 [b][color=cccc50]Tremor[/color][/b]. All remaining Dice on this skill have +1 [b][color=ffffff]Power[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        -6
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Trigger [b][color=ffff50]Tremor Burst[/color][/b], then reduce target's [b][color=cccc50]Tremor[/color][/b] by 3."    
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        -6
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Trigger [b][color=ffff50]Tremor Burst[/color][/b], then reduce target's [b][color=cccc50]Tremor[/color][/b] by 3."    
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "ifelse": [
+                {
+                    "lessThan": [
+                        {
+                            "getUnitDataElem": [
+                                "@Self",
+                                "Attributes/CurrentLight"
+                            ]
+                        },
+                        1
+                    ]
+                },
+                [
+                    "return"
+                ]
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "queryYN": [
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "[b] Spend 1 [color=ffeecc]Light[/color] to grant all other allies a saved [color=aaccff]Block Die[/color] with 1d4 [color=ffffff]Power[/color]?[/b]"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "addLog": [
+                            "Just Pretend"
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] May spend 1 [color=ffeecc]Light[/color] to grant all other allies a saved [color=aaccff]Block Die[/color] with 1d4 [color=ffffff]Power[/color]?[/b]."
+    ]
+}

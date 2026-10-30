@@ -70,6 +70,9 @@ func _on_input_text_submitted(new_text: String) -> void:
 		historyIndex = 0
 	refreshConsole()
 	input.text = ""
+	
+func _on_logs_meta_clicked(meta: Variant) -> void:
+	input.emit_signal("text_submitted", str(meta))
 
 func textPrompt(query := ""):
 	if(!query.is_empty()): addPushConsole(query)
@@ -180,9 +183,13 @@ func jCommand(args: PackedStringArray) -> int:
 	Functions.references.set("&" + command + "_args", args)
 	Functions.references.set("&" + command + "_out", outputs)
 	for c in commands:
+		if(c is Array): c = await Functions.sequence("seq", c.duplicate_deep(), {
+			"&" + command + "_args": args,
+			"&" + command + "_out": outputs
+		})
 		if(c is Dictionary): c = await Functions.isNestedArg(c.duplicate_deep())
 		if(c is float || c is int): return int(c)
-		if(c is String): c = await readCommand(c)
+		if(c is String && !str(c).is_empty()): c = await readCommand(c)
 		outputs.append(c)
 	Functions.references.erase("&" + command + "_args")
 	Functions.references.erase("&" + command + "_out")
@@ -588,7 +595,7 @@ func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
 		addPushConsole(addStyle("<Action does not exist!>", "ff6464", true))
 		return 2
 	var text := ""
-	var isUsable := Functions.isUsable(unitData, actionData)
+	var isUsable := Functions.isUsable(unitData, actionData, actionName)
 	var color := "ffeecc" if(isUsable)else "808080"
 	text += addStyle(" " + str(index) + " | ", color, true)
 	text += getSkillHeader(actionData, isUsable)
@@ -635,8 +642,8 @@ func printSpeedDice(dice: String, listID := 0) -> void:
 	text += " | "
 	text += getNameTag(unit)
 	text += " "
-	var curLight = unitData.dget("Attributes/CurrentLight", "")
-	var maxLight = unitData.dget("Attributes/MaxLight", "")
+	var curLight = unitData.dget("Attributes/CurrentLight", 0)
+	var maxLight = unitData.dget("Attributes/MaxLight", 0)
 	text += addStyle("⬢".repeat(curLight),"ffffcc")
 	text += addStyle("⬢".repeat(maxLight - curLight),"646464")
 	text += " ("
@@ -892,6 +899,9 @@ func italicStr(text: String) -> String:
 
 func underlineStr(text: String) -> String:
 	return "[u]" + text + "[/u]"
+
+func addURL(text: String, url: String) -> String:
+	return "[url=" + url + "]" + text + "[/url]"
 
 func unitCaps(unit: String) -> String:
 	if(unitCase): return unit

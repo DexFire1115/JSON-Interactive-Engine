@@ -4,8 +4,8 @@
     "Type": "Human",
     "Class": "Lvl. 3",
     "Attributes": {
-        "CurrentHealth": 60,
-        "MaxHealth": 60,
+        "CurrentHealth": 56,
+        "MaxHealth": 70,
         "CurrentStagger": 40,
         "MaxStagger": 40,
         "CurrentLight": 5,
@@ -47,7 +47,8 @@
         "Marton_Come_1",
         "Marton_Right_1",
         "Marton_Stay_1",
-        "Marton_Purged_1"
+        "Marton_Purged_1",
+        "Bandage"
     ],
     "Initialize": [
         

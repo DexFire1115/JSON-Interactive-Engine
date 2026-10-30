@@ -1,0 +1,42 @@
+{
+    "Name": "Raging Withdrawal",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 2,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        2
+                    ]
+                },
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=5064cc]Sinking[/color][/b].",
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 1,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Sinking",
+                        3
+                    ]
+                },
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=5064cc]Sinking[/color][/b].",
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

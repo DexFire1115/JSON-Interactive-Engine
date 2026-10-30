@@ -1,0 +1,72 @@
+{
+    "Name": "Zwei Assoc. Fixer - Laemshi",
+    "Color": "#eebbaa",
+    "Type": "Human",
+    "Class": "Grade 5",
+    "Attributes": {
+        "CurrentHealth": 85,
+        "MaxHealth": 90,
+        "CurrentStagger": 45,
+        "MaxStagger": 45,
+        "CurrentLight": 6,
+        "MaxLight": 6,
+        "LightRegen": 2,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 2,
+        "EmotionPoints": 0,
+        "SlashDamage": 1,
+        "PierceDamage": 3,
+        "BluntDamage": -4,
+        "SlashStagger": 0,
+        "PierceStagger": 1,
+        "BluntStagger": -3,
+    },
+    "Vars": {
+
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Laemshi/Deflection",
+        "Laemshi/Defensive",
+        "Laemshi/Greatsword",
+        "Laemshi/Combat",
+        "Laemshi/Guardian",
+        "Laemshi/Lay",
+        "Laemshi/Crisis",
+        "Bandage"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Laemshi/XCorp",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Laemshi/Your_Shield",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Laemshi/Zwei_West",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Laemshi/Per",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

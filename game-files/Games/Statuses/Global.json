@@ -105,6 +105,56 @@
                                 "Vars/Progress",
                                 0
                             ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "equals": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/Wave",
+                                                0
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setUnitDataElem": [
+                                            "@Self",
+                                            "Vars/Count",
+                                            3
+                                        ]
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "equals": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/Wave",
+                                                0
+                                            ]
+                                        },
+                                        2
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setUnitDataElem": [
+                                            "@Self",
+                                            "Vars/Count",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            ]
                         }
                     ]
                ] 
@@ -188,10 +238,10 @@
                                                     ]
                                                 },
                                                 [
-                                                    "Units/Pigritiae"
+                                                    "Units/Luxuriae"
                                                 ],
                                                 [
-                                                    "Units/Irae.json"
+                                                    "Units/Hooligan"
                                                 ]
                                             ]
                                         },

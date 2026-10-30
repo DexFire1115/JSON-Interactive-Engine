@@ -1,0 +1,62 @@
+{
+    "Name": "Wayward Beacon",
+    "Color": "#aaccff",
+    "Type": "Abnormality",
+    "Class": "TETH-02",
+    "Attributes": {
+        "CurrentHealth": 100,
+        "MaxHealth": 100,
+        "CurrentStagger": 25,
+        "MaxStagger": 25,
+        "CurrentLight": 10,
+        "MaxLight": 10,
+        "LightRegen": 0,
+        "SpeedDiceSize": 12,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 5,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": -10,
+        "PierceStagger": -10,
+        "BluntStagger": -10,
+    },
+    "Vars": {
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "WaywardBeacon/Connection",
+        "WaywardBeacon/Tranquil",
+        "WaywardBeacon/Unrest",
+        "WaywardBeacon/Know_Where",
+        "WaywardBeacon/Inextinguishable"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "WaywardBeacon/Unwavering",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "WaywardBeacon/Signal",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Barrier",
+                10,
+                "@Self"
+            ]
+        }
+    ]
+}

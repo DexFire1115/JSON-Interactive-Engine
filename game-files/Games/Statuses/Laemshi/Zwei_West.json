@@ -1,0 +1,77 @@
+{
+    "Name": "Zwei West : Shock Nullification",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "setVar": [
+                    "amt",
+                    {
+                        "forEvery": [
+                            {
+                                "getStatus": [
+                                    "Tremor",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            4,
+                            0,
+                            {
+                                "ifelse": [
+                                    {
+                                        "greaterThan": [
+                                            {
+                                                "getStatus": [
+                                                    "Laemshi/Defensive_Stance",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            },
+                                            0
+                                        ]
+                                    },
+                                    [
+                                        3
+                                    ],
+                                    [
+                                        2
+                                    ]
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Endurance",
+                    {
+                        "getVar": [
+                            "amt",
+                            0
+                        ]
+                    },
+                    "@Self"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Protection",
+                    {
+                        "getVar": [
+                            "amt",
+                            0
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ],
+    },
+    "Text": [
+        "[b][color=ffffff][lb]Scene Start][/color][/b] Gain 1 [b][color=50cc50]Endurance[/color][/b] and 1 [b][color=5080cc]Protection[/color][/b] for every 4 [b][color=cccc50]Tremor[/color][/b] on self (Max: 2).",
+        "If this unit has [b][color=ffccaa]Defensive Stance[/color][/b], raise the maximum for each to 3."
+    ]
+}

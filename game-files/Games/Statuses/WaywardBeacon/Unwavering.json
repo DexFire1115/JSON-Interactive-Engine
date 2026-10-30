@@ -1,0 +1,126 @@
+{
+    "Name": "Unwavering in the Void",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ValidateDamage": [
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    2
+                                ]
+                            },
+                            "contains",
+                            "Tremor"
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                0,
+                                0
+                            ]
+                        },
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                1,
+                                0
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Staggered",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "Barrier_Gain",
+                    {
+                        "min": [
+                            {
+                                "add": [
+                                    {
+                                        "add": [
+                                            {
+                                                "getStatus": [
+                                                    "Charge",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            },
+                                            {
+                                                "getStatus": [
+                                                    "Tremor",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    10
+                                ]
+                            },
+                            30
+                        ]
+                    }
+                ]
+            },
+            {
+                "setStatus": [
+                    "Charge",
+                    0,
+                    "@Self"
+                ]
+            },
+            {
+                "setStatus": [
+                    "Tremor",
+                    0,
+                    "@Self"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Barrier",
+                    {
+                        "getVar": [
+                            "Barrier_Gain",
+                            0
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

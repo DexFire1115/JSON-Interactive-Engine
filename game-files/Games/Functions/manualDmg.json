@@ -1,0 +1,187 @@
+{
+    "Args": [
+        "Unit",
+        "Damage",
+        "Stagger"
+    ],
+    "Defaults": [
+        0,
+        0
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "tempHlt",
+                {
+                    "getUnitDataElem": [
+                        {
+                            "getVar": [
+                                "Unit",
+                                ""
+                            ]
+                        },
+                        "Attributes/CurrentHealth",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "tempStg",
+                {
+                    "getUnitDataElem": [
+                        {
+                            "getVar": [
+                                "Unit",
+                                ""
+                            ]
+                        },
+                        "Attributes/CurrentStagger",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "setUnitDataElem": [
+                {
+                    "getVar": [
+                        "Unit",
+                        ""
+                    ]
+                },
+                "Attributes/CurrentHealth",
+                {
+                    "clamp": [
+                        {
+                            "sub": [
+                                {
+                                    "getVar": [
+                                        "tempHlt",
+                                        0
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "Damage",
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        0,
+                        {
+                            "getUnitDataElem": [
+                                {
+                                    "getVar": [
+                                        "Unit",
+                                        ""
+                                    ]
+                                },
+                                "Attributes/MaxHealth",
+                                0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setUnitDataElem": [
+                {
+                    "getVar": [
+                        "Unit",
+                        ""
+                    ]
+                },
+                "Attributes/CurrentStagger",
+                {
+                    "clamp": [
+                        {
+                            "sub": [
+                                {
+                                    "getVar": [
+                                        "tempStg",
+                                        0
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "Stagger",
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        0,
+                        {
+                            "getUnitDataElem": [
+                                {
+                                    "getVar": [
+                                        "Unit",
+                                        ""
+                                    ]
+                                },
+                                "Attributes/MaxStagger",
+                                0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "consoleCommand": [
+                "dmgDisplay",
+                {
+                    "getVar": [
+                        "Unit",
+                        ""
+                    ]
+                },
+                {
+                    "passArr": [
+                        {
+                            "getVar": [
+                                "tempHlt",
+                                0
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "tempStg",
+                                0
+                            ]
+                        },
+                        {
+                            "getUnitDataElem": [
+                                {
+                                    "getVar": [
+                                        "Unit",
+                                        ""
+                                    ]
+                                },
+                                "Attributes/CurrentHealth",
+                                0
+                            ]
+                        },
+                        {
+                            "getUnitDataElem": [
+                                {
+                                    "getVar": [
+                                        "Unit",
+                                        ""
+                                    ]
+                                },
+                                "Attributes/CurrentStagger",
+                                0
+                            ]
+                        },
+                        ""
+                    ]
+                }
+            ]
+        }
+    ]
+}
