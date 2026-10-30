@@ -1,0 +1,63 @@
+{
+    "Name": "[Shin] Perfected Steps / Promenade",
+    "Color": "#cccccc",
+    "MinStack": 0,
+    "MaxStack": 0,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Attributes/EmotionPoints",
+                                    0
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " May spend 3 [b][color=aa64ff]Emotion Points[/color][/b] to activate [b][color=ffaa80]Perfected Steps[/color][/b]!",
+                            "\n",
+                            "  Run -> [b][url=\"*shin ",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            " Orph/Perfected\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Orph/Perfected[/color][/url][/b]"
+                        ]
+                    }
+                ]
+            },
+        ],
+    },
+    "Text": [
+    ]
+}

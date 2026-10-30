@@ -81,7 +81,11 @@ func varCall(variant, method: String, ...args: Array) -> Variant:
 func refCall(ref: String, method: String, ...args: Array) -> Variant:
 	ref = parseRef(ref)
 	if(!references.has(ref)): return null
-	return Callable.create(references[ref], method).callv(args)
+	var refval = references[ref]
+	if(refval == null): 
+		print("ALERT ", method, " ", args)
+		return null
+	return Callable.create(refval, method).callv(args)
 
 func dieCall(method: String, ...args: Array) -> Variant:
 	var die = getVar("DieData")
@@ -285,6 +289,9 @@ func andBool(b1: bool, b2: bool) -> bool:
 func orBool(b1: bool, b2: bool) -> bool:
 	return b1 || b2
 	
+func nullDefault(val, default) -> Variant:
+	return default if(val == null)else val
+
 func safeDict(input: Array, returnIndex := 0) -> Dictionary:
 	for d in input:
 		if(d.size() == 1 && d.keys()[0] is String):

@@ -1,5 +1,5 @@
 {
-    "Name": "[Shin] Dreams of Achievement / Taking Action",
+    "Name": "[Shin] Memories of Peace / A Will to Protect",
     "Color": "#cccccc",
     "MinStack": 0,
     "MaxStack": 0,
@@ -16,7 +16,7 @@
                                     0
                                 ]
                             },
-                            3
+                            4
                         ]
                     },
                     [
@@ -37,21 +37,21 @@
                                     }
                                 ]
                             },
-                            " May spend 3 [b][color=aa64ff]Emotion Points[/color][/b] to activate [b][color=ffaa80]Dreams Of Achievement[/color][/b]!",
+                            " May spend 4 [b][color=aa64ff]Emotion Points[/color][/b] to activate [b][color=ffaa80]Memories Of Peace[/color][/b]!",
                             "\n",
-                            "  Run -> [b][url=\"shin ",
+                            "  Run -> [b][url=\"*shin ",
                             {
                                 "getSelf": [
                                     
                                 ]
                             },
-                            " Shin/Dreams_Of_Achievement\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            " Shin/Memories_Of_Peace\"][color=64ffaa]shin[/color] [color=aa64ff]",
                             {
                                 "getSelf": [
                                     
                                 ]
                             },
-                            "[/color] [color=ffff64]Shin/Dreams_Of_Achievement[/color][/url][/b]"
+                            "[/color] [color=ffff64]Shin/Memories_Of_Peace[/color][/url][/b]"
                         ]
                     }
                 ]

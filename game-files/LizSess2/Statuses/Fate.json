@@ -1,0 +1,68 @@
+{
+    "Name": "Fate",
+    "Color": "#ffcc64",
+    "Conditions": {
+        "BeforeDie": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b][color=ffcc64]Fate![/color][/b]"
+                        ]
+                    }
+                    
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitProp": [
+                            "@Self",
+                            "dieData"
+                        ]
+                    },
+                    "dset",
+                    "FixedMax",
+                    {
+                        "add": [
+                            1,
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitProp": [
+                                            "@Self",
+                                            "dieData"
+                                        ]
+                                    },
+                                    "dget",
+                                    "FixedMin",
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Fate",
+                    -1,
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When rolling a die, automaticlly take the maximum value, then reduce [color=ffcc64]Fate[/color] by 1.",
+        "Cancels with [color=ccaa50]Paralyze[/color] as if the two were opposing Buffs/Debuffs. For multiple Attack Weight, apply to all copies of the Die across targets."
+    ]
+}

@@ -13,7 +13,7 @@
         "LightRegen": 1,
         "SpeedDiceSize": 8,
         "SpeedDiceBase": 0,
-        "SpeedDiceAmt": 1,
+        "SpeedDiceAmt": 2,
         "EmotionPoints": 1,
         "SlashDamage": -1,
         "PierceDamage": 0,

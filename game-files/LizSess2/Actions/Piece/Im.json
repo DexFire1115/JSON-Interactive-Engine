@@ -1,0 +1,25 @@
+{
+    "Name": "I'm eye-catching, right? RIGHT!?!",
+    "Cost": 1,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

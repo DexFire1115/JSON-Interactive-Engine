@@ -1,0 +1,20 @@
+{
+    "Name": "Complete me! ME!!",
+    "Cost": 0,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=8050cc]Fragile[/color][/b] and [b][color=aa6450]Vulnerable[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 4,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Gain +1 [b][color=ffffff]Power[/color][/b] for every unique Ailment & Debuff on the target.",
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] If this skill evades every enemy Die, another ally may use a skill with a Cost of 1 or lower against the same target without using a [b][color=ffaa64]Speed Die[/color][/b]. They must still spend [b][color=ffeecc]Light[/color][/b] as normal. During this attack, the target may only respond with saved Dice."
+    ]
+}

@@ -18,7 +18,7 @@
         {
             "Type": "BluntOffense",
             "Dice": 10,
-            "Base": 0,
+            "Base": 1,
             "Text": [
                 "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 4 [b][color=cc6450]Burn[/color][/b].",
                 "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b].",

@@ -1,0 +1,130 @@
+{
+    "Name": "[Shin] Prideful Humility / Humble Pride",
+    "Color": "#ffaa80",
+    "MinStack": 0,
+    "MaxStack": 5,
+    "Conditions": {
+        "Applied-Shin_Prideful_Humility": [
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Shin/Prideful_Humility",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/Shin_Prideful_Humility/File",
+                    "Statuses/Shin/Prideful_Humility_Off"
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " Require 2 [b][color=aa64ff]Emotion Points[/color][/b] to Upkeep [b][color=ffaa80]Prideful Humility[/color][/b]!",
+                            "\n",
+                            "  To Disable -> [b][url=\"*shin ",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            " Shin/Prideful_Humility\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Shin/Prideful_Humility[/color][/url][/b]"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getStatus": [
+                            "Shin/Prideful_Humility",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Shin/Prideful_Humility",
+                    1,
+                    "@Self"
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b]Cultivation Increased [color=ffaa80]",
+                            {
+                                "getVar": [
+                                    "temp",
+                                    0
+                                ]
+                            },
+                            "[/color] -> [color=ffaa80]",
+                            {
+                                "getStatus": [
+                                    "Shin/Prideful_Humility",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color][/b]!"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ValidateStatus-Shin_Prideful_Humility": [
+            
+        ]
+    },
+
+    "Text": [
+    ]
+}

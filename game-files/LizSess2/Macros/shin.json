@@ -125,7 +125,8 @@
                                 ]
                             }
                         ]
-                    }
+                    },
+                    "*echo Shin Enabled!"
                 ],
                 [
                     {
@@ -138,12 +139,24 @@
                                 ]
                             },
                             0,
-                            "@Self"
+                            {
+                                "refCall": [
+                                    "&shin_args",
+                                    "get",
+                                    1
+                                ]
+                            }
                         ]
                     },
                     {
                         "setUnitDataElem": [
-                            "@Self",
+                            {
+                                "refCall": [
+                                    "&shin_args",
+                                    "get",
+                                    1
+                                ]
+                            },
                             "Statuses/Shin_Dreams_Of_Achievement/File",
                             {
                                 "concat": [
@@ -159,7 +172,8 @@
                                 ]
                             }
                         ]
-                    }
+                    },
+                    "*echo Shin Enabled!"
                 ]
             ]
         },

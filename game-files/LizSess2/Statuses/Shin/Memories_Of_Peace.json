@@ -1,0 +1,130 @@
+{
+    "Name": "[Shin] Memories of Peace / A Will to Protect",
+    "Color": "#ffaa80",
+    "MinStack": 0,
+    "MaxStack": 5,
+    "Conditions": {
+        "Applied-Shin_Memories_Of_Peace": [
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Shin/Memories_Of_Peace",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/Shin_Memories_Of_Peace/File",
+                    "Statuses/Shin/Memories_Of_Peace_Off"
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " Require 1 [b][color=aa64ff]Emotion Points[/color][/b] to Upkeep [b][color=ffaa80]Memories of Peace[/color][/b]!",
+                            "\n",
+                            "  To Disable -> [b][url=\"*shin ",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            " Shin/Memories_Of_Peace\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Shin/Memories_Of_Peace[/color][/url][/b]"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getStatus": [
+                            "Shin/Memories_Of_Peace",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Shin/Memories_Of_Peace",
+                    1,
+                    "@Self"
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b]Cultivation Increased [color=ffaa80]",
+                            {
+                                "getVar": [
+                                    "temp",
+                                    0
+                                ]
+                            },
+                            "[/color] -> [color=ffaa80]",
+                            {
+                                "getStatus": [
+                                    "Shin/Memories_Of_Peace",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color][/b]!"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ValidateStatus-Shin_Memories_Of_Peace": [
+            
+        ]
+    },
+
+    "Text": [
+    ]
+}

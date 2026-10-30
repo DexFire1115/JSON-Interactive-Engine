@@ -1,0 +1,18 @@
+{
+    "Name": "Touch of Midas",
+    "Cost": 4,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 12,
+            "Base": 6,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 5 [b][color=ff8064]Aggro[/color][/b] and add an extra [b][color=ffaa64]Speed Die[/color][/b] for this scene."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

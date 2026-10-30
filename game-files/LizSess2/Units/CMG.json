@@ -1,0 +1,96 @@
+{
+    "Name": "Connin",
+    "Color": "#4682fc",
+    "Type": "Human",
+    "Class": "Lvl. 8",
+    "Attributes": {
+        "CurrentHealth": 90,
+        "MaxHealth": 90,
+        "CurrentStagger": 40,
+        "MaxStagger": 40,
+        "CurrentLight": 6,
+        "MaxLight": 6,
+        "LightRegen": 2,
+        "SpeedDiceSize": 10,
+        "SpeedDiceBase": 2,
+        "SpeedDiceAmt": 3,
+        "EmotionPoints": 4,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 2,
+        "SlashStagger": 0,
+        "PierceStagger": -1,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "CMG/Oley!",
+        "CMG/Opening",
+        "CMG/Salut",
+        "CMG/Straight",
+        "CMG/Culmanation",
+        "CMG/Between",
+        "CMG/Two"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Battle_Abilities/Mutation",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Feats/Speed_Empowerment",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Feats/Speed_Expert",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Feats/The_Fastest",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Feats/Stead_Pace",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Shin/Dreams_Of_Achievement",
+                0,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Shin/Prideful_Humility",
+                0,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Shin/Memories_Of_Peace",
+                0,
+                "@Self"
+            ]
+        }
+    ]
+}

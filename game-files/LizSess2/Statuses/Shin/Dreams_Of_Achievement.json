@@ -1,0 +1,161 @@
+{
+    "Name": "[Shin] Dreams of Achievement / Taking Action",
+    "Color": "#ffaa80",
+    "MinStack": 0,
+    "MaxStack": 5,
+    "Conditions": {
+        "Applied-Shin_Dreams_Of_Achievement": [
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Shin/Dreams_Of_Achievement",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/Shin_Dreams_Of_Achievement/File",
+                    "Statuses/Shin/Dreams_Of_Achievement_Off"
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "setVar": [
+                    "upkeepCost",
+                    {
+                        "add": [
+                            1,
+                            {
+                                "forEvery": [
+                                    {
+                                        "getStatus": [
+                                            "Shin/Dreams_Of_Achievement",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    2,
+                                    0,
+                                    2
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " Require ",
+                            {
+                                "getVar": [
+                                    "upkeepCost",
+                                    0
+                                ]
+                            },
+                            " [b][color=aa64ff]Emotion Points[/color][/b] to Upkeep [b][color=ffaa80]Dreams Of Achievement[/color][/b]!",
+                            "\n",
+                            "  To Disable -> [b][url=\"*shin ",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            " Shin/Dreams_Of_Achievement\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Shin/Dreams_Of_Achievement[/color][/url][/b]"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getStatus": [
+                            "Shin/Dreams_Of_Achievement",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Shin/Dreams_Of_Achievement",
+                    1,
+                    "@Self"
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b]Cultivation Increased [color=ffaa80]",
+                            {
+                                "getVar": [
+                                    "temp",
+                                    0
+                                ]
+                            },
+                            "[/color] -> [color=ffaa80]",
+                            {
+                                "getStatus": [
+                                    "Shin/Dreams_Of_Achievement",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color][/b]!"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ValidateStatus-Shin_Dreams_Of_Achievement": [
+            
+        ]
+    },
+
+    "Text": [
+    ]
+}

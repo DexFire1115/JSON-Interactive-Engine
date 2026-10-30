@@ -10,7 +10,8 @@ var switches: Dictionary[String, bool] = {
 	"unitCase": false,
 	"censorHealth": false,
 	"censorStagger": false,
-	"skillUseDisp": false
+	"skillUseDisp": false,
+	"visPrintStatement": true
 }
 var swaliases: Dictionary[String, String] = {
 	"uc": "unitCase",
@@ -87,12 +88,16 @@ func textPrompt(query := ""):
 	EventBus.emit_signal("queryOutput", s)
 
 func readCommand(text: String) -> int:
-	var args := text.split(" ", false)
+	switches["visPrintStatement"] = text.left(1) != "*"
+	var args := text.trim_prefix("*").split(" ", false)
 	var errorCode := -1
 	match args[0]:
 		"switch", "sw":
 			argPrint(args, "64ffff", "ffcc64", "ff6464")
 			errorCode = switchCommand(args)
+		"echo", "e":
+			argPrint(args, "64ffff")
+			errorCode = echoCommand(args)
 		"search":
 			argPrint(args, "64ffff", "ffff64")
 			errorCode = searchCommand(args)
@@ -226,6 +231,10 @@ func switchCommand(args: PackedStringArray) -> int:
 
 func fetchSwitches() -> Dictionary:
 	return switches
+
+func echoCommand(args: PackedStringArray) -> int:
+	addPushConsole(" ".join(args.slice(1)))
+	return 0
 
 func searchCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
@@ -848,6 +857,7 @@ func errorCommand(code: int) -> void:
 	addLog(addStyle(text, "ff6464", true))
 
 func argPrint(args: PackedStringArray, ...colors: Array) -> void:
+	if(!switches["visPrintStatement"]): return
 	var text := ""
 	for i in args.size():
 		var a := args[i]

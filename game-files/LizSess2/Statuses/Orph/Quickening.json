@@ -1,0 +1,161 @@
+{
+    "Name": "[Shin] Quickening Choreography / Preemptive Bow",
+    "Color": "#ffaa80",
+    "MinStack": 0,
+    "MaxStack": 5,
+    "Conditions": {
+        "Applied-Orph_Quickening": [
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Orph/Quickening",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/Orph_Quickening/File",
+                    "Statuses/Orph/Quickening_Off"
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "setVar": [
+                    "upkeepCost",
+                    {
+                        "add": [
+                            1,
+                            {
+                                "forEvery": [
+                                    {
+                                        "getStatus": [
+                                            "Orph/Quickening",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    2,
+                                    0,
+                                    2
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " Require ",
+                            {
+                                "getVar": [
+                                    "upkeepCost",
+                                    0
+                                ]
+                            },
+                            " [b][color=aa64ff]Emotion Points[/color][/b] to Upkeep [b][color=ffaa80]Quickening Choreography[/color][/b]!",
+                            "\n",
+                            "  To Disable -> [b][url=\"*shin ",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            " Orph/Quickening\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Orph/Quickening[/color][/url][/b]"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getStatus": [
+                            "Orph/Quickening",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Orph/Quickening",
+                    1,
+                    "@Self"
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b]Cultivation Increased [color=ffaa80]",
+                            {
+                                "getVar": [
+                                    "temp",
+                                    0
+                                ]
+                            },
+                            "[/color] -> [color=ffaa80]",
+                            {
+                                "getStatus": [
+                                    "Orph/Quickening",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color][/b]!"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ValidateStatus-Orph_Quickening": [
+            
+        ]
+    },
+
+    "Text": [
+    ]
+}

@@ -1,0 +1,58 @@
+{
+    "Name": "Piece in Progress",
+    "Color": "#ffd302",
+    "Type": "Human",
+    "Class": "Urban Myth",
+    "Attributes": {
+        "CurrentHealth": 40,
+        "MaxHealth": 40,
+        "CurrentStagger": 15,
+        "MaxStagger": 15,
+        "CurrentLight": 1,
+        "MaxLight": 4,
+        "LightRegen": 2,
+        "SpeedDiceSize": 4,
+        "SpeedDiceBase": -1,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 2,
+        "PierceDamage": -2,
+        "BluntDamage": 0,
+        "SlashStagger": 1,
+        "PierceStagger": -1,
+        "BluntStagger": 1
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Piece/Im",
+        "Piece/No",
+        "Piece/Touch",
+        "Piece/Complete"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Piece/Artwork",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Piece/Underdone",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Piece/Guarding",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

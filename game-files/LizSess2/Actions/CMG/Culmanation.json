@@ -31,6 +31,6 @@
         }
     ],
     "PostText": [
-        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+        "b][color=ffffff][lb]After Use][/color][/b] If all Dice on this skill won a Clash, gain 1 [b][color=aa64ff]Emotion Point[/color][/b] and recover 3 [b][color=ffff64]Stagger Resist[/color][/b]."
     ]
 }

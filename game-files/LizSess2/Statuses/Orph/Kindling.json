@@ -1,0 +1,130 @@
+{
+    "Name": "[Shin] Kindling / -",
+    "Color": "#ffaa80",
+    "MinStack": 0,
+    "MaxStack": 5,
+    "Conditions": {
+        "Applied-Orph_Kindling": [
+            {
+                "ifelse": [
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Orph/Kindling",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/Orph_Kindling/File",
+                    "Statuses/Orph/Kindling_Off"
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " Require 1 [b][color=aa64ff]Emotion Points[/color][/b] to Upkeep [b][color=ffaa80]Kindling[/color][/b]!",
+                            "\n",
+                            "  To Disable -> [b][url=\"*shin ",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            " Orph/Kindling\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Orph/Kindling[/color][/url][/b]"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getStatus": [
+                            "Orph/Kindling",
+                            0,
+                            "@Self"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Orph/Kindling",
+                    1,
+                    "@Self"
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b]Cultivation Increased [color=ffaa80]",
+                            {
+                                "getVar": [
+                                    "temp",
+                                    0
+                                ]
+                            },
+                            "[/color] -> [color=ffaa80]",
+                            {
+                                "getStatus": [
+                                    "Orph/Kindling",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            "[/color][/b]!"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ValidateStatus-Orph_Kindling": [
+            
+        ]
+    },
+
+    "Text": [
+    ]
+}

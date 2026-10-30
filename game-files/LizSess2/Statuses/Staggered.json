@@ -62,7 +62,8 @@
                                     "Action"
                                 ]
                             },
-                            "diceArr"
+                            "diceArr",
+                            []
                         ]
                     }
                 ]

@@ -1,17 +1,17 @@
 {
-    "Name": "[Shin] Dreams of Achievement / Taking Action",
+    "Name": "[Shin] Perfected Steps / Promenade",
     "Color": "#ffaa80",
     "MinStack": 0,
     "MaxStack": 5,
     "Conditions": {
-        "Applied-Shin_Dreams_Of_Achievement": [
+        "Applied-Orph_Perfected": [
             {
                 "ifelse": [
                     {
                         "greaterThan": [
                             {
                                 "getStatus": [
-                                    "Shin/Dreams_Of_Achievement",
+                                    "Orph/Perfected",
                                     0,
                                     "@Self"
                                 ]
@@ -27,8 +27,8 @@
             {
                 "setUnitDataElem": [
                     "@Self",
-                    "Statuses/Shin_Dreams_Of_Achievement/File",
-                    "Statuses/Shin/Dreams_Of_Achievement_Off"
+                    "Statuses/Orph_Perfected/File",
+                    "Statuses/Orph/Perfected_Off"
                 ]
             }
         ],
@@ -46,15 +46,21 @@
                                     }
                                 ]
                             },
-                            " Require 3 [b][color=aa64ff]Emotion Points[/color][/b] to Upkeep [b][color=ffaa80]Dreams Of Achievement[/color][/b]!",
+                            " Require 2 [b][color=aa64ff]Emotion Points[/color][/b] to Upkeep [b][color=ffaa80]Perfected Steps[/color][/b]!",
                             "\n",
-                            "  To Disable -> [b][url][color=64ffaa]shin[/color] [color=aa64ff]",
+                            "  To Disable -> [b][url=\"*shin ",
                             {
                                 "getSelf": [
                                     
                                 ]
                             },
-                            "[/color] [color=ffff64]Shin/Dreams_Of_Achievement[/color][/url][/b]"
+                            " Orph/Perfected\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Orph/Perfected[/color][/url][/b]"
                         ]
                     }
                 ]
@@ -66,7 +72,7 @@
                     "temp",
                     {
                         "getStatus": [
-                            "Shin/Dreams_Of_Achievement",
+                            "Orph/Perfected",
                             0,
                             "@Self"
                         ]
@@ -75,7 +81,7 @@
             },
             {
                 "statusInflict": [
-                    "Shin/Dreams_Of_Achievement",
+                    "Orph/Perfected",
                     1,
                     "@Self"
                 ]
@@ -103,7 +109,7 @@
                             "[/color] -> [color=ffaa80]",
                             {
                                 "getStatus": [
-                                    "Shin/Dreams_Of_Achievement",
+                                    "Orph/Perfected",
                                     0,
                                     "@Self"
                                 ]
@@ -114,15 +120,11 @@
                 ]
             }
         ],
-        "ValidateStatus-Shin_Dreams_Of_Achievement": [
+        "ValidateStatus-Orph_Perfected": [
             
         ]
     },
 
     "Text": [
-        "When an enemy attacks, you may intercept in the following ways:",
-        "If you have a [b][color=ffaa64]Speed Die[/color][/b], you may add your [b][color=ff8064]Aggro[/color][/b] to the value, if the total is equal to or greater than the opposing [b][color=ffaa64]Speed Die[/color][/b], you may use your [b][color=ffaa64]Speed Die[/color][/b] to intercept.",
-        "If the opposing [b][color=ffaa64]Speed Die[/color][/b] is equal to or lower than your [b][color=ff8064]Aggro[/color][/b]. You may intercept without spending a [b][color=ffaa64]Speed Die[/color][/b], but only being able to deploy saved dice in response.",
-        "At the end of each scene, halve the Count."
     ]
 }

@@ -23,7 +23,7 @@
         },
         {
             "Type": "PierceOffense",
-            "Dice": 6,
+            "Dice": 8,
             "Base": 1,
             "Text": [
                 "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b] on the target."

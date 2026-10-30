@@ -1,23 +1,23 @@
 {
-    "Name": "Connin",
-    "Color": "#4682fc",
+    "Name": "Orphea",
+    "Color": "#2ecc71",
     "Type": "Human",
     "Class": "Lvl. 8",
     "Attributes": {
-        "CurrentHealth": 80,
-        "MaxHealth": 80,
-        "CurrentStagger": 40,
-        "MaxStagger": 40,
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 25,
+        "MaxStagger": 25,
         "CurrentLight": 6,
         "MaxLight": 6,
         "LightRegen": 2,
-        "SpeedDiceSize": 10,
-        "SpeedDiceBase": 2,
-        "SpeedDiceAmt": 2,
-        "EmotionPoints": 3,
-        "SlashDamage": 0,
-        "PierceDamage": 0,
-        "BluntDamage": 2,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 6,
+        "SlashDamage": 2,
+        "PierceDamage": -1,
+        "BluntDamage": 0,
         "SlashStagger": 0,
         "PierceStagger": -1,
         "BluntStagger": 0,
@@ -27,70 +27,63 @@
     "Conditions": {
     },
     "Actions": [
-        "CMG/Oley!",
-        "CMG/Opening",
-        "CMG/Salut",
-        "CMG/Straight",
-        "CMG/Culmanation",
-        "CMG/Between",
-        "CMG/Two"
+        "Orph/Refiring",
+        "Orph/Passion",
+        "Orph/Lost",
+        "Orph/One",
+        "Orph/Contra",
+        "Orph/Paso",
+        "Orph/Ember"
     ],
     "Initialize": [
         {
             "statusInflict": [
-                "Battle_Abilities/Mutation",
+                "Orph/True_Talent",
                 1,
                 "@Self"
             ]
         },
         {
             "statusInflict": [
-                "Feats/Speed_Empowerment",
+                "Orph/Infernal",
                 1,
                 "@Self"
             ]
         },
         {
             "statusInflict": [
-                "Feats/Speed_Expert",
+                "Orph/Focused",
                 1,
                 "@Self"
             ]
         },
         {
             "statusInflict": [
-                "Feats/The_Fastest",
+                "Orph/Check_Forward_Walk",
                 1,
                 "@Self"
             ]
         },
         {
             "statusInflict": [
-                "Feats/Steady Pace",
-                1,
-                "@Self"
-            ]
-        },
-        {
-            "statusInflict": [
-                "Shin/Dreams_Of_Achievement",
+                "Orph/Quickening",
                 0,
                 "@Self"
             ]
         },
         {
             "statusInflict": [
-                "Shin/Prideful_Humility",
+                "Orph/Perfected",
                 0,
                 "@Self"
             ]
         },
         {
             "statusInflict": [
-                "Shin/Memories_Of_Peace",
+                "Orph/Kindling",
                 0,
                 "@Self"
             ]
-        }
+        },
     ]
 }
