@@ -4,7 +4,7 @@
     "Type": "Human",
     "Class": "Lvl. 3",
     "Attributes": {
-        "CurrentHealth": 60,
+        "CurrentHealth": 49,
         "MaxHealth": 60,
         "CurrentStagger": 30,
         "MaxStagger": 30,
@@ -43,6 +43,7 @@
         "Eldric_Maim_1",
         "Eldric_Swift_1",
         "Eldric_Charging_1",
-        "Eldric_Feral_1"
+        "Eldric_Feral_1",
+        "Bandage"
     ]
 }

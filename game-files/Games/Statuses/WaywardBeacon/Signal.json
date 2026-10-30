@@ -1,0 +1,50 @@
+{
+    "Name": "Signal to Nowhere",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/WaywardBeacon_Signal/Tracker",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "[i]...floating through the stars... I won't go silent even as the void becomes inconceivably cold...[/i]"
+                            ]
+                        },
+                        {
+                            "changeLight": [
+                                4
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Fragile",
+                                5,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "Removed-Staggered": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/WaywardBeacon_Signal/Tracker",
+                    true
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

@@ -1,0 +1,115 @@
+{
+    "Name": "Defensive Stance",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Laemshi/Defensive_Stance",
+                2,
+                "@Self"
+            ]
+        },
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Once per scene, gain 2 [b][color=ffccaa]Defensive Stance[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "min": [
+                                {
+                                    "getStatus": [
+                                        "Protection",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        2,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every [b][color=580cc]Protection[/color][/b], +1 [b][color=ffffff]Power[/color][/b] (Max: +5).",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=cccc50]Tremor[/color][/b]. Trigger [b][color=ffff50]Tremor Burst[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BlockCounter",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "add": [
+                                        {
+                                            "getStatus": [
+                                                "Tremor",
+                                                0,
+                                                "@self"
+                                            ]
+                                        },
+                                        {
+                                            "getStatus": [
+                                                "Tremor",
+                                                0,
+                                                ""
+                                            ]
+                                        }
+                                    ]
+                                },
+                                20
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Aggro",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If at 20+ (self + target [b][color=cccc50]Tremor[/color][/b]), +2[b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Clash Lose][/color][/b] Gain 1 [b][color=ff8064]Aggro[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

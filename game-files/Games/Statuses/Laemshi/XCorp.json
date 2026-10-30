@@ -1,0 +1,131 @@
+{
+    "Name": "X Corp. Comissioned Knight",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmDamage": [
+            {
+                "setVar": [
+                    "amt",
+                    {
+                        "ifelse": [
+                            {
+                                "greaterThan": [
+                                    {
+                                        "getStatus": [
+                                            "Laemshi/Defensive_Stance",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            [
+                                2
+                            ],
+                            [
+                                1
+                            ]
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "getDieType": [
+                                    {
+                                        "getVar": [
+                                            "DieData"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "contains",
+                            "Blunt"
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                0,
+                                {
+                                    "add": [
+                                        {
+                                            "refCall": [
+                                                "dmgArr",
+                                                "get",
+                                                0
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "amt",
+                                                1
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "getDieType": [
+                                    {
+                                        "getVar": [
+                                            "DieData"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "contains",
+                            "Block"
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                1,
+                                {
+                                    "add": [
+                                        {
+                                            "refCall": [
+                                                "dmgArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "amt",
+                                                1
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=ffaaaa]Blunt Dice[/color][/b] deal +1 [b][color=ff6464]Damage[/color][/b].",
+        "[b][color=aaccff]Block Dice[/color][/b] deal +1 [b][color=ffff64]Stagger[/color][/b].",
+        "These effects are doubled if this unit has [b][color=ffccaa]Defensive Stance[/color][/b]."
+    ]
+}

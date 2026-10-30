@@ -1,0 +1,45 @@
+{
+    "Name": "Old Umbrella",
+    "Color": "#408064",
+    "Type": "Abnormality",
+    "Class": "HE-01",
+    "Attributes": {
+        "CurrentHealth": 7,
+        "MaxHealth": 7,
+        "CurrentStagger": 5,
+        "MaxStagger": 5,
+        "CurrentLight": 1,
+        "MaxLight": 1,
+        "LightRegen": 1,
+        "SpeedDiceSize": 0,
+        "SpeedDiceBase": 1,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 1,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 1,
+    },
+    "Vars": {
+        "ReserveOnDeath": true,
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "DriftingFox/Scattering"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "DriftingFox/Old",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

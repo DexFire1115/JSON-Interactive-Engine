@@ -1,0 +1,138 @@
+{
+    "Name": "Barrier",
+    "Color": "#80ffff",
+    "Conditions": {
+        "ValidateDamage": [
+            {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "max",
+                    {
+                        "min": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    0
+                                ]
+                            },
+                            {
+                                "getStatus": [
+                                    "Barrier",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "setVar": [
+                    "reduc",
+                    {
+                        "queryInt": [
+                            {
+                                "concat": [
+                                    {
+                                        "getIDTag": [
+                                            {
+                                                "getSelf": [
+                                                    
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "[b] Spend 0~",
+                                    {
+                                        "getVar": [
+                                            "max",
+                                            0
+                                        ]
+                                    },
+                                    " [color=aaffff]Barrier[/color]?[/b]"
+                                ]
+                            },
+                            {
+                                "range": [
+                                    {
+                                        "add": [
+                                            {
+                                                "getVar": [
+                                                    "max",
+                                                    0
+                                                ]
+                                            },
+                                            1
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "dmgArr",
+                    "set",
+                    0,
+                    {
+                        "sub": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    0
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "reduc",
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Barrier",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getVar": [
+                                    "reduc",
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

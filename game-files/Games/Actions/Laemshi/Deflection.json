@@ -1,0 +1,76 @@
+{
+    "Name": "Deflection",
+    "Cost": 0,
+    "Reactive": [
+        {
+            "ifelse": [
+                {
+                    "getAction": [
+                        {
+                            "getVar": [
+                                "Action"
+                            ]
+                        },
+                        "data/Intercept",
+                        false
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Protection",
+                            1,
+                            {
+                                "queryUnit": [
+                                    "Grant an ally 1 [b][color=50ccff]Protection[/color][/b]:"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Protection",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff8064][lb]Reactive][/color][/b] If this skill intercepted, grant an ally 1 [b][color=50ccff]Protection[/color][/b].",
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=50ccff]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "changeLight": [
+                        1
+                    ]
+                },
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Aggro",
+                        1,
+                        "@Self"
+                    ]
+                },
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Regain 1 [b][color=ffeecc]Light[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=ff8064]Aggro[/color][/b]." 
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

@@ -1,0 +1,105 @@
+{
+    "Name": "Signal : Tranquil",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "min": [
+                                {
+                                    "getStatus": [
+                                        "Barrier",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                10
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "manualDmg": [
+                        {
+                            "getSelf": []
+                        },
+                        0,
+                        1
+                    ]
+                },
+            ],
+            "ClashLose": [
+                {
+                    "addLog": [
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Know Where?'"
+                            ]
+                        }
+                    ]
+                },
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Gain [b][color=ffffff]Power[/color][/b] by [b][color=80ffff]Barrier[/color][/b] (Max: +10).",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Takes 1 [b][color=ffff64]Stagger[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Know Where?"
+            ]
+        },
+        {
+            "Type": "EvadeCounter",
+            "Dice": 8,
+            "Base": 0,
+            "Evade": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        1,
+                        "@Self",
+                        true
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=6464ff][lb]On Evade][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]).",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=50cc50]Endurance[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                2
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 2 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

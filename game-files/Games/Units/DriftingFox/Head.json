@@ -1,0 +1,78 @@
+{
+    "Name": "Drifting Fox - Head",
+    "Color": "#64aa80",
+    "Type": "Abnormality",
+    "Class": "HE-04",
+    "Attributes": {
+        "CurrentHealth": 65,
+        "MaxHealth": 65,
+        "CurrentStagger": 50,
+        "MaxStagger": 50,
+        "CurrentLight": {
+            "getUnitElemData": [
+                {
+                    "getUnitElemData": [
+                        "@Self",
+                        "Attributes/Parent",
+                        ""
+                    ]
+                },
+                "Attributes/CurrentLight",
+                0
+            ]
+        },
+        "MaxLight": 10,
+        "LightRegen": {
+            "getUnitElemData": [
+                {
+                    "getUnitElemData": [
+                        "@Self",
+                        "Attributes/Parent",
+                        ""
+                    ]
+                },
+                "Attributes/LightRegen",
+                0
+            ]
+        },
+        "SpeedDiceSize": 4,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 2,
+        "EmotionPoints": 0,
+        "SlashDamage": 2,
+        "PierceDamage": 0,
+        "BluntDamage": -2,
+        "SlashStagger": 2,
+        "PierceStagger": 0,
+        "BluntStagger": -2,
+    },
+    "Vars": {
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "DriftingFox/SRecoil",
+        "DriftingFox/STorrent",
+        "DriftingFox/Waiting",
+        "DriftingFox/Cries"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "DriftingFox/Part",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "DriftingFox/Ragged",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

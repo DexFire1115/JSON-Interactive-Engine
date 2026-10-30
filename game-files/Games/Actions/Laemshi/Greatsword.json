@@ -1,0 +1,162 @@
+{
+    "Name": "Greatsword Slam",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Tremor",
+                2,
+                "@Self"
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getStatus": [
+                                "Tremor",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        10
+                    ],
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Protection",
+                            1,
+                            "@Self"
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getStatus": [
+                                "Protection",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        3
+                    ],
+                },
+                [
+                    {
+                        "setVar": [
+                            "Laemshi_Boost",
+                            true,
+                            "@Action"
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "Check": [
+        {
+            "ifelse": [
+                {
+                    "getVar": [
+                        "Laemshi_Boost",
+                        false,
+                        "@Action"
+                    ]
+                },
+                [
+                    {
+                        "changePower": [
+                            1
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=cccc50]Tremor[/color][/b].",
+        "If at 10+ [b][color=cccc50]Tremor[/color][/b], gain 1 [b][color=5080cc]Protection[/color][/b].",
+        "If at 3+ [b][color=5080cc]Protection[/color][/b], all Dice gain +1 [b][color=ffffff]Power[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 2,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 1 [b][color=cccc50]Tremor[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Protection",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                3
+                            ],
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Feeble",
+                                    1
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 1 [b][color=cccc50]Tremor[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] If at 3+ [b][color=5080cc]Protection[/color][/b], inflict 1 [b][color=cc5050]Feeble[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

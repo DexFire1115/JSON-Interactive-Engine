@@ -1,0 +1,125 @@
+{
+    "Name": "Defensive Stance",
+    "Color": "#ffccaa",
+    "MaxStack": 2,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexInstantiate",
+                    "Attributes/SpeedDiceBase"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Attributes/SpeedDiceBase/Laemshi_Defensive_Stance",
+                    -999
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Aggro",
+                    10,
+                    "@Self"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Endurance",
+                    1,
+                    "@Self"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Protection",
+                    1,
+                    "@Self"
+                ]
+            }
+        ],
+        "SceneStartPost": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SpeedDiceBase/Laemshi_Defensive_Stance"
+                ]
+            }
+        ],
+        "OnUse": [
+            {
+                "setVar": [
+                    "Laemshi_Defensive_Stance_CW_TB",
+                    true
+                ]
+            }
+        ],
+        "ClashWin": [
+            {
+                "ifelse": [
+                    {
+                        "getVar": [
+                            "Laemshi_Defensive_Stance_CW_TB",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "Laemshi_Defensive_Stance_CW_TB",
+                                false
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "TremorBurst"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "ValidateStatus-Staggered": [
+            {
+                "refCall": [
+                    "statusArr",
+                    "set",
+                    1,
+                    0
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "statusInflict": [
+                    "Laemshi/Defensive_Stance",
+                    -1,
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Max Stack: 2",
+        "[b][color=ffffff][lb]Scene Start][/color][/b] Fix [b][color=ffaa64]Speed[/color][/b] to 0, gain 10 [b][color=ff8064]Aggro[/color][/b], 1 [b][color=50cc50]Endurance[/color][/b], and 1 [b][color=5080cc]Protection[/color][/b]. This unit cannot [b][color=ffff64]Staggered[/color][/b] be this scene.",
+        "",
+        "[b][color=64ff64][lb]Clash Win][/color][/b] trigger [b][color=ffff50]Tremor Burst[/color][/b] (once per skill).",
+        "[b][color=ffffff][lb]Scene End][/color][/b] Reduce stack by 1."
+    ]
+}

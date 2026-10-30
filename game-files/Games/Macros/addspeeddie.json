@@ -1,0 +1,61 @@
+{
+    "Aliases": [
+        "asd"
+    ],
+    "Args": [
+        "64ffaa",
+        "ffaa64",
+        "ffff64"
+    ],
+    "Commands": [
+        [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "refCall": [
+                                    "&addspeeddie_args",
+                                    "size"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        1,
+                        "return"
+                    ]
+                ]
+            }
+        ],
+        {
+            "propCall": [
+                "diceList",
+                "set",
+                {
+                    "refCall": [
+                        "&addspeeddie_args",
+                        "get",
+                        1
+                    ]
+                },
+                {
+                    "type_convert": [
+                        {
+                            "refCall": [
+                                "&addspeeddie_args",
+                                "get",
+                                2
+                            ]
+                        },
+                        2
+                    ]
+                }
+            ]
+        }
+    ],
+    "Help": [
+        "Insert Dice"
+    ]
+}

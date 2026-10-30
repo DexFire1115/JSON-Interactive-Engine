@@ -24,6 +24,8 @@
                                 "get",
                                 1
                             ],
+                        },
+                        {
                             "varCall": [
                                 {
                                     "getResistance": [
