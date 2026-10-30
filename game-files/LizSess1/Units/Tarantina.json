@@ -1,0 +1,68 @@
+{
+    "Name": "Tarantina",
+    "Color": "#11806a",
+    "Type": "Human",
+    "Class": "Lvl. 8",
+    "Attributes": {
+        "CurrentHealth": 90,
+        "MaxHealth": 90,
+        "CurrentStagger": 45,
+        "MaxStagger": 45,
+        "CurrentLight": 6,
+        "MaxLight": 6,
+        "LightRegen": 2,
+        "SpeedDiceSize": 10,
+        "SpeedDiceBase": 2,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 4,
+        "SlashDamage": -1,
+        "PierceDamage": 0,
+        "BluntDamage": -1,
+        "SlashStagger": -1,
+        "PierceStagger": -1,
+        "BluntStagger": -1,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Tara/Relentless",
+        "Tara/Rended",
+        "Tara/Train",
+        "Tara/Zwei",
+        "Tara/Annd",
+        "Tara/Smoke",
+        "Tara/Threading"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Tara/Out_Of_Screen",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Tara/Genius",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Tara/Slashing_Style",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Tara/24_Frames",
+                1,
+                "@Self"
+            ]
+        },
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "Name": "Openning Spotted",
+    "Cost": 1,
+    "PreText": [
+        "[b][color=ff64aa][lb]Proactive][/color][/b] Target cannot resond using [b][color=ffaa64]Speed Dice[/color][/b] whos value is lower than the used [b][color=ffaa64]Speed Dice[/color][/b] by 5 or more.",
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 10,
+            "Base": 3,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

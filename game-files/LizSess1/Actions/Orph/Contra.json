@@ -1,0 +1,28 @@
+{
+    "Name": "Contra Check",
+    "Cost": 2,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Move up to 2 uses of a limited skill to another limited skill with at least 1 remaining use. If this triggers the [b][color=64aaff][lb]Exhaust][/color][/b] effect of the first skill, trigger the effect as if it was on this skill, and gain 1 [b][color=8050cc]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=ffaa64]Haste[/color][/b] and regain 2 [b][color=ffff64]Stagger Resist[/color][/b] for each of your [b][color=64aaff]Exhaust[/color][/b] skills."
+    ]
+}

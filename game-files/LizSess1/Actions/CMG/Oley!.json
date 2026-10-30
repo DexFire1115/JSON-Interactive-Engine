@@ -1,0 +1,21 @@
+{
+    "Name": "Oley!",
+    "Cost": 0,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 8,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +2 if this skill intercepted the opposing attack.",
+                "[b][color=6464ff][lb]Evade][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

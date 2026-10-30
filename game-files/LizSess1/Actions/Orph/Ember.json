@@ -1,0 +1,40 @@
+{
+    "Name": "Ember's Tango",
+    "Cost": 3,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] You may spend 2 uses of a [b][color=ffff64][lb]Limit][/color][/b] skill to activate its [b][color=64aaff][lb]Exhaust][/color][/b] effect as if it were on this skill."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 3,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 4 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b], then inflict 2 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 10,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 4 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "Name": "Inspiring Golden light!",
+    "Cost": 3,
+    "PreText": [
+        "[b][color=64ffaa][lb]Eminence][/color][/b] If random Ailment inflicts a status that is already on the target or [b][color=cc5064]Bleed[/color][/b], inflict an additional 1 [b][color=8050cc]Fragile[/color][/b].",
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain [b][color=ffcc32]Fate[/color][/b] for every 2 negative status effects on target (max 3)."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc50cc]Random Ailment[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 10,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc50cc]Random Ailment[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 12,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc50cc]Random Ailment[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

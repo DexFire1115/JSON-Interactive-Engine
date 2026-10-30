@@ -1,0 +1,27 @@
+{
+    "Name": "Try Me, Bastard!",
+    "Cost": 1,
+    "Limit": 7,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 10,
+            "Base": 2,
+            "Text": [
+                "[b][color=6464ff][lb]Evade][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b] on the attacker."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "Name": "Annd... Cut!",
+    "Cost": 2,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=ff8064]Aggro[/color][/b] and 2 [b][color=8050cc]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 12,
+            "Base": 6,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] +1 [b][color=ffffff]Power[/color][/b] for every scene that’s concluded this combat (max 4).",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=5064cc]Sinking[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Deal 3 additional [b][color=ff6464]Damage[/color][/b] and gain 3 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 3 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

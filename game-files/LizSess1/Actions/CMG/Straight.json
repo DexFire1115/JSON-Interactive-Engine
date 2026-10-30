@@ -1,0 +1,35 @@
+{
+    "Name": "Straight to the Nerve!",
+    "Cost": 2,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 1,
+            "Text": [
+                "[b][color=6464ff][lb]Evade][/color][/b] Gain 1 [b][color=ffaa64]Haste[/color][/b] (max 2 per scene)."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 2,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +3 when used at 8+ [b][color=ffaa64]Speed[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=cc5050]Feeble[/color][/b] and 1 [b][color=50cc50]Disarm[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

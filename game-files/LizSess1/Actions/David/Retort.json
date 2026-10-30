@@ -1,0 +1,18 @@
+{
+    "Name": "Battle Ability: Retort",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "SlashCounter",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+    ],
+    "PostText": [
+    ]
+}

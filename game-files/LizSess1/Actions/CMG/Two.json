@@ -1,0 +1,41 @@
+{
+    "Name": "Two step march",
+    "Cost": 3,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 3 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+                "[b][color=6464ff][lb]Evade][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 3 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

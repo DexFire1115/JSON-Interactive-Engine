@@ -1,0 +1,171 @@
+{
+    "Aliases": [
+    ],
+    "Args": [
+        "64ffaa",
+        "aa64ff",
+        "ffff64"
+    ],
+    "Commands": [
+        [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "refCall": [
+                                    "&shin_args",
+                                    "size"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        1,
+                        "return"
+                    ],
+                    [
+                        ""
+                    ]
+                ]
+            }
+        ],
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "getUnitDataElem": [
+                                {
+                                    "refCall": [
+                                        "&shin_args",
+                                        "get",
+                                        1
+                                    ]
+                                },
+                                {
+                                    "concat": [
+                                        "Statuses/",
+                                        {
+                                            "varCall": [
+                                                {
+                                                    "refCall": [
+                                                        "&shin_args",
+                                                        "get",
+                                                        2
+                                                    ]
+                                                },
+                                                "replace",
+                                                "/",
+                                                "_"
+                                            ]
+                                        },
+                                        "/File"
+                                    ]
+                                },
+                                ""
+                            ]
+                        },
+                        {
+                            "concat": [
+                                "Statuses/",
+                                {
+                                    "refCall": [
+                                        "&shin_args",
+                                        "get",
+                                        2
+                                    ]
+                                },
+                                "_Off"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setUnitDataElem": [
+                            {
+                                "refCall": [
+                                    "&shin_args",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "concat": [
+                                    "Statuses/",
+                                    {
+                                        "varCall": [
+                                            {
+                                                "refCall": [
+                                                    "&shin_args",
+                                                    "get",
+                                                    2
+                                                ]
+                                            },
+                                            "replace",
+                                            "/",
+                                            "_"
+                                        ]
+                                    },
+                                    "/File"
+                                ]
+                            },
+                            {
+                                "concat": [
+                                    "Statuses/",
+                                    {
+                                        "refCall": [
+                                            "&shin_args",
+                                            "get",
+                                            2
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "setStatus": [
+                            {
+                                "refCall": [
+                                    "&shin_args",
+                                    "get",
+                                    2
+                                ]
+                            },
+                            0,
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "setUnitDataElem": [
+                            "@Self",
+                            "Statuses/Shin_Dreams_Of_Achievement/File",
+                            {
+                                "concat": [
+                                    "Statuses/",
+                                    {
+                                        "refCall": [
+                                            "&shin_args",
+                                            "get",
+                                            2
+                                        ]
+                                    },
+                                    "_Off"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        0
+    ],
+    "Help": [
+        "Shin Activate/Deactive"
+    ]
+}

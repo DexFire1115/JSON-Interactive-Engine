@@ -1,0 +1,89 @@
+{
+    "Name": "Orphea",
+    "Color": "#2ecc71",
+    "Type": "Human",
+    "Class": "Lvl. 8",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 25,
+        "MaxStagger": 25,
+        "CurrentLight": 7,
+        "MaxLight": 7,
+        "LightRegen": 1,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 6,
+        "SlashDamage": 2,
+        "PierceDamage": -1,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": -1,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Orph/Refiring",
+        "Orph/Passion",
+        "Orph/Lost",
+        "Orph/One",
+        "Orph/Contra",
+        "Orph/Paso",
+        "Orph/Ember"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Orph/True_Talent",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Orph/Infernal",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Orph/Focused",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Orph/Check_Forward_Walk",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Orph/Quickening_Choreography",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Orph/Perfected_Steps",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Orph/Kindling",
+                1,
+                "@Self"
+            ]
+        },
+    ]
+}

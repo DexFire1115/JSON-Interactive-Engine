@@ -1,0 +1,69 @@
+{
+    "Name": "David",
+    "Color": "#c00000",
+    "Type": "Human",
+    "Class": "Lvl. 8",
+    "Attributes": {
+        "CurrentHealth": 80,
+        "MaxHealth": 80,
+        "CurrentStagger": 40,
+        "MaxStagger": 40,
+        "CurrentLight": 8,
+        "MaxLight": 8,
+        "LightRegen": 1,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 1,
+        "SlashDamage": -1,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 1,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "David/Gimme",
+        "David/Try",
+        "David/Haha",
+        "David/In",
+        "David/And",
+        "David/This",
+        "David/See",
+        "David/Your"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Battle_Abilities/Retort",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Feats/Skilled",
+                2,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Feats/Flametongue_Tornado",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Feats/Burning_Blitz",
+                1,
+                "@Self"
+            ]
+        },
+    ]
+}

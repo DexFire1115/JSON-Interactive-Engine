@@ -1,0 +1,30 @@
+{
+    "Name": "Your Final Agony",
+    "Cost": 3,
+    "Emotion": 6,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 5 [b][color=cc6450]Burn[/color][/b], then trigger [b][color=ff6450]Blaze[/color][/b] on self, spreading [b][color=cc6450]Burn[/color][/b] to enemies instead of allies."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 10,
+            "Base": 2,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 5 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 3,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +5 of the target has 6+ [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b] on the target."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b]  If at least 1 [b][color=ffaaaa]Offensive Die[/color][/b] on this skill hits, another ally may use a skill with a Cost of 1 or lower against the same target without using a [b][color=ffaa64]Speed Dice[/color][/b]. They must still spend [b][color=ffeecc]Light[/color][/b] as normal. During this attack, the target may only respond with saved Dice."
+    ]
+}

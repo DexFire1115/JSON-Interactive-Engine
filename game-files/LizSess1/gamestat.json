@@ -1,0 +1,21 @@
+{
+    "Units": {
+        "A1": {
+            "Unit": "CMG"
+        },
+        "A2": {
+            "Unit": "Orphea"
+        },
+        "A3": {
+            "Unit": "David"
+        },
+        "A4": {
+            "Unit": "Tarantina"
+        }
+    },
+    "Autoloader": "baseAutoload",
+    "Scene": 0,
+    "Console": [
+        "[b][u]Star of the City Interactive Engine : Liz Semi-Manual[/u][/b]"
+    ]
+}

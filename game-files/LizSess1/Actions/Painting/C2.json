@@ -1,0 +1,26 @@
+{
+    "Name": "..!",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 4,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 3,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

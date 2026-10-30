@@ -1,0 +1,27 @@
+{
+    "Name": "Glow like Gold",
+    "Cost": 1,
+    "PreText": [
+        "[b][color=64ffaa][lb]Eminence][/color][/b] If random Ailment inflicts a status that is already on the target or [b][color=cc5064]Bleed[/color][/b], inflict an additional 1 [b][color=ccaa50]Paralyze[/color][/b].",
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc50cc]Random Ailment[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc50cc]Random Ailment[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

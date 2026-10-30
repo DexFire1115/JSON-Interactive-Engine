@@ -1,0 +1,30 @@
+{
+    "Name": "In The Fieriest Pits of Hell...!",
+    "Cost": 2,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=aa64ff]Emotion Point[/color][/b] for every 3 [b][color=cc6450]Burn[/color][/b] on else (max 5)."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Crit][/color][/b] Inflict 3 [b][color=cc6450]Burn[/color][/b] and gain 2 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b].",
+                "[b][color=64ff64][lb]Crit][/color][/b] Inflict 3 [b][color=cc6450]Burn[/color][/b] and gain 2 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffaa64][lb]On Stagger or Kill][/color][/b] Gain 10 Special Status: [b][color=64ccff]Barrier[/color][/b].",
+        "[b][color=ffffff][lb]After Use][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b] on the target."
+    ]
+}

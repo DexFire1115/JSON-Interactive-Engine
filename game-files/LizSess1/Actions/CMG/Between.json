@@ -1,0 +1,21 @@
+{
+    "Name": "Between Life and Death",
+    "Cost": 2,
+    "PreText": [
+        "Poise required to max out dice on this skill is always 5.",
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 4,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] On a roll of 4, set [b][color=ffffff]Power[/color][/b] to 20, ignoring ALL other modifiers except nullifcation."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

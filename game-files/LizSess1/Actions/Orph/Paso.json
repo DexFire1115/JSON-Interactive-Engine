@@ -1,0 +1,22 @@
+{
+    "Name": "Paso doble",
+    "Cost": 2,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 10,
+            "Base": 5,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Set target’s [b][color=cc6450]Burn[/color][/b] equal to the highest among combatants.",
+                "[b][color=64ffff][lb]Crit][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 2 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "Name": "Passion for the dance",
+    "Cost": 0,
+    "Limit": 5,
+    "PreText": [
+        "[b][color=64aaff][lb]Exhaust][/color][/b] Inflict 4 [b][color=cc6450]Burn[/color][/b] on self and all enemies. Until the end of the skill, trigger [b][color=ff6450]Blaze[/color][/b] on each hit."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 2,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Target loses 2 [b][color=ffff64]Stagger Resist[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ff6464][lb]On Kill][/color][/b] Gain 4 [b][color=aa64ff]Emotion Points[/color][/b]."
+    ]
+}

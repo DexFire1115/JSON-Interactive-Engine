@@ -1,0 +1,53 @@
+{
+    "Name": "Painting of a Doorway",
+    "Color": "#ffd302",
+    "Type": "Human(?)",
+    "Class": "Urban Myth",
+    "Attributes": {
+        "CurrentHealth": 125,
+        "MaxHealth": 125,
+        "CurrentStagger": 999,
+        "MaxStagger": 999,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 4,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 2,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": -99,
+        "PierceStagger": -99,
+        "BluntStagger": -99,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Painting/Not",
+        "Painting/C0",
+        "Painting/C1",
+        "Painting/C3",
+        "Painting/C2",
+        "Painting/End"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Painting/Ceci",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Painting/Artwork",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

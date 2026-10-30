@@ -1,0 +1,21 @@
+{
+    "Name": "Not a door!",
+    "Cost": 0,
+    "Limit": 1,
+    "PreText": [
+        "[b]This skill deals no [color=ff6464]HP Damage[/color] from Ceci n'est pas une porte.''[/b]"
+    ],
+    "Dice": [
+        {
+            "Type": "Blunt",
+            "Dice": 6,
+            "Base": 50,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Reuse this Die."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] If this skill did not clash then deal [b][color=ffff64]Stagger Damage[/color][/b] equal to the Die's roll."
+    ]
+}

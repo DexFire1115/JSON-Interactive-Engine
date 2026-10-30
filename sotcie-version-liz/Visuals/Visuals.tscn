@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dpo048m0uvph1"]
+
+[ext_resource type="PackedScene" uid="uid://73fyrh80aeww" path="res://Console/Console.tscn" id="1_5w1ao"]
+[ext_resource type="Script" uid="uid://cj8y3u48hnmkp" path="res://Visuals/visuals.gd" id="1_47q3x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cd6gv"]
+bg_color = Color(0.047058824, 0.047058824, 0.09411765, 1)
+
+[node name="Visuals" type="Node2D" unique_id=375498207]
+script = ExtResource("1_47q3x")
+
+[node name="Divider" type="HSplitContainer" parent="." unique_id=1446539259]
+offset_right = 411.0
+offset_bottom = 346.0
+theme_override_constants/separation = 5
+theme_override_styles/split_bar_background = SubResource("StyleBoxFlat_cd6gv")
+
+[node name="Console" parent="Divider" unique_id=927690875 instance=ExtResource("1_5w1ao")]
+layout_mode = 2
+
+[node name="SideConsole" parent="Divider" unique_id=1357654809 instance=ExtResource("1_5w1ao")]
+layout_mode = 2
+size_flags_horizontal = 1

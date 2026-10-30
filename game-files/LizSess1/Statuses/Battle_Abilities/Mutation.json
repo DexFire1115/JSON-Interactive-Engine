@@ -1,0 +1,69 @@
+{
+    "Name": "Battle Ability: Mutation",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Applied-Battle_Abilities_Mutation": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "Mutation -> +1 Power for all Dice on ",
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    {
+                                        "concat": [
+                                            "Actions/",
+                                            {
+                                                "randi_range": [
+                                                    0,
+                                                    6
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "Mutation -> +1 Power for all Dice on ",
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    {
+                                        "concat": [
+                                            "Actions/",
+                                            {
+                                                "randi_range": [
+                                                    0,
+                                                    6
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                ]
+            }
+        ],
+    },
+    "Text": [
+        "Increase your [b][color=ffaa64]Agility[/color][/b] by 1.",
+        "",
+        "At the start of each combat, randomly determine one of your Known Skills. All its Dice gain +1 [b][color=ffffff]Power[/color][/b] for the rest of combat.",
+        "",
+        "If you have 7+ Known Skills, apply this to two of them instead."
+
+    ]
+}

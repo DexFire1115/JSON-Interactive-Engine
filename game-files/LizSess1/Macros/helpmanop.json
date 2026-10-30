@@ -1,0 +1,109 @@
+{
+    "Aliases": [
+        "hm",
+        "mohelp"
+    ],
+    "Args": [
+        "64ffaa"
+    ],
+    "Commands": [
+        {
+            "addLog": [
+                "[b][u]COMMAND LIST FOR MANUAL OP: {required args} , (optional args = default as applicable)[/u][/b]\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]s[/b] : Starts a new scene"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]r {size} (base = 0)[/b] : Roll a 1d{size}+(base), base is 0 if not provided\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]lc {unit} {amt}[/b] : Changes the unit's Light\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]ec {unit} {amt}[/b] : Changes the unit's Emotion Points\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]du {unit} {damage} (stagger)[/b] : Deals damage to a unit. If 'stagger' is not specified, stagger is dealt equal to the 'damage' value. Negative damage will heal. This damage cannot be reduced.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]b {unit} {status} (amt) (nextScene) (setStatus)[/b] : Inflicts status. If 'nextScene' is 'n', the infliction will be held to the next scene. If 'setStatus' is s, the infliction will set the value of the stack/nextstack.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]bp {unit}[/b] : Displays the status array of a unit, which includes its passives, feats, and Battle Abilities.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]dun {unit}[/b] : Displays the unit's core stats\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]dsl {unit} (skill_num)[/b] : Displays the unit's skill list. May specify an index from the list with 'skill_num'.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]dsp[/b] : Displays the dice list of the active scene. Gold corresponds to active, aqua to held, and magenta to spent/void.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]hd (die_ID)[/b] : Holds a speed die from active subset. If no 'die_ID' is specified, select the top die from the dsp list.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]rd (die_ID)[/b] : Removes a speed die from active or held subsets. If no 'die_ID' is specified, select the top die from the dsp list (priority active before held).\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b][u]JSON MACROS FOR MANUAL OP: {required args} , (optional args = default as applicable)[/u][/b]\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]au {unit} {filename}[/b] : Adds the unit with its tag as 'unit' and its data derived from the file in Units/ from 'filename'. The '.json' extension may be omitted in the filename. if the unit's tag already exists in the list, the pre-existing one is overwritten.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]ru {unit} [/b]: Deletes the unit with its tag as 'unit'. Any dice in the active scene's queue will be automatically wiped. May be error prone if executed through an escaped but active prompt query.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]qb {unit} {q_stat} (amt) (nextScene) (setStatus)[/b] : Inflicts status based on an abridged name. If 'nextScene' is 'n', the infliction will be held to the next scene. If 'setStatus' is s, the infliction will set the value of the stack/nextstack.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]asd {die_ID} {value}[/b] : Creates a speed die with the designated value and adds it to the active list. If the die already exists in the active list, it is overwritten.\n"
+            ]
+        },
+        {
+            "addLog": [
+                "[b]hm[/b] : Prints this document\n"
+            ]
+        },
+        0
+    ],
+    "Help": [
+    ]
+}

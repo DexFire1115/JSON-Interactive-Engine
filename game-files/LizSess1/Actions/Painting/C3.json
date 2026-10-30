@@ -1,0 +1,38 @@
+{
+    "Name": "!!!",
+    "Cost": 3,
+    "PreText": [
+        "[b][color=64ffaa][lb]Eminence][/color][/b] Dice on this skill gain [b][color=ffffff]Power[/color][/b] up for every negative status on the target."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc5064]Bleed[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Target gains 3 [b][color=ccbbaa]Safeguard[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 2 [b][color=cc5064]Bleed[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Target gains 2 [b][color=ccbbaa]Safeguard[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 3 [b][color=cc5064]Bleed[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Target gains 1 [b][color=ccbbaa]Safeguard[/color][/b]."
+            ]
+        },
+    ],
+    "PostText": [
+    ]
+}

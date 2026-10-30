@@ -1,0 +1,19 @@
+{
+    "Name": "!?!",
+    "Cost": 0,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Give all combatants 1 [b][color=ccbbaa]Safeguard[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Reduce [b][color=ccbbaa]Safeguard[/color][/b] on target by 1."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

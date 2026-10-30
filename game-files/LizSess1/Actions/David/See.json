@@ -1,0 +1,22 @@
+{
+    "Name": "See You In The Next Circle",
+    "Cost": 3,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] You may spend 2 uses of a [b][color=ffff64][lb]Limit][/color][/b] skill to activate its [b][color=64aaff][lb]Exhaust][/color][/b] effect as if it were on this skill."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 12,
+            "Base": 9,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +4 of the target has 6+ [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 4 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Transfer up to 4 of an Ailment from self to target."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Remove all of 1 Ailment or Debuff on self."
+    ]
+}

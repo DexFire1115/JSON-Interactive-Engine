@@ -1,0 +1,63 @@
+{
+    "Name": "[Shin] Dreams of Achievement / Taking Action",
+    "Color": "#cccccc",
+    "MinStack": 0,
+    "MaxStack": 0,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Attributes/EmotionPoints",
+                                    0
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " May spend 3 [b][color=aa64ff]Emotion Points[/color][/b] to activate [b][color=ffaa80]Dreams Of Achievement[/color][/b]!",
+                            "\n",
+                            "  Run -> [b][url=\"shin ",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            " Shin/Dreams_Of_Achievement\"][color=64ffaa]shin[/color] [color=aa64ff]",
+                            {
+                                "getSelf": [
+                                    
+                                ]
+                            },
+                            "[/color] [color=ffff64]Shin/Dreams_Of_Achievement[/color][/url][/b]"
+                        ]
+                    }
+                ]
+            },
+        ],
+    },
+    "Text": [
+    ]
+}

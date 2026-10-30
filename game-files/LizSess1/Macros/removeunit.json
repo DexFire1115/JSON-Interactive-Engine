@@ -1,0 +1,47 @@
+{
+    "Aliases": [
+        "ru"
+    ],
+    "Args": [
+        "64ffaa",
+        "aa64ff"
+    ],
+    "Commands": [
+        [
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "refCall": [
+                                    "&addunit_args",
+                                    "size"
+                                ]
+                            },
+                            2
+                        ]
+                    },
+                    [
+                        1,
+                        "return"
+                    ]
+                ]
+            }
+        ],
+        {
+           "remUnit": [
+                {
+                    "refCall": [
+                        "&addunit_args",
+                        "get",
+                        1
+                    ]
+                }
+           ] 
+        },
+        0
+    ],
+    "Help": [
+        "Removes a unit by tag"
+    ]
+}

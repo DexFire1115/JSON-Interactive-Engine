@@ -1,0 +1,51 @@
+{
+    "Name": "Shining Baroque Ring Student",
+    "Color": "#ffd302",
+    "Type": "Human",
+    "Class": "Urban Plague",
+    "Attributes": {
+        "CurrentHealth": 70,
+        "MaxHealth": 70,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 5,
+        "MaxLight": 5,
+        "LightRegen": 2,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 2,
+        "EmotionPoints": 0,
+        "SlashDamage": 1,
+        "PierceDamage": -1,
+        "BluntDamage": 0,
+        "SlashStagger": 1,
+        "PierceStagger": -1,
+        "BluntStagger": -1,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "BStu/Glow",
+        "BStu/Petrifying",
+        "BStu/Please",
+        "BStu/Inspiring"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "BStu/That_Glimmer",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "BStu/Bright",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

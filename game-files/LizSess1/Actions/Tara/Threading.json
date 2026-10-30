@@ -1,0 +1,38 @@
+{
+    "Name": "Threading The Film",
+    "Cost": 2,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Move up to 2 uses of a limited skill to another limited skill with at least 1 remaining use. If this triggers the [b][color=64aaff][lb]Exhaust][/color][/b] effect of the first skill, trigger the effect as if it was on this skill, and gain 1 [b][color=5080cc]Protection[/color][/b].",
+        "[b][color=64aaff][lb]Exhaust][/color][/b] Gain 3 [b][color=50cc80]Thorns[/color][/b] and 1 [b][color=5080cc]Protection[/color][/b]"
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 4,
+            "Base": 4,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 4 [b][color=5064cc]Sinking[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=ccaa50]Paralyze[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=5064cc]Sinking[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=ffaa64]Haste[/color][/b] and regain 2 [b][color=ffff64]Stagger Resist[/color][/b] for each of your [b][color=64aaff]Exhausted[/color][/b] skills."
+    ]
+}

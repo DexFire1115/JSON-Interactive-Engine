@@ -1,0 +1,12 @@
+{
+    "Name": "... '~",
+    "Cost": 0,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] End the encounter."
+    ],
+    "Dice": [
+    ],
+    "PostText": [
+        "[i]Just- don't cut too deeply..?[/i]."
+    ]
+}

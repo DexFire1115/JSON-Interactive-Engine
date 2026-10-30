@@ -1,0 +1,29 @@
+{
+    "Name": "Relentless Searching",
+    "Cost": 2,
+    "PreText": [
+        "Can only be used proactively to target all enemies that rolled a [b][color=ffaa64]Speed Die[/color][/b] with a value of 1 this scene. Cannot be used otherwise.",
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 2,
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=ffaa64]Bind[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 4 [b][color=50cccc]Tremor[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 2,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+        ""
+    ]
+}

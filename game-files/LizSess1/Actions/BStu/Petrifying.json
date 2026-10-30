@@ -1,0 +1,21 @@
+{
+    "Name": "Petrifying Gold",
+    "Cost": 2,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain [b][color=ffcc32]Fate[/color][/b] for every 3 negative status effects on target (max 2)."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 12,
+            "Base": 0,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If target has 6+ negative status effects, reuse this Die once.",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc50cc]Random Ailment[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

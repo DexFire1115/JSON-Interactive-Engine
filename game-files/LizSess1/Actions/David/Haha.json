@@ -1,0 +1,36 @@
+{
+    "Name": "Haha... Burn, Burn!",
+    "Cost": 2,
+    "Limit": 7,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 3 [b][color=cc6450]Burn[/color][/b], then trigger [b][color=ff6450]Blaze[/color][/b] on self, spreading [b][color=cc6450]Burn[/color][/b] to enemies instead of allies."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 1,
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ff6450]Blaze[/color][/b] on the target."
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 15 [b][color=ff6464]HP[/color][/b]"
+    ]
+}

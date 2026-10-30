@@ -1,0 +1,20 @@
+{
+    "Name": "Lost in the steps",
+    "Cost": 1,
+    "Limit": 3,
+    "PreText": [
+        "[b][color=64aaff][lb]Exhaust][/color][/b] Roll an additional [b][color=ffaa64]Speed Die[/color][/b] and add it to the scene. If this effect did not trigger naturally, gain 2 [b][color=ffaa64]Haste[/color][/b] instead."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 5,
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] When clashing against a [b][color=ffaaaa]Blunt Die[/color][/b], gain 2 [b][color=ffffff]Power[/color][/b]"
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}
