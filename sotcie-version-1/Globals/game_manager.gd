@@ -12,6 +12,7 @@ var homeDir: String = "/home/dexfire1115/Documents/SotCIE/"
 
 # Handling Data Management
 @export var filetree: DataTree
+@export var soundDict := {}
 @onready var loadArchive = $LoadArchive
 
 func _ready() -> void:
@@ -54,6 +55,10 @@ func fileBranch(path: String) -> void:
 			tempDict.set(level, JSON.parse_string(loadfile.read_file(path).get_string_from_ascii()))
 			if(str(tempDict.get(level)) == "<null>"): print("ERROR : ", level)
 			#print(str(tempDict.get(level)).substr(0,100))
+			continue
+		if(level.ends_with(".wav")):
+			soundDict.set(level, AudioStreamWAV.load_from_buffer(loadfile.read_file(path)))
+			tempDict.set(level, "@ExportWAV")
 			continue
 		if(level == "ref"):
 			tempDict.set(level, null)

@@ -4,11 +4,20 @@
             "Unit": "Eldric"
         },
         "A2": {
+            "Unit": "Marton"
+        },
+        "A3": {
+            "Unit": "VileiColparino"
+        },
+        "A4": {
             "Unit": "Mordred"
         },
+        "A5": {
+            "Unit": "Lilli"
+        },
         "E1": {
-            "Unit": "VileiColparino"
-        }
+            "Unit": "HooliganSuper"
+        }    
     },
     "Units-Cache": {
         "**": {
