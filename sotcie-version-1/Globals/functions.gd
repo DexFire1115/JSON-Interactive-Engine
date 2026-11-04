@@ -81,7 +81,11 @@ func varCall(variant, method: String, ...args: Array) -> Variant:
 func refCall(ref: String, method: String, ...args: Array) -> Variant:
 	ref = parseRef(ref)
 	if(!references.has(ref)): return null
-	return Callable.create(references[ref], method).callv(args)
+	var refval = references[ref]
+	if(refval == null): 
+		print("ALERT ", method, " ", args)
+		return null
+	return Callable.create(refval, method).callv(args)
 
 func dieCall(method: String, ...args: Array) -> Variant:
 	var die = getVar("DieData")
@@ -282,9 +286,18 @@ func notBool(b: bool) -> bool:
 func andBool(b1: bool, b2: bool) -> bool:
 	return b1 && b2
 
+func andSet(...args: Array) -> bool:
+	return args.all(func(element): return element if(element is bool)else false)
+
 func orBool(b1: bool, b2: bool) -> bool:
 	return b1 || b2
-	
+
+func orSet(...args: Array) -> bool:
+	return args.any(func(element): return element if(element is bool)else false)
+
+func nullDefault(val, default) -> Variant:
+	return default if(val == null)else val
+
 func safeDict(input: Array, returnIndex := 0) -> Dictionary:
 	for d in input:
 		if(d.size() == 1 && d.keys()[0] is String):
@@ -892,15 +905,18 @@ func isUsable(unitData: DataTree, actionData: DataTree, actionName: String) -> b
 		return false
 	if(unitData.dget("Attributes/EmotionPoints", 0) < actionData.dget("Emotion", 0)):
 		return false
-	if(actionData.has("Limit") && unitData.dget("Vars/ActionUses/" + actionName, 0) >= actionData.dget("Limit", 0)):
+	if(actionData.has("Limit") && getSkillUses(unitData, actionName) >= actionData.dget("Limit", 0)):
 		return false
 	return true
+
+func getSkillUses(unitData: DataTree, actionName: String):
+	return unitData.dget("Vars/ActionUses/" + actionName, 0)
 
 func isTargettable(_unitData: DataTree, _targetData: DataTree) -> bool:
 	return true
 
 func actionSaveDie(unit: String, die: DataTree, dieArr: Array):
-	if(die.dget("RecycleCount", 0) == 0): 
+	if(die.dget("RecycleCount", 0) > 0): 
 		dieArr.pop_front()
 		return
 	unitList[unit].savedDice.push_back(dieArr.pop_front())
@@ -956,6 +972,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 		&& getAction(u2id[i], "data/Limit", 0) > 0):
 			await readActionTag("Exhaust", u2[i])
 		moveCounterDice(u2id[i])
+		
 	while(!(u1dice.is_empty() && u2dice.all(isEmpty))):
 		if(u1dice.is_empty()): await afterSkillAWProactive(u1, u2, clashData)
 		var u1Recycle = true
@@ -1080,10 +1097,10 @@ func executeSkills(u1: String, u2: String, a1: String, a2: String) -> void:
 	await readActionTag("Reactive", u2)
 	await readActionTag("OnUse", u1)
 	await readActionTag("OnUse", u2)
-	if(getAction(u1id, "data/Uses", 0) >= getAction(u1id, "data/Limit", 0)
+	if(getSkillUses(getUnitData(u1), a1) >= getAction(u1id, "data/Limit", 0)
 	&& getAction(u1id, "data/Limit", 0) > 0):
 		await readActionTag("Exhaust", u1)
-	if(getAction(u2id, "data/Uses", 0) >= getAction(u2id, "data/Limit", 0)
+	if(getSkillUses(getUnitData(u2), a2) >= getAction(u2id, "data/Limit", 0)
 	&& getAction(u2id, "data/Limit", 0) > 0):
 		await readActionTag("Exhaust", u2)
 	moveCounterDice(u1id)
@@ -1468,6 +1485,12 @@ func getIDTag(unit: String) -> String:
 	var unitColor = unitData.dget("Color","")
 	if(!(unitColor is String)): unitColor = "aaaaaa"
 	return "[b][color=" + unitColor + "][lb]" + unit + "][/color][/b]"
+
+
+func playSound(sound: String):
+	if(!GameManager.soundDict.has(sound)): return
+	EventBus.emit_signal("playSound", GameManager.soundDict[sound])
+
 
 func runMacro(input: String) -> int:
 	EventBus.emit_signal("consoleStore", "&rM_temp", "readCommand", input)

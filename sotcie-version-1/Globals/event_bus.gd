@@ -14,3 +14,5 @@ extends Node
 @warning_ignore("unused_signal") signal skillListDisplay
 @warning_ignore("unused_signal") signal savediceListDisplay
 @warning_ignore("unused_signal") signal targetListDisplay
+
+@warning_ignore("unused_signal") signal playSound

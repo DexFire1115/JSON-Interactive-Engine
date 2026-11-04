@@ -1,0 +1,64 @@
+{
+    "Name": "Electro-Oxidation",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Hit": [
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getStatus": [
+                                    "Vulnerable",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Sinking",
+                                1
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getStatus": [
+                                    "Vulnerable",
+                                    0
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Vulnerable",
+                                -3
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Paralysis",
+                                1
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=64ff64][lb]Hit][/color][/b] If target has [b][color=aa6450]Vulnerable[/color][/b], inflict 1 [b][color=5064cc]Sinking[/color][/b]. If able, consume 3 [b][color=aa6450]Vulnerable[/color][/b] on target to inflict 1 [b][color=ccaa50]Paralysis[/color][/b]."
+    ]
+}

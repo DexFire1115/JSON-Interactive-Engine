@@ -6,6 +6,11 @@
             "runMacro": [
                 "sw sud t"
             ]
+        },
+        {
+            "playSound": [
+                "SFX_Siren.wav"
+            ]
         }
     ]
 }

@@ -62,7 +62,8 @@
                                     "Action"
                                 ]
                             },
-                            "diceArr"
+                            "diceArr",
+                            []
                         ]
                     }
                 ]
@@ -80,6 +81,11 @@
                             
                         ]
                     }
+                ]
+            },
+            {
+                "playSound": [
+                    "Stagger.wav"
                 ]
             }
         ],

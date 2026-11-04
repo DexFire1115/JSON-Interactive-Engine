@@ -8,7 +8,8 @@ var unitCase := false
 var switches: Dictionary[String, bool] = {
 	"unitCase": false,
 	"censorHealth": false,
-	"skillUseDisp": false
+	"skillUseDisp": false,
+	"visPrintStatement": true
 }
 var swaliases: Dictionary[String, String] = {
 	"uc": "unitCase",
@@ -64,7 +65,10 @@ func _on_input_text_submitted(new_text: String) -> void:
 		readCommand(new_text.replace("[", "[lb]"))
 		mutatedHistory.set(historyIndex, new_text)
 		commandHistory[0] = mutatedHistory.get(historyIndex, "")
-		commandHistory.push_front("")
+		if(commandHistory.size() > 1 && commandHistory[0] == commandHistory[1]):
+			commandHistory[0] = ""
+		else:
+			commandHistory.push_front("")
 		mutatedHistory.clear()
 		mutatedHistory.set(0, "")
 		historyIndex = 0
@@ -86,12 +90,19 @@ func textPrompt(query := ""):
 	EventBus.emit_signal("queryOutput", s)
 
 func readCommand(text: String) -> int:
-	var args := text.split(" ", false)
+	switches["visPrintStatement"] = text.left(1) != "*"
+	var args := text.trim_prefix("*").split(" ", false)
 	var errorCode := -1
 	match args[0]:
 		"switch", "sw":
 			argPrint(args, "64ffff", "ffcc64", "ff6464")
 			errorCode = switchCommand(args)
+		"echo", "e":
+			argPrint(args, "64ffff")
+			errorCode = echoCommand(args)
+		"history", "h":
+			argPrint(args, "64ffff", "ff6464")
+			errorCode = historyCommand(args)
 		"search":
 			argPrint(args, "64ffff", "ffff64")
 			errorCode = searchCommand(args)
@@ -225,6 +236,21 @@ func switchCommand(args: PackedStringArray) -> int:
 
 func fetchSwitches() -> Dictionary:
 	return switches
+
+func echoCommand(args: PackedStringArray) -> int:
+	addPushConsole(" ".join(args.slice(1)))
+	return 0
+
+func historyCommand(args: PackedStringArray) -> int:
+	var arr: Array
+	if(args.size() > 1 && args[1].is_valid_int()):
+		var num := int(args[1])
+		arr = commandHistory.slice(1, num + 1) if(num >= 0)else commandHistory.slice(num)
+	else:
+		arr = commandHistory.slice(1)
+	for i in arr.size():
+		addLog(str(i) + " | " + arr[arr.size() - i - 1])
+	return 0
 
 func searchCommand(args: PackedStringArray) -> int:
 	if(args.size() < 2): return 1
@@ -455,14 +481,14 @@ func displaySkillCommand(args: PackedStringArray) -> int:
 		if(l is String): addLog(addStyle(l, "aaaaaa"))
 	return 0
 
-func getSkillHeader(data: DataTree, isUsable := true) -> String:
+func getSkillHeader(data: DataTree, isUsable := true, useOverride := -1) -> String:
 	var text := ""
 	text += addStyle("[" + displaySkillTextField(data, "Cost") + "] ", "ffaa64", true)
 	if(data.has("Emotion")):
 		text += addStyle("[" + displaySkillTextField(data, "Emotion") + "] ", "aa64ff", true)
 	text += displaySkillTextField(data, "Name", "ffffff" if(isUsable)else "808080", true)
 	if(data.has("Limit")):
-		var uses = data.dget("Uses", 0)
+		var uses = data.dget("Uses", 0) if(useOverride == -1)else useOverride
 		var limit = data.dget("Limit", 0)
 		var color := "ffff64" if(uses < limit)else "aaaaaa"
 		text += addStyle(" [" + castNumDataToString(uses) + "/" + 
@@ -598,7 +624,7 @@ func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
 	var isUsable := Functions.isUsable(unitData, actionData, actionName)
 	var color := "ffeecc" if(isUsable)else "808080"
 	text += addStyle(" " + str(index) + " | ", color, true)
-	text += getSkillHeader(actionData, isUsable)
+	text += getSkillHeader(actionData, isUsable, Functions.getSkillUses(unitData, actionName))
 	addPushConsole(text)
 	return 0
 
@@ -846,6 +872,7 @@ func errorCommand(code: int) -> void:
 	addLog(addStyle(text, "ff6464", true))
 
 func argPrint(args: PackedStringArray, ...colors: Array) -> void:
+	if(!switches["visPrintStatement"]): return
 	var text := ""
 	for i in args.size():
 		var a := args[i]
