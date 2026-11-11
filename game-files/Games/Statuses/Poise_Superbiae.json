@@ -39,6 +39,15 @@
                         "queryYN": [
                             {
                                 "concat": [
+                                    {
+                                        "getIDTag": [
+                                            {
+                                                "getSelf": [
+                                                    
+                                                ]
+                                            }
+                                        ]
+                                    },
                                     "[b]Spend ",
                                     {
                                         "getVar": [

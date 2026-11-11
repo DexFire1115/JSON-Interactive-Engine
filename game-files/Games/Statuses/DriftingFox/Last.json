@@ -1,0 +1,67 @@
+{
+    "Name": "Combative",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/DriftingFox_Last/Condition",
+                    {
+                        "lte": [
+                            {
+                                "divf": [
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Attributes/CurrentHealth",
+                                            1
+                                        ]
+                                    },
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Attributes/MaxHealth",
+                                            1
+                                        ]
+                                    }
+                                ]
+                            },
+                            0.3
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/DriftingFox_Last/Condition",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Bind",
+                                10,
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Feeble",
+                                1,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "Name": "Blockade",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 1,
+            "ClashWin": [
+                {
+                    "dealDamage": [
+                        4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Target takes 3 [b][color=ff6464]Damage[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0
+        }
+    ],
+    "PostText": [
+    ]
+}

@@ -8,33 +8,9 @@
         "MaxHealth": 65,
         "CurrentStagger": 50,
         "MaxStagger": 50,
-        "CurrentLight": {
-            "getUnitElemData": [
-                {
-                    "getUnitElemData": [
-                        "@Self",
-                        "Attributes/Parent",
-                        ""
-                    ]
-                },
-                "Attributes/CurrentLight",
-                0
-            ]
-        },
+        "CurrentLight": 0,
         "MaxLight": 10,
-        "LightRegen": {
-            "getUnitElemData": [
-                {
-                    "getUnitElemData": [
-                        "@Self",
-                        "Attributes/Parent",
-                        ""
-                    ]
-                },
-                "Attributes/LightRegen",
-                0
-            ]
-        },
+        "LightRegen": 6,
         "SpeedDiceSize": 4,
         "SpeedDiceBase": 0,
         "SpeedDiceAmt": 2,

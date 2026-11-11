@@ -1,7 +1,22 @@
 {
     "Name": "Raging Withdrawal",
     "Cost": 2,
+    "OnUse": [
+        {
+            "changeLight": [
+                -2,
+                {
+                    "getUnitDataElem": [
+                        "@Self",
+                        "Attributes/Head",
+                        ""
+                    ]
+                }
+            ]
+        }
+    ],
     "PreText": [
+        "This skill may only be used by the Head Part."
     ],
     "Dice": [
         {

@@ -10,7 +10,7 @@
         "MaxStagger": 200,
         "CurrentLight": 3,
         "MaxLight": 10,
-        "LightRegen": 3,
+        "LightRegen": 5,
         "SpeedDiceSize": 6,
         "SpeedDiceBase": 0,
         "SpeedDiceAmt": 5,

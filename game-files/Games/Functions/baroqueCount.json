@@ -1,0 +1,457 @@
+{
+    "Args": [
+        "target"
+    ],
+    "Defaults": [
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "count",
+                0
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Feeble",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Disarm",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Fragile",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Vulnerable",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Bind",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Burn",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Bleed",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Tremor",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Sinking",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getStatus": [
+                                                "Paralyze",
+                                                0,
+                                                {
+                                                    "getVar": [
+                                                        "target",
+                                                        ""
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                [
+                                    1
+                                ],
+                                [
+                                    0
+                                ]
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "count",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "count"
+                            ]
+                        },
+                        {
+                            "getStatus": [
+                                "Safeguard",
+                                0,
+                                {
+                                    "getVar": [
+                                        "target",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "getVar": [
+                "count",
+                0
+            ]
+        }
+    ]
+}

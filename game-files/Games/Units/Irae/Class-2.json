@@ -1,0 +1,55 @@
+{
+    "Name": "Peccatulum Irae Class 2",
+    "Color": "#ff5064",
+    "Type": "Distortion",
+    "Class": "Class 2",
+    "Attributes": {
+        "CurrentHealth": 80,
+        "MaxHealth": 80,
+        "CurrentStagger": 40,
+        "MaxStagger": 40,
+        "CurrentLight": 6,
+        "MaxLight": 6,
+        "LightRegen": 2,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 2,
+        "EmotionPoints": 0,
+        "SlashDamage": 0,
+        "PierceDamage": -2,
+        "BluntDamage": 2,
+        "SlashStagger": -3,
+        "PierceStagger": 0,
+        "BluntStagger": 1,
+    },
+    "Vars": {
+        "ReserveOnDeath": true,
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Irae/C2/Explosive_1",
+        "Irae/C2/Sear_1",
+        "Irae/C2/Fire_1",
+        "Irae/C2/Tail_1"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Irae/C2/Burning",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Irae/C2/Wrath",
+                1,
+                "@Self"
+            ]
+        }        
+    ]
+}

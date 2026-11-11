@@ -1,0 +1,35 @@
+{
+    "Name": "Takedown",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Protection",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=50ccff]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 5,
+            "Hit": [
+                {
+                    "dealStagger": [
+                        4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Target takes 4 additional [b][color=ffff64]Stagger[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

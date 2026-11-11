@@ -1,0 +1,17 @@
+{
+    "Name": "HP Drip Ampule",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "dealDamage": [
+                    -5,
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

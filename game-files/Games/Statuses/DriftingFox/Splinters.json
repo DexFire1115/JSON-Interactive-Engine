@@ -1,0 +1,48 @@
+{
+    "Name": "Umbrella Splinters",
+    "Color": "#64aa80",
+    "Passive": true,
+    "Conditions": {
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "dmgVal",
+                    {
+                        "mult": [
+                            {
+                                "getStatus": [
+                                    "DriftingFox/Splinters",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            15
+                        ]
+                    }
+                ]
+            },
+            {
+                "dealMixed": [
+                    {
+                        "getVar": [
+                            "dmgVal"
+                        ]
+                    },
+                    {
+                        "getVar": [
+                            "dmgVal"
+                        ]
+                    },
+                    "@Self"
+                ]
+            },
+            {
+                "statusClearSelf": [
+                    
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

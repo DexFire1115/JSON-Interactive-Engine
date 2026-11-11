@@ -2,10 +2,10 @@
     "Name": "Computer Aided Domination",
     "Color": "#9e2424",
     "Type": "Machine",
-    "Class": "Lvl. 1",
+    "Class": "Lvl. 2",
     "Attributes": {
-        "CurrentHealth": 40,
-        "MaxHealth": 40,
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
         "CurrentStagger": 25,
         "MaxStagger": 25,
         "CurrentLight": 4,
@@ -23,35 +23,30 @@
         "BluntStagger": 1,
     },
     "Statuses": {
-        "Moral_Support": {
-            "File": "Statuses/Moral_Support",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "ConfirmStatus",
-                "Protected"
-            ]
-        },
-        "Utilitarian": {
-            "File": "Statuses/Utilitarian",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-            ]
-        }
     },
     "Conditions": {
-        "ConfirmStatus": [
-            "Moral_Support"
-        ],
-        "Protected": [
-            "Moral_Support"
-        ]
     },
     "Actions": [
-        "CAD_Sustained_1",
-        "CAD_Protectorate_1",
-        "CAD_Adaptive_1",
-        "CAD_Flensing_1"
+        "CAD/Sustained_1",
+        "CAD/Adaptive_1",
+        "CAD/Hydraulic_1",
+        "CAD/Flensing_1",
+        "CAD/Augmented_1"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Battle_Abilities/Moral_Support",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Utilitarian",
+                1,
+                "@Self"
+            ]
+        }
     ]
 }

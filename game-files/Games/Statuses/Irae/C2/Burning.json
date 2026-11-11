@@ -1,0 +1,88 @@
+{
+    "Name": "Wrath",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ValidateDamage": [
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    2
+                                ]
+                            },
+                            "begins_with",
+                            "Burn"
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                0,
+                                {
+                                    "div": [
+                                        {
+                                            "refCall": [
+                                                "dmgArr",
+                                                "get",
+                                                0
+                                            ]
+                                        },
+                                        2
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    2
+                                ]
+                            },
+                            "begins_with",
+                            "Sinking"
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                1,
+                                {
+                                    "mult": [
+                                        {
+                                            "refCall": [
+                                                "dmgArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        2
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "This unit takes half [b][color=ff6464]Damage[/color][/b] from [b][color=cc6450]Burn[/color][/b], and twice as much [b][color=ffff64]Stagger[/color][/b] from [b][color=5064cc]Sinking[/color][/b]."
+    ]
+}

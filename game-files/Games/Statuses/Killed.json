@@ -6,6 +6,25 @@
     "Conditions": {
         "Applied-Killed": [
             {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "getStatus": [
+                                    "Killed",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
                 "consoleCommand": [
                     "killedDisplay",
                     {

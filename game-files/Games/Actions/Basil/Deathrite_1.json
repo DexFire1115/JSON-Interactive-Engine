@@ -1,0 +1,142 @@
+{
+    "Name": "Quickening - Deathrite",
+    "Cost": 3,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Haste",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 3 [b][color=ffaa64]Haste[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 2,
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "propCall": [
+                                        "usedList",
+                                        "get",
+                                        {
+                                            "varCall": [
+                                                {
+                                                    "getUnitProp": [
+                                                        "@Self",
+                                                        "speedDie"
+                                                    ]
+                                                },
+                                                "get",
+                                                0
+                                            ]
+                                        },
+                                        0
+                                    ]
+                                },
+                                8
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    4
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] + 4 when used at 8+ [b][color=ffaa64]Speed[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 12,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        }
+    ],
+    "OnKill": [
+        {
+            "statusInflict": [
+                "Poise",
+                6,
+                "@Self"
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Poise",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ff6464][lb]On Kill][/color][/b] Gain 6 [b][color=aacccc]Poise[/color][/b].",
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 3 [b][color=aacccc]Poise[/color][/b]."
+    ]
+}

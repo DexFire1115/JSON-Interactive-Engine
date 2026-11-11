@@ -5,9 +5,22 @@
     "OnUse": [
         {
             "statusInflict": [
-                "SpawnUmbrellas",
+                "DriftingFox/SpawnUmbrellas",
                 2,
-                "@Self"
+                "@Self",
+                true
+            ]
+        },
+        {
+            "changeLight": [
+                -6,
+                {
+                    "getUnitDataElem": [
+                        "@Self",
+                        "Attributes/Parent",
+                        ""
+                    ]
+                }
             ]
         }
     ],

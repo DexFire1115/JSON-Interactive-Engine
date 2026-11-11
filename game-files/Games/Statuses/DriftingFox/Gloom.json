@@ -1,0 +1,314 @@
+{
+    "Name": "Gloom-Ridden Patterns",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "orBool": [
+                            {
+                                "greaterThan": [
+                                    {
+                                        "getStatus": [
+                                            "Staggered",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "greaterThan": [
+                                    {
+                                        "getStatus": [
+                                            "Staggered",
+                                            0,
+                                            {
+                                                "getUnitDataElem": [
+                                                    "@Self",
+                                                    "Attributes/Head",
+                                                    ""
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    0
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Vars/SceneOffset",
+                                {
+                                    "add": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/SceneOffset",
+                                                0
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "cycle",
+                    {
+                        "mod": [
+                            {
+                                "sub": [
+                                    {
+                                        "get": [
+                                            "scene"
+                                        ]
+                                    },
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Vars/SceneOffset",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            },
+                            4
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "cycle",
+                                    1
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                {
+                                    "concat": [
+                                        {
+                                            "getIDTag": [
+                                                {
+                                                    "getSelf": [
+                                                        
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        " Waiting . . . (Head Part is untargetable this scene.)"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "complexInstantiate",
+                                "Attributes/SpeedDiceAmt"
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                -1
+                            ]
+                        },
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Attributes/Head"
+                                            ]
+                                        },
+                                    ]
+                                },
+                                "complexInstantiate",
+                                "Attributes/SpeedDiceAmt"
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                {
+                                    "getUnitDataElem": [
+                                        "@Self",
+                                        "Attributes/Head"
+                                    ]
+                                },
+                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                -2
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "orBool": [
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "cycle",
+                                            1
+                                        ]
+                                    },
+                                    0
+                                ]
+                            },
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/DriftingFox_Last/Condition",
+                                    false
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                {
+                                    "concat": [
+                                        {
+                                            "getIDTag": [
+                                                {
+                                                    "getSelf": [
+                                                        
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        " Cries Seeking Something . . ."
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "cycle",
+                                    1
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        "@Self"
+                                    ]
+                                },
+                                "complexInstantiate",
+                                "Attributes/SpeedDiceAmt"
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                1
+                            ]
+                        },
+                        {
+                            "objCall": [
+                                {
+                                    "getUnitData": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Attributes/Head"
+                                            ]
+                                        },
+                                    ]
+                                },
+                                "complexInstantiate",
+                                "Attributes/SpeedDiceAmt"
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                {
+                                    "getUnitDataElem": [
+                                        "@Self",
+                                        "Attributes/Head"
+                                    ]
+                                },
+                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                -1
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SpeedDiceAmt/DriftingFox_Gloom"
+                ]
+            },
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Attributes/Head"
+                                ]
+                            }
+                        ]
+                    },
+                    "complexErase",
+                    "Attributes/SpeedDiceAmt/DriftingFox_Gloom"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

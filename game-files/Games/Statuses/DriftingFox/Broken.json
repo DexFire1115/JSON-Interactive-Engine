@@ -1,0 +1,92 @@
+{
+    "Name": "Broken Umbrella",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Applied-Staggered": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/DriftingFox_Broken/Tracker",
+                    true
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/DriftingFox_Broken/Tracker",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Fragile",
+                                1,
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Fragile",
+                                1,
+                                {
+                                    "getUnitDataElem": [
+                                        "@Self",
+                                        "Attributes/Head",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "ConfirmStatus-Fragile": [
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/DriftingFox_Broken/Tracker",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "set",
+                                1,
+                                {
+                                    "add": [
+                                        {
+                                            "refCall": [
+                                                "statusArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

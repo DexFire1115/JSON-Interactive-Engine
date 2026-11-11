@@ -1,0 +1,35 @@
+{
+    "Name": "Part of a Whole",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "DamageTaken": [
+            {
+                "dealMixed": [
+                    {
+                        "refCall": [
+                            "dmgArr",
+                            "get",
+                            0
+                        ]
+                    },
+                    {
+                        "refCall": [
+                            "dmgArr",
+                            "get",
+                            1
+                        ]
+                    },
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Attributes/Parent"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

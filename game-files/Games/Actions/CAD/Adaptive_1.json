@@ -1,6 +1,6 @@
 {
     "Name": "Adaptive Motion Routine",
-    "Cost": 2,
+    "Cost": 0,
     "OnUse": [
         {
             "statusInflict": [
@@ -34,35 +34,18 @@
             "Text": [
                 "[b][color=6464ff][lb]On Evade][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
             ]
-        },
-        {
-            "Type": "SlashOffense",
-            "Dice": 6,
-            "Base": 1,
-            "Hit": [
-                {
-                    "statusInflict": [
-                        "Charge",
-                        1,
-                        "@Self"
-                    ]
-                }
-            ],
-            "Text": [
-                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
-            ]
-        },
+        }
     ],
     "AfterUse": [
         {
             "statusInflict": [
                 "Charge",
-                2,
+                1,
                 "@Self"
             ]
         }
     ],
     "PostText": [
-        "[b][color=ffffff][lb]After Use][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b]."
     ]
 }

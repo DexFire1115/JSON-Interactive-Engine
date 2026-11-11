@@ -1,0 +1,116 @@
+{
+    "Name": "[E.G.O.] Leashed Beast",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStartPost": [
+            {
+                "setVar": [
+                    "amt",
+                    {
+                        "varCall": [
+                            {
+                                "propCall": [
+                                    "diceList",
+                                    "keys"
+                                ]
+                            },
+                            "reduce",
+                            {
+                                "lambda": [
+                                    "countSpeeds",
+                                    [
+                                        {
+                                            "ifelse": [
+                                                {
+                                                    "andBool": [
+                                                        {
+                                                            "gte": [
+                                                                {
+                                                                    "propCall": [
+                                                                        "diceList",
+                                                                        "get",
+                                                                        {
+                                                                            "getVar": [
+                                                                                "x",
+                                                                                ""
+                                                                            ]
+                                                                        },
+                                                                        0
+                                                                    ]
+                                                                },
+                                                                8
+                                                            ]
+                                                        },
+                                                        {
+                                                            "equals": [
+                                                                {
+                                                                    "getUnitFromDice": [
+                                                                        {
+                                                                            "getVar": [
+                                                                                "x",
+                                                                                ""
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    "getVar": [
+                                                                        ".Self",
+                                                                        ""
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                [
+                                                    1
+                                                ],
+                                                [
+                                                    0
+                                                ]
+                                            ]
+                                        }
+                                    ],
+                                    "x"
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            },
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            "Gained Poise -> ",
+                            {
+                                "getVar": [
+                                    "amt",
+                                    0
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Poise",
+                    {
+                        "getVar": [
+                            "amt",
+                            0
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        ""
+    ]
+}

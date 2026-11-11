@@ -1,0 +1,82 @@
+{
+    "Name": "Petrifying Gold",
+    "Cost": 2,
+    "OnUse": [
+        {
+            "setVar": [
+                "Reuseable",
+                true,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain [b][color=ffcc32]Fate[/color][/b] for every 3 negative status effects on target (max 2)."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 12,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "andBool": [
+                                {
+                                    "getVar": [
+                                        "Reuseable",
+                                        false,
+                                        "@Action"
+                                    ]
+                                },
+                                {
+                                    "gte": [
+                                        {
+                                            "baroqueCount": [
+                                                {
+                                                    "getSingleTarget": [
+                                                        
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        6
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "objCall": [
+                                    {
+                                        "getVar": [
+                                            "DieData"
+                                        ]
+                                    },
+                                    "dset",
+                                    "Recycle",
+                                    1
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Random_Ailment",
+                        3
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If target has 6+ negative status effects, reuse this Die once.",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cc50cc]Random Ailment[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

@@ -4,10 +4,26 @@
     "Attributes": {
     },
     "Vars": {
-        "Wave": 0,
+        "Wave": -1,
         "Progress": 0,
-        "Limit": 3,
-        "Count": 6
+        "Limit": 0,
+        "Count": 0,
+        "LimitArr": [
+            5,
+            5,
+            5,
+            0
+        ],
+        "UnitsArr": [
+            [
+                "KCorp",
+                "KCorp",
+                "KCorp",
+                "KCorp",
+                "KCorp"
+            ],
+            []
+        ]
     },
     "Statuses": {
     },

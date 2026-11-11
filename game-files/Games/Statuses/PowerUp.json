@@ -1,0 +1,16 @@
+{
+    "Name": "[RR] Power Up",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Check": [
+            {
+                "changePower": [
+                    1
+                ]
+            },
+        ]
+    },
+    "Text": [
+    ]
+}

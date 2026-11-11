@@ -107,53 +107,58 @@
                             ]
                         },
                         {
-                            "ifelse": [
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Vars/Limit",
                                 {
-                                    "equals": [
+                                    "varCall": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Vars/LimitArr",
+                                                ""
+                                            ]
+                                        },
+                                        "get",
                                         {
                                             "getUnitDataElem": [
                                                 "@Self",
                                                 "Vars/Wave",
                                                 0
                                             ]
-                                        },
-                                        1
+                                        }
                                     ]
-                                },
-                                [
-                                    {
-                                        "setUnitDataElem": [
-                                            "@Self",
-                                            "Vars/Count",
-                                            3
-                                        ]
-                                    }
-                                ]
+                                }
                             ]
                         },
                         {
-                            "ifelse": [
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Vars/Count",
                                 {
-                                    "equals": [
+                                    "varCall": [
                                         {
-                                            "getUnitDataElem": [
-                                                "@Self",
-                                                "Vars/Wave",
-                                                0
+                                            "varCall": [
+                                                {
+                                                    "getUnitDataElem": [
+                                                        "@Self",
+                                                        "Vars/UnitsArr",
+                                                        ""
+                                                    ]
+                                                },
+                                                "get",
+                                                {
+                                                    "getUnitDataElem": [
+                                                        "@Self",
+                                                        "Vars/Wave",
+                                                        0
+                                                    ]
+                                                }
                                             ]
                                         },
-                                        2
+                                        "size"
                                     ]
-                                },
-                                [
-                                    {
-                                        "setUnitDataElem": [
-                                            "@Self",
-                                            "Vars/Count",
-                                            0
-                                        ]
-                                    }
-                                ]
+                                }
                             ]
                         }
                     ]
@@ -204,10 +209,21 @@
                     ],
                     [
                         {
-                            "addUnit": [
+                            "setVar": [
+                                "tag",
                                 {
                                     "generateUniqueUID": [
                                         "E"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "addUnit": [
+                                {
+                                    "getVar": [
+                                        "tag",
+                                        ""
                                     ]
                                 },
                                 {
@@ -219,35 +235,55 @@
                                         },
                                         "dget",
                                         {
-                                            "ifelse": [
+                                            "concat": [
+                                                "Units/",
                                                 {
-                                                    "equals": [
+                                                    "varCall": [
                                                         {
-                                                            "mod": [
+                                                            "varCall": [
+                                                                {
+                                                                    "getUnitDataElem": [
+                                                                        "@Self",
+                                                                        "Vars/UnitsArr",
+                                                                        ""
+                                                                    ]
+                                                                },
+                                                                "get",
                                                                 {
                                                                     "getUnitDataElem": [
                                                                         "@Self",
                                                                         "Vars/Wave",
                                                                         0
                                                                     ]
-                                                                },
-                                                                2
+                                                                }
                                                             ]
                                                         },
-                                                        1
+                                                        "get",
+                                                        {
+                                                            "getUnitDataElem": [
+                                                                "@Self",
+                                                                "Vars/Progress",
+                                                                0
+                                                            ]
+                                                        }
                                                     ]
-                                                },
-                                                [
-                                                    "Units/Luxuriae"
-                                                ],
-                                                [
-                                                    "Units/Hooligan"
-                                                ]
+                                                }
                                             ]
                                         },
-                                        {}
                                     ]
                                 }
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                {
+                                    "getVar": [
+                                        "tag",
+                                        ""
+                                    ]
+                                },
+                                "Vars/ReserveOnDeath",
+                                true
                             ]
                         },
                         {

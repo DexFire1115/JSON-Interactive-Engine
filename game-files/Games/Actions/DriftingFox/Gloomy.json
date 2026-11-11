@@ -1,7 +1,22 @@
 {
     "Name": "Gloomy Moan",
     "Cost": 1,
+    "OnUse": [
+        {
+            "changeLight": [
+                -1,
+                {
+                    "getUnitDataElem": [
+                        "@Self",
+                        "Attributes/Head",
+                        ""
+                    ]
+                }
+            ]
+        }
+    ],
     "PreText": [
+        "This skill may only be used by the Head Part."
     ],
     "Dice": [
         {

@@ -1,0 +1,143 @@
+{
+    "Name": "Spawning Umbrellas . . .",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+            "setVar": [
+                "allies",
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getSelf": [
+                                        
+                                    ]
+                                },
+                                "contains",
+                                "A"
+                            ]
+                        },
+                        [
+                            "A"
+                        ],
+                        [
+                            "E"
+                        ]
+                    ]
+                }
+            ]
+        },
+            {
+                "loop": [
+                    {
+                        "range": [
+                            {
+                                "getStatus": [
+                                    "DriftingFox/SpawnUmbrellas",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "newID",
+                                {
+                                    "generateUniqueUID": [
+                                        {
+                                            "getVar": [
+                                                "allies",
+                                                ""
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "addUnit": [
+                                {
+                                    "getVar": [
+                                        "newID",
+                                        ""
+                                    ]
+                                },
+                                {
+                                    "propCall": [
+                                        "fileTree",
+                                        "dget",
+                                        "Units/DriftingFox/Umbrella"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                {
+                                    "getVar": [
+                                        "newID",
+                                        ""
+                                    ]
+                                },
+                                "Attributes/Parent",
+                                {
+                                    "getSelf": [
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "getUnitDataElem": [
+                                        "@Self",
+                                        "Statuses/DriftingFox_Last/Condition",
+                                        false
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setUnitDataElem": [
+                                            {
+                                                "getVar": [
+                                                    "newID",
+                                                    ""
+                                                ]
+                                            },
+                                            "Attributes/CurrentHealth",
+                                            14
+                                        ]
+                                    },
+                                    {
+                                        "setUnitDataElem": [
+                                            {
+                                                "getVar": [
+                                                    "newID",
+                                                    ""
+                                                ]
+                                            },
+                                            "Attributes/MaxHealth",
+                                            14
+                                        ]
+                                    },
+                                ]
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "statusClearSelf": [
+                    
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}
