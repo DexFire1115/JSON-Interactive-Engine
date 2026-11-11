@@ -1,0 +1,99 @@
+{
+    "Name": "Old and Abandoned",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Applied-Killed": [
+            {
+                "setVar": [
+                    "parent",
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Attributes/Parent",
+                            ""
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Haste",
+                    2,
+                    {
+                        "getVar": [
+                            "Source"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Bind",
+                    2,
+                    {
+                        "getVar": [
+                            "parent"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Bind",
+                    2,
+                    {
+                        "getUnitDataElem": [
+                            {
+                                "getVar": [
+                                    "parent"
+                                ]
+                            },
+                            "Attributes/Head",
+                            ""
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "DriftingFox/Splinters",
+                    1,
+                    {
+                        "getVar": [
+                            "parent"
+                        ]
+                    }
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    {
+                        "getVar": [
+                            "parent"
+                        ]
+                    },
+                    "Vars/UmbrellasKilled",
+                    {
+                        "add": [
+                            {
+                                "getUnitDataElem": [
+                                    {
+                                        "getVar": [
+                                            "parent"
+                                        ]
+                                    },
+                                    "Vars/UmbrellasKilled",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

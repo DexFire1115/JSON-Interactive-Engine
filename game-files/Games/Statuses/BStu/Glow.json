@@ -1,0 +1,136 @@
+{
+    "Name": "[Eminence] Glow",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmStatus-Random_Ailment": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/BStu_Glow/Dict",
+                    {
+                        "Burn": false,
+                        "Tremor": false,
+                        "Sinking": false
+                    }
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/BStu_Glow/Dict/Burn",
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Burn",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/BStu_Glow/Dict/Tremor",
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Tremor",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/BStu_Glow/Dict/Sinking",
+                    {
+                        "greaterThan": [
+                            {
+                                "getStatus": [
+                                    "Sinking",
+                                    0
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Random-Ailment-Selection": [
+            {
+                "ifelse": [
+                    {
+                        "notBool": [
+                            {
+                                "orBool": [
+                                    {
+                                        "equals": [
+                                            {
+                                                "getVar": [
+                                                    "RANType",
+                                                    ""
+                                                ]
+                                            },
+                                            "Bleed"
+                                        ]
+                                    },
+                                    {
+                                        "varCall": [
+                                            {
+                                                "getUnitDataElem": [
+                                                    "@Self",
+                                                    "Statuses/BStu_Glow/Dict",
+                                                    {}
+                                                ]
+                                            },
+                                            "get",
+                                            {
+                                                "getVar": [
+                                                    "RANType",
+                                                    ""
+                                                ]
+                                            },
+                                            false
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "addLog": [
+                    "[b][color=64ffaa][lb]Eminence][/color][/b]: Target gains 1 [b][color=ccaa50]Paralyze[/color][/b]."
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Paralyze",
+                    1
+                ]
+            }
+        ],
+        "AfterUse": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

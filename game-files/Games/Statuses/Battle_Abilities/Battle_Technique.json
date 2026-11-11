@@ -1,0 +1,18 @@
+{
+    "Name": "Battle Ability: Special Technique",
+    "Color": "#cccccc",
+    "MinStack": 0,
+    "MaxStack": 20,
+    "Passive": true,
+    "Conditions": {
+        "Applied-Battle_Abilities/Special_Technique": [
+            {
+                "addLog": [
+                    "Special Technique Changed!"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

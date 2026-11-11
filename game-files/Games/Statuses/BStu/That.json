@@ -1,0 +1,10 @@
+{
+    "Name": "That glimmer..",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+    },
+    "Text": [
+        "Each stack of target's [b][color=ccbbaa]Safeguard[/color][/b] is treated as +1 negative status effect."
+    ]
+}

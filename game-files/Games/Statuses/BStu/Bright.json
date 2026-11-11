@@ -1,0 +1,17 @@
+{
+    "Name": "Bright Beyond Compare",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ClashWin": [
+            {
+                "changeEmotion": [
+                    -1,
+                    "@Target"
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

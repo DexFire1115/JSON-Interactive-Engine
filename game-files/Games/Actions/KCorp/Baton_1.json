@@ -1,0 +1,20 @@
+{
+    "Name": "Baton Technique",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0
+        }
+    ],
+    "PostText": [
+    ]
+}

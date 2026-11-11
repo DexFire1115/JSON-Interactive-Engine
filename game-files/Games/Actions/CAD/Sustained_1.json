@@ -8,7 +8,20 @@
                 2,
                 {
                     "queryUnit": [
-                        "Give an ally 1 [b][color=cc5050]Strength[/color][/b]:"
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " [b]Give an ally 1 [color=cc5050]Strength[/color]:[/b]"
+                            ]
+                        }
                     ]
                 }
             ]

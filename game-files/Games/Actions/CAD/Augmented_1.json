@@ -1,0 +1,173 @@
+{
+    "Name": "Augmented Power Cycle",
+    "Cost": 2,
+    "Emotion":6,
+    "OnUse": [
+        {
+            "loop": [
+                {
+                    "range": [
+                        3
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Protection",
+                            1,
+                            {
+                                "queryUnit": [
+                                    {
+                                        "concat": [
+                                            {
+                                                "getIDTag": [
+                                                    {
+                                                        "getSelf": [
+                                                            
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            " [b]Give 1 [b][color=5080cc]Protection[/color][/b] to 3 allies. [color=ffff64](",
+                                            {
+                                                "getVar": [
+                                                    "i"
+                                                ]
+                                            },
+                                            "/3)[/color]:[/b]"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "i"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Charge",
+                3,
+                {
+                    "queryUnit": [
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " [b]Give an ally 3 [color=50cccc]Charge[/color]:[/b]"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "statusInflict": [
+                "Charge",
+                1,
+                {
+                    "queryUnit": [
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " [b]Give another ally 1 [color=50cccc]Charge[/color]:[/b]"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        3
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Resolve",
+                            1,
+                            {
+                                "queryUnit": [
+                                    {
+                                        "concat": [
+                                            {
+                                                "getIDTag": [
+                                                    {
+                                                        "getSelf": [
+                                                            
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            " [b]Give 1 [b][color=ffcc50]Resolve[/color][/b] to 3 allies. [color=ffff64](",
+                                            {
+                                                "getVar": [
+                                                    "i"
+                                                ]
+                                            },
+                                            "/3)[/color]:[/b]"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "i"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Give 1 [b][color=5080cc]Protection[/color][/b] to 3 allies (can include self).",
+        "[b][color=ffffff][lb]On Use][/color][/b] Give yourself and an ally 3 [b][color=50cccc]Charge[/color][/b]. Give a third ally 1 [b][color=50cccc]Charge[/color][/b].",
+        "[b][color=ffffff][lb]On Use][/color][/b] Give 1 [b][color=ffcc50]Resolve[/color][/b] to 3 allies (can include self)."
+    ],
+    "Dice": [
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Charge",
+                3,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Haste",
+                2,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "CAD/Augmented_Charge",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 3 [b][color=50cccc]Charge[/color][/b].",
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 2 [b][color=ffaa64]Haste[/color][/b]."
+    ]
+}

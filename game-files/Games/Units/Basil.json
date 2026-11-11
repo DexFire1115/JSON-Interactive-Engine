@@ -1,0 +1,61 @@
+{
+    "Name": "Basil",
+    "Color": "#aaa238",
+    "Type": "Heishou",
+    "Class": "Lvl. 2",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 8,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 1,
+        "SlashDamage": -1,
+        "PierceDamage": 0,
+        "BluntDamage": 2,
+        "SlashStagger": -1,
+        "PierceStagger": 0,
+        "BluntStagger": 1,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Basil/Strider_1",
+        "Basil/Blinkstep_1",
+        "Basil/Dual_1",
+        "Basil/Quickening_1",
+        "Basil/Deathrite_1",
+        "Basil/Leashed_1",
+        "Basil/Leashed_2"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Battle_Abilities/Special_Technique",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Slashing_Style",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Headstart",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

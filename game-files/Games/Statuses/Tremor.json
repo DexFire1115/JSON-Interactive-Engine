@@ -1,7 +1,6 @@
 {
     "Name": "Tremor",
     "Color": "#cccc50",
-    "MinStack": 0,
     "MaxStack": 30,
     "Conditions": {},
     "Text": [

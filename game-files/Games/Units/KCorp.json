@@ -1,0 +1,46 @@
+{
+    "Name": "K Corp Security",
+    "Color": "#50aa64",
+    "Type": "Human",
+    "Class": "Class 1",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 30,
+        "MaxStagger": 30,
+        "CurrentLight": 4,
+        "MaxLight": 4,
+        "LightRegen": 1,
+        "SpeedDiceSize": 4,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": -2,
+        "BluntStagger": 1,
+    },
+    "Vars": {
+        "ReserveOnDeath": true,
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "KCorp/Takedown_1",
+        "KCorp/Blockade_1",
+        "KCorp/Baton_1"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "KCorp/HP",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

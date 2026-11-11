@@ -1,0 +1,297 @@
+{
+    "Name": "Random Ailment",
+    "Color": "#805080",
+    "Conditions": {
+        "Applied-Random_Ailment": [
+            {
+                "setVar": [
+                    "statusNum",
+                    {
+                        "randi_range": [
+                            1,
+                            4
+                        ]
+                    }
+                ]
+            },
+            {
+                "setVar": [
+                    "targDict",
+                    {
+                        "Target": "",
+                        "RANType": ""
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "targDict",
+                    "set",
+                    "Target",
+                    {
+                        "getSelf": [
+                            
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "statusNum"
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "[b][color=cc6450]Burn[/color][/b] randomly inflicted!"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Burn",
+                                {
+                                    "getStatus": [
+                                        "Random_Ailment",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "removeStatus": [
+                                "Random_Ailment",
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "refCall": [
+                                "targDict",
+                                "set",
+                                "RANType",
+                                "Burn"
+                            ]
+                        },
+                        {
+                            "readDieTag": [
+                                "Random-Ailment-Selection",
+                                {
+                                    "getVar": [
+                                        "Source"
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "targDict"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "statusNum"
+                                ]
+                            },
+                            2
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "[b][color=cc5064]Bleed[/color][/b] randomly inflicted!"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Bleed",
+                                {
+                                    "getStatus": [
+                                        "Random_Ailment",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "removeStatus": [
+                                "Random_Ailment",
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "refCall": [
+                                "targDict",
+                                "set",
+                                "RANType",
+                                "Bleed"
+                            ]
+                        },
+                        {
+                            "readDieTag": [
+                                "Random-Ailment-Selection",
+                                {
+                                    "getVar": [
+                                        "Source"
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "targDict"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "statusNum"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "[b][color=cccc50]Tremor[/color][/b] randomly inflicted!"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Tremor",
+                                {
+                                    "getStatus": [
+                                        "Random_Ailment",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "removeStatus": [
+                                "Random_Ailment",
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "refCall": [
+                                "targDict",
+                                "set",
+                                "RANType",
+                                "Tremor"
+                            ]
+                        },
+                        {
+                            "readDieTag": [
+                                "Random-Ailment-Selection",
+                                {
+                                    "getVar": [
+                                        "Source"
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "targDict"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "statusNum"
+                                ]
+                            },
+                            4
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "[b][color=5064cc]Sinking[/color][/b] randomly inflicted!"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Sinking",
+                                {
+                                    "getStatus": [
+                                        "Random_Ailment",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "removeStatus": [
+                                "Random_Ailment",
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "refCall": [
+                                "targDict",
+                                "set",
+                                "RANType",
+                                "Sinking"
+                            ]
+                        },
+                        {
+                            "readDieTag": [
+                                "Random-Ailment-Selection",
+                                {
+                                    "getVar": [
+                                        "Source"
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "targDict"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "When determining a random Ailment, roll a d4 and consult the following:",
+        "1: [b][color=cc6450]Burn[/color][/b] , 2: [b][color=cc5064]Bleed[/color][/b]",
+        "3: [b][color=cccc50]Tremor[/color][/b] , 4: [b][color=5064cc]Sinking[/color][/b]"
+    ]
+}

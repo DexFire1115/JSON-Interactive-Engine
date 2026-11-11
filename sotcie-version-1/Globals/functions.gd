@@ -406,6 +406,7 @@ func dealCombinedDamage(dmgArr: Array, caster := "", target := "") -> Array:
 	consoleCommand("dmgDisplay", target, dataArr)
 	if(dataArr[0] > 0 && dataArr[2] == 0): await statusInflict("Killed", 1, target)
 	if(dataArr[1] > 0 && dataArr[3] == 0): await statusInflict("Staggered", 1, target)
+	if(unitList.has(caster)): await readDieTag("DamageTaken", target, {"dmgArr": dmgArr})
 	if(unitList.has(caster)): await readDieTag("DamageResponse", caster, {"dmgArr": dmgArr})
 	return dataArr
 
@@ -418,7 +419,7 @@ func changeLight(amt := 0, target := "@Self") -> Array:
 	target = getSingleTarget(target)
 	if(target.is_empty()): return dataArr
 	var unitdata := getUnitData(target)
-	if(unitdata.isEmpty()): return dataArr
+	if(unitdata == null || unitdata.isEmpty()): return dataArr
 	dataArr[0] = unitdata.dget("Attributes/CurrentLight", "")
 	dataArr[1] = unitdata.dget("Attributes/MaxLight", "")
 	dataArr[2] = min(max(0, dataArr[0] + amt), dataArr[1])
@@ -431,7 +432,7 @@ func changeEmotion(amt := 0, target := "@Self", display := true) -> Array:
 	target = getSingleTarget(target)
 	if(target.is_empty()): return dataArr
 	var unitdata := getUnitData(target)
-	if(unitdata.isEmpty()): return dataArr
+	if(unitdata == null || unitdata.isEmpty()): return dataArr
 	dataArr[0] = unitdata.safeGet("Attributes/EmotionPoints", -1)
 	dataArr[1] = max(0, dataArr[0] + amt)
 	unitdata.dset("Attributes/EmotionPoints", dataArr[1])
@@ -488,8 +489,8 @@ func setStatus(status: String, amt := 1, target := "", nextScene := false, apply
 	
 	await readUnitTag("StatusClamp", target, {}, [{"clampStatus": [statusData]}])
 	if(apply):
-		await readUnitTag("Applied", target)
-		await readUnitTag("Applied-" + status, target)
+		await readUnitTag("Applied", target, {"Source": caster})
+		await readUnitTag("Applied-" + status, target, {"Source": caster})
 		if(unitList.has(caster)):
 			await readDieTag("Caused", caster, {"Target": target})
 			await readDieTag("Caused-" + status, caster, {"Target": target})
@@ -533,6 +534,8 @@ func clampStatus(statusData: DataTree):
 
 func statusClearSelf(status := ""):
 	if(status.is_empty()): status = str(getVar("Status", ""))
+	status = getUnitDataElem("@Self", "Statuses/" + status + "/File", "")
+	status = status.trim_prefix("Statuses/")
 	await setStatus(status, 0, "@Self", false, false)
 	await readUnitTag("Removed-" + status, "@Self")
 
@@ -717,6 +720,7 @@ func nextTurn(dice := "", isProactive := true):
 	
 	if(canDeploy && answer == 1):
 		var savediceList := Array(unitList[unitName].savedDice.duplicate())
+		var savediceNums := range(savediceList.size())
 		savediceList.push_front("*[b][color=64ff64]Deploy Dice[/color][/b]")
 		var selectedInts := []
 		answer = -1
@@ -726,8 +730,9 @@ func nextTurn(dice := "", isProactive := true):
 			EventBus.emit_signal("savediceListDisplay", unitName, savediceList, optionInts)
 			answer = await queryInt("", optionInts, 0)
 			if(answer == 0): break
-			selectedInts.append(answer - 1)
+			selectedInts.append(savediceNums[answer - 1])
 			savediceList.remove_at(answer)
+			savediceNums.remove_at(answer - 1)
 			if(savediceList.size() == 1): break
 		return "SaveDice" + str(selectedInts)
 	
@@ -1000,7 +1005,7 @@ func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 				u1, u2[i], d1, d2)
 			if(result.is_empty()):
 				if(!u2dice[i].is_empty()):
-					actionSaveDie(u2[i], d2, u2dice)
+					actionSaveDie(u2[i], d2, u2dice[i])
 				continue
 			else:
 				u1Store = false

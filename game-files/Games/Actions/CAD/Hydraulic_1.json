@@ -1,5 +1,5 @@
 {
-    "Name": "Protectorate Protocol",
+    "Name": "Hydraulic Impact",
     "Cost": 1,
     "OnUse": [
         {
@@ -11,11 +11,24 @@
         },
         {
             "statusInflict": [
-                "Protection",
+                "Charge",
                 1,
                 {
                     "queryUnit": [
-                        "Give 1 [b][color=5080cc]Protection[/color][/b] to 1 Ally:"
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " [b]Give another ally 1 [color=5050cc]Charge[/color]:[/b]"
+                            ]
+                        }
                     ]
                 }
             ]
@@ -23,11 +36,11 @@
     ],
     "PreText": [
         "[b][color=64ffaa][lb]Eminence][/color][/b] Whenever you would gain an [b][color=aa64ff]Emotion Point[/color][/b] from clashing, an ally of your choice gains them instead.",
-        "[b][color=ffffff][lb]On Use][/color][/b] Give 1 [b][color=5080cc]Protection[/color][/b] to 1 Ally."
+        "[b][color=ffffff][lb]On Use][/color][/b] Give another ally 1  [b][color=Charge]Charge[/color][/b]."
     ],
     "Dice": [
         {
-            "Type": "Block",
+            "Type": "BluntOffense",
             "Dice": 8,
             "Base": 3,
             "Check": [
@@ -54,7 +67,21 @@
                     ]
                 }
             ],
-            "ClashWin": [
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Charge",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Crit": [
+                {
+                    "dealDamage": [
+                        2
+                    ]
+                },
                 {
                     "statusInflict": [
                         "Charge",
@@ -65,7 +92,8 @@
             ],
             "Text": [
                 "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +2 if this skill intercepted the opposing attack.",
-                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]."
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cccc]Charge[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Deal 2 additional [b][color=ff6464]Damage[/color][/b] gain 2 [b][color=50cccc]Charge[/color][/b]."
             ]
         }
     ],

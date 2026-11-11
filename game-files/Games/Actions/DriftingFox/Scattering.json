@@ -1,0 +1,170 @@
+{
+    "Name": "Scattering Sorrow",
+    "Cost": 1,
+    "PreText": [
+        "Old Umbrella unique skill.",
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Hit": [
+                {
+                    "setVar": [
+                        "foe",
+                        {
+                            "ifelse": [
+                                {
+                                    "varCall": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        },
+                                        "contains",
+                                        "A"
+                                    ]
+                                },
+                                [
+                                    "E"
+                                ],
+                                [
+                                    "A"
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "setVar": [
+                        "inflictArr",
+                        {
+                            "varCall": [
+                                {
+                                    "propCall": [
+                                        "unitList",
+                                        "keys"
+                                    ]
+                                },
+                                "filter",
+                                {
+                                    "lambda": [
+                                        "findFoes",
+                                        [
+                                            {
+                                                "varCall": [
+                                                    {
+                                                        "getVar": [
+                                                            "x",
+                                                            ""
+                                                        ]
+                                                    },
+                                                    "contains",
+                                                    {
+                                                        "getVar": [
+                                                            ".foe",
+                                                            "_"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "x"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "loop": [
+                        {
+                            "getVar": [
+                                "inflictArr",
+                                []
+                            ]
+                        },
+                        [
+                            {
+                                "ifelse": [
+                                    {
+                                        "greaterThan": [
+                                            {
+                                                "getStatus": [
+                                                    "Fragile",
+                                                    0,
+                                                    {
+                                                        "getVar": [
+                                                            "i"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            0
+                                        ]
+                                    },
+                                    [
+                                        {
+                                            "statusInflict": [
+                                                "Fragile",
+                                                1,
+                                                {
+                                                    "getVar": [
+                                                        "i"
+                                                    ]
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            },
+                            {
+                                "ifelse": [
+                                    {
+                                        "greaterThan": [
+                                            {
+                                                "getStatus": [
+                                                    "Sinking",
+                                                    0,
+                                                    {
+                                                        "getVar": [
+                                                            "i"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            0
+                                        ]
+                                    },
+                                    [
+                                        {
+                                            "statusInflict": [
+                                                "Sinking",
+                                                1,
+                                                {
+                                                    "getVar": [
+                                                        "i"
+                                                    ]
+                                                },
+                                                true
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            }
+                        ],
+                        "i"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Every enemy with [b][color=8050cc]Fragile[/color][/b] gains 1 [b][color=8050cc]Fragile[/color][/b] next scene. very enemy with [b][color=5064cc]Sinking[/color][/b] gains 1 [b][color=5064cc]Sinking[/color][/b] next scene.",
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain all [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

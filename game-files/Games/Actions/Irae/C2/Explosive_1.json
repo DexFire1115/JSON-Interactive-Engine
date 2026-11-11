@@ -1,0 +1,32 @@
+{
+    "Name": "Explosive Wrath",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 10,
+            "Base": 6,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        5
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Disarm",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 5 [b][color=cc6450]Burn[/color][/b] and 1 [b][color=50cc50]Disarm[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

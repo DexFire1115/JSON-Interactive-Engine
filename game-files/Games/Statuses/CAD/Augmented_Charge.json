@@ -1,0 +1,73 @@
+{
+    "Name": "[E.G.O.] Augmented Power Cycle",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "Barrier",
+                    {
+                        "min": [
+                            {
+                                "getStatus": [
+                                    "Charge",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "add": [
+                                    5,
+                                    {
+                                        "ifelse": [
+                                            {
+                                                "gte": [
+                                                    {
+                                                        "type_convert": [
+                                                            {
+                                                                "varCall": [
+                                                                    {
+                                                                        "objCall": [
+                                                                            {
+                                                                                "getUnitData": [
+                                                                                    "@Self"
+                                                                                ]
+                                                                            },
+                                                                            "dget",
+                                                                            "Class"
+                                                                        ]
+                                                                    },
+                                                                    "replace",
+                                                                    "Lvl. ",
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            3
+                                                        ]
+                                                    },
+                                                    5
+                                                ]
+                                            },
+                                            [
+                                                5
+                                            ],
+                                            [
+                                                0
+                                            ]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=ffffff][lb]Scene Start][/color][/b] Gain [b][color=80ccff]Barrier[/color][/b] = [b][color=50cccc]Charge[/color][/b] on self (Max 5).",
+        "Increase the maximum gained to 10 when you reach Level 5."
+    ]
+}

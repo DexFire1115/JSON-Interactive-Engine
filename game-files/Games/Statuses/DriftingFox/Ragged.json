@@ -1,0 +1,100 @@
+{
+    "Name": "Ragged Umbrella",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ValidateStatus-Killed": [
+            {
+                "objCall": [
+                    {
+                        "getUnitData": [
+                            "@Self"
+                        ]
+                    },
+                    "dset",
+                    "Statuses/DriftingFox_Ragged/Tracker",
+                    true
+                ]
+            },
+            {
+                "refCall": [
+                    "statusArr",
+                    "set",
+                    1,
+                    0
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/DriftingFox_Ragged/Tracker",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Feeble",
+                                1,
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Feeble",
+                                1,
+                                {
+                                    "getUnitDataElem": [
+                                        "@Self",
+                                        "Attributes/Parent",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "ConfirmStatus-Sinking": [
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/DriftingFox_Ragged/Tracker",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "set",
+                                1,
+                                {
+                                    "add": [
+                                        {
+                                            "refCall": [
+                                                "statusArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

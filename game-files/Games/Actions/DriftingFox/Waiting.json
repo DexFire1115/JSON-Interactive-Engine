@@ -3,16 +3,147 @@
     "Cost": 0,
     "OnUse": [
         {
-            "statusInflict": [
-                "Charge",
-                3,
-                "@Self"
+            "setVar": [
+                "foe",
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getSelf": [
+                                        
+                                    ]
+                                },
+                                "contains",
+                                "A"
+                            ]
+                        },
+                        [
+                            "E"
+                        ],
+                        [
+                            "A"
+                        ]
+                    ]
+                }
             ]
-        }
+        },
+        {
+            "setVar": [
+                "inflictArr",
+                {
+                    "varCall": [
+                        {
+                            "propCall": [
+                                "unitList",
+                                "keys"
+                            ]
+                        },
+                        "filter",
+                        {
+                            "lambda": [
+                                "findFoes",
+                                [
+                                    {
+                                        "varCall": [
+                                            {
+                                                "getVar": [
+                                                    "x",
+                                                    ""
+                                                ]
+                                            },
+                                            "contains",
+                                            {
+                                                "getVar": [
+                                                    ".foe",
+                                                    "_"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "x"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "getVar": [
+                        "inflictArr",
+                        []
+                    ]
+                },
+                [
+                    {
+                        "changeEmotion": [
+                            -3,
+                            {
+                                "getVar": [
+                                    "i"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "i"
+            ]
+        },
+        {
+            "setVar": [
+                "dieName",
+                {
+                    "varCall": [
+                        {
+                            "getAction": [
+                                -1,
+                                "diceArr",
+                                []
+                            ]
+                        },
+                        "get",
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        9
+                    ]
+                },
+                [
+                    {
+                        "varCall": [
+                            {
+                                "getAction": [
+                                    -1,
+                                    "diceArr",
+                                    []
+                                ]
+                            },
+                            "append",
+                            {
+                                "getVar": [
+                                    "dieName",
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "i"
+            ]
+        },
     ],
     "PreText": [
         "This skill contains 10 copies of the Die below.",
-        "[b][color=ffffff][lb]On Use][/color][/b] All enemies lose 5 Emotion Points."
+        "[b][color=ffffff][lb]On Use][/color][/b] All enemies lose 5 [b][color=aa64ff]Emotion Points[/color][/b]."
     ],
     "Dice": [
         {
@@ -54,24 +185,46 @@
             ],
             "ClashLose": [
                 {
-                    "statusInflict": [
-                        "Strength",
-                        2,
-                        "@Self"
+                    "setVar": [
+                        "dmg",
+                        {
+                            "mult": [
+                                {
+                                    "getUnitDataElem": [
+                                        "@Self",
+                                        "Vars/UmbrellasKilled",
+                                        0
+                                    ]
+                                },
+                                2
+                            ]
+                        }
                     ]
                 },
                 {
-                    "addLog": [
-                        "Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Unrest.'"
+                    "dealMixed": [
+                        {
+                            "getVar": [
+                                "dmg"
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "dmg"
+                            ]
+                        },
+                        "@Self"
                     ]
                 }
             ],
             "Text": [
-                "[b][color=64ff64][lb]Clash Win][/color][/b] Take 2 [b][color=ffff64]Stagger[/color][/b]. Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Tranquil.'",
-                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=cc5050]Strength[/color][/b]. Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Unrest.'" 
+                "[b][color=64ffff][lb]Check][/color][/b] If target has no [b][color=aa64ff]Emotion Points[/color][/b], +4 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Target loses 2 [b][color=aa64ff]Emotion Points[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] For every [b][color=408064]Old Umbrella[/color][/b] destroyed during this combat, take 3 [b][color=ff6464]Damage[/color][/b] and [b][color=ffff64]Stagger[/color][/b]." 
             ]
         }
     ],
     "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain all [b][color=ffeecc]Light[/color][/b]."
     ]
 }

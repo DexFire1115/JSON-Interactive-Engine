@@ -1,105 +1,117 @@
 {
-    "Name": "Signal : Tranquil",
-    "Cost": 0,
+    "Name": "Sorrowful Torrent",
+    "Cost": 2,
+    "OnUse": [
+        {
+            "changeLight": [
+                -2,
+                {
+                    "getUnitDataElem": [
+                        "@Self",
+                        "Attributes/Parent",
+                        ""
+                    ]
+                }
+            ]
+        }
+    ],
     "PreText": [
+        "This skill may only be used by the Core Part."
     ],
     "Dice": [
         {
-            "Type": "Block",
-            "Dice": 4,
-            "Base": 0,
-            "Check": [
-                {
-                    "changePower": [
-                        {
-                            "min": [
-                                {
-                                    "getStatus": [
-                                        "Barrier",
-                                        0,
-                                        "@Self"
-                                    ]
-                                },
-                                10
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "ClashWin": [
-                {
-                    "manualDmg": [
-                        {
-                            "getSelf": []
-                        },
-                        0,
-                        1
-                    ]
-                },
-            ],
-            "ClashLose": [
-                {
-                    "addLog": [
-                        {
-                            "concat": [
-                                {
-                                    "getIDTag": [
-                                        {
-                                            "getSelf": [
-                                                
-                                            ]
-                                        }
-                                    ]
-                                },
-                                " Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Know Where?'"
-                            ]
-                        }
-                    ]
-                },
-            ],
-            "Text": [
-                "[b][color=64ffff][lb]Check][/color][/b] Gain [b][color=ffffff]Power[/color][/b] by [b][color=80ffff]Barrier[/color][/b] (Max: +10).",
-                "[b][color=64ff64][lb]Clash Win][/color][/b] Takes 1 [b][color=ffff64]Stagger[/color][/b].",
-                "[b][color=ff6464][lb]Clash Lose][/color][/b] Next [b][color=ffaa64]Speed Die[/color][/b] must be 'Signal : Know Where?"
-            ]
-        },
-        {
-            "Type": "EvadeCounter",
+            "Type": "Evade",
             "Dice": 8,
             "Base": 0,
             "Evade": [
                 {
-                    "statusInflict": [
-                        "Charge",
-                        2,
-                        "@Self"
+                    "setVar": [
+                        "PlusFragile",
+                        true,
+                        "@Action"
                     ]
-                }
-            ],
-            "ClashLose": [
-                {
-                    "statusInflict": [
-                        "Endurance",
-                        1,
-                        "@Self",
-                        true
-                    ]
-                }
+                },
             ],
             "Text": [
-                "[b][color=6464ff][lb]On Evade][/color][/b] Gain 2 [b][color=50cccc]Charge[/color][/b]).",
-                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=50cc50]Endurance[/color][/b]."
+                "[b][color=6464ff][lb]On Evade][/color][/b] This skill inflicts +1 [b][color=8050cc]Fragile[/color][/b] (only once)."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        2
+                    ]
+                },
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=8050cc]Fragile[/color][/b]."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 4,
+            "Base": 4,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                },
+            ],
+            "Crit": [
+                {
+                    "statusInflict": [
+                        "Fragile",
+                        1
+                    ]
+                },
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b].",
+                "[b][color=64ffff][lb]Crit][/color][/b] Inflict 1 [b][color=8050cc]Fragile[/color][/b]."
             ]
         }
     ],
-    "AfterUse": [
+    "ConfirmStatus-Fragile": [
         {
-            "changeLight": [
-                2
+            "ifelse": [
+                {
+                    "getVar": [
+                        "PlusFragile",
+                        false,
+                        "@Action"
+                    ]
+                },
+                [
+                    {
+                        "refCall": [
+                            "statusArr",
+                            "set",
+                            1,
+                            {
+                                "add": [
+                                    {
+                                        "refCall": [
+                                            "statusArr",
+                                            "get",
+                                            1
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    }
+                ]
             ]
         }
     ],
     "PostText": [
-        "[b][color=ffffff][lb]After Use][/color][/b] Regain 2 [b][color=ffeecc]Light[/color][/b]."
     ]
 }

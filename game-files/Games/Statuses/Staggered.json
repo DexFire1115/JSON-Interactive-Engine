@@ -6,6 +6,25 @@
     "Conditions": {
         "Applied-Staggered": [
             {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "getStatus": [
+                                    "Staggered",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            0
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
                 "consoleCommand": [
                     "staggeredDisplay",
                     {

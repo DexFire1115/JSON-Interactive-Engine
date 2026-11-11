@@ -1,0 +1,98 @@
+{
+    "Name": "Slashing Style",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/Slashing_Style/Tracker",
+                    true
+                ]
+            }
+        ],
+        "BeforeDie": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/Slashing_Style/Tracker",
+                                    true
+                                ]
+                            },
+                            {
+                                "varCall": [
+                                    {
+                                        "getDieType": [
+                                            {
+                                                "getUnitProp": [
+                                                    "@Self",
+                                                    "dieData"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "contains",
+                                    "Slash"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "ifelse": [
+                                {
+                                    "queryYN": [
+                                        {
+                                            "concat": [
+                                                {
+                                                    "getIDTag": [
+                                                        {
+                                                            "getSelf": [
+                                                                
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                " [b]Gain Advantage on Slash Die?[/b]"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitProp": [
+                                                    "@Self",
+                                                    "dieData"
+                                                ]
+                                            },
+                                            "dset",
+                                            "Advantage",
+                                            2
+                                        ]
+                                    },
+                                    {
+                                        "setUnitDataElem": [
+                                            "@Self",
+                                            "Statuses/Slashing_Style/Tracker",
+                                            false
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        ""
+    ]
+}

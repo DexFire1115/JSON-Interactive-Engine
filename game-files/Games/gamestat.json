@@ -1,5 +1,8 @@
 {
     "Units": {
+        "**": {
+            "Unit": "SceneManager"
+        },
         "A1": {
             "Unit": "Eldric"
         },
@@ -7,17 +10,14 @@
             "Unit": "Marton"
         },
         "A3": {
-            "Unit": "VileiColparino"
-        },
-        "A4": {
             "Unit": "Mordred"
         },
-        "A5": {
-            "Unit": "Lilli"
+        "A4": {
+            "Unit": "CAD"
         },
-        "E1": {
-            "Unit": "HooliganSuper"
-        }    
+        "A5": {
+            "Unit": "Henry"
+        }
     },
     "Units-Cache": {
         "**": {
@@ -28,6 +28,18 @@
         },
         "A2": {
             "Unit": "Marton"
+        },
+        "A3": {
+            "Unit": "Basil"
+        },
+        "A4": {
+            "Unit": "CAD"
+        },
+        "A5": {
+            "Unit": "Henry"
+        },
+        "A6": {
+            "Unit": "Lilli"
         },
         "A3": {
             "Unit": "Laemshi"

@@ -33,12 +33,20 @@
     "Actions": [
         "DriftingFox/Gloomy",
         "DriftingFox/Raging",
-        "DriftingFox/SRecoil",
-        "DriftingFox/STorrent",
-        "DriftingFox/Waiting",
-        "DriftingFox/Cries"
+        "DriftingFox/Waiting"
     ],
     "Initialize": [
+        {
+            "setUnitDataElem": [
+                "@Self",
+                "Vars/SceneOffset",
+                {
+                    "get": [
+                        "scene"
+                    ]
+                }
+            ]
+        },
         {
             "setVar": [
                 "allies",
@@ -93,6 +101,18 @@
                         "fileTree",
                         "dget",
                         "Units/DriftingFox/Head"
+                    ]
+                }
+            ]
+        },
+        {
+            "setUnitDataElem": [
+                "@Self",
+                "Attributes/Head",
+                {
+                    "getVar": [
+                        "newID",
+                        ""
                     ]
                 }
             ]
@@ -172,7 +192,7 @@
         },
         {
             "statusInflict": [
-                "DriftingFox/Seeking",
+                "DriftingFox/Last",
                 1,
                 "@Self"
             ]
