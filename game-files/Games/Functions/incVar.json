@@ -4,9 +4,13 @@
         "Amt",
         "Ref"
     ],
+    "Defaults": [
+        1,
+        ""
+    ],
     "Sequence": [
         {
-            "setVar": [
+            "setAnyVar": [
                 {
                     "getVar": [
                         "Var",
@@ -16,7 +20,7 @@
                 {
                     "add": [
                         {
-                            "getVar": [
+                            "getAnyVar": [
                                 {
                                     "getVar": [
                                         "Var",

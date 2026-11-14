@@ -1,0 +1,56 @@
+{
+    "Args": [
+        "argSet",
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "refCall": [
+                                "argSet",
+                                "get",
+                                "target"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        {
+            "addLog": [
+                {
+                    "sub": [
+                        {
+                            "varCall": [
+                                {
+                                    "refCall": [
+                                        "argSet",
+                                        "get",
+                                        "dataArr"
+                                    ]
+                                },
+                                "get",
+                                0
+                            ]
+                        },
+                        {
+                            "varCall": [
+                                {
+                                    "refCall": [
+                                        "argSet",
+                                        "get",
+                                        "dataArr"
+                                    ]
+                                },
+                                "get",
+                                2
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

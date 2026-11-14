@@ -15,8 +15,9 @@ func toJSONStr() -> String:
 func isEmpty() -> bool:
 	return dataset == null || dataset.is_empty()
 
-func has(path: String) -> bool:
-	return fetchData(dataset, path)[1] == 0
+func has(path: String, strict := false) -> bool:
+	var state = fetchData(dataset, path)[1]
+	return (state == -1 && !strict) || state == 0
 
 func dget(path: String, default = null) -> Variant:
 	var rawFetch := fetchData(dataset, path)
