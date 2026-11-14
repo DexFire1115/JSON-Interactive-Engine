@@ -22,6 +22,7 @@ var jcaliases: Dictionary[String, String] = {
 var commandHistory: Array[String] = [""]
 var mutatedHistory: Dictionary[int, String] = {0: ""}
 var historyIndex := 0
+var logLength := 100
 
 func _ready() -> void:
 	EventBus.connect("consoleStore", consoleStore)
@@ -106,6 +107,9 @@ func readCommand(text: String) -> int:
 		"search":
 			argPrint(args, "64ffff", "ffff64")
 			errorCode = searchCommand(args)
+		"loglen", "ll":
+			argPrint(args, "64ffff", "ffff64")
+			errorCode = logLengthCommand(args)
 		"edit":
 			argPrint(args, "64ffff", "ffff64", "ff64aa")
 			errorCode = editCommand(args)
@@ -851,6 +855,11 @@ func displayClash(t1: String, r1: int, t2: String, r2: int):
 	text += addStyle("[lb]" + (str(r2) if r2 > 0 else "-") + "]", getTypeColor(t2), true)
 	addPushConsole(text)
 
+func logLengthCommand(args: PackedStringArray) -> int:
+	if(args.size() == 1): return 0
+	if(!args[1].is_valid_int()): return 5
+	logLength = args[1].to_int()
+	return 0
 
 func failedCommand(args: PackedStringArray) -> int:
 	addLog(addStyle(" ".join(args), "aaaaaa", false))
@@ -958,4 +967,4 @@ func renderLog(limit: int) -> void:
 		logs.text += arr[i] + "\n"
 
 func refreshConsole() -> void:
-	renderLog(100)
+	renderLog(logLength)

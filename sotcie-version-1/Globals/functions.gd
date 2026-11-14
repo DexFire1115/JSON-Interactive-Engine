@@ -18,6 +18,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 @export var stack: Array[String] = []
 
 func callj(method: String, args: Array) -> Variant:
+	#print(stack, " and ", references)
 	#print("  ", method, " : ", args.map(func(element): return str(element).split("\n")[0]))
 	for i in args.size():
 		args[i] = await isNestedArg(args[i])
@@ -53,9 +54,9 @@ func jFunc(method: String, args: Array) -> Variant:
 	if(!argNames is Array): return null
 	if(args.size() + defaults.size() < argNames.size()): return null
 	for i in argNames.size():
-		argPairs[argNames[i]] = args[i] if(i < args.size())else defaults[i - args.size()]
+		argPairs[argNames[i]] = args[i] if(i < args.size())else defaults[i - (argNames.size() - defaults.size())]
 	if(argPairs.size() == 1): argPairs["_"] = "_"
-	#print(argPairs)
+	print(argPairs)
 	return await sequence(method, funcData["Sequence"], argPairs)
 
 func propCall(property: String, method: String, ...args: Array) -> Variant:
@@ -93,9 +94,10 @@ func dieCall(method: String, ...args: Array) -> Variant:
 	return die.callv(method, args)
 
 func parseRef(varName: String) -> String:
-	if(references.has(varName)): return varName
+	#if(references.has(varName)): return varName
 	if(varName.begins_with("*")): return varName.substr(1)
 	var stackName = "/".join(stack.slice(0, max(0, stack.size() - varName.count("."))))
+	#addLog(concat("Stack is ", stack, " parsed to ", stackName, " for ", varName))
 	varName = varName.replace(".", "")
 	#print("parsing -> ", stackName, "/", varName)
 	if(stackName.is_empty()): return varName
@@ -204,23 +206,39 @@ func addLog(text):
 	GameManager.addPushConsole(str(text))
 
 func setVar(varName: String, value, ref := "") -> Variant:
-	varName = appendRef(varName, ref)
-	var realName = parseRef(varName)
-	return rawSetVar(realName, value)
+	#print("setVar : ", varName, " ", value, " ", ref)
+	#print(stack, " and ", references)
+	return rawSetVar(parseRef(appendRef(varName, ref)), value)
 
 func getVar(varName: String, default = null, ref := "") -> Variant:
-	varName = appendRef(varName, ref)
-	var realName = parseRef(varName)
-	return rawGetVar(realName, default)
+	return rawGetVar(parseRef(appendRef(varName, ref)), default)
 
 func appendRef(varName: String, ref := "") -> String:
 	if(!ref.is_empty()):
 		var prefix = getVar(ref, null)
 		if(!prefix is String): return ""
-		varName = prefix + "/" + varName
+		varName = "*" + prefix + "/" + varName
+	return varName
+
+func setAnyVar(varName: String, value, ref := "") -> Variant:
+	return rawSetVar(getNearestVarName(parseRef(appendRef(varName, ref))), value)
+
+func getAnyVar(varName: String, default = null, ref := "") -> Variant:
+	return rawGetVar(getNearestVarName(parseRef(appendRef(varName, ref))), default)
+
+func getNearestVarName(varName: String) -> String:
+	if(references.has(varName)): return varName
+	var nameSplit: Array;
+	while(!references.has(varName)):
+		nameSplit = varName.rsplit("/", true, 2)
+		if(nameSplit.size() == 1): return nameSplit[0]
+		if(nameSplit.size() == 2): varName = nameSplit[1]
+		else: varName = nameSplit[0] + "/" + nameSplit[2]
 	return varName
 
 func rawSetVar(varName: String, value) -> Variant:
+	#print("@@@ rSV : ", varName, " = ", value)
+	#addLog(concat("@@@ rSV : ", varName, " = ", value))
 	var oldVal = rawGetVar(varName)
 	references[varName] = value
 	return oldVal
@@ -408,6 +426,7 @@ func dealCombinedDamage(dmgArr: Array, caster := "", target := "") -> Array:
 	if(dataArr[1] > 0 && dataArr[3] == 0): await statusInflict("Staggered", 1, target)
 	if(unitList.has(caster)): await readDieTag("DamageTaken", target, {"dmgArr": dmgArr})
 	if(unitList.has(caster)): await readDieTag("DamageResponse", caster, {"dmgArr": dmgArr})
+	await codeInjection("damageOccuredInjection", {"dmgArr": dataArr, "target": target, "caster": caster})
 	return dataArr
 
 func clampDamage(dmg, flag: bool):
@@ -423,6 +442,7 @@ func changeLight(amt := 0, target := "@Self") -> Array:
 	dataArr[0] = unitdata.dget("Attributes/CurrentLight", "")
 	dataArr[1] = unitdata.dget("Attributes/MaxLight", "")
 	dataArr[2] = min(max(0, dataArr[0] + amt), dataArr[1])
+	await codeInjection("changeLightInjection", {"dataArr": dataArr, "target": target})
 	unitdata.dset("Attributes/CurrentLight", dataArr[2])
 	consoleCommand("lightDisplay", target, dataArr)
 	return dataArr
@@ -435,6 +455,7 @@ func changeEmotion(amt := 0, target := "@Self", display := true) -> Array:
 	if(unitdata == null || unitdata.isEmpty()): return dataArr
 	dataArr[0] = unitdata.safeGet("Attributes/EmotionPoints", -1)
 	dataArr[1] = max(0, dataArr[0] + amt)
+	await codeInjection("changeEmotionInjection", {"dataArr": dataArr, "target": target})
 	unitdata.dset("Attributes/EmotionPoints", dataArr[1])
 	if(display): consoleCommand("emotionDisplay", target, dataArr)
 	return dataArr
@@ -522,6 +543,17 @@ func getStatus(status: String, default := 0, target := "", nextScene := false) -
 	var statusData = DataTree.new(targetData.dget("Statuses/" + status.replace("/", "_"), {}))
 	var stackName := "Stack" if(!nextScene) else "NextStack"
 	return statusData.dget(stackName, default)
+
+func hasStatus(status: String, target := "", nextScene := false) -> bool:
+	target = getSingleTarget(target)
+	if(target.is_empty()): return false
+	var targetData := getUnitData(target)
+	if(targetData == null): return false
+	var statusData = DataTree.new(targetData.dget("Statuses/" + status.replace("/", "_"), {}))
+	var stackName := "Stack" if(!nextScene) else "NextStack"
+	var amt = statusData.dget(stackName)
+	if(amt == null): return false
+	return (amt > statusData.dget("MinStack", 0))
 
 func clampStatus(statusData: DataTree):
 	var fileStatus = DataTree.new(fileTree.safeGet(statusData.dget("File", ""),
@@ -630,6 +662,9 @@ func queryQInt(query: String, choices: Array, default := -1, persistTitle := tru
 		if(choices.is_empty()): return default
 		return choices[0]
 	return await queryInt(query, choices, default)
+
+func codeInjection(method: String, argSet := {}):
+	if(fileTree.has("Functions/" + method.trim_prefix("/") + ".json")): await jFunc(method, [argSet])
 
 func sceneStart():
 	#print("< - - - SCENE - - - >")
@@ -1256,6 +1291,7 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 	if(!d2Data.isEmpty()):
 		await readDieTag("Check", u2)
 		d2Roll = await rollDieEmbed(u2, d2Data)
+	await codeInjection("executeClashPrePrintInjection", {"u1": u1, "u2": u2})
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll[0], getDieType(d2Data), d2Roll[0])
 
 	if(d1Roll[0] * d2Roll[0] != 0): # Not Unopposed

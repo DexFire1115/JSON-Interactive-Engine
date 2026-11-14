@@ -1,23 +1,11 @@
 {
     "Units": {
-        "**": {
-            "Unit": "SceneManager"
-        },
         "A1": {
-            "Unit": "Eldric"
+            "Unit": "Hooligan"
         },
-        "A2": {
-            "Unit": "Marton"
+        "AE1": {
+            "Unit": "Hooligan"
         },
-        "A3": {
-            "Unit": "Mordred"
-        },
-        "A4": {
-            "Unit": "CAD"
-        },
-        "A5": {
-            "Unit": "Henry"
-        }
     },
     "Units-Cache": {
         "**": {
