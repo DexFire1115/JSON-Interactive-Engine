@@ -1,0 +1,130 @@
+{
+    "Name": "Shell of a Former Amalgamatron",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "Feeble",
+                    3,
+                    "@Self"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Disarm",
+                    3,
+                    "@Self"
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Uni_Def_Up",
+                    3,
+                    "@Self"
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Shell/Tracker",
+                    0
+                ]
+            }
+        ],
+        "Clash": [
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Shell/Tracker",
+                                    0
+                                ]
+                            },
+                            5
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Shell/Tracker",
+                    {
+                        "add": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Shell/Tracker",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "isOffense": [
+                            {
+                                "getUnitProp": [
+                                    "",
+                                    "dieData"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Endurance",
+                                1,
+                                "@Self",
+                                true
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Fragile",
+                                1,
+                                "@Self",
+                                true
+                            ]
+                        }
+                    ],
+                    [
+                        {
+                            "statusInflict": [
+                                "Strength",
+                                1,
+                                "@Self",
+                                true
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Vulnerable",
+                                1,
+                                "@Self",
+                                true
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+    },
+    "Text": [
+        "For",
+        "When this unit inflicts Burn, inflict additional [b][color=cc6450]Burn[/color][/b] and [b][color=cc5080]Induction Heating[/color][/b] for every [b][color=50cc50]Endurance[/color][/b] (Max: +3)."
+    ]
+}

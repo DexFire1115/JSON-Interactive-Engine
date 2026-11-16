@@ -1,0 +1,297 @@
+{
+    "Name": "Conditions of Retreat",
+    "Color": "#cccccc",
+    "Hidden": true,
+    "Passive": true,
+    "Conditions": {
+        "Applied-RAA_C4_Conditions": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Conditions/Tracker",
+                    0
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Conditions/Offset",
+                    {
+                        "get": [
+                            "scene"
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneStart": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Conditions/Tracker",
+                    {
+                        "add": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Tracker",
+                                    0
+                                ]
+                            },
+                            {
+                                "div": [
+                                    {
+                                        "sub": [
+                                            {
+                                                "get": [
+                                                    "scene"
+                                                ]
+                                            },
+                                            {
+                                                "getUnitDataElem": [
+                                                    "@Self",
+                                                    "Statuses/RAA_C4_Conditions/Offset",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    2
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Tracker",
+                                    0
+                                ]
+                            },
+                            100
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                "RETREAT!"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "OnKill": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Conditions/Tracker",
+                    {
+                        "add": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Tracker",
+                                    0
+                                ]
+                            },
+                            10
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Applied-Staggered": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Conditions/Tracker",
+                    {
+                        "add": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Tracker",
+                                    0
+                                ]
+                            },
+                            25
+                        ]
+                    }
+                ]
+            }
+        ],
+        "DamageTaken": [
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Thres1",
+                                    true
+                                ]
+                            },
+                            {
+                                "lte": [
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Attributes/CurrentHealth",
+                                            320
+                                        ]
+                                    },
+                                    160
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Conditions/Thres1",
+                                false
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Conditions/Tracker",
+                                {
+                                    "add": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Statuses/RAA_C4_Conditions/Tracker",
+                                                0
+                                            ]
+                                        },
+                                        10
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Thres2",
+                                    true
+                                ]
+                            },
+                            {
+                                "lte": [
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Attributes/CurrentHealth",
+                                            320
+                                        ]
+                                    },
+                                    100
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Conditions/Thres2",
+                                false
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Conditions/Tracker",
+                                {
+                                    "add": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Statuses/RAA_C4_Conditions/Tracker",
+                                                0
+                                            ]
+                                        },
+                                        15
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Thres3",
+                                    true
+                                ]
+                            },
+                            {
+                                "lte": [
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Attributes/CurrentHealth",
+                                            320
+                                        ]
+                                    },
+                                    50
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Conditions/Thres3",
+                                false
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Conditions/Tracker",
+                                {
+                                    "add": [
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Statuses/RAA_C4_Conditions/Tracker",
+                                                0
+                                            ]
+                                        },
+                                        10
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

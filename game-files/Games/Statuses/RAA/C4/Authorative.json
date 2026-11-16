@@ -1,0 +1,89 @@
+{
+    "Name": "Authorative Security III",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "Uni_Def_Up",
+                    {
+                        "min": [
+                            {
+                                "arrCountCondition": [
+                                    {
+                                        "getAlliesArr": [
+                                            
+                                        ]
+                                    },
+                                    [
+                                        {
+                                            "orSet": [
+                                                {
+                                                    "equals": [
+                                                        {
+                                                            "getUnitDataElem": [
+                                                                {
+                                                                    "getAnyVar": [
+                                                                        "x",
+                                                                        ""
+                                                                    ]
+                                                                },
+                                                                "Name",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "Radiant Alloy Amalgamite"
+                                                    ]
+                                                },
+                                                {
+                                                    "equals": [
+                                                        {
+                                                            "getUnitDataElem": [
+                                                                {
+                                                                    "getAnyVar": [
+                                                                        "x",
+                                                                        ""
+                                                                    ]
+                                                                },
+                                                                "Name",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "Radiant Alloy Amalgam"
+                                                    ]
+                                                },
+                                                {
+                                                    "equals": [
+                                                        {
+                                                            "getUnitDataElem": [
+                                                                {
+                                                                    "getAnyVar": [
+                                                                        "x",
+                                                                        ""
+                                                                    ]
+                                                                },
+                                                                "Name",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "Radiant Alloy Amalgamous"
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            },
+                            4
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=ffffff][lb]Scene Start][/color][/b] For every [b][color=cc5080]Radiant Alloy Amalgam-X[/color][/b] of a lower class that is alive, gain 1 [b][color=80cc50]Universal Defense Up[/color][/b] (Max: 4)."
+    ]
+}

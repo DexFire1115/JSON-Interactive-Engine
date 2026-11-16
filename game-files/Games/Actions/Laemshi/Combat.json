@@ -246,8 +246,57 @@
                 },
                 [
                     {
-                        "addLog": [
-                            "Just Pretend"
+                        "changeLight": [
+                            -1
+                        ]
+                    },
+                    {
+                        "loop": [
+                            {
+                                "getAlliesArr": [
+                                ]
+                            },
+                            [
+                                {
+                                    "ifelse": [
+                                        {
+                                            "equals": [
+                                                {
+                                                    "getVar": [
+                                                        "U",
+                                                        ""
+                                                    ]
+                                                },
+                                                {
+                                                    "getSelf": [
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        [
+                                            "continue"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "varCall": [
+                                        {
+                                            "getUnitProp": [
+                                                {
+                                                    "getVar": [
+                                                        "U",
+                                                        ""
+                                                    ]
+                                                },
+                                                "savedDice"
+                                            ]
+                                        },
+                                        "append",
+                                        "Laemshi/Combat_Extra/0"
+                                    ]
+                                }
+                            ],
+                            "U"
                         ]
                     }
                 ]

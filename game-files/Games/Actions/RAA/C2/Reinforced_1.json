@@ -1,0 +1,67 @@
+{
+    "Name": "Reinforced Shell",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Protection",
+                        1,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Resolve",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=8050cc]Protection[/color][/b] and [b][color=ffcc50]Resolve[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BlockCounter",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                2
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 2 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

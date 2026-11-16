@@ -1,0 +1,181 @@
+{
+    "Args": [
+        "unit"
+    ],
+    "Defaults": [
+        "@Self"
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "unit",
+                {
+                    "getSingleTarget": [
+                        {
+                            "getVar": [
+                                "unit"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "returnArr",
+                []
+            ]
+        },
+        {
+            "setVar": [
+                "statusArr",
+                ["Burn", "Bleed", "Tremor", "Sinking", "Paralyze"]
+            ]
+        },
+        {
+            "setVar": [
+                "colorsArr",
+                ["cc6450", "cc5064", "cccc50", "5064cc", "ccaa50"]
+            ]
+        },
+        {
+            "setVar": [
+                "i",
+                {
+                    "add": [
+                        0,
+                        0
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "size"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "statusName",
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    {
+                                        "getVar": [
+                                            "j",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "setVar": [
+                            "fetch",
+                            {
+                                "getIndexedStatus": [
+                                    {
+                                        "getVar": [
+                                            "i",
+                                            0
+                                        ]
+                                    },
+                                    {
+                                        "getVar": [
+                                            "statusName",
+                                            ""
+                                        ]
+                                    },
+                                    {
+                                        "refCall": [
+                                            "colorsArr",
+                                            "get",
+                                            {
+                                                "getVar": [
+                                                    "j",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "getVar": [
+                                            "unit",
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "ifelse": [
+                            {
+                                "equals": [
+                                    {
+                                        "typeof": [
+                                            {
+                                                "getVar": [
+                                                    "fetch",
+                                                    -1
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    4
+                                ]
+                            },
+                            [
+                                {
+                                    "refCall": [
+                                        "returnArr",
+                                        "append",
+                                        {
+                                            "getVar": [
+                                                "statusName",
+                                                ""
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "setVar": [
+                                        "i",
+                                        {
+                                            "add": [
+                                                {
+                                                    "getVar": [
+                                                        "i",
+                                                        0
+                                                    ]
+                                                },
+                                                1
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                "j"
+            ]
+        },
+        {
+            "getVar": [
+                "returnArr",
+                []
+            ]
+        }
+    ]
+}

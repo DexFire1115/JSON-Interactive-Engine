@@ -22,28 +22,28 @@
         "PierceStagger": 0,
         "BluntStagger": 1,
     },
+    "Vars": {
+    },
     "Statuses": {
-        "Eldric_Critical": {
-            "File": "Statuses/Eldric_Critical",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "ConfirmStatus"
-            ]
-        }
     },
     "Conditions": {
-        "ConfirmStatus": [
-            "Eldric_Critical"
-        ],
     },
     "Actions": [
-        "Eldric_Slash_1",
-        "Eldric_Slowing_1",
-        "Eldric_Maim_1",
-        "Eldric_Swift_1",
-        "Eldric_Charging_1",
-        "Eldric_Feral_1",
+        "Eldric/Slash_1",
+        "Eldric/Slowing_1",
+        "Eldric/Maim_1",
+        "Eldric/Swift_1",
+        "Boiler_Hellish",
+        "Eldric/Feral_1",
         "Bandage"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "Eldric_Critical",
+                1,
+                "@Self"
+            ]
+        }
     ]
 }

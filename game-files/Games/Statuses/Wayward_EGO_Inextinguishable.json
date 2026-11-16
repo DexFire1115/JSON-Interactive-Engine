@@ -1,0 +1,75 @@
+{
+    "Name": "[E.G.O.] Rest-State Tranquility",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "selfQueryYN": [
+                    "Gain 1 [b][color=ffcc50]Resolve[/color][/b] (y) or 3 [b][color=80ccff]Barrier[/color][/b] (n) from [b][color=cccccc]Inextinguishable[/color][/b]?",
+                    [
+                        {
+                            "statusInflict": [
+                                "Resolve",
+                                1,
+                                "@Self"
+                            ]
+                        }
+                    ],
+                    [
+                        {
+                            "statusInflict": [
+                                "Barrier",
+                                3,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getStatus": [
+                                    "Barrier",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            10
+                        ]
+                    },
+                    [
+                        {
+                            "selfQueryYN": [
+                                "Spend 10 [b][color=80ccff]Barrier[/color][/b] to regain 1 [b][color=ffeecc]Light[/color][/b]?",
+                                [
+                                    {
+                                        "statusInflict": [
+                                            "Barrier",
+                                            -10,
+                                            "@Self"
+                                        ]
+                                    }
+                                ],
+                                [
+                                    {
+                                        "changeLight": [
+                                            1
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=ffffff][lb]Scene Start][/color][/b] Gain 1 [b][color=ffcc50]Resolve[/color][/b] or 3 [b][color=80ccff]Barrier[/color][/b].",
+        "May spend 10 [b][color=80ccff]Barrier[/color][/b] to regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "Args": [
+        "argSet",
+    ],
+    "Sequence": [
+        {
+            "readUnitTag": [
+                "Laemshi_Per",
+                {
+                    "getVar": [
+                        "*Laemshi_Tag",
+                        ""
+                    ]
+                },
+                {
+                    "getVar": [
+                        "argSet"
+                    ]
+                }
+            ]
+        }
+    ]
+}

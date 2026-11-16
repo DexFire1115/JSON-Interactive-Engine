@@ -1,7 +1,7 @@
 {
     "Name": "Bandage",
     "Cost": 0,
-    "Limit": 2,
+    "Limit": 4,
     "PreText": [
         "Expends a use."
     ],
@@ -26,7 +26,11 @@
                         }
                     ]
                 },
-                "@Self"
+                {
+                    "queryUnit": [
+                        "Select an ally to heal:"
+                    ]
+                }
             ]
         }
     ],

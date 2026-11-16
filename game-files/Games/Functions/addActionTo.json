@@ -1,0 +1,82 @@
+{
+    "Args": [
+        "action",
+        "unit"
+    ],
+    "Defaults": [
+        ""
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "arr",
+                {
+                    "getUnitDataElem": [
+                        {
+                            "getVar": [
+                                "unit",
+                                ""
+                            ]
+                        },
+                        "Actions",
+                        []
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "refCall": [
+                        "arr",
+                        "has",
+                        {
+                            "getVar": [
+                                "action",
+                                ""
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setUnitDataElem": [
+                            {
+                                "getVar": [
+                                    "x",
+                                    ""
+                                ]
+                            },
+                            {
+                                "concat": [
+                                    "ActionUses/",
+                                    {
+                                        "getVar": [
+                                            "action",
+                                            ""
+                                        ]
+                                    }
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "refCall": [
+                            "arr",
+                            "append",
+                            {
+                                "getVar": [
+                                    "action",
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}

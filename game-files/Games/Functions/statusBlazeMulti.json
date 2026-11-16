@@ -1,0 +1,72 @@
+{
+    "Args": [
+        "units"
+    ],
+    "Defaults": [
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "@Action",
+                {
+                    "concat": [
+                        "*statusBlazeMulti-",
+                        {
+                            "getAnyVar": [
+                                "Self",
+                                "undef"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "BlazeAWOverride",
+                true,
+                "@Action"
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "getVar": [
+                        "units",
+                        []
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Blaze",
+                            1,
+                            {
+                                "getVar": [
+                                    "U",
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "U"
+            ]
+        },
+        {
+            "clearScope": [
+                {
+                    "concat": [
+                        "*statusBlazeMulti-",
+                        {
+                            "getAnyVar": [
+                                "Self",
+                                "undef"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,112 @@
+{
+    "Name": "Urgent Self-Preservation",
+    "Color": "#cccccc",
+    "Hidden": true,
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Conditions/Tracker",
+                                    0
+                                ]
+                            },
+                            50
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "amt",
+                                {
+                                    "ifelse": [
+                                        {
+                                            "gte": [
+                                                {
+                                                    "getUnitDataElem": [
+                                                        "@Self",
+                                                        "Statuses/RAA_C4_Conditions/Tracker",
+                                                        0
+                                                    ]
+                                                },
+                                                75
+                                            ]
+                                        },
+                                        [
+                                            2
+                                        ],
+                                        [
+                                            1
+                                        ]
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Feeble",
+                                {
+                                    "getVar": [
+                                        "amt"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Endurance",
+                                {
+                                    "getVar": [
+                                        "amt"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Fragile",
+                                {
+                                    "getVar": [
+                                        "amt"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Vulnerable",
+                                {
+                                    "getVar": [
+                                        "amt"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Paralyze",
+                                {
+                                    "getVar": [
+                                        "amt"
+                                    ]
+                                },
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+    },
+    "Text": [
+    ]
+}

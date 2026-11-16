@@ -83,7 +83,6 @@
                 }
             ]
         },
-
         {
             "ifelse": [
                 {
@@ -134,7 +133,7 @@
                                         "typeof": [
                                             {
                                                 "getVar": [
-                                                    "panaceaArr"
+                                                    "panaceaChoice"
                                                 ]
                                             }
                                         ]
@@ -147,7 +146,7 @@
                                     "setStatus": [
                                         {
                                             "getVar": [
-                                                "panaceaArr",
+                                                "panaceaChoice",
                                                 ""
                                             ]
                                         },

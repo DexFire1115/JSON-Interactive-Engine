@@ -1,0 +1,144 @@
+{
+    "Name": "Cooked to the Core",
+    "Cost": 2,
+    "OnUse": [
+        {
+            "setVar": [
+                "burnInc",
+                {
+                    "forEvery": [
+                        {
+                            "getStatus": [
+                                "RAA/Thermocurrent",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        4,
+                        0,
+                        3
+                    ]
+                },
+                "@Action"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/Thermocurrent",
+                -12,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Spend up to 12 [b][color=ff3264]Thermocurrent Flux[/color][/b] to increase [b][color=cc6450]Burn[/color][/b] infliction, +1 [b][color=cc6450]Burn[/color][/b] infliction for every 4 stacks spent."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0
+                                    ]
+                                },
+                                5
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        {
+                            "add": [
+                                {
+                                    "getVar": [
+                                        "burnInc",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                2
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If target has 5+ [b][color=cc5080]Induction Heating[/color][/b], +2 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0
+                                    ]
+                                },
+                                5
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        {
+                            "add": [
+                                {
+                                    "getVar": [
+                                        "burnInc",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                2
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If target has 5+ [b][color=cc5080]Induction Heating[/color][/b], +2 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

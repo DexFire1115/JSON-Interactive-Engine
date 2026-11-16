@@ -1,0 +1,231 @@
+{
+    "Name": "Uninterrupted Lashing",
+    "Cost": 2,
+    "Proactive": [
+        {
+            "statusInflict": [
+                "RAA/Thermocurrent",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "Reactive": [
+        {
+            "setVar": [
+                "Reactive",
+                true,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff6480][lb]Proactive][/color][/b] Gain 3 [b][color=ff3264]Thermocurrent Flux[/color][/b].",
+        "[b][color=ff8064][lb]Reactive][/color][/b] Inflict [b][color=cc5080]Induction Heating[/color][/b] instead of [b][color=cc6450]Burn[/color][/b]. First Die has -3 [b][color=ffffff]Power[/color][/b].",
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 10,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "Reactive",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    -3
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Evade": [
+                {
+                    "statusInflict": [
+                        {
+                            "ifelse": [
+                                {
+                                    "getVar": [
+                                        "Reactive",
+                                        false,
+                                        "@Action"
+                                    ]
+                                },
+                                [
+                                    "Induction"
+                                ],
+                                [
+                                    "Burn"
+                                ]
+                            ]
+                        },
+                        1
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        {
+                            "sub": [
+                                8,
+                                {
+                                    "forEvery": [
+                                        {
+                                            "getStatus": [
+                                                "RAA/Thermocurrent",
+                                                0,
+                                                "@Self"
+                                            ]
+                                        },
+                                        10,
+                                        0,
+                                        5
+                                    ]
+                                }
+                            ]
+                        },
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=6464ff][lb]Evade][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 3 [b][color=ff3264]Thermocurrent Flux[/color][/b], increasing by 1 for every 10 stacks below 50."
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 4,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        5,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        {
+                            "ifelse": [
+                                {
+                                    "getVar": [
+                                        "Reactive",
+                                        false,
+                                        "@Action"
+                                    ]
+                                },
+                                [
+                                    "Induction"
+                                ],
+                                [
+                                    "Burn"
+                                ]
+                            ]
+                        },
+                        1
+                    ]
+                },
+                {
+                    "ifelse": [
+                        {
+                            "andBool": [
+                                {
+                                    "objCall": [
+                                        {
+                                            "getUnitProp": [
+                                                "",
+                                                "dieData"
+                                            ]
+                                        },
+                                        "isEmpty"
+                                    ]
+                                },
+                                {
+                                    "lessThan": [
+                                        {
+                                            "getVar": [
+                                                "D2Recycles",
+                                                0,
+                                                "@Action"
+                                            ]
+                                        },
+                                        3
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "objCall": [
+                                    {
+                                        "getVar": [
+                                            "DieData"
+                                        ]
+                                    },
+                                    "dset",
+                                    "Recycle",
+                                    1
+                                ]
+                            },
+                            {
+                                "setVar": [
+                                    "D2Recycles",
+                                    {
+                                        "add": [
+                                            {
+                                                "getVar": [
+                                                    "D2Recycles",
+                                                    0,
+                                                    "@Action"
+                                                ]
+                                            },
+                                            1
+                                        ]
+                                    },
+                                    "@Action"
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 5 [b][color=ff3264]Thermocurrent Flux[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]. If this Die was unopposed, recycle it (Max times 3, for a total of 4 uses)."
+            ]
+        },
+        {
+            "Type": "SlashCounter",
+            "Dice": 4,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Induction",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc5080]Induction Heating[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

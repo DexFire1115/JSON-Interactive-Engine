@@ -1,0 +1,199 @@
+{
+    "Name": "The Final Push; The Ultimate Duty",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "setVar": [
+                    "allies",
+                    {
+                        "getAlliesArr": [
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "refCall": [
+                                    "allies",
+                                    "size"
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        {
+                            "loop": [
+                                {
+                                    "getVar": [
+                                        "allies",
+                                        []
+                                    ]
+                                },
+                                [
+                                    {
+                                        "ifelse": [
+                                            {
+                                                "notBool": [
+                                                    {
+                                                        "equals": [
+                                                            {
+                                                                "getVar": [
+                                                                    "U",
+                                                                    ""
+                                                                ]
+                                                            },
+                                                            {
+                                                                "getSelf": [
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            [
+                                                {
+                                                    "setComplexData": [
+                                                        {
+                                                            "getVar": [
+                                                                "U",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "Attributes/SpeedDiceAmt",
+                                                        "Laemshi_The_Final",
+                                                        1
+                                                    ]
+                                                }
+                                            ]
+                                        ]
+                                    },
+                                    {
+                                        "statusInflict": [
+                                            "Uni_Def_Up",
+                                            {
+                                                "min": [
+                                                    {
+                                                        "mult": [
+                                                            {
+                                                                "add": [
+                                                                    {
+                                                                        "forEvery": [
+                                                                            {
+                                                                                "sub": [
+                                                                                    {
+                                                                                        "get": [
+                                                                                            "scene"
+                                                                                        ]
+                                                                                    },
+                                                                                    1
+                                                                                ]
+                                                                            },
+                                                                            5,
+                                                                            1,
+                                                                            5
+                                                                        ]
+                                                                    },
+                                                                    1
+                                                                ]
+                                                            },
+                                                            {
+                                                                "ifelse": [
+                                                                    {
+                                                                        "lte": [
+                                                                            {
+                                                                                "divf": [
+                                                                                    {
+                                                                                        "getUnitDataElem": [
+                                                                                            {
+                                                                                                "getVar": [
+                                                                                                    "U",
+                                                                                                    ""
+                                                                                                ]
+                                                                                            },
+                                                                                            "Attributes/CurrentHealth",
+                                                                                            0
+                                                                                        ]
+                                                                                    },
+                                                                                    {
+                                                                                        "getUnitDataElem": [
+                                                                                            {
+                                                                                                "getVar": [
+                                                                                                    "U",
+                                                                                                    ""
+                                                                                                ]
+                                                                                            },
+                                                                                            "Attributes/MaxHealth",
+                                                                                            0
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            },
+                                                                            0.5
+                                                                        ]
+                                                                    },
+                                                                    [
+                                                                        2
+                                                                    ],
+                                                                    [
+                                                                        1
+                                                                    ]
+                                                                ]
+                                                            }
+                                                        ]
+                                                    },
+                                                    5
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "U",
+                                                    ""
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "U"
+                            ]
+                        }
+                    ],
+                    [
+                        {
+                            "loop": [
+                                {
+                                    "getVar": [
+                                        "allies",
+                                        []
+                                    ]
+                                },
+                                [
+                                    {
+                                        "eraseComplexData": [
+                                            {
+                                                "getVar": [
+                                                    "U",
+                                                    ""
+                                                ]
+                                            },
+                                            "Attributes/SpeedDiceAmt",
+                                            "Laemshi_The_Final"
+                                        ]
+                                    }
+                                ],
+                                "U"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

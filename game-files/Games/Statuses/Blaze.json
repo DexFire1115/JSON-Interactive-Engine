@@ -1,0 +1,373 @@
+{
+    "Name": "Blaze",
+    "Color": "#ff6450",
+    "Conditions": {
+        "Applied-Blaze": [
+            {
+                "setVar": [
+                    "actionID",
+                    {
+                        "getUnitProp": [
+                            {
+                                "getVar": [
+                                    "Source",
+                                    ""
+                                ]
+                            },
+                            "action"
+                        ]
+                    }
+                ]
+            },
+            {
+                "setVar": [
+                    "@SourceAction",
+                    {
+                        "ifelse": [
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "actionID"
+                                        ]
+                                    },
+                                    null
+                                ]
+                            },
+                            [
+                                "*INVALID"
+                            ],
+                            [
+                                {
+                                    "setVar": [
+                                        "AtkWeightState",
+                                        {
+                                            "greaterThan": [
+                                                {
+                                                    "getAction": [
+                                                        {
+                                                            "getVar": [
+                                                                "actionID",
+                                                                0
+                                                            ]
+                                                        },
+                                                        "data/AttackWeight",
+                                                        1
+                                                    ]
+                                                },
+                                                1
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "getAction": [
+                                        {
+                                            "getVar": [
+                                                "actionID",
+                                                0
+                                            ]
+                                        },
+                                        "path",
+                                        "*INVALID"
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "@SourceAction",
+                                    "*INVALID"
+                                ]
+                            },
+                            "*INVALID"
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "@SourceAction",
+                                {
+                                    "concat": [
+                                        "*statusBlazeMulti-",
+                                        {
+                                            "getVar": [
+                                                "Source",
+                                                "undef"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "orBool": [
+                                    {
+                                        "getVar": [
+                                            "AtkWeightState",
+                                            false
+                                        ]
+                                    },
+                                    {
+                                        "getVar": [
+                                            "BlazeAWOverride",
+                                            false,
+                                            "@SourceAction"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "BlazeAWTarget",
+                                            "",
+                                            "@SourceAction"
+                                        ]
+                                    },
+                                    ""
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "BlazeAWTarget",
+                                {
+                                    "queryUnit": [
+                                        {
+                                            "concat": [
+                                                {
+                                                    "getIDTag": [
+                                                        {
+                                                            "getVar": [
+                                                                "Source",
+                                                                ""
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                " Select main target for [b][color=ff6480]ATK WEIGHT[/color][/b] Blaze:"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "@SourceAction"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "spreadArr",
+                    {
+                        "ifelse": [
+                            {
+                                "equals": [
+                                    {
+                                        "getVar": [
+                                            "BlazeAWTarget",
+                                            "",
+                                            "@SourceAction"
+                                        ]
+                                    },
+                                    ""
+                                ]
+                            },
+                            [
+                                {
+                                    "varCall": [
+                                        {
+                                            "getAlliesArr": [
+                                            ]
+                                        },
+                                        "filter",
+                                        {
+                                            "lambda": [
+                                                "lowerBurn",
+                                                [
+                                                    {
+                                                        "lessThan": [
+                                                            {
+                                                                "getStatus": [
+                                                                    "Burn",
+                                                                    0,
+                                                                    {
+                                                                        "getVar": [
+                                                                            "x",
+                                                                            ""
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            {
+                                                                "getStatus": [
+                                                                    "Burn",
+                                                                    0,
+                                                                    "@Self"
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ],
+                                                "x"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            [
+                                []
+                            ]
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "refCall": [
+                            "spreadArr",
+                            "is_empty"
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                {
+                                    "concat": [
+                                        "[b][color=ff6450]Blaze![/color] ([color=cc6450]1[/color]) -> [color=aa64ff]Self[/color] : [color=aa64ff]",
+                                        {
+                                            "getSelf": [
+                                            ]
+                                        },
+                                        "[/color][/b]"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Burn",
+                                1,
+                                "@Self"
+                            ]
+                        }
+                    ],
+                    [
+                        {
+                            "loop": [
+                                {
+                                    "getVar": [
+                                        "spreadArr",
+                                        []
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setVar": [
+                                            "amt",
+                                            {
+                                                "add": [
+                                                    {
+                                                        "div": [
+                                                            {
+                                                                "sub": [
+                                                                    {
+                                                                        "getStatus": [
+                                                                            "Burn",
+                                                                            0,
+                                                                            "@Self"
+                                                                        ]
+                                                                    },
+                                                                    {
+                                                                        "getStatus": [
+                                                                            "Burn",
+                                                                            0,
+                                                                            {
+                                                                                "getVar": [
+                                                                                    "U"
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                ]
+                                                            },
+                                                            5
+                                                        ]
+                                                    },
+                                                    1
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "addLog": [
+                                            {
+                                                "concat": [
+                                                    "[b][color=ff6450]Blaze![/color] ([color=cc6450]",
+                                                    {
+                                                        "getVar": [
+                                                            "amt"
+                                                        ]
+                                                    },
+                                                    "[/color]) -> [color=aa64ff]",
+                                                    {
+                                                        "getVar": [
+                                                            "U"
+                                                        ]
+                                                    },
+                                                    "[/color][/b]"
+                                                ]
+                                            }
+                                            
+                                        ]
+                                    },
+                                    {
+                                        "statusInflict": [
+                                            "Burn",
+                                            {
+                                                "getVar": [
+                                                    "amt"
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "U"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "U"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "statusClearSelf": [
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

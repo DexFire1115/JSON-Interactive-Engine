@@ -36,7 +36,6 @@
         "Laemshi/Combat",
         "Laemshi/Guardian",
         "Laemshi/Lay",
-        "Laemshi/Crisis",
         "Bandage"
     ],
     "Initialize": [
@@ -64,6 +63,13 @@
         {
             "statusInflict": [
                 "Laemshi/Per",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Laemshi/The_Final",
                 1,
                 "@Self"
             ]

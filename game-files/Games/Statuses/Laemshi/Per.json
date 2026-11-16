@@ -3,6 +3,406 @@
     "Color": "#cccccc",
     "Passive": true,
     "Conditions": {
+        "Applied-Laemshi_Per": [
+            {
+                "setVar": [
+                    "*Laemshi_Tag",
+                    {
+                        "getSelf": [
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Laemshi_Per": [
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "getSingleTarget": [
+                                ]
+                            },
+                            "contains",
+                            {
+                                "ifelse": [
+                                    {
+                                        "varCall": [
+                                            {
+                                                "getSelf": [
+                                                ]
+                                            },
+                                            "contains",
+                                            "A"
+                                        ]
+                                    },
+                                    [
+                                        "A"
+                                    ],
+                                    [
+                                        "E"
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setVar": [
+                                "temp",
+                                {
+                                    "add": [
+                                        {
+                                            "sub": [
+                                                {
+                                                    "refCall": [
+                                                        "dmgArr",
+                                                        "get",
+                                                        0
+                                                    ]
+                                                },
+                                                {
+                                                    "refCall": [
+                                                        "dmgArr",
+                                                        "get",
+                                                        2
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                {
+                                                    "concat": [
+                                                        "Statuses/Laemshi_Per/",
+                                                        {
+                                                            "getSingleTarget": [
+                                                            ]
+                                                        },
+                                                        "/Damage"
+                                                    ]
+                                                },
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                {
+                                    "concat": [
+                                        "Statuses/Laemshi_Per/",
+                                        {
+                                            "getSingleTarget": [
+                                            ]
+                                        },
+                                        "/Damage"
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "temp",
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getVar": [
+                                                "temp",
+                                                0
+                                            ]
+                                        },
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Statuses/Laemshi_Per/HighestDamage",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setUnitDataElem": [
+                                            "@Self",
+                                            "Statuses/Laemshi_Per/HighestDamage",
+                                            {
+                                                "getVar": [
+                                                    "temp",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "setUnitDataElem": [
+                                            "@Self",
+                                            "Statuses/Laemshi_Per/HighestDamageUnit",
+                                            {
+                                                "getSingleTarget": [
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        },
+                        {
+                            "setVar": [
+                                "temp",
+                                {
+                                    "add": [
+                                        {
+                                            "sub": [
+                                                {
+                                                    "refCall": [
+                                                        "dmgArr",
+                                                        "get",
+                                                        1
+                                                    ]
+                                                },
+                                                {
+                                                    "refCall": [
+                                                        "dmgArr",
+                                                        "get",
+                                                        3
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                {
+                                                    "concat": [
+                                                        "Statuses/Laemshi_Per/",
+                                                        {
+                                                            "getSingleTarget": [
+                                                            ]
+                                                        },
+                                                        "/Stagger"
+                                                    ]
+                                                },
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                {
+                                    "concat": [
+                                        "Statuses/Laemshi_Per/",
+                                        {
+                                            "getSingleTarget": [
+                                            ]
+                                        },
+                                        "/Stagger"
+                                    ]
+                                },
+                                {
+                                    "getVar": [
+                                        "temp",
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "greaterThan": [
+                                        {
+                                            "getVar": [
+                                                "temp",
+                                                0
+                                            ]
+                                        },
+                                        {
+                                            "getUnitDataElem": [
+                                                "@Self",
+                                                "Statuses/Laemshi_Per/HighestStagger",
+                                                0
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "setUnitDataElem": [
+                                            "@Self",
+                                            "Statuses/Laemshi_Per/HighestStagger",
+                                            {
+                                                "getVar": [
+                                                    "temp",
+                                                    0
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "setUnitDataElem": [
+                                            "@Self",
+                                            "Statuses/Laemshi_Per/HighestStaggerUnit",
+                                            {
+                                                "getSingleTarget": [
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SceneEnd": [
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/Laemshi_Per/HighestDamageUnit",
+                            ""
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Strength",
+                    1,
+                    {
+                        "getVar": [
+                            "temp"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Protection",
+                    2,
+                    {
+                        "getVar": [
+                            "temp"
+                        ]
+                    }
+                ]
+            },
+            {
+                "setVar": [
+                    "temp",
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/Laemshi_Per/HighestStaggerUnit",
+                            ""
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Endurance",
+                    1,
+                    {
+                        "getVar": [
+                            "temp"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Resolve",
+                    2,
+                    {
+                        "getVar": [
+                            "temp"
+                        ]
+                    }
+                ]
+            },
+            {
+                "loop": [
+                    {
+                        "getAlliesArr": [
+                            
+                        ]
+                    },
+                    [
+                        {
+                            "ifelse": [
+                                {
+                                    "equals": [
+                                        {
+                                            "getUnitDataElem": [
+                                                {
+                                                    "getVar": [
+                                                        "U",
+                                                        ""
+                                                    ]
+                                                },
+                                                "Name",
+                                                ""
+                                            ]
+                                        },
+                                        "Zwei Assoc. Fixer - Laemshi"
+                                    ]
+                                },
+                                [
+                                    "continue"
+                                ]
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "hasStatus": [
+                                        "Staggered",
+                                        {
+                                            "getVar": [
+                                                "U",
+                                                ""
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "statusInflict": [
+                                            "Laemshi/PerRec",
+                                            1,
+                                            {
+                                                "getVar": [
+                                                    "U"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ],
+                    "U"
+                ]
+            }
+        ]
     },
     "Text": [
     ]

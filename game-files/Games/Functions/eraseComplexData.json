@@ -1,0 +1,92 @@
+{
+    "Args": [
+        "unit",
+        "path",
+        "tag"
+    ],
+    "Defaults": [
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "typeof": [
+                                {
+                                    "getVar": [
+                                        "path"
+                                    ]
+                                }
+                            ]
+                        },
+                        28
+                    ]
+                },
+                [
+                    {
+                        "loop": [
+                            {
+                                "getVar": [
+                                    "path"
+                                ]
+                            },
+                            [
+                                {
+                                    "eraseComplexData": [
+                                        {
+                                            "getVar": [
+                                                "unit"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "x"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "tag"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "x"
+                        ]
+                    },
+                    "return"
+                ]
+            ]
+        },
+        {
+            "objCall": [
+                {
+                    "getUnitData": [
+                        {
+                            "getVar": [
+                                "unit"
+                            ]
+                        }
+                    ]
+                },
+                "complexErase",
+                {
+                    "concat": [
+                        {
+                            "getVar": [
+                                "path"
+                            ]
+                        },
+                        "/",
+                        {
+                            "getVar": [
+                               "tag" 
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

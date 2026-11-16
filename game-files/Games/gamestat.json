@@ -1,11 +1,17 @@
 {
     "Units": {
+        "**": {
+            "Unit": "SceneManager"
+        },
         "A1": {
-            "Unit": "Hooligan"
+            "Unit": "Eldric"
         },
-        "AE1": {
-            "Unit": "Hooligan"
+        "A2": {
+            "Unit": "Marton"
         },
+        "A3": {
+            "Unit": "Laemshi"
+        }
     },
     "Units-Cache": {
         "**": {
@@ -31,7 +37,10 @@
         },
         "A3": {
             "Unit": "Laemshi"
-        }
+        },
+        "E1": {
+            "Unit": "Dummy"
+        },
     },
     "Autoloader": "baseAutoload",
     "Scene": 0,

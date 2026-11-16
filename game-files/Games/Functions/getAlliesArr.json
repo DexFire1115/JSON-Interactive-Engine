@@ -1,0 +1,88 @@
+{
+    "Args": [
+        "Unit"
+    ],
+    "Defaults": [
+        "@Self"
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "foe",
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getSingleTarget": [
+                                        {
+                                            "getVar": [
+                                                "Unit",
+                                                "@Self"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "contains",
+                                "A"
+                            ]
+                        },
+                        [
+                            "A"
+                        ],
+                        [
+                            "E"
+                        ]
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "inflictArr",
+                {
+                    "varCall": [
+                        {
+                            "propCall": [
+                                "unitList",
+                                "keys"
+                            ]
+                        },
+                        "filter",
+                        {
+                            "lambda": [
+                                "findFoes",
+                                [
+                                    {
+                                        "varCall": [
+                                            {
+                                                "getVar": [
+                                                    "x",
+                                                    ""
+                                                ]
+                                            },
+                                            "contains",
+                                            {
+                                                "getAnyVar": [
+                                                    "foe",
+                                                    "_"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "x"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "getVar": [
+                "inflictArr",
+                []
+            ]
+        }
+    ]
+}

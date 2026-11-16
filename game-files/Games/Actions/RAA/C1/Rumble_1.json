@@ -1,0 +1,57 @@
+{
+    "Name": "Rumble & Hum",
+    "Cost": 1,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=50cc50]Endurance[/color][/b] next scene."
+    ],
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Endurance",
+                1,
+                "@Self",
+                true
+            ],
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        1,
+                        "@Self",
+                        true
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cc50]Endurance[/color][/b] next scene.",
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 1,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        1,
+                        "@Self",
+                        true
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 1 [b][color=50cc50]Endurance[/color][/b] next scene.",
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

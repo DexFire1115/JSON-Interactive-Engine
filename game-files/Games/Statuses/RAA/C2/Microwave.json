@@ -1,0 +1,124 @@
+{
+    "Name": "Superalloy Microwave",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "Endurance",
+                    {
+                        "arrCountCondition": [
+                            {
+                                "getEnemiesArr": [
+                                    
+                                ]
+                            },
+                            [
+                                {
+                                    "gte": [
+                                        {
+                                            "add": [
+                                                {
+                                                    "getStatus": [
+                                                        "Burn",
+                                                        0,
+                                                        {
+                                                            "getAnyVar": [
+                                                                "x",
+                                                                ""
+                                                            ]
+                                                        }
+                                                    ]
+                                                },
+                                                {
+                                                    "getStatus": [
+                                                        "Induction",
+                                                        0,
+                                                        {
+                                                            "getAnyVar": [
+                                                                "x",
+                                                                ""
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        10
+                                    ]
+                                }
+                            ]
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ],
+        "ConfirmStatus-Burn": [
+            {
+                "refCall": [
+                    "statusArr",
+                    "set",
+                    1,
+                    {
+                        "add": [
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "min": [
+                                    {
+                                        "objCall": [
+                                            {
+                                                "getUnitData": [
+                                                    "@Self"
+                                                ]
+                                            },
+                                            "dget",
+                                            "Statuses/Endurance/Stack",
+                                            0
+                                        ]
+                                    },
+                                    4
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "Caused-Burn": [
+            {
+                "statusInflict": [
+                    "Induction",
+                    {
+                        "min": [
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitData": [
+                                            "@Self"
+                                        ]
+                                    },
+                                    "dget",
+                                    "Statuses/Endurance/Stack",
+                                    0
+                                ]
+                            },
+                            4
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "For",
+        "When this unit inflicts Burn, inflict additional [b][color=cc6450]Burn[/color][/b] and [b][color=cc5080]Induction Heating[/color][/b] for every [b][color=50cc50]Endurance[/color][/b] (Max: +3)."
+    ]
+}

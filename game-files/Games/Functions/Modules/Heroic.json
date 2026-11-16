@@ -1,0 +1,30 @@
+{
+    "Args": [
+    ],
+    "Defaults": [
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "getAction": [
+                        {
+                            "getAnyVar": [
+                                "Action"
+                            ]
+                        },
+                        "data/Intercept",
+                        false
+                    ]
+                },
+                [
+                    {
+                        "changePower": [
+                            2
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}

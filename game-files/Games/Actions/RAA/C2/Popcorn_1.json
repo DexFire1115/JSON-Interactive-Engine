@@ -1,0 +1,195 @@
+{
+    "Name": "Popcorn Meal",
+    "Cost": 5,
+    "Limit": 1,
+    "AttackWeight": 2,
+    "OnUse": [
+        {
+            "setVar": [
+                "targetArr",
+                {
+                    "getVar": [
+                        "targetArr",
+                        []
+                    ]
+                },
+                "@Action"
+            ]
+        },
+        {
+            "duplicateDie": [
+                {
+                    "forEvery": [
+                        {
+                            "refCall": [
+                                "targetArr",
+                                "reduce",
+                                {
+                                    "lambda": [
+                                        "countInduction",
+                                        [
+                                            {
+                                                "add": [
+                                                    {
+                                                        "getAnyVar": [
+                                                            "y",
+                                                            0
+                                                        ]
+                                                    },
+                                                    {
+                                                        "getStatus": [
+                                                            "Induction",
+                                                            0,
+                                                            {
+                                                                "getAnyVar": [
+                                                                    "x",
+                                                                    ""
+                                                                ]
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ],
+                                        "y",
+                                        "x"
+                                    ]
+                                },
+                                0
+                            ]
+                        },
+                        4,
+                        0,
+                        4
+                    ]
+                }
+            ]
+        }
+    ],
+    "RolledDie": [
+        {
+            "setVar": [
+                "dmgDown",
+                false,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff6480]ATK WEIGHT: 2[/color][/b]",
+        "[b][color=ffffff][lb]On Use][/color][/b] This skill contains an additional copy of the Die below for every 4[ b][color=cc5080]Induction Heating[/color][/b] across all targets (Max 5 total)."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0,
+                                        ""
+                                    ]
+                                },
+                                2,
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "setVar": [
+                        "dmgDown",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "dmgDown",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            4
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 2 [b][color=cc5080]Induction Heating[/color][/b] on target, +1 Power.",
+                "[b][color=ff6464][lb]Clash Win][/color][/b] Deal -4 [b][color=ff6464]Damage[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "loop": [
+                {
+                    "getVar": [
+                        "targetArr",
+                        [],
+                        "@Action"
+                    ]
+                },
+                [
+                    {
+                        "setStatus": [
+                            "Induction",
+                            0,
+                            {
+                                "getVar": [
+                                    "U"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "U"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Remove all [b][color=cc5080]Induction Heating[/color][/b] from target."
+    ]
+}

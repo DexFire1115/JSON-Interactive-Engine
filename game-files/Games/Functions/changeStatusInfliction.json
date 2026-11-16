@@ -1,0 +1,33 @@
+{
+    "Args": [
+        "amt"
+    ],
+    "Defaults": [
+        0
+    ],
+    "Sequence": [
+        {
+            "refCall": [
+                "statusArr",
+                "set",
+                1,
+                {
+                    "add": [
+                        {
+                            "refCall": [
+                                "statusArr",
+                                "get",
+                                1
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "amt"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

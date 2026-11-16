@@ -22,35 +22,29 @@
         "PierceStagger": 0,
         "BluntStagger": -1,
     },
+    "Vars": {
+    },
     "Statuses": {
-        "Marton_Intercept": {
-            "File": "Statuses/Marton_Intercept",
-            "Stack": 1,
-            "isPassive": true,
-            "Conditions": [
-                "HoldDie",
-                "Check"
-            ]
-        }
     },
     "Conditions": {
-        "HoldDie": [
-            "Marton_Intercept"
-        ],
-        "Check": [
-            "Marton_Intercept"
-        ],
     },
     "Actions": [
-        "Marton_Taking_1",
-        "Marton_Back_1",
-        "Marton_Come_1",
-        "Marton_Right_1",
-        "Marton_Stay_1",
-        "Marton_Purged_1",
+        "Marton/Taking_1",
+        "Marton/Back_1",
+        "Marton/Come_1",
+        "Marton/Right_1",
+        "Marton/Impact_1",
+        "Marton/Purged_1",
+        "Wayward_EGO",
         "Bandage"
     ],
     "Initialize": [
-        
+        {
+            "statusInflict": [
+                "Marton_Intercept",
+                1,
+                "@Self"
+            ]
+        }
     ]
 }

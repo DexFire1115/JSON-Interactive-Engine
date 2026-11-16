@@ -1,0 +1,95 @@
+{
+    "Name": "Radiant Alloy Amalgamation",
+    "Color": "#cc5080",
+    "Type": "Creature",
+    "Class": "?",
+    "Attributes": {
+        "CurrentHealth": 320,
+        "MaxHealth": 320,
+        "CurrentStagger": 160,
+        "MaxStagger": 160,
+        "CurrentLight": 9,
+        "MaxLight": 9,
+        "LightRegen": 3,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 5,
+        "EmotionPoints": 0,
+        "SlashDamage": -1,
+        "PierceDamage": -3,
+        "BluntDamage": 0,
+        "SlashStagger": -1,
+        "PierceStagger": 0,
+        "BluntStagger": -2,
+    },
+    "Vars": {
+        "CensorHealth": true,
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "RAA/C4/Alloy_1",
+        "RAA/C4/Surging_1",
+        "RAA/C4/Cast_1",
+        "RAA/C4/Uninterrupted_1",
+        "RAA/C4/Cooked_1",
+        "RAA/C4/Blanket_1",
+        "RAA/C4/All_1",
+        "RAA/C4/Popcorn_1",
+        "RAA/C4/Radiological_1"
+    ],
+    "Initialize": [
+        {
+            "statusInflict": [
+                "RAA/C4/Conditions",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/C4/Urgent",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/C4/Shell",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/C4/Advent",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/C4/Microwave",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/C4/Cook",
+                1,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/C4/Rubbish",
+                1,
+                "@Self"
+            ]
+        }
+    ]
+}

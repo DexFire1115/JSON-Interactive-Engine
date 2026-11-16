@@ -1,0 +1,42 @@
+{
+    "Name": "Popcorn Cooker Proactive",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Check": [
+            {
+                "changePower": [
+                    2
+                ]
+            }
+        ],
+        "ConfirmStatus-Burn": [
+            {
+                "refCall": [
+                    "statusArr",
+                    "set",
+                    1,
+                    {
+                        "add": [
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            2
+                        ]
+                    }
+                ]
+            }
+        ],
+        "AfterUse": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

@@ -1,0 +1,73 @@
+{
+    "Args": [
+        "amt",
+        "index"
+    ],
+    "Defaults": [
+        1,
+        0
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "dieName",
+                {
+                    "varCall": [
+                        {
+                            "getAction": [
+                                -1,
+                                "diceArr",
+                                []
+                            ]
+                        },
+                        "get",
+                        {
+                            "getVar": [
+                                "index"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        {
+                            "getVar": [
+                                "amt"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "varCall": [
+                            {
+                                "getAction": [
+                                    -1,
+                                    "diceArr",
+                                    []
+                                ]
+                            },
+                            "insert",
+                            {
+                                "getVar": [
+                                    "index"
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "dieName",
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "i"
+            ]
+        }
+    ]
+}

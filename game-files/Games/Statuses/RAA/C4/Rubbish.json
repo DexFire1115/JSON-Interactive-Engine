@@ -1,0 +1,35 @@
+{
+    "Name": "Rubbish to Rubbish...",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Function-CreateAlly": [
+            {
+                "statusInflict": [
+                    "PowerDown",
+                    3,
+                    {
+                        "getVar": [
+                            "Unit"
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusInflict": [
+                    "RAA/C4/Rubbish_Passive",
+                    1,
+                    {
+                        "getVar": [
+                            "Unit"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "For",
+        "When this unit inflicts Burn, inflict additional [b][color=cc6450]Burn[/color][/b] and [b][color=cc5080]Induction Heating[/color][/b] for every [b][color=50cc50]Endurance[/color][/b] (Max: +3)."
+    ]
+}
