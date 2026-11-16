@@ -1,0 +1,17 @@
+{
+    "Name": "Combat Preparation (Saved Die)",
+    "Cost": 0,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 4,
+            "Base": 1,
+            "Text": [
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

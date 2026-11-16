@@ -513,6 +513,7 @@ func displaySkillDice(action, index: int):
 			displaySkillDice(data, i)
 		return
 	
+	print(diceList, " and ", index)
 	var d = DataTree.new(diceList[index])
 	addLog(getDieHeader(d))
 	
@@ -916,7 +917,7 @@ func getNameTag(unit: String) -> String:
 
 func displayHealth(unit: String, data) -> String:
 	var displayValue := castNumDataToString(data)
-	if(switches["censorHealth"] && Functions.getUnitData(unit).safeGet("CensorHealth", TYPE_BOOL)):
+	if(switches["censorHealth"] && Functions.getUnitData(unit).safeGet("Vars/CensorHealth", TYPE_BOOL)):
 		displayValue = "?".repeat(displayValue.length())
 	return addStyle(displayValue, "646464" if(float(data) <= 0) else "ff6464")
 

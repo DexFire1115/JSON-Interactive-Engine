@@ -1,0 +1,127 @@
+{
+    "Name": "Roasting Fire",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "dieDict",
+                        {
+                            "getAction": [
+                                -1,
+                                "data/Dice/1"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "refCall": [
+                        "dieDict",
+                        "set",
+                        "Base",
+                        {
+                            "add": [
+                                {
+                                    "refCall": [
+                                        "dieDict",
+                                        "get",
+                                        "Base"
+                                    ]
+                                },
+                                3
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Induction",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Final Die has +3 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]. Inflict 1 [b][color=cc5080]Induction Heating[/color][/b].",
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 4,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Induction",
+                        4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 4 [b][color=cc5080]Induction Heating[/color][/b].",
+            ]
+        },
+        {
+            "Type": "PierceCounter",
+            "Dice": 4,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "getStatus": [
+                                "Endurance",
+                                0,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Haste",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Gain [b][color=ffffff]Power[/color][/b] by [b][color=50cc50]Endurance[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]. Gain 1 [b][color=ffaa64]Haste[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

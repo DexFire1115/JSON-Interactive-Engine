@@ -1,0 +1,195 @@
+{
+    "Name": "Surging Hums",
+    "Cost": 1,
+    "OnUse": [
+        {
+            "ifelse": [
+                {
+                    "lte": [
+                        {
+                            "getStatus": [
+                                "RAA/Thermocurrent",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        50
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Fragile",
+                            -1,
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "statusInflict": [
+                            "Vulnerable",
+                            -1,
+                            "@Self"
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] At 50- [b][color=ff3264]Thermocurrent Flux[/color][/b], remove 1 [b][color=8050cc]Fragile[/color][/b] and 1 [b][color=aa6450]Vulnerable[/color][/b] from self and gain 2 [b][color=ff3264]Thermocurrent Flux[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        3,
+                        "@Self"
+                    ]
+                },
+                {
+                    "varCall": [
+                        {
+                            "getAction": [
+                                -1,
+                                "diceArr"
+                            ]
+                        },
+                        "pop_at",
+                        1
+                    ]
+                },
+                {
+                    "setVar": [
+                        "Boost",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 3 [b][color=ff3264]Thermocurrent Flux[/color][/b], destroy next Die, and final Die has +2 [b][color=ffffff]Power[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b].",
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 2,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        5,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Burn",
+                        3
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 5 [b][color=ff3264]Thermocurrent Flux[/color][/b]. Inflict 3 [b][color=cc6450]Burn[/color][/b].",
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "Boost",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                },
+                {
+                    "changePower": [
+                        {
+                            "getStatus": [
+                                "Strength",
+                                0,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "ifelse": [
+                        {
+                            "notBool": [
+                                {
+                                    "objCall": [
+                                        {
+                                            "getUnitProp": [
+                                                "",
+                                                "dieData"
+                                            ]
+                                        },
+                                        "isEmpty"
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "RAA/Thermocurrent",
+                                    {
+                                        "getStatus": [
+                                            "Strength",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Double [b][color=ffffff]Power[/color][/b] gained from [b][color=cc5050]Strength[/color][/b]. If this Die is being clashed, gain [b][color=ff3264]Thermocurrent Flux[/color][/b] by [b][color=cc5050]Strength[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

@@ -4,21 +4,6 @@
     ],
     "Sequence": [
         {
-            "ifelse": [
-                {
-                    "equals": [
-                        {
-                            "refCall": [
-                                "argSet",
-                                "get",
-                                "target"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
-        {
             "addLog": [
                 {
                     "sub": [

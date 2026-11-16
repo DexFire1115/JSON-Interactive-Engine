@@ -1,10 +1,232 @@
 {
-    "Name": ". . .",
+    "Name": "Lay Down in the Name of Duty",
     "Cost": 0,
+    "Reactive": [
+        {
+            "setVar": [
+                "lightAmt",
+                {
+                    "forEvery": [
+                        {
+                            "getUnitDataElem": [
+                                "@Self",
+                                "Attributes/EmotionPoints"
+                            ]
+                        },
+                        3,
+                        0,
+                        4
+                    ]
+                }
+            ]
+        },
+        {
+            "changeLight": [
+                {
+                    "getVar": [
+                        "lightAmt",
+                        0
+                    ]
+                },
+                {
+                    "queryUnit": [
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " Spend ",
+                                {
+                                    "mult": [
+                                        {
+                                            "getVar": [
+                                                "lightAmt",
+                                                0
+                                            ]
+                                        },
+                                        3
+                                    ]
+                                },
+                                " [b][color=aa64ff]Emotion Points[/color][/b] to give another ally ",
+                                {
+                                    "getVar": [
+                                        "lightAmt",
+                                        0
+                                    ]
+                                },
+                                " [b][color=ffeecc]Light[/color][/b]:"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
     "PreText": [
+        "[b][color=ff8064][lb]Reactive][/color][/b] Spend up to 12 [b][color=aa64ff]Emotion Points[/color][/b]. An ally of your choice regains 1 [b][color=ffeecc]Light[/color][/b] for every 3 [b][color=aa64ff]Emotion Points[/color][/b] spent."
+    ],
+    "HitReceived": [
+        {
+            "setVar": [
+                "hitsTaken",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "hitsTaken",
+                                0,
+                                "@Action"
+                            ]
+                        },
+                        1
+                    ]
+                },
+                "@Action"
+            ]
+        }
     ],
     "Dice": [
     ],
+    "AfterUse": [
+        {
+            "setVar": [
+                "amt",
+                {
+                    "min": [
+                        {
+                            "getVar": [
+                                "hitsTaken",
+                                0,
+                                "@Action"
+                            ]
+                        },
+                        {
+                            "varCall": [
+                                {
+                                    "getAlliesArr": [
+                                        
+                                    ]
+                                },
+                                "size"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "loop": [
+                {
+                    "range": [
+                        {
+                            "getVar": [
+                                "amt",
+                                0
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "unit",
+                            {
+                                "queryUnit": [
+                                    {
+                                        "concat": [
+                                            {
+                                                "getIDTag": [
+                                                    {
+                                                        "getSelf": [
+                                                            
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            " Grant another ally one use of 'Crisis' [b][color=ffff64](",
+                                            {
+                                                "getVar": [
+                                                    "x",
+                                                    0
+                                                ]
+                                            },
+                                            "/",
+                                            {
+                                                "getVar": [
+                                                    "amt",
+                                                    0
+                                                ]
+                                            },
+                                            ")[/color][/b]:"
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "setVar": [
+                            "arr",
+                            {
+                                "getUnitDataElem": [
+                                    {
+                                        "getVar": [
+                                            "x",
+                                            0
+                                        ]
+                                    },
+                                    "Actions",
+                                    []
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "ifelse": [
+                            {
+                                "refCall": [
+                                    "arr",
+                                    "has",
+                                    "Laemshi/Crisis"
+                                ]
+                            },
+                            [
+                                {
+                                    "setUnitDataElem": [
+                                        {
+                                            "getVar": [
+                                                "x",
+                                                0
+                                            ]
+                                        },
+                                        "ActionUses/Laemshi/Crisis",
+                                        0
+                                    ]
+                                }
+                            ],
+                            [
+                                {
+                                    "refCall": [
+                                        "arr",
+                                        "append",
+                                        "Laemshi/Crisis"
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ],
+                "x"
+            ]
+        }
+    ],
     "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] For every [b][color=ffaaaa]Offensive Die[/color][/b] that hit from opposing skill, grant another ally one use of 'Crisis' (cannot exceed number of allies)."
     ]
 }

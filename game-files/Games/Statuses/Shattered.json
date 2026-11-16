@@ -1,0 +1,54 @@
+{
+    "Name": "Shattered",
+    "Color": "#ffeeaa",
+    "MaxStack": 1,
+    "Conditions": {
+        "Applied-Shattered": [
+            {
+                "setComplexData": [
+                    "@Self",
+                    [
+                        "Attributes/SlashDamage",
+                        "Attributes/PierceDamage",
+                        "Attributes/BluntDamage"
+                    ],
+                    "Shattered",
+                    1
+                ]
+            },
+            {
+                "setComplexData": [
+                    "@Self",
+                    [
+                        "Attributes/SlashStagger",
+                        "Attributes/PierceStagger",
+                        "Attributes/BluntStagger"
+                    ],
+                    "Shattered",
+                    2
+                ]
+            }
+        ],
+        "Removed-Shattered": [
+            {
+                "eraseComplexData": [
+                    "@Self",
+                    [
+                        "Attributes/SlashDamage",
+                        "Attributes/PierceDamage",
+                        "Attributes/BluntDamage",
+                        "Attributes/SlashStagger",
+                        "Attributes/PierceStagger",
+                        "Attributes/BluntStagger"
+                    ],
+                    "Shattered"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Does not stack, lasts until the end of combat.",
+        "All [b][color=ff6464]Damage[/color][/b] affinities suffer +1; all [b][color=ffff64]Stagger[/color][/b] affinities suffer +2.",
+        "[b][color=cccc50]Tremor[/color][/b] Cap on this combatant is increased by 5."
+    ]
+}

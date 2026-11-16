@@ -1,0 +1,113 @@
+{
+    "Name": "Alloy Shield",
+    "Cost": 0,
+    "Reactive": [
+        {
+            "statusInflict": [
+                "Endurance",
+                {
+                    "forEvery": [
+                        {
+                            "getStatus": [
+                                "RAA/Thermocurrent",
+                                0,
+                                "@Self"
+                            ]
+                        },
+                        3,
+                        0,
+                        2
+                    ]
+                },
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "RAA/Thermocurrent",
+                -6,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff8064][lb]Reactive][/color][/b] Spend up to 6 [b][color=ff3264]Thermocurrent Flux[/color][/b] to gain [b][color=50cc50]Endurance[/color][/b], gaining 1 for every 3 stacks spent.",
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Induction",
+                        2
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Protection",
+                        1,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Resolve",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b] and 2 [b][color=cc5080]Induction Heating[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=8050cc]Protection[/color][/b] and [b][color=ffcc50]Resolve[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BlockCounter",
+            "Dice": 4,
+            "Base": 2,
+            "Check": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        2,
+                        "@Self"
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Gain 2 [b][color=cc5080]Induction Heating[/color][/b].",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                1
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

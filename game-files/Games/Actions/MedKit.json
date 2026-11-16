@@ -1,0 +1,25 @@
+{
+    "Name": "Med Kit",
+    "Cost": 0,
+    "Limit": 1,
+    "PreText": [
+        "Expends a use."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0
+        }
+    ],
+    "AfterUse": [
+        {
+            "addLog": [
+                "Just revive a unit randomly (Reset unit w/ 30HP + Full SP)"
+            ]
+        }
+    ],
+    "PostText": [
+        "Revives!"
+    ]
+}

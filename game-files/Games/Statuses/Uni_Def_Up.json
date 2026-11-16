@@ -1,0 +1,126 @@
+{
+    "Name": "Universal Defense Up",
+    "Color": "#80cc50",
+    "Conditions": {
+        "ValidateDamage": [
+            {
+                "triggerStatus": [
+                    "@Self",
+                    "Staggered",
+                    "ValidateDamage"
+                ]
+            },
+            {
+                "refCall": [
+                    "dmgArr",
+                    "set",
+                    0,
+                    {
+                        "min": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    0
+                                ]
+                            },
+                            {
+                                "max": [
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            {
+                                                "getStatus": [
+                                                    "Uni_Def_Up",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "sub": [
+                                            1,
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    3
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "dmgArr",
+                    "set",
+                    1,
+                    {
+                        "min": [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "max": [
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    1
+                                                ]
+                                            },
+                                            {
+                                                "getStatus": [
+                                                    "Uni_Def_Up",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "sub": [
+                                            1,
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    4
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "SceneEndPost": [
+            {
+                "statusClearSelf": []
+            }
+        ],
+    },
+    "Text": [
+    ]
+}

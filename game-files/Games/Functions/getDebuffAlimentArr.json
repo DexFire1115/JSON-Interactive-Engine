@@ -2,7 +2,24 @@
     "Args": [
         "unit"
     ],
+    "Defaults": [
+        "@Self"
+    ],
     "Sequence": [
+        {
+            "setVar": [
+                "unit",
+                {
+                    "getSingleTarget": [
+                        {
+                            "getVar": [
+                                "unit"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
         {
             "setVar": [
                 "returnArr",
@@ -47,6 +64,23 @@
                 [
                     {
                         "setVar": [
+                            "statusName",
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    {
+                                        "getVar": [
+                                            "j",
+                                            0
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "setVar": [
                             "fetch",
                             {
                                 "getIndexedStatus": [
@@ -57,15 +91,9 @@
                                         ]
                                     },
                                     {
-                                        "refCall": [
-                                            "statusArr",
-                                            "get",
-                                            {
-                                                "getVar": [
-                                                    "j",
-                                                    0
-                                                ]
-                                            }
+                                        "getVar": [
+                                            "statusName",
+                                            ""
                                         ]
                                     },
                                     {
@@ -114,7 +142,7 @@
                                         "append",
                                         {
                                             "getVar": [
-                                                "fetch",
+                                                "statusName",
                                                 ""
                                             ]
                                         }

@@ -1,0 +1,38 @@
+{
+    "Name": "Dummy",
+    "Color": "#cccccc",
+    "Type": "Human",
+    "Class": "Canard",
+    "Attributes": {
+        "CurrentHealth": 1000,
+        "MaxHealth": 1000,
+        "CurrentStagger": 100,
+        "MaxStagger": 100,
+        "CurrentLight": 10,
+        "MaxLight": 10,
+        "LightRegen": 2,
+        "SpeedDiceSize": 0,
+        "SpeedDiceBase": 1,
+        "SpeedDiceAmt": 4,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0
+    },
+    "Vars": {
+        "ReserveOnDeath": true,
+        "ActionUses": {}
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "Hooligan_Bash_1",
+        "Hooligan_Parry_1",
+        "Hooligan_Yikes_1",
+        "Hooligan_Knife_1"
+    ]
+}

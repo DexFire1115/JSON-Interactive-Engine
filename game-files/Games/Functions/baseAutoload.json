@@ -8,6 +8,11 @@
             ]
         },
         {
+            "runMacro": [
+                "sw ch t"
+            ]
+        },
+        {
             "playSound": [
                 "SFX_Siren.wav"
             ]

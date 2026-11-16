@@ -1,0 +1,64 @@
+{
+    "Name": "...Cook the World for just ##.###.### Ahn!",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneEnd": [
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "getEnemiesArr": [
+                                    
+                                ]
+                            },
+                            "any",
+                            {
+                                "lambda": [
+                                    "hasCondition",
+                                    [
+                                        {
+                                            "gte": [
+                                                {
+                                                    "getUnitDataElem": [
+                                                        {
+                                                            "getAnyVar": [
+                                                                "x",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "Statuses/Induction/Stack",
+                                                        0
+                                                    ]
+                                                },
+                                                10
+                                            ]
+                                        }
+                                    ],
+                                    "x"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "RAA/Thermocurrent",
+                                20,
+                                "@Self"
+                            ]
+                        },
+                        {
+                            "addLog": [
+                                "[b][color=ff3264]/!\\ All Radiant Amalgamites must use 'Popcorn Cooker' next scene or become Staggered! /!\\[/color][/b]"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

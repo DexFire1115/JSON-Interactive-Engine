@@ -1,0 +1,53 @@
+{
+    "Args": [
+        "query",
+        "yesarr",
+        "noarr"
+    ],
+    "Defaults": [
+        [],
+        []
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "queryYN": [
+                        {
+                            "concat": [
+                                {
+                                    "getIDTag": [
+                                        {
+                                            "getSelf": [
+                                                
+                                            ]
+                                        }
+                                    ]
+                                },
+                                " ",
+                                {
+                                    "getVar": [
+                                        "query",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "getVar": [
+                        "yesarr",
+                        []
+                    ]
+                },
+                {
+                    "getVar": [
+                        "noarr",
+                        []
+                    ]
+                }
+            ]
+        }
+    ]
+}

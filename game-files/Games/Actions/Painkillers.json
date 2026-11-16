@@ -1,0 +1,35 @@
+{
+    "Name": "Painkillers",
+    "Cost": 0,
+    "Limit": 1,
+    "PreText": [
+        "Expends a use."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Resolve",
+                4,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Resolve",
+                2,
+                "@Self",
+                true
+            ]
+        }
+    ],
+    "PostText": [
+        "Provides some Resolve."
+    ]
+}

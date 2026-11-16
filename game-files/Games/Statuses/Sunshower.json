@@ -1,0 +1,38 @@
+{
+    "Name": "Sunshower",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Check": [
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "getDieType": [
+                                    {
+                                        "getUnitProp": [
+                                            "@Self",
+                                            "dieData"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "contains",
+                            "Block"
+                        ]
+                    },
+                    [
+                        {
+                            "changePower": [
+                                1
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

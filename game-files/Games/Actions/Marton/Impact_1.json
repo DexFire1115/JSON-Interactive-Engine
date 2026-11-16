@@ -1,0 +1,90 @@
+{
+    "Name": "Impact Resurgence",
+    "Cost": 2,
+    "PreText": [
+    ],
+    "Dice": [        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 2,
+            "Text": [
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 8,
+            "Base": 2,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "hasStatus": [
+                                "Shattered"
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    4
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "ifelse": [
+                        {
+                            "hasStatus": [
+                                "Shattered"
+                            ]
+                        },
+                        [
+                            "return"
+                        ]
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Tremor",
+                                        0
+                                    ]
+                                },
+                                20
+                            ]
+                        },
+                        [
+                            {
+                                "setStatus": [
+                                    "Tremor",
+                                    0
+                                ]
+                            },
+                            {
+                                "statusInflict": [
+                                    "Shattered"
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If the target has [b][color=ffeeaa]Shattered[/color][/b], gain +4 [b][color=ffffff]Power[/color][/b] and ignore this skill’s Hit effect.",
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=ffff50]Tremor Burst[/color][/b], then if the target has 20+ [b][color=cccc50]Tremor[/color][/b], consume all [b][color=cccc50]Tremor[/color][/b] on the target and inflict [b][color=ffeeaa]Shattered[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

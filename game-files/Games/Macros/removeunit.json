@@ -14,7 +14,7 @@
                         "lessThan": [
                             {
                                 "refCall": [
-                                    "&addunit_args",
+                                    "&removeunit_args",
                                     "size"
                                 ]
                             },
@@ -32,7 +32,7 @@
            "remUnit": [
                 {
                     "refCall": [
-                        "&addunit_args",
+                        "&removeunit_args",
                         "get",
                         1
                     ]

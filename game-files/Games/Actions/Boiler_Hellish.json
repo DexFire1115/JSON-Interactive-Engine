@@ -1,0 +1,72 @@
+{
+    "Name": "[color=cc3250]Boiler Office - Hellish Rend[/color]",
+    "Cost": 3,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Boiler_Hellish_Eminence",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=64ffaa][lb]Eminence][/color][/b] For every 5 [b][color=aa64ff]Emotion Points[/color][/b], all Dice on this skill have +1 [b][color=ffffff]Power[/color][/b] (Max: +6). For every 10 [b][color=aa64ff]Emotion Points[/color][/b], all Dice on this skill inflict +1 [b][color=cc6450]Burn[/color][/b] (Max: +3)."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 10,
+            "Base": 5,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Burn",
+                                        0
+                                    ]
+                                },
+                                6,
+                                0,
+                                3
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        4
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "triggerStatus": [
+                        "",
+                        "Burn",
+                        "SceneEnd"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 6 [b][color=cc6450]Burn[/color][/b] on target, +1 [b][color=ffffff]Power[/color][/b] (Max: +3).",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 4 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Trigger [b][color=cc6450]Burn[/color][/b] Scene End effects, then inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

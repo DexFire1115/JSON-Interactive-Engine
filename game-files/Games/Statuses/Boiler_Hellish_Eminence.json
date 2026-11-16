@@ -1,0 +1,68 @@
+{
+    "Name": "[Emn] Hellish Rend",
+    "Color": "#64ffaa",
+    "Passive": true,
+    "Conditions": {
+        "Check": [
+            {
+                "changePower": [
+                    {
+                        "forEvery": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Attributes/EmotionPoints",
+                                    0
+                                ]
+                            },
+                            5,
+                            0,
+                            6
+                        ]
+                    }
+                ]
+            }
+        ],
+        "ConfirmStatus-Burn": [
+            {
+                "refCall": [
+                    "statusArr",
+                    "set",
+                    1,
+                    {
+                        "add": [
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "forEvery": [
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            "Attributes/EmotionPoints",
+                                            0
+                                        ]
+                                    },
+                                    10,
+                                    0,
+                                    3
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "AfterUse": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

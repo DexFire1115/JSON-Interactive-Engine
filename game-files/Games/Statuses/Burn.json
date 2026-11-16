@@ -2,6 +2,7 @@
     "Name": "Burn",
     "Color": "#cc6450",
     "Conditions": {
+        "_": null,
         "SceneEnd": [
             {
                 "addLog": [

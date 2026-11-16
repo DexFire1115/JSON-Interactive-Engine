@@ -3,7 +3,11 @@
         "i",
         "status",
         "color",
-        "unit"
+        "unit",
+        "dispCount"
+    ],
+    "Defaults": [
+        true
     ],
     "Sequence": [
         {
@@ -64,6 +68,47 @@
             ]
         },
         {
+            "ifelse": [
+                {
+                    "getVar": [
+                        "dispCount"
+                    ]
+                },
+                [
+                    {
+                        "setVar": [
+                            "countStr",
+                            {
+                                "concat": [
+                                    " [b][color=ffff64](",
+                                    {
+                                        "roundi": [
+                                            {
+                                                "getStatus": [
+                                                    {
+                                                        "getVar": [
+                                                            "status"
+                                                        ]
+                                                    },
+                                                    0,
+                                                    {
+                                                        "getVar": [
+                                                            "unit"
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    ")[/color][/b]"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
             "addLog": [
                 {
                     "concat": [
@@ -82,6 +127,12 @@
                         {
                             "getVar": [
                                 "codedStatus",
+                                ""
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "countStr",
                                 ""
                             ]
                         }

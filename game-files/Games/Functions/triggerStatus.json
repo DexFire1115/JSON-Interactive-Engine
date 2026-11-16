@@ -1,0 +1,168 @@
+{
+    "Args": [
+        "unit",
+        "status",
+        "tag",
+        "metadata"
+    ],
+    "Defaults": [
+        {}
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "notBool": [
+                        {
+                            "propCall": [
+                                "unitList",
+                                "has",
+                                {
+                                    "getSingleTarget": [
+                                        {
+                                            "getVar": [
+                                                "unit"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                    ]
+                },
+                [
+                    "return"
+                ]
+            ]
+        },
+        {
+            "refCall": [
+                "metadata",
+                "merge",
+                {
+                    "composeConditionMetaData": [
+                        {
+                            "getUnit": [
+                                {
+                                    "getVar": [
+                                        "unit"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "refCall": [
+                "metadata",
+                "set",
+                "Status",
+                {
+                    "getVar": [
+                        "status"
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "notBool": [
+                        {
+                            "varCall": [
+                                {
+                                    "getUnitDataElem": [
+                                        {
+                                            "getVar": [
+                                                "unit"
+                                            ]
+                                        },
+                                        {
+                                            "concat": [
+                                                "Conditions/",
+                                                {
+                                                    "getVar": [
+                                                        "tag"
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        []
+                                    ]
+                                },
+                                "has",
+                                {
+                                    "getVar": [
+                                        "status"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                [
+                    "return"
+                ]
+            ]
+        },
+        {
+            "executeCondition": [
+                {
+                    "getVar": [
+                        "tag"
+                    ]
+                },
+                {
+                    "toDataTree": [
+                        {
+                            "safeCallDict": [
+                                [
+                                    {
+                                        "propCall": [
+                                            "fileTree",
+                                            "dget",
+                                            {
+                                                "concat": [
+                                                    {
+                                                        "getUnitDataElem": [
+                                                            {
+                                                                "getVar": [
+                                                                    "unit"
+                                                                ]
+                                                            },
+                                                            {
+                                                                "concat": [
+                                                                    "Statuses/",
+                                                                    {
+                                                                        "getVar": [
+                                                                            "status"
+                                                                        ]
+                                                                    },
+                                                                    "/File"
+                                                                ]
+                                                            },
+                                                            ""
+                                                        ]
+                                                    },
+                                                    "/Conditions"
+                                                ]
+                                            },
+                                            {}
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "getVar": [
+                        "metadata"
+                    ]
+                }
+            ]
+        }
+    ]
+}

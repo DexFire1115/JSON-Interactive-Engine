@@ -1,0 +1,58 @@
+{
+    "Args": [
+        "arr",
+        "evals"
+    ],
+    "Defaults": [
+        [false]
+    ],
+    "Sequence": [
+        {
+            "refCall": [
+                "arr",
+                "reduce",
+                {
+                    "lambda": [
+                        "arrCountConditionSub",
+                        [
+                            {
+                                "add": [
+                                    {
+                                        "getAnyVar": [
+                                            "y",
+                                            0
+                                        ]
+                                    },
+                                    {
+                                        "ifelse": [
+                                            {
+                                                "sequence": [
+                                                    "arrCountConditionSub2",
+                                                    {
+                                                        "refCall": [
+                                                            "evals",
+                                                            "duplicate_deep"
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            [
+                                                1
+                                            ],
+                                            [
+                                                0
+                                            ]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ],
+                        "y",
+                        "x"
+                    ]
+                },
+                0
+            ]
+        }
+    ]
+}

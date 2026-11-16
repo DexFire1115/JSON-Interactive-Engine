@@ -1,0 +1,157 @@
+{
+    "Args": [
+        "Amt"
+    ],
+    "Defaults": [
+        1
+    ],
+    "Sequence": [
+        {
+            "addLog": [
+                {
+                    "concat": [
+                        {
+                            "getIDTag": [
+                                {
+                                    "getSelf": [
+                                        
+                                    ]
+                                }
+                            ]
+                        },
+                        " [b]Transferral Edge : Select an Aliment to transfer ",
+                        {
+                            "roundi": [
+                                {
+                                    "getVar": [
+                                        "Amt"
+                                    ]
+                                }
+                            ]
+                        },
+                        " of.[/b]"
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "transferralArr",
+                {
+                    "getDebuffAlimentArr": [
+                        "@Self"
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "refCall": [
+                        "transferralArr",
+                        "is_empty"
+                    ]
+                },
+                [
+                    {
+                        "addLog": [
+                            "[b][color=ff6464]No Debuff/Ailment to transfer![/color][/b]"
+                        ]
+                    },
+                    "return"
+                ]
+            ]
+        },
+        {
+            "setVar": [
+                "transferralChoice",
+                {
+                    "refCall": [
+                        "transferralArr",
+                        "get",
+                        {
+                            "queryInt": [
+                                "",
+                                {
+                                    "range": [
+                                        {
+                                            "refCall": [
+                                                "transferralArr",
+                                                "size"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "addLog": [
+                {
+                    "getVar": [
+                        "transferralChoice"
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "typeof": [
+                                {
+                                    "getVar": [
+                                        "transferralChoice"
+                                    ]
+                                }
+                            ]
+                        },
+                        4
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            {
+                                "getVar": [
+                                    "transferralChoice",
+                                    ""
+                                ]
+                            },
+                            {
+                                "sub": [
+                                    0,
+                                    {
+                                        "getVar": [
+                                            "Amt"
+                                        ]
+                                    }
+                                ]
+                            },
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "statusInflict": [
+                            {
+                                "getVar": [
+                                    "transferralChoice",
+                                    ""
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "Amt"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}

@@ -1,0 +1,49 @@
+{
+    "Name": "Rubbish to Rubbish... (Effect)",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Applied-RAA_C4_Rubbish_Passive": [
+            {
+                "addActionTo": [
+                    "RAA/C1/Detonation_1",
+                    "@Self"
+                ]
+            }
+        ],
+        "Applied-Staggered": [
+            {
+                "statusInflict": [
+                    "Fragile",
+                    20,
+                    "@Self",
+                    true
+                ]
+            }
+        ],
+        "Removed-Staggered": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                            
+                                        ]
+                                    }
+                                ]
+                            },
+                            " Must use 'Detonation' this scene!"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "For",
+        "When this unit inflicts Burn, inflict additional [b][color=cc6450]Burn[/color][/b] and [b][color=cc5080]Induction Heating[/color][/b] for every [b][color=50cc50]Endurance[/color][/b] (Max: +3)."
+    ]
+}

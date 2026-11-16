@@ -1,0 +1,534 @@
+{
+    "Name": "Advent of Waveform Cooking",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Applied-RAA_C4_Advent": [
+            {
+                "statusInflict": [
+                    "RAA/Thermocurrent",
+                    20,
+                    "@Self"
+                ]
+            }
+        ],
+        "Appied-Staggered": [
+            {
+                "setVar": [
+                    "tcfBurn",
+                    {
+                        "div": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            5
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusClearSelf": [
+                    "RAA/Thermocurrent"
+                ]
+            },
+            {
+                "loop": [
+                    {
+                        "getAlliesArr": [
+                            
+                        ]
+                    },
+                    [
+                        {
+                            "ifelse": [
+                                {
+                                    "notBool": [
+                                        {
+                                            "equals": [
+                                                {
+                                                    "getVar": [
+                                                        "x",
+                                                        ""
+                                                    ]
+                                                },
+                                                {
+                                                    "getSelf": [
+                                                        
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                [
+                                    {
+                                        "statusInflict": [
+                                            "Burn",
+                                            {
+                                                "getVar": [
+                                                    "tcfBurn",
+                                                    0
+                                                ]
+                                            },
+                                            {
+                                                "getVar": [
+                                                    "x",
+                                                    ""
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ],
+                    "x"
+                ]
+            }
+        ],
+        "Removed-Staggered": [
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Advent/Thres1",
+                    true
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Advent/Thres2",
+                    true
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/RAA_C4_Advent/Thres3",
+                    true
+                ]
+            }
+        ],
+        "Caused-Burn": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getVar": [
+                                    "Target"
+                                ]
+                            },
+                            {
+                                "getSelf": [
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "isAW",
+                    {
+                        "greaterThan": [
+                            {
+                                "getAction": [
+                                    -1,
+                                    "data/AttackWeight",
+                                    0
+                                ]
+                            },
+                            1
+                        ]
+                    }
+                ]
+            },
+            {
+                "loop": [
+                    {
+                        "range": [
+                            {
+                                "forEvery": [
+                                    {
+                                        "getStatus": [
+                                            "RAA/Thermocurrent",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    20,
+                                    0,
+                                    5
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                {
+                                    "ifelse": [
+                                        {
+                                            "equals": [
+                                                {
+                                                    "randi_range": [
+                                                        0,
+                                                        1
+                                                    ]
+                                                },
+                                                1
+                                            ]
+                                        },
+                                        [
+                                            "Pyre"
+                                        ],
+                                        [
+                                            "Induction"
+                                        ]
+                                    ]
+                                },
+                                1
+                            ]
+                        },
+                        {
+                            "ifelse": [
+                                {
+                                    "getVar": [
+                                        "isAW",
+                                        false
+                                    ]
+                                },
+                                [
+                                    {
+                                        "statusInflict": [
+                                            "RAA/Thermocurrent",
+                                            -3,
+                                            "@Self"
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }                        
+                    ]
+                ]
+            }
+        ],
+        "DamageTaken": [
+            {
+                "setVar": [
+                    "spPercent",
+                    {
+                        "divf": [
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Attributes/CurrentStagger"
+                                ]
+                            },
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Attributes/MaxStagger"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "lte": [
+                                    {
+                                        "getVar": [
+                                            "spPercent",
+                                            1
+                                        ]
+                                    },
+                                    0.75
+                                ]
+                            },
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Advent/Thres1",
+                                    true
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Advent/Thres1",
+                                false
+                            ]
+                        },
+                        {
+                            "triggerStatus": [
+                                "@Self",
+                                "RAA_C4_Advent",
+                                "SpecialTrigger-RAA_C4_Advent"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "lte": [
+                                    {
+                                        "getVar": [
+                                            "spPercent",
+                                            1
+                                        ]
+                                    },
+                                    0.5
+                                ]
+                            },
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Advent/Thres2",
+                                    true
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Advent/Thres2",
+                                false
+                            ]
+                        },
+                        {
+                            "triggerStatus": [
+                                "@Self",
+                                "RAA_C4_Advent",
+                                "SpecialTrigger-RAA_C4_Advent"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "andBool": [
+                            {
+                                "lte": [
+                                    {
+                                        "getVar": [
+                                            "spPercent",
+                                            1
+                                        ]
+                                    },
+                                    0.25
+                                ]
+                            },
+                            {
+                                "getUnitDataElem": [
+                                    "@Self",
+                                    "Statuses/RAA_C4_Advent/Thres3",
+                                    true
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C4_Advent/Thres3",
+                                false
+                            ]
+                        },
+                        {
+                            "triggerStatus": [
+                                "@Self",
+                                "RAA_C4_Advent",
+                                "SpecialTrigger-RAA_C4_Advent"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "SpecialTrigger-RAA_C4_Advent": [
+            {
+                "addLog": [
+                    {
+                        "concat": [
+                            {
+                                "getIDTag": [
+                                    {
+                                        "getSelf": [
+                                        ]
+                                    }
+                                ]
+                            },
+                            " [b][color=ff3264]Advent of Waveform Cooking : Threshold Met![/color][/b]"
+                        ]
+                    }
+                ]
+            },
+            {
+                "playSound": [
+                    "RAAC4Break.wav"
+                ]
+            },
+            {
+                "setStatus": [
+                    "RAA/Thermocurrent",
+                    {
+                        "div": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            2
+                        ]
+                    },
+                    "@Self"
+                ]
+            },
+            {
+                "statusBlazeMulti": [
+                    {
+                        "getEnemiesArr": [
+                            
+                        ]
+                    }
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "lessThan": [
+                            {
+                                "arrCountCondition": [
+                                    {
+                                        "getAlliesArr": [
+                                            
+                                        ]
+                                    },
+                                    [
+                                        {
+                                            "equals": [
+                                                {
+                                                    "getUnitDataElem": [
+                                                        {
+                                                            "getAnyVar": [
+                                                                "x",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "Name",
+                                                        ""
+                                                    ]
+                                                },
+                                                "Radiant Alloy Amalgamite"
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            },
+                            3
+                        ]
+                    },
+                    [
+                        {
+                            "createAlly": [
+                                "@Self",
+                                "RAA/Class-1"
+                            ]
+                        },
+                        {
+                            "createAlly": [
+                                "@Self",
+                                "RAA/Class-1"
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Protection",
+                    3,
+                    "@Self",
+                    true
+                ]
+            },
+            {
+                "statusInflict": [
+                    "Resolve",
+                    3,
+                    "@Self",
+                    true
+                ]
+            },
+            {
+                "setComplexData": [
+                    "@Self",
+                    "Attributes/SpeedDiceAmt",
+                    "RAA_C4_Advent",
+                    -4
+                ]
+            },
+            {
+                "loop": [
+                    {
+                        "getEnemiesArr": [
+                        ]
+                    },
+                    [
+                        {
+                            "changeLight": [
+                                1,
+                                {
+                                    "getVar": [
+                                        "U",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "U"
+                ]
+            }
+        ],
+        "SceneStartPost": [
+            {
+                "eraseComplexData": [
+                    "@Self",
+                    "Attributes/SpeedDiceAmt",
+                    "RAA_C4_Advent"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "[b][color=ffffff][lb]Scene Start][/color][/b] For every [b][color=cc5080]Radiant Alloy Amalgam-X[/color][/b] of a lower class that is alive, gain 1 [b][color=80cc50]Universal Defense Up[/color][/b] (Max: 4)."
+    ]
+}

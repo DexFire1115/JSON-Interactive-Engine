@@ -1,0 +1,117 @@
+{
+    "Name": "Pyre",
+    "Color": "#ff5032",
+    "Conditions": {
+        "_": null,
+        "ValidateDamage": [
+            {
+                "ifelse": [
+                    {
+                        "notBool": [
+                            {
+                                "andBool": [
+                                    {
+                                        "varCall": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    2
+                                                ]
+                                            },
+                                            "begins_with",
+                                            "Burn"
+                                        ]
+                                    },
+                                    {
+                                        "gte": [
+                                            {
+                                                "getStatus": [
+                                                    "Pyre",
+                                                    0,
+                                                    "@Self"
+                                                ]
+                                            },
+                                            3
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "setVar": [
+                    "dmgVal",
+                    {
+                        "refCall": [
+                            "dmgArr",
+                            "get",
+                            0
+                        ]
+                    }
+                ]
+            },
+            {
+                "refCall": [
+                    "dmgArr",
+                    "set",
+                    0,
+                    {
+                        "add": [
+                            {
+                                "getVar": [
+                                    "dmgVal"
+                                ]
+                            },
+                            {
+                                "div": [
+                                    {
+                                        "getVar": [
+                                            "dmgVal"
+                                        ]
+                                    },
+                                    {
+                                        "ifelse": [
+                                            {
+                                                "gte": [
+                                                    {
+                                                        "getStatus": [
+                                                            "Pyre",
+                                                            0,
+                                                            "@Self"
+                                                        ]
+                                                    },
+                                                    5
+                                                ]
+                                            },
+                                            [
+                                                1
+                                            ],
+                                            [
+                                                2
+                                            ]
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "statusClearSelf": [
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Unique Ailment.",
+        "At the end of each scene, if the count is 3 or higher, increase the [b][color=ff6464]Damage[/color][/b] the inflicted unit takes from [b][color=cc6450]Burn[/color][/b] by 1.5x. If the count is 5 or higher, multiply by 2x instead.",
+        "After [b][color=ff5032]Pyre[/color][/b] increases [b][color=ff6464]Damage[/color][/b], remove all [b][color=ff5032]Pyre[/color][/b]."
+    ]
+}

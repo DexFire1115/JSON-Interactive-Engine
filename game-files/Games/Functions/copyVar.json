@@ -1,0 +1,34 @@
+{
+    "Args": [
+        "var",
+        "default"
+    ],
+    "Defaults": [
+        null
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                {
+                    "getVar": [
+                        "var"
+                    ]
+                },
+                {
+                    "getAnyVar": [
+                        {
+                            "getVar": [
+                                "var"
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "default"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,135 @@
+{
+    "Name": "Extra Skill - Crisis",
+    "Cost": 0,
+    "Limit": 1,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Strength",
+                2,
+                {
+                    "getVar": [
+                        "*Laemshi_ID",
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "statusInflict": [
+                "Endurance",
+                2,
+                {
+                    "getVar": [
+                        "*Laemshi_ID",
+                        ""
+                    ]
+                }
+            ]
+        },
+        {
+            "addLog": [
+                "[b][color=eebbaa]Zwei Assoc. Fixer - Laemshi[/color][/b] will now prioritize protecting this unit."
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] [b][color=eebbaa]Zwei Assoc. Fixer - Laemshi[/color][/b] gains 2 [b][color=cc5050]Strength[/color][/b] and 2 [b][color=50cc50]Disarm[/color][/b] and will prioritize the target of this skill or will intercept skills that target this unit.."
+    ],
+    "Clash": [
+        {
+            "setVar": [
+                "clashes",
+                {
+                    "getVar": [
+                        "clashes",
+                        0,
+                        "@Action"
+                    ]
+                },
+                "@Action"
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Protection",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=5080cc]Protection[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Protection",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=5080cc]Protection[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Evade",
+            "Dice": 6,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Protection",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=5080cc]Protection[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "ifelse": [
+                {
+                    "gte": [
+                        {
+                            "getVar": [
+                                "clashes",
+                                0,
+                                "@Action"
+                            ]
+                        },
+                        2
+                    ]
+                },
+                [
+                    {
+                        "changeLight": [
+                            1
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] If 2+ clashes occured, regain 1 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

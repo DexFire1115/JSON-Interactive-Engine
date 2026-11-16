@@ -1,0 +1,46 @@
+{
+    "Name": "Quick Popcorn Cooker Proactive",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "ConfirmStatus-Burn": [
+            {
+                "refCall": [
+                    "statusArr",
+                    "set",
+                    1,
+                    {
+                        "add": [
+                            {
+                                "refCall": [
+                                    "statusArr",
+                                    "get",
+                                    1
+                                ]
+                            },
+                            {
+                                "min": [
+                                    {
+                                        "getStatus": [
+                                            "Haste",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    3
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "AfterUse": [
+            {
+                "statusClearSelf": []
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

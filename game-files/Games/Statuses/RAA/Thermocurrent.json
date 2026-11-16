@@ -1,0 +1,235 @@
+{
+    "Name": "Thermocurrent Flux",
+    "Color": "#ff3264",
+    "MaxStack": 100,
+    "Conditions": {
+        "Applied-RAA_Thermocurrent": [
+            {
+                "ifelse": [
+                    {
+                        "equals": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            100
+                        ]
+                    },
+                    [
+                        {
+                            "addLog": [
+                                {
+                                    "concat": [
+                                        "[b][color=ff3264]/!\\[/color][/b] ",
+                                        {
+                                            "getIDTag": [
+                                                {
+                                                    "getSelf": [
+                                                        
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        " [b][color=ff3264]Thermocurrent Flux :: Overdrive /!\\[/color][/b]"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "ConfirmStatus-Burn": [
+            {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            25
+                        ]
+                    },
+                    [
+                        {
+                            "changeStatusInfliction": [
+                                -1
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            50
+                        ]
+                    },
+                    [
+                        {
+                            "changeStatusInfliction": [
+                                1
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            75
+                        ]
+                    },
+                    [
+                        {
+                            "statusInflict": [
+                                "Blaze"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ],
+        "ValidateDamage": [
+            {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            25
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                1,
+                                {
+                                    "sub": [
+                                        {
+                                            "refCall": [
+                                                "dmgArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "lte": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            50
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                1,
+                                {
+                                    "add": [
+                                        {
+                                            "refCall": [
+                                                "dmgArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "gte": [
+                            {
+                                "getStatus": [
+                                    "RAA/Thermocurrent",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            75
+                        ]
+                    },
+                    [
+                        {
+                            "refCall": [
+                                "dmgArr",
+                                "set",
+                                1,
+                                {
+                                    "sub": [
+                                        {
+                                            "refCall": [
+                                                "dmgArr",
+                                                "get",
+                                                1
+                                            ]
+                                        },
+                                        1
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "Max Stack: 10.",
+        "When this unit gains [b][color=cc6450]Burn[/color][/b], take [b][color=ffff64]Stagger[/color][/b] by [b][color=cc6450]Burn[/color][/b] gained.",
+        "When this unit gains [b][color=aa64ff]Emotion Points[/color][/b], reduce stack by an equal amount."
+    ]
+}

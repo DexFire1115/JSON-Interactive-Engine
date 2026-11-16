@@ -1,0 +1,187 @@
+{
+    "Name": "Blanket of Steel",
+    "Cost": 3,
+    "PreText": [
+        "[b][color=64ffaa][lb]Eminence][/color][/b] All Dice have +2 [b][color=ffffff]Power[/color][/b] against [b][color=ffaaaa]Offense Dice[/color][/b] and -2 [b][color=ffffff]Power[/color][/b] against [b][color=aaccff]Defense Dice[/color][/b]."
+    ],
+    "Check": [
+        {
+            "ifelse": [
+                {
+                    "isOffense": [
+                        {
+                            "getUnitProp": [
+                                "",
+                                "dieData"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "changePower": [
+                            2
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "changePower": [
+                            -2
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "Clash": [
+        {
+            "setVar": [
+                "countNet",
+                {
+                    "sub": [
+                        {
+                            "getVar": [
+                                "countNet",
+                                0
+                            ]
+                        },
+                        1
+                    ]
+                },
+                "@Action"
+            ]
+        }
+    ],
+    "ClashWin": [
+        {
+            "setVar": [
+                "countNet",
+                {
+                    "add": [
+                        {
+                            "getVar": [
+                                "countNet",
+                                0
+                            ]
+                        },
+                        1
+                    ]
+                },
+                "@Action"
+            ]
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        5,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Blaze"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 5 [b][color=ff3264]Thermocurrent Flux[/color][/b]. Trigger [b][color=ff6450]Blaze[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        5,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Blaze"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 5 [b][color=ff3264]Thermocurrent Flux[/color][/b]. Trigger [b][color=ff6450]Blaze[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        5,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Blaze"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Gain 5 [b][color=ff3264]Thermocurrent Flux[/color][/b]. Trigger [b][color=ff6450]Blaze[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "getVar": [
+                                "countNet",
+                                0,
+                                "@Action"
+                            ]
+                        },
+                        0
+                    ]
+                },
+                [
+                    {
+                        "changeLight": [
+                            1
+                        ]
+                    },
+                    {
+                        "statusInflict": [
+                            "Resolve",
+                            2,
+                            "@Self"
+                        ]
+                    }
+                ],
+                [
+                    {
+                        "statusInflict": [
+                            "Feeble",
+                            1,
+                            "@Self",
+                            true
+                        ]
+                    }
+                ]
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

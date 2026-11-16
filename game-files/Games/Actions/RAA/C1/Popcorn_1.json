@@ -1,0 +1,300 @@
+{
+    "Name": "Popcorn Cooker",
+    "Cost": 3,
+    "Limit": 1,
+    "Proactive": [
+        {
+            "inflictStatus": [
+                "RAA/C1/Popcorn",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "RolledDie": [
+        {
+            "setVar": [
+                "dmgDown",
+                false,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff6480][lb]Proactive][/color][/b] Until skill end, all dice have +2 [b][color=ffffff]Power[/color][/b] and inflict twice as much [b][color=cc6450]Burn[/color][/b] from all sources."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0,
+                                        ""
+                                    ]
+                                },
+                                2,
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                },
+                {
+                    "setVar": [
+                        "dmgDown",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "dmgDown",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            3
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 2 [b][color=cc5080]Induction Heating[/color][/b] on target, +1 Power.",
+                "[b][color=ff6464][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]. Deal -3 [b][color=ff6464]Damage[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0,
+                                        ""
+                                    ]
+                                },
+                                2,
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                },
+                {
+                    "setVar": [
+                        "dmgDown",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "dmgDown",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            3
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 2 [b][color=cc5080]Induction Heating[/color][/b] on target, +1 Power.",
+                "[b][color=ff6464][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]. Deal -3 [b][color=ff6464]Damage[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "forEvery": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0,
+                                        ""
+                                    ]
+                                },
+                                2,
+                                0,
+                                5
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                },
+                {
+                    "setVar": [
+                        "dmgDown",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "dmgDown",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            3
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        1
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] For every 2 [b][color=cc5080]Induction Heating[/color][/b] on target, +1 Power.",
+                "[b][color=ff6464][lb]Clash Win][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]. Deal -3 [b][color=ff6464]Damage[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 1 [b][color=cc6450]Burn[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "setStatus": [
+                "Induction",
+                0
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Remove all [b][color=cc5080]Induction Heating[/color][/b] from target."
+    ]
+}

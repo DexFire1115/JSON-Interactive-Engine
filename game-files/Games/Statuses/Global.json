@@ -165,6 +165,12 @@
                ] 
             },
             {
+                "setVar": [
+                    "newTags",
+                    []
+                ]
+            },
+            {
                 "whileLoop": [
                     [
                         {
@@ -287,6 +293,18 @@
                             ]
                         },
                         {
+                            "refCall": [
+                                "newTags",
+                                "append",
+                                {
+                                    "getVar": [
+                                        "tag",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        },
+                        {
                             "setUnitDataElem": [
                                 "@Self",
                                 "Vars/Progress",
@@ -321,6 +339,30 @@
                             ]
                         }
                     ]
+                ]
+            },
+            {
+                "loop": [
+                    {
+                        "getVar": [
+                            "newTags",
+                            []
+                        ]
+                    },
+                    [
+                        {
+                            "readUnitTag": [
+                                "SceneStart",
+                                {
+                                    "getVar": [
+                                        "U",
+                                        ""
+                                    ]
+                                }
+                            ]
+                        }
+                    ],
+                    "U"
                 ]
             }
         ]

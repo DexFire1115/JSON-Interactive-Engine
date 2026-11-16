@@ -1,0 +1,96 @@
+{
+    "Name": "...Cook Everything for just 270.000 Ahn!",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneEnd": [
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/RAA_C2_Cook/Used",
+                            false
+                        ]
+                    },
+                    [
+                        "return"
+                    ]
+                ]
+            },
+            {
+                "ifelse": [
+                    {
+                        "varCall": [
+                            {
+                                "getEnemiesArr": [
+                                    
+                                ]
+                            },
+                            "any",
+                            {
+                                "lambda": [
+                                    "hasCondition",
+                                    [
+                                        {
+                                            "gte": [
+                                                {
+                                                    "getUnitDataElem": [
+                                                        {
+                                                            "getAnyVar": [
+                                                                "x",
+                                                                ""
+                                                            ]
+                                                        },
+                                                        "Statuses/Induction/Stack",
+                                                        0
+                                                    ]
+                                                },
+                                                10
+                                            ]
+                                        }
+                                    ],
+                                    "x"
+                                ]
+                            }
+                        ]
+                    },
+                    [
+                        {
+                            "setUnitDataElem": [
+                                "@Self",
+                                "Statuses/RAA_C2_Cook/Used",
+                                true
+                            ]
+                        },
+                        {
+                            "changeLight": [
+                                {
+                                    "objCall": [
+                                        {
+                                            "getUnitData": [
+                                                "@Self"
+                                            ]
+                                        },
+                                        "dget",
+                                        "Attributes/MaxLight",
+                                        0
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "statusInflict": [
+                                "Strength",
+                                2,
+                                "@Self"
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}

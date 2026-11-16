@@ -1,0 +1,27 @@
+{
+    "Name": "Power Down",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Check": [
+            {
+                "changePower": [
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "getStatus": [
+                                    "PowerDown",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+        ]
+    },
+    "Text": [
+    ]
+}

@@ -1,0 +1,166 @@
+{
+    "Args": [
+    ],
+    "Defaults": [
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "actionName",
+                {
+                    "varCall": [
+                        {
+                            "getAction": [
+                                -1,
+                                "diceArr/0",
+                                ""
+                            ]
+                        },
+                        "replace",
+                        "/",
+                        "_"
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "scenePath",
+                {
+                    "concat": [
+                        "Vars/",
+                        {
+                            "getVar": [
+                                "actionName"
+                            ]
+                        },
+                        "_QuickStep_Scene"
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "amtPath",
+                {
+                    "concat": [
+                        "Vars/",
+                        {
+                            "getVar": [
+                                "actionName"
+                            ]
+                        },
+                        "_QuickStep_Amt"
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "lessThan": [
+                        {
+                            "getUnitDataElem": [
+                                "@Self",
+                                {
+                                    "getVar": [
+                                        "scenePath"
+                                    ]
+                                },
+                                0
+                            ]
+                        },
+                        {
+                            "get": [
+                                "scene"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setUnitDataElem": [
+                            "@Self",
+                            {
+                                "getVar": [
+                                    "scenePath"
+                                ]
+                            },
+                            {
+                                "get": [
+                                    "scene"
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "setUnitDataElem": [
+                            "@Self",
+                            {
+                                "getVar": [
+                                    "amtPath"
+                                ]
+                            },
+                            0
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "lte": [
+                        {
+                            "getUnitDataElem": [
+                                "@Self",
+                                {
+                                    "getVar": [
+                                        "amtPath"
+                                    ]
+                                },
+                                0
+                            ]
+                        },
+                        2
+                    ]
+                },
+                [
+                    {
+                        "statusInflict": [
+                            "Haste",
+                            1,
+                            "@Self"
+                        ]
+                    },
+                    {
+                        "setUnitDataElem": [
+                            "@Self",
+                            {
+                                "getVar": [
+                                    "amtPath"
+                                ]
+                            },
+                            {
+                                "add": [
+                                    {
+                                        "getUnitDataElem": [
+                                            "@Self",
+                                            {
+                                                "getVar": [
+                                                    "amtPath"
+                                                ]
+                                            },
+                                            0
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}

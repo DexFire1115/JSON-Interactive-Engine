@@ -1,0 +1,228 @@
+{
+    "Name": "Quick Popcorn Cooking",
+    "Cost": 3,
+    "Limit": 2,
+    "Proactive": [
+        {
+            "inflictStatus": [
+                "RAA/C2/Popcorn",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff6480][lb]Proactive][/color][/b] Until skill end, all dice inflict additional [b][color=cc6450]Burn[/color][/b] by [b][color=ffaa64]Haste[/color][/b] on self (Max: +3)."
+    ],
+    "Dice": [
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0
+                                    ]
+                                },
+                                2
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Induction",
+                                    2
+                                ]
+                            },
+                            {
+                                "changePower": [
+                                    4
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Feeble",
+                        2,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Haste",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Spend 2 [b][color=cc5080]Induction Heating[/color][/b] on target for +4 Power.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=cc5050]Feeble[/color][/b]. Gain 1 [b][color=50cc50]Endurance[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]. Inflict 1 [b][color=ffaa64]Haste[/color][/b]."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0
+                                    ]
+                                },
+                                2
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Induction",
+                                    2
+                                ]
+                            },
+                            {
+                                "changePower": [
+                                    3
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Feeble",
+                        2,
+                        "@Self"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Haste",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Spend 2 [b][color=cc5080]Induction Heating[/color][/b] on target for +3 Power.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=cc5050]Feeble[/color][/b]. Gain 1 [b][color=50cc50]Endurance[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]. Inflict 1 [b][color=ffaa64]Haste[/color][/b]."
+            ]
+        },
+        {
+            "Type": "PierceOffense",
+            "Dice": 4,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Induction",
+                                        0
+                                    ]
+                                },
+                                1
+                            ]
+                        },
+                        [
+                            {
+                                "statusInflict": [
+                                    "Induction",
+                                    1
+                                ]
+                            },
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        2,
+                        "@Self",
+                        true
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Haste",
+                        1,
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Spend 1 [b][color=cc5080]Induction Heating[/color][/b] on target for +2 Power.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 2 [b][color=50cc50]Endurance[/color][/b] next scene.",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b]. Inflict 1 [b][color=ffaa64]Haste[/color][/b]."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

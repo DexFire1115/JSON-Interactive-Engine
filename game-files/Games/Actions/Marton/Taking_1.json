@@ -1,0 +1,76 @@
+{
+    "Name": "Taking The Hit.",
+    "Cost": 0,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Protection",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=50ccff]Protection[/color][/b]."      
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 1,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "gte": [
+                                {
+                                    "getStatus": [
+                                        "Tremor",
+                                        0
+                                    ]
+                                },
+                                8
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    1
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "TremorBurst"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        -4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] If this Die rolled minimum value, you may re-roll it once.",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Trigger [b][color=ffff50]Tremor Burst[/color][/b], then reduce target's [b][color=cccc50]Tremor[/color][/b] by 4."    
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 1 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

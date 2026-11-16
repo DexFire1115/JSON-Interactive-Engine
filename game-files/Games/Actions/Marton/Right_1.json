@@ -1,0 +1,84 @@
+{
+    "Name": "Right Back At You!",
+    "Cost": 3,
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Tremor",
+                4,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 4 [b][color=cccc50]Tremor[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 8,
+            "Base": 1,
+            "Check": [
+                {
+                    "Modules/Heroic": [
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +2 if this skill intercepted the opposing attack.",
+            ]
+        },
+        {
+            "Type": "SlashOffense",
+            "Dice": 8,
+            "Base": 0,
+            "ClashWin": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "Modules/TransferralEdge": [
+                        4
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Clash Win][/color][/b] Inflict 3 [b][color=cccc50]Tremor[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Transfer up to 4 of an Ailment from self to target."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 10,
+            "Base": 1,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        3
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 3 [b][color=cccc50]Tremor[/color][/b].",
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                4,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 4 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

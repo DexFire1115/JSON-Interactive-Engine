@@ -1,0 +1,192 @@
+{
+    "Args": [
+        "unit",
+        "filepath",
+        "childRefs",
+        "parentRefs"
+    ],
+    "Defaults": [
+        false,
+        ""
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "Self",
+                {
+                    "getSingleTarget": [
+                        {
+                            "getVar": [
+                                "unit",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "allies",
+                {
+                    "ifelse": [
+                        {
+                            "varCall": [
+                                {
+                                    "getSelf": [
+                                    ]
+                                },
+                                "contains",
+                                "A"
+                            ]
+                        },
+                        [
+                            "A"
+                        ],
+                        [
+                            "E"
+                        ]
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "newID",
+                {
+                    "generateUniqueUID": [
+                        {
+                            "getVar": [
+                                "allies",
+                                ""
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "addUnit": [
+                {
+                    "getVar": [
+                        "newID",
+                        ""
+                    ]
+                },
+                {
+                    "propCall": [
+                        "fileTree",
+                        "dget",
+                        {
+                            "concat": [
+                                "Units/",
+                                {
+                                    "getVar": [
+                                        "filepath"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "setVar": [
+                "tagDict",
+                {}
+            ]
+        },
+        {
+            "refCall": [
+                "tagDict",
+                "set",
+                "Unit",
+                {
+                    "getVar": [
+                        "newID"
+                    ]
+                }
+            ]
+        },
+        {
+            "readUnitTag": [
+                "Function-CreateAlly",
+                {
+                    "getSelf": [
+                        
+                    ]
+                },
+                {
+                    "getVar": [
+                        "tagDict",
+                        {}
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "notBool": [
+                        {
+                            "refCall": [
+                                "parentRefs",
+                                "is_empty"
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "setUnitDataElem": [
+                            "@Self",
+                            {
+                                "concat": [
+                                    "Attributes/",
+                                    {
+                                        "getVar": [
+                                            "parentRefs"
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "getVar": [
+                                    "newID",
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "getVar": [
+                        "childRefs"
+                    ]
+                },
+                [
+                    {
+                        "setUnitDataElem": [
+                            {
+                                "getVar": [
+                                    "newID",
+                                    ""
+                                ]
+                            },
+                            "Attributes/Parent",
+                            {
+                                "getSelf": [
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}

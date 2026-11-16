@@ -1,0 +1,117 @@
+{
+    "Args": [
+        "unit",
+        "path",
+        "tag",
+        "value"
+    ],
+    "Defaults": [
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "typeof": [
+                                {
+                                    "getVar": [
+                                        "path"
+                                    ]
+                                }
+                            ]
+                        },
+                        28
+                    ]
+                },
+                [
+                    {
+                        "loop": [
+                            {
+                                "getVar": [
+                                    "path"
+                                ]
+                            },
+                            [
+                                {
+                                    "setComplexData": [
+                                        {
+                                            "getVar": [
+                                                "unit"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "x"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "tag"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "value"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "x"
+                        ]
+                    },
+                    "return"
+                ]
+            ]
+        },
+        {
+            "objCall": [
+                {
+                    "getUnitData": [
+                        {
+                            "getVar": [
+                                "unit"
+                            ]
+                        }
+                    ]
+                },
+                "complexInstantiate",
+                {
+                    "getVar": [
+                        "path"
+                    ]
+                }
+            ]
+        },
+        {
+            "setUnitDataElem": [
+                {
+                    "getVar": [
+                        "unit"
+                    ]
+                },
+                {
+                    "concat": [
+                        {
+                            "getVar": [
+                                "path"
+                            ]
+                        },
+                        "/",
+                        {
+                            "getVar": [
+                               "tag" 
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "getVar": [
+                        "value"
+                    ]
+                }
+            ]
+        }
+    ]
+}

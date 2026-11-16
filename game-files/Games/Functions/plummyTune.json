@@ -10,8 +10,8 @@
             "setVar": [
                 "Self",
                 {
-                    "getVar": [
-                        ".Self"
+                    "getAnyVar": [
+                        "Self"
                     ]
                 }
             ]

@@ -1,0 +1,85 @@
+{
+    "Name": "Thermal Humming",
+    "Cost": 1,
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 1 [b][color=50cc50]Endurance[/color][/b] next scene."
+    ],
+    "OnUse": [
+        {
+            "statusInflict": [
+                "Endurance",
+                1,
+                "@Self",
+                true
+            ],
+        }
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "setVar": [
+                        "Boost",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Next Die has +2 [b][color=ffffff]Power[/color][/b].",
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "Boost",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "changePower": [
+                                    2
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        2
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Endurance",
+                        2,
+                        "@Self",
+                        true
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Inflict 2 [b][color=cc6450]Burn[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Gain 2 [b][color=50cc50]Endurance[/color][/b] next scene."
+            ]
+        }
+    ],
+    "PostText": [
+    ]
+}

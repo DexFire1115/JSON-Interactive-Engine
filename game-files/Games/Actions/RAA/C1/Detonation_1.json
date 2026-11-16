@@ -1,0 +1,64 @@
+{
+    "Name": "Detonation",
+    "Cost": 0,
+    "AttackWeight": 2,
+    "PreText": [
+        "[b][color=ff8064]ATK WEIGHT: 2[/color][/b]",
+        "Cannot be clashed or intercepted."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 4,
+            "Base": 3,
+            "Hit": [
+                {
+                    "setVar": [
+                        "bonusDmg",
+                        {
+                            "getStatus": [
+                                "Inducton",
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "setStatus": [
+                        "Inducton",
+                        0
+                    ]
+                },
+                {
+                    "dealMixed": [
+                        {
+                            "getVar": [
+                                "bonusDmg"
+                            ]
+                        },
+                        {
+                            "getVar": [
+                                "bonusDmg"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Remove all [b][color=cc5080]Induction Heating[/color][/b] from target and deal that much bonus [b][color=ff6464]Damage[/color][/b] and [b][color=ffff64]Stagger[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Killed",
+                1,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] This unit is [b][color=ff6464]Killed[/color][/b]."
+    ]
+}

@@ -1,0 +1,104 @@
+{
+    "Args": [
+        "Cost",
+        "Improvement"
+    ],
+    "Defaults": [
+        false
+    ],
+    "Sequence": [
+        {
+            "setVar": [
+                "hpPercent",
+                {
+                    "divf": [
+                        {
+                            "getUnitDataElem": [
+                                "",
+                                "Attributes/CurrentHealth",
+                                0
+                            ]
+                        },
+                        {
+                            "getUnitDataElem": [
+                                "",
+                                "Attributes/MaxHealth",
+                                0
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "andBool": [
+                        {
+                            "getVar": [
+                                "Improvement"
+                            ]
+                        },
+                        {
+                            "lte": [
+                                {
+                                    "getVar": [
+                                        "hpPercent"
+                                    ]
+                                },
+                                0.25
+                            ]
+                        }
+                    ]
+                },
+                [
+                    {
+                        "changePower": [
+                            {
+                                "add": [
+                                    {
+                                        "getVar": [
+                                            "Cost"
+                                        ]
+                                    },
+                                    5
+                                ]
+                            }
+                        ]
+                    },
+                    "return"
+                ]
+            ]
+        },
+        {
+            "ifelse": [
+                {
+                    "lte": [
+                        {
+                            "getVar": [
+                                "hpPercent"
+                            ]
+                        },
+                        0.5
+                    ]
+                },
+                [
+                    {
+                        "changePower": [
+                            {
+                                "add": [
+                                    {
+                                        "getVar": [
+                                            "Cost"
+                                        ]
+                                    },
+                                    1
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            ]
+        }
+    ]
+}

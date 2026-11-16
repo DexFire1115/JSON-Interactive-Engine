@@ -1,0 +1,97 @@
+{
+    "Name": "Superalloy Microwave - Ultra",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "statusInflict": [
+                    "RAA/Thermocurrent",
+                    {
+                        "varCall": [
+                            {
+                                "getEnemiesArr": [
+                                    
+                                ]
+                            },
+                            "reduce",
+                            {
+                                "lambda": [
+                                    "addBurn",
+                                    [
+                                        {
+                                            "add": [
+                                                {
+                                                    "getAnyVar": [
+                                                        "y",
+                                                        0
+                                                    ]
+                                                },
+                                                {
+                                                    "getStatus": [
+                                                        "Burn",
+                                                        0,
+                                                        {
+                                                            "getAnyVar": [
+                                                                "x",
+                                                                ""
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "y",
+                                    "x"
+                                ]
+                            },
+                            5
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ],
+        "ClashWin": [
+            {
+                "statusInflict": [
+                    "RAA/Thermocurrent",
+                    1,
+                    "@Self"
+                ]
+            }
+        ],
+        "ClashLose": [
+            {
+                "statusInflict": [
+                    "RAA/Thermocurrent",
+                    {
+                        "sub": [
+                            0,
+                            {
+                                "forEvery": [
+                                    {
+                                        "getStatus": [
+                                            "RAA/Thermocurrent",
+                                            0,
+                                            "@Self"
+                                        ]
+                                    },
+                                    20,
+                                    0,
+                                    5
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "For",
+        "When this unit inflicts Burn, inflict additional [b][color=cc6450]Burn[/color][/b] and [b][color=cc5080]Induction Heating[/color][/b] for every [b][color=50cc50]Endurance[/color][/b] (Max: +3)."
+    ]
+}

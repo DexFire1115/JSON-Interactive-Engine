@@ -1,0 +1,82 @@
+{
+    "Name": "Come At Me!",
+    "Cost": 2,
+        "OnUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                2,
+                "@Self"
+            ]
+        },
+        {
+            "statusInflict": [
+                "Protection",
+                2,
+                "@Self"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ffffff][lb]On Use][/color][/b] Gain 2 [b][color=ff8064]Aggro[/color][/b] and 2 [b][color=50ccff]Protection[/color][/b]."
+    ],
+    "Dice": [
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "Modules/PlummyTune": [
+                        3
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] You may spend up to 3 [b][color=aa64ff]Emotion Points[/color][/b] to inflict that much [b][color=cccc50]Tremor[/color][/b] on all foes. If there's only 1 foe, inflict an additional [b][color=cccc50]Tremor[/color][/b] as long as at least 1 point was spent this way."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "Modules/Heroic": [
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] [b][color=ffffff]Power[/color][/b] +2 if this skill intercepted the opposing attack.",
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 6,
+            "Base": 0,
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Tremor",
+                        2
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 2 [b][color=cccc50]Tremor[/color][/b]."
+            ]
+        },
+    ],
+    "AfterUse": [
+        {
+            "statusInflict": [
+                "Aggro",
+                3,
+                "@Self"
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Gain 3 [b][color=ff8064]Aggro[/color][/b]."
+    ]
+}

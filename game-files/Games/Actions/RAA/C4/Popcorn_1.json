@@ -1,0 +1,436 @@
+{
+    "Name": "Popcorn Volcano",
+    "Cost": 0,
+    "AttackWeight": 5,
+    "OnUse": [
+        {
+            "setVar": [
+                "targetArr",
+                {
+                    "getVar": [
+                        "targetArr",
+                        []
+                    ]
+                },
+                "@Action"
+            ]
+        },
+        {
+            "setVar": [
+                "recycleUnit",
+                "",
+                "@Action"
+            ]
+        },
+        {
+            "duplicateDie": [
+                {
+                    "sub": [
+                        {
+                            "mult": [
+                                {
+                                    "varCall": [
+                                        {
+                                            "getEnemiesArr": [
+                                            ]
+                                        },
+                                        "size"
+                                    ]
+                                },
+                                2
+                            ]
+                        },
+                        1
+                    ]
+                },
+                2
+            ]
+        }
+    ],
+    "RolledDie": [
+        {
+            "setVar": [
+                "dmgDown",
+                false,
+                "@Action"
+            ]
+        }
+    ],
+    "PreText": [
+        "[b][color=ff6480]ATK WEIGHT: 5[/color][/b]",
+        "[b][color=ffffff][lb]On Use][/color][/b] This skill contains 2 copies of the final Die below for every enemy alive."
+    ],
+    "Dice": [
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "Check": [
+                {
+                    "changePower": [
+                        {
+                            "sub": [
+                                {
+                                    "getStatus": [
+                                        "Endurance",
+                                        0,
+                                        "@Self"
+                                    ]
+                                },
+                                {
+                                    "getStatus": [
+                                        "Strength",
+                                        0,
+                                        "@Self"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "setVar": [
+                        "Loses",
+                        {
+                            "add": [
+                                {
+                                    "getVar": [
+                                        "Loses",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                1
+                            ]
+                        },
+                        "@Action"
+                    ]
+                },
+                {
+                    "ifelse": [
+                        {
+                            "queryYN": [
+                                {
+                                    "concat": [
+                                        {
+                                            "getIDTag": [
+                                                {
+                                                    "getSingleTarget": [
+                                                    ]
+                                                }
+                                            ]
+                                        },
+                                        " Choose to not deal [b][color=ff6464]Damage[/color][/b] or [b][color=ffff64]Stagger[/color][/b] and recycle Die?"
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "setVar": [
+                                    "recycleUnit",
+                                    {
+                                        "getSingleTarget": [
+                                        ]
+                                    },
+                                    "@Action"
+                                ]
+                            },
+                            {
+                                "objCall": [
+                                    {
+                                        "getUnitProp": [
+                                            "",
+                                            "dieData"
+                                        ]
+                                    },
+                                    "dset",
+                                    "Recycle",
+                                    1
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "ValidateDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "equals": [
+                                {
+                                    "getVar": [
+                                        "recycleUnit",
+                                        "",
+                                        "@Action"
+                                    ]
+                                },
+                                {
+                                    "getSingleTarget": [
+                                    ]
+                                }
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    -999
+                                ]
+                            },
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    1,
+                                    -999
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Double [b][color=ffffff]Power[/color][/b] gained from [b][color=50cc50]Endurance[/color][/b]. Reduce [b][color=ffffff]Power[/color][/b] by [b][color=cc5050]Strength[/color][/b].",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Opponent may choose to not deal [b][color=ff6464]Damage[/color][/b] or [b][color=ffff64]Stagger[/color][/b] and recycle their Die. This unit's next Die has -10 [b][color=ffffff]Power[/color][/b] for all targets."
+            ]
+        },
+        {
+            "Type": "BluntOffense",
+            "Dice": 20,
+            "Base": 15,
+            "Check": [
+                {
+                    "objCall": [
+                        {
+                            "getUnitProp": [
+                                "@Self",
+                                "dieData"
+                            ]
+                        },
+                        "dset",
+                        "Advantage",
+                        {
+                            "arrCountCondition": [
+                                {
+                                    "getAlliesArr": [
+                                    ]
+                                },
+                                [
+                                    {
+                                        "notBool": [
+                                            {
+                                                "hasStatus": [
+                                                    "Staggered",
+                                                    {
+                                                        "getAnyVar": [
+                                                            "x",
+                                                            ""
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "changePower": [
+                        {
+                            "mult": [
+                                {
+                                    "getVar": [
+                                        "Loses",
+                                        0,
+                                        "@Action"
+                                    ]
+                                },
+                                -10
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "ClashWin": [
+                {
+                    "setVar": [
+                        "dmgDown",
+                        true,
+                        "@Action"
+                    ]
+                }
+            ],
+            "ClashLose": [
+                {
+                    "dealDamage": [
+                        5,
+                        "@Self"
+                    ]
+                }
+            ],
+            "ConfirmDamage": [
+                {
+                    "ifelse": [
+                        {
+                            "getVar": [
+                                "dmgDown",
+                                false,
+                                "@Action"
+                            ]
+                        },
+                        [
+                            {
+                                "refCall": [
+                                    "dmgArr",
+                                    "set",
+                                    0,
+                                    {
+                                        "sub": [
+                                            {
+                                                "refCall": [
+                                                    "dmgArr",
+                                                    "get",
+                                                    0
+                                                ]
+                                            },
+                                            {
+                                                "mult": [
+                                                    {
+                                                        "getVar": [
+                                                            "Loses",
+                                                            0,
+                                                            "@Action"
+                                                        ]
+                                                    },
+                                                    5
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            ],
+            "Hit": [
+                {
+                    "statusInflict": [
+                        "Burn",
+                        5
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Blaze"
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Blaze"
+                    ]
+                },
+                {
+                    "setVar": [
+                        "tempInduction",
+                        {
+                            "getStatus": [
+                                "Induction",
+                                0
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "setStatus": [
+                        "Induction",
+                        0
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Burn",
+                        {
+                            "getVar": [
+                                "tempInduction"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=64ffff][lb]Check][/color][/b] Roll with Advantage, rolling an additional time above the normal 2 rolls for every other ally that is not [b][color=ffff64]Staggered[/color][/b].",
+                "[b][color=64ff64][lb]Clash Win][/color][/b] -5 [b][color=ff6464]Damage[/color][/b] for every opponent that won clash on the last Die.",
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Take 5 [b][color=ff6464]Damage[/color][/b].",
+                "[b][color=64ff64][lb]Hit][/color][/b] Inflict 5 [b][color=cc6450]Burn[/color][/b]. Trigger [b][color=ff6450]Blaze[/color][/b] twice. Then, remove all [b][color=cc5080]Induction Heating[/color][/b] and inflict that much [b][color=cc6450]Burn[/color][/b]."
+            ]
+        },
+        {
+            "Type": "Block",
+            "Dice": 6,
+            "Base": 0,
+            "ClashLose": [
+                {
+                    "statusInflict": [
+                        "Resolve",
+                        1,
+                        "@Self"
+                    ]
+                },
+                {
+                    "setVar": [
+                        "tempBurn",
+                        {
+                            "min": [
+                                {
+                                    "getStatus": [
+                                        "Burn",
+                                        0
+                                    ]
+                                },
+                                5
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "Burn",
+                        -5
+                    ]
+                },
+                {
+                    "statusInflict": [
+                        "RAA/Thermocurrent",
+                        {
+                            "getVar": [
+                                "tempBurn"
+                            ]
+                        },
+                        "@Self"
+                    ]
+                }
+            ],
+            "Text": [
+                "[b][color=ff6464][lb]Clash Lose][/color][/b] Gain 1 [b][color=ffcc50]Resolve[/color][/b]. Remove up to 5 [b][color=cc6450]Burn[/color][/b] on target to gain that much [b][color=ff3264]Thermocurrent Flux[/color][/b]."
+            ]
+        }
+    ],
+    "AfterUse": [
+        {
+            "changeLight": [
+                -4
+            ]
+        }
+    ],
+    "PostText": [
+        "[b][color=ffffff][lb]After Use][/color][/b] Spend up to 4 [b][color=ffeecc]Light[/color][/b]."
+    ]
+}

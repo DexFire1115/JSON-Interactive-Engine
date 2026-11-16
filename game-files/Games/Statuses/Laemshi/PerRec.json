@@ -1,0 +1,63 @@
+{
+    "Name": "Per the Contract (Stagger Recovery)",
+    "Color": "#cccccc",
+    "Passive": true,
+    "Conditions": {
+        "Removed-Staggered": [
+            {
+                "changeLight": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Attributes/MaxLight"
+                        ]
+                    }
+                ]
+            },
+            {
+                "setUnitDataElem": [
+                    "@Self",
+                    "Statuses/Laemshi_PerRec/Done",
+                    true
+                ]
+            },
+            {
+                "setComplexData": [
+                    "@Self",
+                    "Attributes/SpeedDiceAmt",
+                    "Laemshi_PerRec",
+                    1
+                ]
+            }
+        ],
+        "SceneStartPost": [
+            {
+                "ifelse": [
+                    {
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Statuses/Laemshi_PerRec/Done",
+                            false
+                        ]
+                    },
+                    [
+                        {
+                            "eraseComplexData": [
+                                "@Self",
+                                "Attributes/SpeedDiceAmt",
+                                "Laemshi_PerRec"
+                            ]
+                        },
+                        {
+                            "statusClearSelf": [
+                                
+                            ]
+                        }
+                    ]
+                ]
+            }
+        ]
+    },
+    "Text": [
+    ]
+}
