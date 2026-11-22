@@ -687,6 +687,7 @@ func sceneStart():
 	for u in unitList.keys().duplicate():
 		await readUnitTag("SceneEndPost", u)
 	scene += 1
+	GameManager.newScene()
 	GameManager.addPushConsole("[u][b][lb]Scene " + str(scene) + "][/b][/u]")
 	for u in unitList.keys().duplicate():
 		await readUnitTag("SceneStart", u)
@@ -729,12 +730,15 @@ func nextTurn(dice := "", isProactive := true) -> String:
 	var isSavedDice := diceList.is_empty()
 	var canDeploy := !isProactive
 	if(dice.is_empty()): dice = getNextSpeedDie(!isSavedDice)
-	if(dice.is_empty()): return "_"
+	if(dice.is_empty()): 
+		if(isProactive): nextTurnPrintout()
+		return "_"
 	var unitName := getUnitFromDice(dice)
 	if(!unitList.has(unitName)): return "_"
 	var unitData := unitList[unitName].dataSet
 	if(await isInactive(unitData)): 
 		removeSpeedDice(dice)
+		if(isProactive): nextTurnPrintout()
 		return "_"
 	var actionList := []
 	if(!dice.contains("*")):
@@ -759,7 +763,7 @@ func nextTurn(dice := "", isProactive := true) -> String:
 			TYPE_DICTIONARY)), actionList[i])): optionInts.append(i)
 	var answer := 0
 	if(actionList.size() > 1):
-		addLog("[u]" + getIDTag(unitName) + "[b]: Select Action:[/b][/u]")
+		addLog("[u]" + urlStr(getIDTag(unitName), "*dun " + unitName) + "[b]: Select Action:[/b][/u]")
 		EventBus.emit_signal("skillListDisplay", unitName, actionList)
 		answer = await queryInt("", optionInts, 0)
 	
@@ -767,6 +771,7 @@ func nextTurn(dice := "", isProactive := true) -> String:
 		if(isProactive):
 			if(isSavedDice): removeSpeedDice(dice)
 			else: saveSpeedDice(dice)
+			nextTurnPrintout()
 		return "_"
 	
 	if(canDeploy && answer == 1):
@@ -825,14 +830,18 @@ func nextTurn(dice := "", isProactive := true) -> String:
 		if(targetDie.is_empty()): targetDie = u + "D*"
 		skillTargets[u] = skillTargets[u] + await nextTurn(targetDie, false)
 	await executeAWSkill(unitName, skillTargets.keys(), actionChoice, skillTargets.values())
+	if(isProactive): nextTurnPrintout()
 	return ""
+
+func nextTurnPrintout():
+	if(diceList.is_empty() && saveList.is_empty()): 
+		addLog(urlStr(boldStr(colorStr("No Speed Dice. Start next scene?", "ff6480")), "*s"))
+	else: addLog(urlStr(boldStr(colorStr("Start next turn?", "64ffff")), "*nt"))
 
 func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	var choiceDict := {"[b][color=ff6464]No Contest[/color][/b]": "No"}
 	if(!(getNextUnitSpeedDie(unit, false).is_empty())):
 		choiceDict.set("[b][color=64aaff]Use Held Die[/color][/b]", "HeldDie")
-	#if(!(getNextUnitSpeedDie(unit, false).is_empty() || unitList[unit].savedDice.is_empty())):
-	#	choiceDict.set("[b][color=64aaff]Use Saved Die[/color][/b]", "SavedDie")
 	await readUnitTag("InterceptCheck", unit, {
 		"Self": unit,
 		"Target": proactive,
@@ -842,8 +851,10 @@ func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	addLog("[u]" + getIDTag(unit) + "[b]: Select Intercept Strategy:[/b][/u]")
 	var optionInts := range(choiceDict.size())
 	for o in optionInts:
+		var strIndex := str(o)
+		strIndex = urlStr(strIndex, strIndex)
 		var text := ""
-		text += "[b][color=cceeff] " + str(o) + " | [/color][/b]"
+		text += "[b][color=cceeff] " + strIndex + " | [/color][/b]"
 		text += choiceDict.keys()[o]
 		addLog(text)
 	var answer = choiceDict.values()[await queryInt("", optionInts, 0)]
@@ -909,6 +920,7 @@ func remAllUnitSpeedDice(unit: String):
 
 # Removes next die if unspecified
 func removeSpeedDice(die := "") -> int:
+	GameManager.recordSpeedDie()
 	if(die.is_empty()): die = getNextSpeedDie(!diceList.is_empty())
 	if(die.is_empty()): return -1 # No Dice to Remove
 	var isHeld := saveList.has(die)
@@ -1119,7 +1131,7 @@ func afterSkillAWProactive(u1: String, u2: Array, data: Dictionary):
 
 func afterSkillAW(u1: String, u2: Array, data: Dictionary):
 	var subdata := data.duplicate_deep()
-	afterSkillAWProactive(u1, u2, data)
+	await afterSkillAWProactive(u1, u2, data)
 	for i in u2.size():
 		subdata["u2oldHealth"] = data["u2oldHealth"][i]
 		subdata["u2oldStagger"] = data["u2oldStagger"][i]
@@ -1377,14 +1389,10 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 		if(isOffense(d2Data)): await readUnitTag("UsedOffense", u2)
 		else: await readUnitTag("UsedDefense", u2)
 	
-	if(d1Data.dget("Recycle", 0) == 0):
-		d1Data.dset("Recycle", 0 if(!(isOffense(atkDice) || isOffense(defDice)))
-			else recycleDie(d1Data, d1Result))
-	if(d2Data.dget("Recycle", 0) == 0):
-		d2Data.dset("Recycle", 0 if(!(isOffense(atkDice) || isOffense(defDice)))
-			else recycleDie(d2Data, d2Result))
+	d1Data.dset("Recycle", recycleDieCheck(d1Data, d2Data, d1Result))
+	d2Data.dset("Recycle", recycleDieCheck(d2Data, d1Data, d2Result))
+	
 	return [d1Result, d2Result, d1Data.dget("Recycle", 0), d2Data.dget("Recycle", 0)]
-	#return d1Data.dget("Recycle", 0) * 2 + d2Data.dget("Recycle", 0)
 
 func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 	print("\n\nUNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
@@ -1488,6 +1496,15 @@ func getDiceData(die: String, id := -1) -> Dictionary:
 	if(!isSaveDiceArr(getAction(id, "name"))): return getAction(id, "data/Dice/" + dieParse[1], {})
 	return fileTree.safeGet("Actions/" + dieParse[0] + "/Dice/" + dieParse[1], TYPE_DICTIONARY)
 
+func recycleDieCheck(die: DataTree, opp: DataTree, clashResult: int) -> int:
+	var recycles = die.dget("Recycle", 0)
+	if(recycles != 0): return 1 if(recycles > 0) else 0
+	if(clashResult > 1): return 0 # Lose or Unopposed
+	var type := getDieType(die)
+	if(type == "Evade" && isOffense(opp)): return 1
+	if(type.contains("Counter")): return 1
+	return 0
+
 func recycleDie(die: DataTree, result: int) -> int:
 	var type = getDieType(die)
 	if(!(type.contains("Evade") || type.contains("Counter"))): return 0
@@ -1543,7 +1560,7 @@ func getIDTag(unit: String) -> String:
 	var unitData := unitList[unit].dataSet
 	var unitColor = unitData.dget("Color","")
 	if(!(unitColor is String)): unitColor = "aaaaaa"
-	return "[b][color=" + unitColor + "][lb]" + unit + "][/color][/b]"
+	return boldStr(colorStr("[lb]" + unit + "]", unitColor))
 
 
 func playSound(sound: String):
@@ -1551,21 +1568,38 @@ func playSound(sound: String):
 	EventBus.emit_signal("playSound", GameManager.soundDict[sound])
 
 
-func runMacro(input: String) -> int:
-	EventBus.emit_signal("consoleStore", "&rM_temp", "readCommand", input)
-	var temp = references.get("&rM_temp", 0)
-	references.erase("&rM_temp")
+func boldStr(text: String) -> String:
+	return "[b]" + text + "[/b]"
+
+func italicStr(text: String) -> String:
+	return "[i]" + text + "[/i]"
+
+func underlineStr(text: String) -> String:
+	return "[u]" + text + "[/u]"
+
+func urlStr(text: String, url: String) -> String:
+	return "[url=" + url + "]" + text + "[/url]"
+
+func colorStr(text: String, color: String) -> String:
+	return "[color=" + color + "]" + text + "[/color]"
+
+func consoleExecute(dest: String, ref: String, ...args: Array) -> Variant:
+	EventBus.callv("emit_signal", joinArr(["consoleStore", dest, ref], args))
+	var temp = references.get(dest, 0)
+	references.erase(dest)
 	return temp
+
+func runMacro(input: String) -> int:
+	return consoleExecute("&rM_temp", "readCommand", input)
 
 func addMacro(m: String):
 	m = m.trim_prefix("Macros/").trim_suffix(".json")
 	var aliases: Array = fileTree.dget("Macros/" + m + "/Aliases", [])
 	aliases.append(m)
-	EventBus.emit_signal("consoleStore", "&init_aliases", "jcaliases")
-	var jcaliases: Dictionary = references.get("&init_aliases", {})
-	references.erase("&init_aliases")
+	var jcaliases: Dictionary = consoleExecute("&init_aliases", "jcaliases")
 	for a in aliases:
 		jcaliases.set(a, m)
+
 
 func loaderCommand(loadFunc) -> void:
 	if(loadFunc == null): return

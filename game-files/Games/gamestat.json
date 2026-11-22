@@ -10,7 +10,19 @@
             "Unit": "Marton"
         },
         "A3": {
-            "Unit": "Laemshi"
+            "Unit": "VileiColparino"
+        },
+        "A4": {
+            "Unit": "CAD"
+        },
+        "A5": {
+            "Unit": "Henry"
+        },
+        "A6": {
+            "Unit": "Lilli"
+        },
+        "A7": {
+            "Unit": "Mordred"
         }
     },
     "Units-Cache": {

@@ -9,18 +9,25 @@
         "Limit": 0,
         "Count": 0,
         "LimitArr": [
-            3,
-            1,
+            6,
             0
         ],
         "UnitsArr": [
             [
-                "RAA/Class-2",
-                "RAA/Class-1",
-                "RAA/Class-1"
+                "Irae/Class-1",
+                "Luxuriae",
+                "Pigritiae",
+                "Gulae",
+                "Morositatis",
+                "Superbiae",
+                "Irae/Class-1",
+                "Luxuriae",
+                "Pigritiae",
+                "Gulae",
+                "Morositatis",
+                "Superbiae",
             ],
             [
-                "RAA/Class-4"
             ]
         ]
     },
