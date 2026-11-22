@@ -14,6 +14,7 @@ var homeDir: String = "/home/dexfire1115/Documents/SotCIE/"
 @export var filetree: DataTree
 @export var soundDict := {}
 @onready var loadArchive = $LoadArchive
+@export var clockData: DataTree
 
 func _ready() -> void:
 	loadArchive.current_dir = homeDir
@@ -30,6 +31,10 @@ func _on_load_archive_file_selected(path: String) -> void:
 		for filePath in fileList:
 			fileBranch(filePath)
 		loadfile.close()
+		clockData = DataTree.new()
+		clockData.dset("sceneStats", [])
+		clockData.dset("sumStats", {})
+		clockData.dset("start", Time.get_ticks_msec() / 60000.0)
 		Functions.runGameStat()
 
 func search(s: String) -> void:
@@ -66,6 +71,7 @@ func fileBranch(path: String) -> void:
 		if(!tempDict.has(level)): tempDict.set(level, {})
 		tempDict = tempDict[level]
 
+# Marked for removal
 func fetchUnit(path: String) -> Variant:
 	var split := path.split("/", true, 1)
 	if(split.size() < 1): return [{},-2]
@@ -75,3 +81,38 @@ func fetchUnit(path: String) -> Variant:
 	else: subpath = split[1]
 	if(!(unit is Unit)): return null
 	return unit.dataSet.dget(subpath, null)
+
+func newScene():
+	var sceneStr := str(Functions.scene)
+	var lastSceneStr := str(Functions.scene - 1)
+	var lastDict = clockData.dget("sceneStats/" + lastSceneStr, {})
+	updateRates(lastDict)
+	clockData.dset("sceneStats/" + lastSceneStr, lastDict)
+	var newDict := {}
+	updateRates(newDict)
+	clockData.dset("sceneStats/" + sceneStr, newDict)
+
+func updateRates(dict: Dictionary):
+	if(!dict.has("startTime")): dict["startTime"] = Time.get_ticks_msec() / 60000.0
+	dict["endTime"] = Time.get_ticks_msec() / 60000.0
+	dict["deltaTime"] = dict["endTime"] - dict["startTime"]
+	if(!dict.has("speedDice")): dict["speedDice"] = 0
+	dict["mpss"] = dict["deltaTime"] / dict["speedDice"]
+	dict["sdph"] = 60.0 / dict["mpss"]
+
+func recordSpeedDie():
+	var sceneStr := str(Functions.scene)
+	var dict = clockData.dget("sceneStats/" + sceneStr, {})
+	if(!dict.has("speedDice")): dict["speedDice"] = 0
+	dict["speedDice"] = dict["speedDice"] + 1
+	updateRates(dict)
+
+func compileSum():
+	var sumDict = clockData.dget("sumStats", {})
+	sumDict["startTime"] = clockData.dget("sceneStats/0/startTime", 0)
+	sumDict["endTime"] = Time.get_ticks_msec() / 60000.0
+	sumDict["deltaTime"] = sumDict["endTime"] - sumDict["startTime"]
+	sumDict["speedDice"] = Array(clockData.dget("sceneStats", [])).reduce(
+		func(accum, elem): return accum + elem.get("speedDice", 0), 0)
+	sumDict["mpss"] = sumDict["deltaTime"] / sumDict["speedDice"]
+	sumDict["sdph"] = 60.0 / sumDict["mpss"]

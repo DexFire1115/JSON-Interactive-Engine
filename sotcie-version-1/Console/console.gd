@@ -77,7 +77,9 @@ func _on_input_text_submitted(new_text: String) -> void:
 	input.text = ""
 	
 func _on_logs_meta_clicked(meta: Variant) -> void:
-	input.emit_signal("text_submitted", str(meta))
+	if(!meta is String): return
+	if(str(meta).begins_with("*")): await readCommand(meta)
+	else: input.emit_signal("text_submitted", str(meta))
 
 func textPrompt(query := ""):
 	if(!query.is_empty()): addPushConsole(query)
@@ -176,6 +178,9 @@ func readCommand(text: String) -> int:
 		"nextturn", "nt":
 			argPrint(args, "64ffff", "ffcc64")
 			errorCode = nextTurnCommand(args)
+		"clockget", "cg":
+			argPrint(args, "64ffff")
+			errorCode = clockGetCommand(args)
 #		"fload":
 #			argPrint(args, "64ffff")
 #			errorCode = fileLoadCommand(args)
@@ -302,6 +307,8 @@ func resumeCommand(_args: PackedStringArray) -> int:
 
 func startSceneCommand(_args: PackedStringArray) -> int:
 	Functions.sceneStart()
+	readCommand("*dsp")
+	addPushConsole(urlStr(addStyle("Start next turn?", "64ffff", true), "*nt"))
 	return 0
 
 func saveDiceCommand(args: PackedStringArray) -> int:
@@ -441,7 +448,6 @@ func displayUnitCommand(args: PackedStringArray) -> int:
 	text += weaknessPrint(temp[1], true)
 	text += "\n"
 	
-	
 	addPushConsole(text)
 	return 0
 
@@ -477,20 +483,23 @@ func displaySkillCommand(args: PackedStringArray) -> int:
 	if(data.isEmpty()): return 2
 	addLog(getSkillHeader(data))
 	for l in data.safeGet("PreText", TYPE_ARRAY):
-		if(l is String): addLog(addStyle(l, "aaaaaa"))
+		if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
 	
 	displaySkillDice(data, -1)
 	
 	for l in data.safeGet("PostText", TYPE_ARRAY):
-		if(l is String): addLog(addStyle(l, "aaaaaa"))
+		if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
+	refreshConsole()
 	return 0
 
-func getSkillHeader(data: DataTree, isUsable := true, useOverride := -1) -> String:
+func getSkillHeader(data: DataTree, isUsable := true, useOverride := -1, unit := "", index := -1) -> String:
 	var text := ""
 	text += addStyle("[" + displaySkillTextField(data, "Cost") + "] ", "ffaa64", true)
 	if(data.has("Emotion")):
 		text += addStyle("[" + displaySkillTextField(data, "Emotion") + "] ", "aa64ff", true)
-	text += displaySkillTextField(data, "Name", "ffffff" if(isUsable)else "808080", true)
+	var skillName = displaySkillTextField(data, "Name", "ffffff" if(isUsable)else "808080", true)
+	if(index >= 0): skillName = urlStr(skillName, "*dsl " + unit + " " + str(index))
+	text += skillName
 	if(data.has("Limit")):
 		var uses = data.dget("Uses", 0) if(useOverride == -1)else useOverride
 		var limit = data.dget("Limit", 0)
@@ -515,10 +524,10 @@ func displaySkillDice(action, index: int):
 	
 	print(diceList, " and ", index)
 	var d = DataTree.new(diceList[index])
-	addLog(getDieHeader(d))
+	addLog("  " + getDieHeader(d))
 	
 	for l in d.safeGet("Text", TYPE_ARRAY):
-		if(l is String): addLog("  " + addStyle(l, "aaaaaa"))
+		if(l is String): addLog("    " + addStyle(l, "aaaaaa"))
 
 func getDieHeader(dieData: DataTree) -> String:
 	var dicePower := int(displaySkillTextField(dieData, "Dice"))
@@ -557,9 +566,9 @@ func getTypeColor(type: String) -> String:
 	if(type.contains("Offense")):
 		return "ff6464"
 	if(type == "Block"):
-		return "64aaff"
+		return "64ccff"
 	if(type == "Evade"):
-		return "64aaff"
+		return "6480ff"
 	if(type.contains("Counter")):
 		return "ffcc64"
 	return "aaaaaa"
@@ -585,7 +594,7 @@ func displaySkillOptions(unit: String, options: Array, describe := -1):
 		addLog("")
 		return
 	for i in options.size():
-		displaySkillListItem(unit, options, i)
+		displaySkillListItem(unit, options, i, true)
 
 func displaySaveDiceOptions(unit: String, savedice: Array, options: Array):
 	if (!Functions.unitList.has(unit)):
@@ -593,7 +602,8 @@ func displaySaveDiceOptions(unit: String, savedice: Array, options: Array):
 		return
 	for o in options:
 		var text := ""
-		text += addStyle(" " + str(o) + " | ", "ffeecc", true)
+		var strIndex = str(o)
+		text += addStyle(" " + urlStr(strIndex, strIndex) + " | ", "ffeecc", true)
 		if(!range(savedice.size()).has(o)):
 			addLog(addStyle("<Die out of bounds!>", "ff6464", true))
 			continue
@@ -608,18 +618,22 @@ func displaySaveDiceOptions(unit: String, savedice: Array, options: Array):
 		addLog(text)
 	refreshConsole()
 
-func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
+func displaySkillListItem(unit: String, actionArr: Array, index: int, queuing := false) -> int:
 	if (!Functions.unitList.has(unit)): 
 		addPushConsole(addStyle("<Unit does not exist!>", "ff6464", true))
 		return 3
+	var strIndex := str(index)
 	var unitData := Functions.unitList[unit].dataSet
 	var actionName = str(actionArr[index])
 	var actionData = DataTree.new(
 		GameManager.filetree.dget("Actions/" + actionName, {}))
+	var actionPos := Array(unitData.dget("Actions")).find(actionName)
 	if(actionData.isEmpty()):
 		if(actionName.begins_with("*")): 
+			var temp := strIndex
+			if(queuing): temp = urlStr(strIndex, strIndex)
 			addPushConsole(
-				addStyle(" " + str(index) + " | ", "cceeff", true) + 
+				addStyle(" " + temp + " | ", "cceeff", true) + 
 				actionName.substr(1)
 			)
 			return 0
@@ -628,16 +642,19 @@ func displaySkillListItem(unit: String, actionArr: Array, index: int) -> int:
 	var text := ""
 	var isUsable := Functions.isUsable(unitData, actionData, actionName)
 	var color := "ffeecc" if(isUsable)else "808080"
-	text += addStyle(" " + str(index) + " | ", color, true)
-	text += getSkillHeader(actionData, isUsable, Functions.getSkillUses(unitData, actionName))
+	var temp2 := strIndex
+	if(queuing): temp2 = urlStr(strIndex, strIndex)
+	text += addStyle(" " + temp2 + " | ", color, true)
+	text += getSkillHeader(actionData, isUsable, Functions.getSkillUses(unitData, actionName), unit, actionPos)
 	addPushConsole(text)
 	return 0
 
 func displayTargetOptions(options: Array):
 	for i in options.size():
+		var strIndex := str(i)
 		var text := ""
-		text += addStyle(" " + str(i) + " | ", "ffeecc", true)
-		text += getNameTag(options[i])
+		text += addStyle(" " + urlStr(strIndex, strIndex) + " | ", "ffeecc", true)
+		text += urlStr(getNameTag(options[i]), "*dun " + options[i])
 		addPushConsole(text)
 
 func displaySpeedDiceCommand(_args: PackedStringArray) -> int:
@@ -856,6 +873,51 @@ func displayClash(t1: String, r1: int, t2: String, r2: int):
 	text += addStyle("[lb]" + (str(r2) if r2 > 0 else "-") + "]", getTypeColor(t2), true)
 	addPushConsole(text)
 
+
+func clockGetCommand(_args: PackedStringArray) -> int:
+	addLog(addStyle("Clock Printout : ", "ffffee", true, false, true))
+	var clockScenes = GameManager.clockData.dget("sceneStats", [])
+	for i in clockScenes.size():
+		if(i == Functions.scene): GameManager.updateRates(clockScenes[i])
+		var strIndex := str(i)
+		if(strIndex.length() == 1): strIndex = " " + strIndex
+		addLog("  " + strIndex + " | " + printClockString(clockScenes[i]))
+	GameManager.compileSum()
+	addLog(" SUM | " + printClockString(GameManager.clockData.dget("sumStats"), true))
+	refreshConsole()
+	return 0
+
+func printClockString(dict: Dictionary, isSum := false) -> String:
+	var text := ""
+	text += boldStr(toClockTime(dict["deltaTime"]))
+	text += " ("
+	text += toClockTime(dict["startTime"])
+	text += " -> "
+	text += toClockTime(dict["endTime"])
+	text += ") | "
+	var sd := str(floori(dict["speedDice"]))
+	sd = " ".repeat(max(2 - sd.length(), 0)) + sd
+	text += addStyle(sd + " sd", "ffaa64", true)
+	text += " | "
+	var mpss := "%0.2f" % dict["mpss"]
+	if(int(dict["mpss"]) < 0): mpss = "-.--"
+	text += addStyle(mpss + ("mpss" if(isSum) else "smpss"), "ffcc64", true)
+	text += " / "
+	var sdph := "%0.2f" % dict["sdph"]
+	if(int(dict["sdph"]) < 0): sdph = "-.--"
+	text += addStyle(sdph + ("sdph" if(isSum) else "ssdph"), "64ccff", true)
+	return text
+
+func toClockTime(minCount: float) -> String:
+	if(int(minCount) < 0): return "--:--:--"
+	var seconds := str(floori(minCount * 60) % 60)
+	seconds = "0".repeat(2 - seconds.length()) + seconds
+	var minutes := str(floori(minCount) % 60)
+	minutes = "0".repeat(2 - minutes.length()) + minutes
+	var hours := str(floori(minCount / 60))
+	hours = "0".repeat(2 - hours.length()) + hours
+	return hours + ":" + minutes + ":" + seconds
+
 func logLengthCommand(args: PackedStringArray) -> int:
 	if(args.size() == 1): return 0
 	if(!args[1].is_valid_int()): return 5
@@ -922,7 +984,7 @@ func displayHealth(unit: String, data) -> String:
 	return addStyle(displayValue, "646464" if(float(data) <= 0) else "ff6464")
 
 func addStyle(text: String, color := "ffffff", bold := false, italic := false, underline := false) -> String:
-	var styleText := "[color=" + color + "]" + text + "[/color]"
+	var styleText := colorStr(text, color)
 	if(bold): styleText = boldStr(styleText)
 	if(italic): styleText = italicStr(styleText)
 	if(underline): styleText = underlineStr(styleText)
@@ -937,8 +999,11 @@ func italicStr(text: String) -> String:
 func underlineStr(text: String) -> String:
 	return "[u]" + text + "[/u]"
 
-func addURL(text: String, url: String) -> String:
+func urlStr(text: String, url: String) -> String:
 	return "[url=" + url + "]" + text + "[/url]"
+
+func colorStr(text: String, color: String) -> String:
+	return "[color=" + color + "]" + text + "[/color]"
 
 func unitCaps(unit: String) -> String:
 	if(unitCase): return unit
