@@ -10,7 +10,7 @@
             "Base": 1,
             "Hit": [
                 {
-                    "dmgUnit": [
+                    "dealDamage": [
                         -1,
                         "@Self"
                     ]
@@ -26,7 +26,7 @@
             "Base": 0,
             "Hit": [
                 {
-                    "dmgUnit": [
+                    "dealDamage": [
                         -1,
                         "@Self"
                     ]

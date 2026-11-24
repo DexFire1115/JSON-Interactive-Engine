@@ -593,8 +593,11 @@ func statusNextStack():
 		statusData.erase("NextStack")
 
 func changePower(amt: int, die := DataTree.new()):
-	if(die.dataset.is_empty()): die = getAnyVar("DieData")
-	die.dset("Base", add(die.dget("Base", 0), amt))
+	changeDieField("Base", add, 0, amt, die)
+
+func changeDieField(field: String, method: Callable, default, value, die := DataTree.new()):
+	if(die.isEmpty()): die = getAnyVar("DieData")
+	die.dset(field, method.callv([die.dget(field, default), value]))
 
 func roll(power: int, base := 0) -> int:
 	if(power < 0): return base - randi_range(1, -power)
@@ -697,6 +700,8 @@ func sceneStart():
 	for u in unitList.keys().duplicate():
 		await readUnitTag("SceneStartPost", u)
 		await readUnitTag("StatusNextStack", u, {}, [{"statusNextStack": []}])
+	consoleExecute("", "readCommand", "*dsp")
+	addLog(urlStr(boldStr(colorStr("Start next turn?", "64ffff")), "*nt"))
 
 func clearSaveDice():
 	for u in unitList:
@@ -725,6 +730,15 @@ func rollSpeed():
 			))
 			if(await isInactive(unitData)): usedList.set(u + "D" + str(i), val)
 			else: diceList.set(u + "D" + str(i), val)
+
+func nextTurnPrintout():
+	if(diceList.is_empty() && saveList.is_empty()): 
+		addLog(urlStr(boldStr(colorStr("No Speed Dice. Start next scene?", "ff6480")), "*s"))
+	else: addLog(urlStr(boldStr(colorStr("Start next turn?", "64ffff")), "*nt"))
+
+
+
+
 
 func nextTurn(dice := "", isProactive := true) -> String:
 	var isSavedDice := diceList.is_empty()
@@ -832,11 +846,11 @@ func nextTurn(dice := "", isProactive := true) -> String:
 	await executeAWSkill(unitName, skillTargets.keys(), actionChoice, skillTargets.values())
 	if(isProactive): nextTurnPrintout()
 	return ""
-
-func nextTurnPrintout():
-	if(diceList.is_empty() && saveList.is_empty()): 
-		addLog(urlStr(boldStr(colorStr("No Speed Dice. Start next scene?", "ff6480")), "*s"))
-	else: addLog(urlStr(boldStr(colorStr("Start next turn?", "64ffff")), "*nt"))
+	
+	
+	
+	
+	
 
 func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	var choiceDict := {"[b][color=ff6464]No Contest[/color][/b]": "No"}
@@ -879,6 +893,10 @@ func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 		"answerArr": answerArr
 	})
 	return [answerArr[0] != "No", answerArr[2]]
+
+
+
+
 
 func getNextUnitSpeedDie(unit: String, searchUnused := true) -> String:
 	unit = getSingleTarget(unit)
@@ -1317,9 +1335,11 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 	var d2Roll := d1Roll.duplicate_deep()
 	if(!d1Data.isEmpty()):
 		await readDieTag("Check", u1)
+		await readDieTag("OnDieUse", u1)
 		d1Roll = await rollDieEmbed(u1, d1Data)
 	if(!d2Data.isEmpty()):
 		await readDieTag("Check", u2)
+		await readDieTag("OnDieUse", u2)
 		d2Roll = await rollDieEmbed(u2, d2Data)
 	await codeInjection("executeClashPrePrintInjection", {"u1": u1, "u2": u2})
 	EventBus.emit_signal("clashConsole", getDieType(d1Data), d1Roll[0], getDieType(d2Data), d2Roll[0])
@@ -1394,11 +1414,12 @@ func executeClash(u1: String, u2: String, d1: DataTree, d2: DataTree) -> Array:
 	
 	return [d1Result, d2Result, d1Data.dget("Recycle", 0), d2Data.dget("Recycle", 0)]
 
-func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
+func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := [], propDown := false):
 	print("\n\nUNT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	var unitData = getUnitData(unit)
 	if(unitData == null): return
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
+	if(unit != "**"): readUnitTag(tag + "-Unit", "**", metadata, [])
 	var conditionStatuses: Array = unitData.safeGet("Conditions/" + tag, TYPE_ARRAY)
 	#print("TAG = ", tag, " -> ", conditionStatuses)
 	if(!defaultSeq.is_empty()):
@@ -1411,24 +1432,29 @@ func readUnitTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
 		metadata.merge({"Status": status}, true)
 		await executeCondition(tag, cond, metadata, defaultSeq)
 		if(!unitList.has(unit)): return
+	if(propDown):
+		readActionTag(tag, unit, metadata, defaultSeq, false)
+		readDieTag(tag, unit, metadata, defaultSeq, false)
 
-func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
+func readActionTag(tag: String, unit: String, metadata := {}, defaultSeq := [], propUp := true):
 	#print("\n\nACT TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
+	if(unit != "**"): readActionTag(tag + "-Action", "**", metadata, [], false)
 	if(metadata.is_empty()): return
 	var dataDict = getAction(metadata["Action"], "data")
 	if(dataDict != null):
 		await executeCondition(tag, DataTree.new(dataDict), metadata, defaultSeq)
-	await readUnitTag(tag, unit, metadata, defaultSeq)
+	if(propUp): await readUnitTag(tag, unit, metadata, defaultSeq)
 
-func readDieTag(tag: String, unit: String, metadata := {}, defaultSeq := []):
+func readDieTag(tag: String, unit: String, metadata := {}, defaultSeq := [], propUp := true):
 	#print("\n\nDIE TAG = ", tag, " @ ", getUnit(unit), " (", unit, ")")
 	metadata.merge(composeConditionMetaData(getUnit(unit)))
+	if(unit != "**"): readDieTag(tag + "-Die", "**", metadata, [], false)
 	if(metadata.is_empty()): return
 	var dieData = metadata["DieData"]
 	if(dieData != null):
 		await executeCondition(tag, dieData, metadata, defaultSeq)
-	await readActionTag(tag, unit, metadata, defaultSeq)
+	if(propUp): await readActionTag(tag, unit, metadata, defaultSeq)
 
 func executeCondition(tag: String, source: DataTree, metadata := {}, defaultSeq := []):
 	var tagSequence = source.copy().safeGet(tag, TYPE_ARRAY)
@@ -1585,6 +1611,7 @@ func colorStr(text: String, color: String) -> String:
 
 func consoleExecute(dest: String, ref: String, ...args: Array) -> Variant:
 	EventBus.callv("emit_signal", joinArr(["consoleStore", dest, ref], args))
+	if(dest.is_empty()): return null
 	var temp = references.get(dest, 0)
 	references.erase(dest)
 	return temp

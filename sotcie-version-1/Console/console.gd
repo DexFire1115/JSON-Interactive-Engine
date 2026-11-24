@@ -307,8 +307,6 @@ func resumeCommand(_args: PackedStringArray) -> int:
 
 func startSceneCommand(_args: PackedStringArray) -> int:
 	Functions.sceneStart()
-	readCommand("*dsp")
-	addPushConsole(urlStr(addStyle("Start next turn?", "64ffff", true), "*nt"))
 	return 0
 
 func saveDiceCommand(args: PackedStringArray) -> int:
@@ -1012,7 +1010,7 @@ func unitCaps(unit: String) -> String:
 func consoleStore(dest: String, ref: String, ...args: Array):
 	var fetch = get(ref)
 	if(fetch is Callable): fetch = callv(ref, args)
-	Functions.references.set(dest, fetch)
+	if(!dest.is_empty()): Functions.references.set(dest, fetch)
 
 func addPushConsole(s: String) -> void:
 	var lines: PackedStringArray = s.split("\n");
