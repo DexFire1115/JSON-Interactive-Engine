@@ -262,6 +262,11 @@ func getPrimitve(path: String, default = null) -> Variant:
 	if(!isPrimitive(val)): return default
 	return val
 
+func renameKey(path: String, key: String, newkey: String):
+	var value = dget(path + "/" + key)
+	erase(path + "/" + key)
+	dset(path + "/" + newkey, value)
+
 func erase(path: String):
 	if(path.is_empty()): 
 		dataset.clear()
