@@ -805,10 +805,10 @@ func rollSpeed():
 	usedList.clear()
 	for u in unitList:
 		var unitData = unitList[u].dataSet
-		for i in int(await getSumAttribute(unitData, "SpeedDiceAmt")):
+		for i in int(await getAttribute(u, "SpeedDiceAmt")):
 			var val = max(1, roll(
-				await getSumAttribute(unitData, "SpeedDiceSize"),
-				await getSumAttribute(unitData, "SpeedDiceBase"),
+				await getAttribute(u, "SpeedDiceSize"),
+				await getAttribute(u, "SpeedDiceBase"),
 			))
 			if(await isInactive(unitData)): usedList.set(u + "D" + str(i), val)
 			else: diceList.set(u + "D" + str(i), val)
@@ -1665,21 +1665,94 @@ func getDieType(die: DataTree) -> String:
 
 func getResistance(unit: String, type: String) -> Array[int]:
 	if(!unitList.has(unit)): return [0, 0]
-	var unitData := unitList[unit].dataSet
 	var dmgPath = type + "Damage"
 	var stgPath = type + "Stagger"
-	var dmgRes = await getSumAttribute(unitData, dmgPath)
-	var stgRes = await getSumAttribute(unitData, stgPath)
+	var dmgRes = await getAttribute(unit, dmgPath)
+	var stgRes = await getAttribute(unit, stgPath)
 	return [dmgRes, stgRes]
 
-func getSumAttribute(unitData: DataTree, attribute: String) -> int:
-	return await unitData.getComplexSeqn("Attributes/" + attribute, "add", 0)
+func getAttribute(unit: String, attribute: String, default := 0) -> int:
+	unit = getSingleTarget(unit)
+	if(!unitList.has(unit)): return default
+	var attributeData = unitList[unit].dataSet.dget("Attributes/" + attribute, default)
+	if(!(attributeData is Dictionary)): return int(attributeData)
+	return await getComplexData(attributeData, default)
 
 func setAttributeModif(unit: String, attribute: String, modif: String, source: String, value):
+	unit = getSingleTarget(unit)
 	if(!unitList.has(unit)): return
 	var unitData := unitList[unit].dataSet
 	unitData.complexInstantiate("Attributes/" + attribute)
-	unitData.dset("Attributes/" + attribute + "/" + modif + "/" + source, value)
+	await setComplexData(unitData.dget("Attributes/" + attribute, {}), modif, source, value)
+
+func eraseAttributeModif(unit: String, attribute: String, modif: String, source: String):
+	unit = getSingleTarget(unit)
+	if(!unitList.has(unit)): return
+	var attributeData = unitList[unit].dataSet.dget("Attributes/" + attribute)
+	if(eraseComplexData(attributeData, modif, source)):
+		unitList[unit].dataSet.dset("Attributes/" + attribute, attributeData.get("Base"))
+
+
+func getComplexData(indata, default := 0) -> int:
+	if(indata is Dictionary): indata = DataTree.new(indata)
+	if(!indata is DataTree): return default
+	var data: DataTree = indata
+	var result = data.dget("Base", 0)
+	if(result == null): return default
+	var opArr: Array = data.dget("ops", [])
+	for op in opArr:
+		var opDict: Dictionary = getVar("*ComplexOp/" + op, {})
+		var opResult = await Dictionary(data.dget(op, {})).values().reduce(opDict["reduce"], opDict["base"])
+		result = await Callable(opDict["app"]).call(result, opResult)
+	return int(result)
+
+func setComplexData(indata, modif: String, source: String, value):
+	if(indata is Dictionary): indata = DataTree.new(indata)
+	if(!indata is DataTree): return
+	var data: DataTree = indata
+	var modifData := DataTree.new(getVar("*ComplexOp/" + modif, {}))
+	if(modifData.isEmpty()): 
+		addLog("[b][color=ff6464]/!\\ Modifier \"" + modif + "\" does not exist! /!\\[/color][/b]")
+		return
+	data.dset(modif + "/" + source, value)
+	if(!data.has("ops")):
+		data.dset("ops", [])
+		data.dset("opsPrio", [])
+	var opsArr: Array = data.dget("ops", [])
+	var prioArr: Array = data.dget("opsPrio", [])
+	if(opsArr.has(modif)): return
+	var modifPrio: int = modifData.dget("priority", 0)
+	var index := 0
+	for prio in prioArr:
+		if(prio < modifPrio): index += 1
+		else: break
+	opsArr.insert(index, modif)
+	prioArr.insert(index, modifPrio)
+
+func eraseComplexData(indata, modif: String, source: String) -> bool:
+	if(indata is Dictionary): indata = DataTree.new(indata)
+	if(!indata is DataTree): return false
+	var data: DataTree = indata
+	var sourcePath := modif + "/" + source
+	if(!data.has(sourcePath)): return false
+	data.erase(sourcePath)
+	if(!Dictionary(data.dget(modif, {})).is_empty()): return false
+	data.erase(modif)
+	var opsArr := Array(data.dget("ops", []))
+	var index := opsArr.find(modif)
+	opsArr.pop_at(index)
+	Array(data.dget("opsPrio", [])).pop_at(index)
+	return opsArr.is_empty()
+
+
+func createComplexModif(modif: String, appMethod: String, redMethod: String, base, priority := INT32_MAX):
+	if(getVar("*ComplexOp/" + modif) != null): print("COLLISION : Modif Name = ", modif)
+	setVar("*ComplexOp/" + modif, {
+		"app": func(input, factor): return await callj(appMethod, [input, factor]),
+		"reduce": func(accum, elem): return await callj(redMethod, [accum, elem]),
+		"base": base,
+		"priority": priority
+	})
 
 func getIDTag(unit: String) -> String:
 	if(!unitList.has(unit)): return ""

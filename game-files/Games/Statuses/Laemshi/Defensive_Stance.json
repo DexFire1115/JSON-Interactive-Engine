@@ -5,26 +5,12 @@
     "Conditions": {
         "SceneStart": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/SpeedDiceBase"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/SpeedDiceBase/Laemshi_Defensive_Stance",
-                    -999
+                "setAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "xModif",
+                    "Laemshi_Defensive_Stance",
+                    0
                 ]
             },
             {
@@ -51,14 +37,11 @@
         ],
         "SceneStartPost": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SpeedDiceBase/Laemshi_Defensive_Stance"
+                "eraseAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "xModif",
+                    "Laemshi_Defensive_Stance"
                 ]
             }
         ],

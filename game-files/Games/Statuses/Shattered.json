@@ -5,25 +5,27 @@
     "Conditions": {
         "Applied-Shattered": [
             {
-                "setComplexData": [
+                "setAttributesGroup": [
                     "@Self",
                     [
-                        "Attributes/SlashDamage",
-                        "Attributes/PierceDamage",
-                        "Attributes/BluntDamage"
+                        "SlashDamage",
+                        "PierceDamage",
+                        "BluntDamage"
                     ],
+                    "+Modif",
                     "Shattered",
                     1
                 ]
             },
             {
-                "setComplexData": [
+                "setAttributesGroup": [
                     "@Self",
                     [
-                        "Attributes/SlashStagger",
-                        "Attributes/PierceStagger",
-                        "Attributes/BluntStagger"
+                        "SlashStagger",
+                        "PierceStagger",
+                        "BluntStagger"
                     ],
+                    "+Modif",
                     "Shattered",
                     2
                 ]
@@ -31,16 +33,17 @@
         ],
         "Removed-Shattered": [
             {
-                "eraseComplexData": [
+                "eraseAttributesGroup": [
                     "@Self",
                     [
-                        "Attributes/SlashDamage",
-                        "Attributes/PierceDamage",
-                        "Attributes/BluntDamage",
-                        "Attributes/SlashStagger",
-                        "Attributes/PierceStagger",
-                        "Attributes/BluntStagger"
+                        "SlashDamage",
+                        "PierceDamage",
+                        "BluntDamage",
+                        "SlashStagger",
+                        "PierceStagger",
+                        "BluntStagger"
                     ],
+                    "+Modif",
                     "Shattered"
                 ]
             }

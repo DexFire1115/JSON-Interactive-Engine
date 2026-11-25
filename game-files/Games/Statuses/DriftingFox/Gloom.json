@@ -121,48 +121,25 @@
                             ]
                         },
                         {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        "@Self"
-                                    ]
-                                },
-                                "complexInstantiate",
-                                "Attributes/SpeedDiceAmt"
-                            ]
-                        },
-                        {
-                            "setUnitDataElem": [
+                            "setAttributeModif": [
                                 "@Self",
-                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                "SpeedDiceAmt",
+                                "+Modif",
+                                "DriftingFox_Gloom",
                                 -1
                             ]
                         },
                         {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        {
-                                            "getUnitDataElem": [
-                                                "@Self",
-                                                "Attributes/Head"
-                                            ]
-                                        },
-                                    ]
-                                },
-                                "complexInstantiate",
-                                "Attributes/SpeedDiceAmt"
-                            ]
-                        },
-                        {
-                            "setUnitDataElem": [
+                            "setAttributeModif": [
                                 {
                                     "getUnitDataElem": [
                                         "@Self",
                                         "Attributes/Head"
                                     ]
                                 },
-                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                "SpeedDiceAmt",
+                                "+Modif",
+                                "DriftingFox_Gloom",
                                 -2
                             ]
                         }
@@ -230,48 +207,25 @@
                     },
                     [
                         {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        "@Self"
-                                    ]
-                                },
-                                "complexInstantiate",
-                                "Attributes/SpeedDiceAmt"
-                            ]
-                        },
-                        {
-                            "setUnitDataElem": [
+                            "setAttributeModif": [
                                 "@Self",
-                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                "SpeedDiceAmt",
+                                "+Modif",
+                                "DriftingFox_Gloom",
                                 1
                             ]
                         },
                         {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        {
-                                            "getUnitDataElem": [
-                                                "@Self",
-                                                "Attributes/Head"
-                                            ]
-                                        },
-                                    ]
-                                },
-                                "complexInstantiate",
-                                "Attributes/SpeedDiceAmt"
-                            ]
-                        },
-                        {
-                            "setUnitDataElem": [
+                            "setAttributeModif": [
                                 {
                                     "getUnitDataElem": [
                                         "@Self",
                                         "Attributes/Head"
                                     ]
                                 },
-                                "Attributes/SpeedDiceAmt/DriftingFox_Gloom",
+                                "SpeedDiceAmt",
+                                "+Modif",
+                                "DriftingFox_Gloom",
                                 -1
                             ]
                         }
@@ -281,30 +235,24 @@
         ],
         "SceneEnd": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SpeedDiceAmt/DriftingFox_Gloom"
+                "eraseAttributeModif": [
+                    "@Self",
+                    "SpeedDiceAmt",
+                    "+Modif",
+                    "DriftingFox_Gloom"
                 ]
             },
             {
-                "objCall": [
+                "eraseAttributeModif": [
                     {
-                        "getUnitData": [
-                            {
-                                "getUnitDataElem": [
-                                    "@Self",
-                                    "Attributes/Head"
-                                ]
-                            }
+                        "getUnitDataElem": [
+                            "@Self",
+                            "Attributes/Head"
                         ]
                     },
-                    "complexErase",
-                    "Attributes/SpeedDiceAmt/DriftingFox_Gloom"
+                    "SpeedDiceAmt",
+                    "+Modif",
+                    "DriftingFox_Gloom"
                 ]
             }
         ]

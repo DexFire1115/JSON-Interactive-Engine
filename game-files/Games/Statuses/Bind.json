@@ -4,25 +4,11 @@
     "Conditions": {
         "SceneStart": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/SpeedDiceBase"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/SpeedDiceBase/Bind",
+                "setAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "+Modif",
+                    "Bind",
                     {
                         "sub": [
                             0,
@@ -45,14 +31,11 @@
         ],
         "Removed-Bind": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SpeedDiceBase/Bind"
+                "eraseAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "+Modif",
+                    "Bind"
                 ]
             }
         ]

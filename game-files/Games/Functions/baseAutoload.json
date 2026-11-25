@@ -13,6 +13,42 @@
             ]
         },
         {
+            "createComplexModif": [
+                "+Modif",
+                "add",
+                "add",
+                0,
+                1000
+            ]
+        },
+        {
+            "createComplexModif": [
+                "%Modif",
+                "percentMult",
+                "add",
+                100,
+                2000
+            ]
+        },
+        {
+            "createComplexModif": [
+                "xModif",
+                "multf",
+                "multf",
+                1.0,
+                3000
+            ]
+        },
+        {
+            "createComplexModif": [
+                "+postModif",
+                "add",
+                "add",
+                0,
+                4000
+            ]
+        },
+        {
             "playSound": [
                 "SFX_Siren.wav"
             ]

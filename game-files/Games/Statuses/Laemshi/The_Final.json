@@ -58,14 +58,15 @@
                                             },
                                             [
                                                 {
-                                                    "setComplexData": [
+                                                    "setAttributeModif": [
                                                         {
                                                             "getVar": [
                                                                 "U",
                                                                 ""
                                                             ]
                                                         },
-                                                        "Attributes/SpeedDiceAmt",
+                                                        "SpeedDiceAmt",
+                                                        "+Modif",
                                                         "Laemshi_The_Final",
                                                         1
                                                     ]
@@ -174,14 +175,15 @@
                                 },
                                 [
                                     {
-                                        "eraseComplexData": [
+                                        "eraseAttributeModif": [
                                             {
                                                 "getVar": [
                                                     "U",
                                                     ""
                                                 ]
                                             },
-                                            "Attributes/SpeedDiceAmt",
+                                            "SpeedDiceAmt",
+                                            "+Modif",
                                             "Laemshi_The_Final"
                                         ]
                                     }
