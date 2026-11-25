@@ -1,0 +1,36 @@
+{
+    "Name": "Everbloom",
+    "Color": "#aacc50",
+    "MaxCount": 5,
+    "Conditions": {
+        "SceneStart": [
+            {
+                "setStatus": [
+                    "Thorns",
+                    {
+                        "max": [
+                            {
+                                "getStatus": [
+                                    "Everbloom",
+                                    0,
+                                    "@Self"
+                                ]
+                            },
+                            {
+                                "getStatus": [
+                                    "Thorns",
+                                    0,
+                                    "@Self"
+                                ]
+                            }
+                        ]
+                    },
+                    "@Self"
+                ]
+            }
+        ]
+    },
+    "Text": [
+        "At the start of each scene, set your [b][color=50cc80]Thorns[/color][/b] equal to your [b][color=ccaa50]Everbloom[/color][/b], unless this would cause you to lose [b][color=50cc80]Thorns[/color][/b]."
+    ]
+}

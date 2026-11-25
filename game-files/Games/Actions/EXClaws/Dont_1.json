@@ -52,7 +52,7 @@
                     {
                         "loop": [
                             {
-                                "rangeTo": [
+                                "range": [
                                     {
                                         "refCall": [
                                             "enemyDice",
@@ -81,7 +81,7 @@
                     {
                         "loop": [
                             {
-                                "rangeTo": [
+                                "range": [
                                     {
                                         "sub": [
                                             {

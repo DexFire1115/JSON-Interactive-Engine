@@ -4,25 +4,10 @@
             "Unit": "SceneManager"
         },
         "A1": {
-            "Unit": "Eldric"
-        },
-        "A2": {
-            "Unit": "Marton"
-        },
-        "A3": {
             "Unit": "VileiColparino"
         },
-        "A4": {
-            "Unit": "CAD"
-        },
-        "A5": {
-            "Unit": "Henry"
-        },
-        "A6": {
-            "Unit": "Lilli"
-        },
-        "A7": {
-            "Unit": "Mordred"
+        "E1": {
+            "Unit": "Claws"
         }
     },
     "Units-Cache": {

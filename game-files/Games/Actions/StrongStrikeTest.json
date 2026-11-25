@@ -1,0 +1,20 @@
+{
+    "Name": "Ham Strong Strike Test",
+    "Cost": 2,
+    "PreText": [
+        "A Ham."
+    ],
+    "Dice": [
+        {
+            "Type": "PierceOffense",
+            "Dice": 12,
+            "Base": 6,
+            "Text": [
+                "A Ham."
+            ]
+        }
+    ],
+    "PostText": [
+        "A Ham."
+    ]
+}
