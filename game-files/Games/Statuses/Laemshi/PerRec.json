@@ -22,9 +22,10 @@
                 ]
             },
             {
-                "setComplexData": [
+                "setAttributeModif": [
                     "@Self",
-                    "Attributes/SpeedDiceAmt",
+                    "SpeedDiceAmt",
+                    "+Modif",
                     "Laemshi_PerRec",
                     1
                 ]
@@ -42,9 +43,10 @@
                     },
                     [
                         {
-                            "eraseComplexData": [
+                            "eraseAttributeModif": [
                                 "@Self",
-                                "Attributes/SpeedDiceAmt",
+                                "SpeedDiceAmt",
+                                "+Modif",
                                 "Laemshi_PerRec"
                             ]
                         },

@@ -488,9 +488,10 @@
                 ]
             },
             {
-                "setComplexData": [
+                "setAttributeModif": [
                     "@Self",
-                    "Attributes/SpeedDiceAmt",
+                    "SpeedDiceAmt",
+                    "+Modif",
                     "RAA_C4_Advent",
                     -4
                 ]
@@ -520,9 +521,10 @@
         ],
         "SceneStartPost": [
             {
-                "eraseComplexData": [
+                "eraseAttributeModif": [
                     "@Self",
-                    "Attributes/SpeedDiceAmt",
+                    "SpeedDiceAmt",
+                    "+Modif",
                     "RAA_C4_Advent"
                 ]
             }

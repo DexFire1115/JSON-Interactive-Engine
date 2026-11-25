@@ -146,14 +146,11 @@
                             ]
                         },
                         {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        "@Self"
-                                    ]
-                                },
-                                "dset",
-                                "Attributes/SpeedDiceBase/EXClaws_Dont",
+                            "setAttributeModif": [
+                                "@Self",
+                                "SpeedDiceBase",
+                                "+Modif",
+                                "EXClaws_Dont",
                                 10
                             ]
                         }
@@ -163,14 +160,11 @@
         ],
         "SceneStartPost": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SpeedDiceBase/EXClaws_Dont"
+                "eraseAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "+Modif",
+                    "EXClaws_Dont"
                 ]
             }
         ],

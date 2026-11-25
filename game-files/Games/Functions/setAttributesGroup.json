@@ -1,0 +1,104 @@
+{
+    "Args": [
+        "unit",
+        "attribute",
+        "modif",
+        "source",
+        "value"
+    ],
+    "Defaults": [
+    ],
+    "Sequence": [
+        {
+            "ifelse": [
+                {
+                    "equals": [
+                        {
+                            "typeof": [
+                                {
+                                    "getVar": [
+                                        "attribute"
+                                    ]
+                                }
+                            ]
+                        },
+                        28
+                    ]
+                },
+                [
+                    {
+                        "loop": [
+                            {
+                                "getVar": [
+                                    "attribute"
+                                ]
+                            },
+                            [
+                                {
+                                    "setAttributeModif": [
+                                        {
+                                            "getVar": [
+                                                "unit"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "x"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "modif"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "source"
+                                            ]
+                                        },
+                                        {
+                                            "getVar": [
+                                                "value"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                            "x"
+                        ]
+                    },
+                    "return"
+                ]
+            ]
+        },
+        {
+            "setAttributeModif": [
+                {
+                    "getVar": [
+                        "unit"
+                    ]
+                },
+                {
+                    "getVar": [
+                        "attribute"
+                    ]
+                },
+                {
+                    "getVar": [
+                        "modif"
+                    ]
+                },
+                {
+                    "getVar": [
+                        "source"
+                    ]
+                },
+                {
+                    "getVar": [
+                        "value"
+                    ]
+                }
+            ]
+        }
+    ]
+}

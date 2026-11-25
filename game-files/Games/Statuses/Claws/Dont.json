@@ -135,25 +135,11 @@
                             ]
                         },
                         {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        "@Self"
-                                    ]
-                                },
-                                "complexInstantiate",
-                                "Attributes/SpeedDiceBase"
-                            ]
-                        },
-                        {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        "@Self"
-                                    ]
-                                },
-                                "dset",
-                                "Attributes/SpeedDiceBase/Claws_Dont",
+                            "setAttributeModif": [
+                                "@Self",
+                                "SpeedDiceBase",
+                                "+Modif",
+                                "Claws_Dont",
                                 10
                             ]
                         }
@@ -163,14 +149,11 @@
         ],
         "SceneStartPost": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SpeedDiceBase/Claws_Dont"
+                "eraseAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "+Modif",
+                    "Claws_Dont"
                 ]
             }
         ],

@@ -4,83 +4,15 @@
     "Conditions": {
         "Applied-Fragile": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/SlashDamage"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/SlashDamage/Fragile",
-                    {
-                        "getStatus": [
-                            "Fragile",
-                            0,
-                            "@Self"
-                        ]
-                    }
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/PierceDamage"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/PierceDamage/Fragile",
-                    {
-                        "getStatus": [
-                            "Fragile",
-                            0,
-                            "@Self"
-                        ]
-                    }
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/BluntDamage"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/BluntDamage/Fragile",
+                "setAttributesGroup": [
+                    "@Self",
+                    [
+                        "SlashDamage",
+                        "PierceDamage",
+                        "BluntDamage"
+                    ],
+                    "+Modif",
+                    "Fragile",
                     {
                         "getStatus": [
                             "Fragile",
@@ -98,36 +30,15 @@
         ],
         "Removed-Fragile": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SlashDamage/Fragile"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/PierceDamage/Fragile"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/BluntDamage/Fragile"
+                "eraseAttributesGroup": [
+                    "@Self",
+                    [
+                        "SlashDamage",
+                        "PierceDamage",
+                        "BluntDamage",
+                    ],
+                    "+Modif",
+                    "Fragile"
                 ]
             }
         ]

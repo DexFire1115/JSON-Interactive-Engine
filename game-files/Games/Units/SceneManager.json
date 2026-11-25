@@ -9,26 +9,24 @@
         "Limit": 0,
         "Count": 0,
         "LimitArr": [
-            6,
+            5,
+            4,
+            3,
             0
         ],
         "UnitsArr": [
             [
-                "Irae/Class-1",
-                "Luxuriae",
-                "Pigritiae",
-                "Gulae",
-                "Morositatis",
-                "Superbiae",
-                "Irae/Class-1",
-                "Luxuriae",
-                "Pigritiae",
-                "Gulae",
-                "Morositatis",
-                "Superbiae",
+                "VileiColparino",
+                "Laemshi",
+                "Claws"
             ],
             [
-            ]
+                "DriftingFox/Core"
+            ],
+            [
+                "WaywardBeacon"
+            ],
+            []
         ]
     },
     "Statuses": {

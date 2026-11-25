@@ -4,25 +4,11 @@
     "Conditions": {
         "SceneStart": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/SpeedDiceBase"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/SpeedDiceBase/Haste",
+                "setAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "+Modif",
+                    "Haste",
                     {
                         "getStatus": [
                             "Haste",
@@ -40,14 +26,11 @@
         ],
         "Removed-Haste": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SpeedDiceBase/Haste"
+                "eraseAttributeModif": [
+                    "@Self",
+                    "SpeedDiceBase",
+                    "+Modif",
+                    "Haste"
                 ]
             }
         ]

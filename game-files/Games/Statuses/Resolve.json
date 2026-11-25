@@ -4,93 +4,15 @@
     "Conditions": {
         "Applied-Resolve": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/SlashStagger"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/SlashStagger/Resolve",
-                    {
-                        "sub": [
-                            0,
-                            {
-                                "getStatus": [
-                                    "Resolve",
-                                    0,
-                                    "@Self"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/PierceStagger"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/PierceStagger/Resolve",
-                    {
-                        "sub": [
-                            0,
-                            {
-                                "getStatus": [
-                                    "Resolve",
-                                    0,
-                                    "@Self"
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexInstantiate",
-                    "Attributes/BluntStagger"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "dset",
-                    "Attributes/BluntStagger/Resolve",
+                "setAttributesGroup": [
+                    "@Self",
+                    [
+                        "SlashStagger",
+                        "PierceStagger",
+                        "BluntStagger"
+                    ],
+                    "+Modif",
+                    "Resolve",
                     {
                         "sub": [
                             0,
@@ -113,36 +35,15 @@
         ],
         "Removed-Resolve": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SlashStagger/Resolve"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/PierceStagger/Resolve"
-                ]
-            },
-            {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/BluntStagger/Resolve"
+                "eraseAttributesGroup": [
+                    "@Self",
+                    [
+                        "SlashStagger",
+                        "PierceStagger",
+                        "BluntStagger",
+                    ],
+                    "+Modif",
+                    "Resolve"
                 ]
             }
         ]

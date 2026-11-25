@@ -166,25 +166,11 @@
                             ]
                         },
                         {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        "@Self"
-                                    ]
-                                },
-                                "complexInstantiate",
-                                "Attributes/SpeedDiceAmt"
-                            ]
-                        },
-                        {
-                            "objCall": [
-                                {
-                                    "getUnitData": [
-                                        "@Self"
-                                    ]
-                                },
-                                "dset",
-                                "Attributes/SpeedDiceAmt/Claws_Delayed",
+                            "setAttributeModif": [
+                                "@Self",
+                                "SpeedDiceAmt",
+                                "+Modif",
+                                "Claws_Delayed",
                                 -1
                             ]
                         },
@@ -210,14 +196,11 @@
         ],
         "SceneStartPost": [
             {
-                "objCall": [
-                    {
-                        "getUnitData": [
-                            "@Self"
-                        ]
-                    },
-                    "complexErase",
-                    "Attributes/SpeedDiceAmt/Claws_Delayed"
+                "eraseAttributeModif": [
+                    "@Self",
+                    "SpeedDiceAmt",
+                    "+Modif",
+                    "Claws_Delayed"
                 ]
             }
         ]
