@@ -1,0 +1,34 @@
+{
+    "Name": "A Ham (Strong Strike)",
+    "Color": "#cccccc",
+    "Type": "Human",
+    "Class": "Lvl. 1",
+    "Attributes": {
+        "CurrentHealth": 50,
+        "MaxHealth": 50,
+        "CurrentStagger": 25,
+        "MaxStagger": 25,
+        "CurrentLight": 3,
+        "MaxLight": 3,
+        "LightRegen": 1,
+        "SpeedDiceSize": 6,
+        "SpeedDiceBase": 0,
+        "SpeedDiceAmt": 1,
+        "EmotionPoints": 2,
+        "SlashDamage": 0,
+        "PierceDamage": 0,
+        "BluntDamage": 0,
+        "SlashStagger": 0,
+        "PierceStagger": 0,
+        "BluntStagger": 0,
+    },
+    "Statuses": {
+    },
+    "Conditions": {
+    },
+    "Actions": [
+        "StrongStrikeTest",
+    ],
+    "Initialize": [
+    ]
+}

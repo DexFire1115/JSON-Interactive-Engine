@@ -1,6 +1,7 @@
 extends Node
 
 enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
+enum {OVERRIDE = 0, CANCEL = 1, APPEND_FRONT = 2, APPEND_REAR = 3, APPEND_FOLLOWER = 4}
 
 # Handling Game Processes
 @export var unitList: Dictionary[String, Unit]
@@ -14,6 +15,7 @@ enum {UNOPPOSED = 0, CLASH_WIN = 1, CLASH_TIE = 2, CLASH_LOSE = 3}
 @export var switches: Dictionary[String, bool]
 
 # Temporary Function Vars
+@export var cache: Dictionary[String, Variant] = {}
 @export var references: Dictionary[String, Variant] = {}
 @export var stack: Array[String] = []
 
@@ -152,6 +154,18 @@ func ifelse(query: bool, trueCase: Array, falseCase := []):
 			if(retval is Dictionary && val.has("*") && val["*"] == null): break
 	return retval
 
+func switch(value: String, cases: Dictionary):
+	var retval = ""
+	var val = ""
+	var arr: Array = cases.get(value, ["break"])
+	for c in arr.duplicate_deep():
+		val = await isNestedArg(c)
+		if(val is String && val == "break"): break
+		if(val is String && val == "return"): val = returnBlock(retval, stack.back())
+		retval = val
+		if(retval is Dictionary && val.has("*") && val["*"] == null): break
+	return retval
+
 func loop(arr: Array, commands: Array, varName := ""):
 	var retval = ""
 	var val = ""
@@ -199,8 +213,67 @@ func returnBlock(val, stackName):
 		"retStack": stackName
 	}
 
-func rangeTo(val: int):
-	return range(val)
+func passUpArgs(argsArray: Array) -> Dictionary:
+	var dict := {}
+	for a in argsArray:
+		dict.set(a, {"getAnyVar": [a]})
+	return dict
+
+func createJFunction(methodname: String, callseq: Array, args := [], defaults := [], collisionhandle := 0) -> bool:
+	var completeName := "Functions/" + methodname + ".json"
+	var collided := false
+	if(fileTree.has(completeName)):
+		var funcArgs: Array = fileTree.dget(completeName + "/Args", [])
+		var funcSeq: Array = fileTree.dget(completeName + "/Sequence", [])
+		collided = true
+		match(collisionhandle):
+			0: pass
+			1: return true
+			2: 
+				funcSeq.assign(joinArr(callseq, funcSeq))
+				return true
+			3: 
+				funcSeq.append_array(callseq)
+				return true
+			4: 
+				funcSeq.assign(joinArr([{
+					"sequence": [methodname, funcSeq, passUpArgs(funcArgs)]
+				}], callseq))
+				return true
+			_: pass
+	fileTree.dset(completeName, {
+		"Args": args,
+		"Defaults": defaults,
+		"Sequence": callseq
+	})
+	return collided
+
+func eraseFunctionInjection(methodname: String, injectionName: String, size: int):
+	var completeName := "Functions/" + methodname + ".json"
+	if(!fileTree.has(completeName)): return
+	if(fileTree.dget(completeName + "/" + injectionName, false)):
+		fileTree.erase(completeName)
+	else:
+		var callSeq: Array = fileTree.dget(completeName, [])
+		var startPoint := callSeq.find(injectionName)
+		if(startPoint == -1): return
+		for i in range(size): callSeq.pop_at(startPoint)
+
+func createFunctionStopper(methodname: String, returnval = null):
+	if(!createJFunction(methodname, ["FunctionStopper", returnval, "return"], [], [], 2)):
+		fileTree.dset("Functions/" + methodname + "/FunctionStopper", true)
+
+func eraseFunctionStopper(methodname: String):
+	eraseFunctionInjection(methodname, "FunctionStopper", 3)
+
+func createFunctionRedirect(methodname: String, newMethod: String, argNames := []):
+	if(!createJFunction(methodname, ["FunctionRedirect", {
+			newMethod: passUpArgs(argNames).values()
+		}, "return"], [], [], 2)):
+		fileTree.dset("Functions/" + methodname + "/FunctionRedirect", true)
+
+func eraseFunctionRedirect(methodname: String):
+	eraseFunctionInjection(methodname, "FunctionRedirect", 3)
 
 func addLog(text):
 	GameManager.addPushConsole(str(text))
@@ -312,6 +385,15 @@ func orBool(b1: bool, b2: bool) -> bool:
 
 func orSet(...args: Array) -> bool:
 	return args.any(func(element): return element if(element is bool)else false)
+
+func union(arr1: Array, arr2: Array) -> Array:
+	return joinArr(arr1, exclude(arr2, arr1))
+
+func intersect(arr1: Array, arr2: Array) -> Array:
+	return arr1.filter(func(element): return arr2.has(element))
+
+func exclude(arr1: Array, arr2: Array) -> Array:
+	return arr1.filter(func(element): return !arr2.has(element))
 
 func nullDefault(val, default) -> Variant:
 	return default if(val == null)else val
@@ -681,7 +763,7 @@ func queryQInt(query: String, choices: Array, default := -1, persistTitle := tru
 	return await queryInt(query, choices, default)
 
 func codeInjection(method: String, argSet := {}):
-	if(fileTree.has("Functions/" + method.trim_prefix("/") + ".json")): await jFunc(method, [argSet])
+	if(fileTree.has("Functions/" + method.trim_prefix("/") + ".json")): return await jFunc(method, [argSet])
 
 func sceneStart():
 	#print("< - - - SCENE - - - >")
@@ -735,7 +817,6 @@ func nextTurnPrintout():
 	if(diceList.is_empty() && saveList.is_empty()): 
 		addLog(urlStr(boldStr(colorStr("No Speed Dice. Start next scene?", "ff6480")), "*s"))
 	else: addLog(urlStr(boldStr(colorStr("Start next turn?", "64ffff")), "*nt"))
-
 
 
 
@@ -846,11 +927,6 @@ func nextTurn(dice := "", isProactive := true) -> String:
 	await executeAWSkill(unitName, skillTargets.keys(), actionChoice, skillTargets.values())
 	if(isProactive): nextTurnPrintout()
 	return ""
-	
-	
-	
-	
-	
 
 func interceptCheck(unit: String, proactive: String, reactives: Array) -> Array:
 	var choiceDict := {"[b][color=ff6464]No Contest[/color][/b]": "No"}
@@ -1007,6 +1083,22 @@ func actionSaveDie(unit: String, die: DataTree, dieArr: Array):
 		dieArr.pop_front()
 		return
 	unitList[unit].savedDice.push_back(dieArr.pop_front())
+
+func instantiateAction(unit: String, action: String, isProactive: bool) -> int:
+	var aid := await createAction(unit, action)
+	setUnitProp(unit, "action", aid)
+	await readActionTag("Eminence", unit)
+	if(isProactive): await readActionTag("Proactive", unit)
+	else: await readActionTag("Reactive", unit)
+	if(getUnitDataElem(unit, "Vars/ActionUses/" + action, 0) >= getAction(aid, "data/Limit", 0)
+	&& getAction(aid, "data/Limit", 0) > 0):
+		await readActionTag("Exhaust", unit)
+	moveCounterDice(aid)
+	await readActionTag("OnUse", unit)
+	return aid
+
+func executeTurnSkill(u1: String, u2: Array, a1: int, a2: Array):
+	pass
 
 func executeAWSkill(u1: String, u2: Array, a1: String, a2: Array) -> void:
 	print(a1 , " v . ", a2)
@@ -1459,6 +1551,8 @@ func readDieTag(tag: String, unit: String, metadata := {}, defaultSeq := [], pro
 func executeCondition(tag: String, source: DataTree, metadata := {}, defaultSeq := []):
 	var tagSequence = source.copy().safeGet(tag, TYPE_ARRAY)
 	if(tagSequence.is_empty()): tagSequence = defaultSeq
+	if(await codeInjection("executeConditionInjection", {"tag": tag, "source": source, 
+		"metadata": metadata, "tagSequence": tagSequence}) == "escape"): return 
 	return await sequence(tag, tagSequence, metadata)
 
 func composeConditionMetaData(unit: String) -> Dictionary:
@@ -1580,6 +1674,12 @@ func getResistance(unit: String, type: String) -> Array[int]:
 
 func getSumAttribute(unitData: DataTree, attribute: String) -> int:
 	return await unitData.getComplexSeqn("Attributes/" + attribute, "add", 0)
+
+func setAttributeModif(unit: String, attribute: String, modif: String, source: String, value):
+	if(!unitList.has(unit)): return
+	var unitData := unitList[unit].dataSet
+	unitData.complexInstantiate("Attributes/" + attribute)
+	unitData.dset("Attributes/" + attribute + "/" + modif + "/" + source, value)
 
 func getIDTag(unit: String) -> String:
 	if(!unitList.has(unit)): return ""
